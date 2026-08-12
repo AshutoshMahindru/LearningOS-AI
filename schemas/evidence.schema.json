@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Learning Evidence",
+  "type": "object",
+  "required": ["mission_id", "artifact", "competency", "status"],
+  "properties": {
+    "mission_id": {"type": "string"},
+    "artifact": {"type": "string"},
+    "competency": {"type": "string"},
+    "status": {"enum": ["pending", "submitted", "passed", "repair"]},
+    "review_notes": {"type": "string"}
+  }
+}
