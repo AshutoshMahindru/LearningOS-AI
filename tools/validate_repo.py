@@ -9,12 +9,12 @@ REQUIRED = [
     "README.md", "data/missions.json", "data/mission_dependencies.json", "data/source_registry.json",
     "data/content_registry.json", "data/lab_status.json", "data/autonomy_policy.json", "data/apprenticeship_controls.yaml",
     "learning_os/cli.py", "learning_os/closed_loop.py", "learning_os/learner_model.py", "learning_os/retention_engine.py",
-    "learning_os/autonomy_engine.py", "learning_os/side_quest_engine.py", "learning_os/decision_engine.py",
-    "learning_os/mission_loader.py", "learning_os/mission_runner.py", "learning_os/gate_engine.py", "learning_os/storage.py",
-    "learning_os/retrieval.py", "learning_os/content_router.py", "learning_os/prerequisite_graph.py", "learning_os/mission_context.py",
-    "prompts/pedagogical_orchestrator.md", "prompts/zoom_controller.md", "tracking/learner_state.json",
-    "tracking/learner_model.json", "tracking/retention_events.json", "tracking/side_quests.json", "tracking/autonomy_events.json",
-    "schemas/evidence.schema.json"
+    "learning_os/autonomy_engine.py", "learning_os/side_quest_engine.py", "learning_os/decision_engine.py", "learning_os/dashboard.py",
+    "learning_os/dashboard_server.py", "learning_os/mission_loader.py", "learning_os/mission_runner.py", "learning_os/gate_engine.py",
+    "learning_os/storage.py", "learning_os/retrieval.py", "learning_os/content_router.py", "learning_os/prerequisite_graph.py",
+    "learning_os/mission_context.py", "web/dashboard.html", "prompts/pedagogical_orchestrator.md", "prompts/zoom_controller.md",
+    "tracking/learner_state.json", "tracking/learner_model.json", "tracking/retention_events.json", "tracking/side_quests.json",
+    "tracking/autonomy_events.json", "schemas/evidence.schema.json"
 ]
 errors: list[str] = []
 for rel in REQUIRED:
@@ -53,6 +53,11 @@ if policy_path.exists():
     policy = json.loads(policy_path.read_text(encoding="utf-8"))
     levels = [item["level"] for item in policy.get("levels", [])]
     if levels != ["A1", "A2", "A3", "A4"]: errors.append("autonomy policy must define A1..A4 in order")
+html_path = ROOT / "web" / "dashboard.html"
+if html_path.exists():
+    html = html_path.read_text(encoding="utf-8")
+    if "/api/dashboard" not in html: errors.append("dashboard must consume the live dashboard API")
+    if "Read-only dashboard" not in html: errors.append("dashboard must make its read-only mutation boundary explicit")
 if errors:
     print("Repository validation FAILED")
     for error in errors: print(f"- {error}")

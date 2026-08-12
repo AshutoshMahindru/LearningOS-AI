@@ -19,10 +19,11 @@ jobs:
         run: python tools/validate_repo.py
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
-      - name: CLI closed-loop smoke test
+      - name: CLI closed-loop and dashboard smoke test
         run: |
           tmp=$(mktemp -d)
           cp -R data "$tmp/data"
+          cp -R web "$tmp/web"
           mkdir -p "$tmp/tracking"
           printf '{"learner_id":"default","current_mission":null,"mission_status":{},"blockers":[]}' > "$tmp/tracking/learner_state.json"
           printf '{"learner_id":"default","current_mission":null,"autonomy_level":"A1","competencies":{},"misconceptions":[],"confidence":{},"retention_due":[],"open_side_quests":[],"evidence_summary":{},"gate_history":{},"autonomy_history":[]}' > "$tmp/tracking/learner_model.json"
@@ -32,10 +33,12 @@ jobs:
           printf '[]' > "$tmp/tracking/retention_events.json"
           printf '[]' > "$tmp/tracking/side_quests.json"
           printf '[]' > "$tmp/tracking/autonomy_events.json"
+          learning-os --root "$tmp" dashboard | python -m json.tool > /dev/null
           learning-os --root "$tmp" start M01
           learning-os --root "$tmp" step
           learning-os --root "$tmp" evidence M01 --summary "smoke map" --competency "system mapping" --no-ai --transfer --explanation
           learning-os --root "$tmp" gate M01
+          learning-os --root "$tmp" dashboard | python -m json.tool > /dev/null
           learning-os --root "$tmp" step
           learning-os --root "$tmp" learner-model
           learning-os --root "$tmp" autonomy status

@@ -7,6 +7,8 @@ from pathlib import Path
 
 from .closed_loop import LearningLoop
 from .content_router import ContentRouter
+from .dashboard import DashboardService
+from .dashboard_server import serve_dashboard
 from .lab_registry import LabRegistry
 from .mission_context import MissionContextAssembler
 from .mission_loader import MissionRepository
@@ -30,10 +32,11 @@ def parser() -> argparse.ArgumentParser:
     resources = sub.add_parser("resources"); resources.add_argument("mission"); resources.add_argument("--blocker"); resources.add_argument("--depth", choices=["L1","L2","L3","L4","L5"])
     prereqs = sub.add_parser("prereqs"); prereqs.add_argument("mission")
     lab = sub.add_parser("lab-status"); lab.add_argument("mission")
-    learner = sub.add_parser("learner-model")
+    sub.add_parser("learner-model")
     retention = sub.add_parser("retention"); retention.add_argument("action", choices=["due", "complete"]); retention.add_argument("event_id", nargs="?"); retention.add_argument("--fail", action="store_true")
     autonomy = sub.add_parser("autonomy"); autonomy.add_argument("action", choices=["status", "evaluate"]); autonomy.add_argument("--signal", action="append", default=[])
     sq = sub.add_parser("sidequest"); sq.add_argument("action", choices=["list", "open", "close"]); sq.add_argument("--mission"); sq.add_argument("--target"); sq.add_argument("--reason"); sq.add_argument("--return-target"); sq.add_argument("--minutes", type=int, default=60); sq.add_argument("--id"); sq.add_argument("--assessment", choices=["PASS","PARTIAL","FAIL"]); sq.add_argument("--outcome", default="")
+    dash = sub.add_parser("dashboard"); dash.add_argument("--mission"); dash.add_argument("--serve", action="store_true"); dash.add_argument("--host", default="127.0.0.1"); dash.add_argument("--port", type=int, default=8765)
     return p
 
 
@@ -68,8 +71,7 @@ def main() -> None:
         else:
             if not args.event_id: raise SystemExit("retention complete requires event_id")
             print(json.dumps(loop.retention.complete(args.event_id, not args.fail), indent=2))
-    elif args.command == "autonomy":
-        print(json.dumps(loop.autonomy.status() if args.action == "status" else loop.autonomy.evaluate(set(args.signal)), indent=2))
+    elif args.command == "autonomy": print(json.dumps(loop.autonomy.status() if args.action == "status" else loop.autonomy.evaluate(set(args.signal)), indent=2))
     elif args.command == "sidequest":
         if args.action == "list": print(json.dumps(loop.side_quests.active(args.mission), indent=2))
         elif args.action == "open":
@@ -78,6 +80,11 @@ def main() -> None:
         else:
             if not args.id or not args.assessment: raise SystemExit("sidequest close requires --id --assessment")
             print(json.dumps(loop.side_quests.close(args.id, args.assessment, args.outcome), indent=2))
+    elif args.command == "dashboard":
+        if args.serve:
+            serve_dashboard(root, args.host, args.port)
+        else:
+            print(json.dumps(DashboardService(root).snapshot(args.mission), indent=2))
 
 
 if __name__ == "__main__":
