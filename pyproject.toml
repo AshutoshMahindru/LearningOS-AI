@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "learningos-ai"
+version = "0.1.0"
+description = "Mission-driven AI/ML apprenticeship runtime"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+learning-os = "learning_os.cli:main"
+
+[tool.setuptools]
+packages = ["learning_os"]
