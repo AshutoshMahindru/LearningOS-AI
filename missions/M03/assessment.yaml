@@ -1,0 +1,6 @@
+assessment:
+  transfer_required: true
+  tests:
+    - modify unfamiliar program
+    - explain debugging evidence
+    - predict behavior change
