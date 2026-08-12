@@ -1,0 +1,6 @@
+experiments:
+  - predict split impact before changing split
+  - predict feature impact before changing features
+  - predict model impact before changing model
+  - predict hyperparameter impact
+  - diagnose shuffled labels
