@@ -1,0 +1,9 @@
+sections:
+  - working_program_first
+  - modify_inputs_constants_conditions_loops_functions_data
+  - debugging
+  - code_reading
+  - transfer
+experiments:
+  - change program behavior without rewriting
+  - diagnose failures from symptoms
