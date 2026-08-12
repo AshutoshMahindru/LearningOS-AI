@@ -19,7 +19,7 @@ jobs:
         run: python tools/validate_repo.py
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
-      - name: CLI smoke test
+      - name: CLI mission smoke test
         run: |
           tmp=$(mktemp -d)
           cp -R data "$tmp/data"
@@ -28,3 +28,8 @@ jobs:
           learning-os --root "$tmp" evidence M01 --summary "smoke map" --no-ai --transfer --explanation
           learning-os --root "$tmp" gate M01
           learning-os --root "$tmp" next
+      - name: CLI retrieval smoke test
+        run: |
+          learning-os resources M33 --blocker "embeddings semantic similarity"
+          learning-os prereqs M34
+          learning-os lab-status M01
