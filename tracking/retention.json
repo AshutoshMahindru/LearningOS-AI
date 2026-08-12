@@ -1,0 +1,8 @@
+{
+  "reviews": [],
+  "rules": {
+    "initial_review_days": 7,
+    "second_review_days": 21,
+    "quarterly_review": true
+  }
+}

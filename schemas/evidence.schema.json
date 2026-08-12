@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Learning OS Evidence",
+  "type": "object",
+  "required": ["id", "mission_id", "type", "summary"],
+  "properties": {
+    "id": {"type": "string"},
+    "mission_id": {"type": "string"},
+    "type": {"type": "string"},
+    "summary": {"type": "string"},
+    "competencies": {"type": "array", "items": {"type": "string"}},
+    "no_ai": {"type": "boolean"},
+    "transfer": {"type": "boolean"},
+    "explanation": {"type": "boolean"},
+    "created_at": {"type": "string"}
+  }
+}
