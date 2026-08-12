@@ -1,0 +1,8 @@
+mission_id: M03
+title: Modify Python Before Learning Python
+phase: P1
+flagship: V01
+competencies:
+  - Python
+  - debugging
+objective: Gain Python fluency by modifying working programs.
