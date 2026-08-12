@@ -1,0 +1,26 @@
+{
+  "registry_status": "curated-starter",
+  "verified_on": "2026-08-12",
+  "sources": [
+    {"id":"python-tutorial","title":"Python Tutorial","publisher":"Python Software Foundation","url":"https://docs.python.org/3/tutorial/","kind":"official-docs","topics":["python"]},
+    {"id":"numpy-quickstart","title":"NumPy Quickstart","publisher":"NumPy","url":"https://numpy.org/doc/stable/user/quickstart.html","kind":"official-docs","topics":["numpy","vectors","matrices"]},
+    {"id":"pandas-start","title":"pandas Getting Started","publisher":"pandas","url":"https://pandas.pydata.org/docs/getting_started/index.html","kind":"official-docs","topics":["pandas","visualization"]},
+    {"id":"sklearn-guide","title":"scikit-learn User Guide","publisher":"scikit-learn","url":"https://scikit-learn.org/stable/user_guide.html","kind":"official-docs","topics":["pipelines","regression","classification","metrics","clustering"]},
+    {"id":"stanford-cs229","title":"CS229 Machine Learning","publisher":"Stanford University","url":"https://cs229.stanford.edu/","kind":"course","topics":["regression","classification","probability","statistics","optimization"]},
+    {"id":"3b1b-linear-algebra","title":"Essence of Linear Algebra","publisher":"3Blue1Brown","url":"https://www.3blue1brown.com/topics/linear-algebra","kind":"visual-course","topics":["vectors","matrices"]},
+    {"id":"3b1b-calculus","title":"Essence of Calculus","publisher":"3Blue1Brown","url":"https://www.3blue1brown.com/topics/calculus","kind":"visual-course","topics":["gradients","optimization"]},
+    {"id":"3b1b-neural-networks","title":"Neural Networks","publisher":"3Blue1Brown","url":"https://www.3blue1brown.com/topics/neural-networks","kind":"visual-course","topics":["neural-networks","backprop"]},
+    {"id":"fastai-course","title":"Practical Deep Learning for Coders","publisher":"fast.ai","url":"https://course.fast.ai/","kind":"course","topics":["neural-networks","pytorch"]},
+    {"id":"pytorch-basics","title":"Learn the Basics","publisher":"PyTorch","url":"https://docs.pytorch.org/tutorials/beginner/basics/intro.html","kind":"official-docs","topics":["pytorch","neural-networks"]},
+    {"id":"karpathy-micrograd","title":"micrograd","publisher":"Andrej Karpathy","url":"https://github.com/karpathy/micrograd","kind":"reference-implementation","topics":["gradients","backprop"]},
+    {"id":"karpathy-zero-to-hero","title":"Neural Networks: Zero to Hero","publisher":"Andrej Karpathy","url":"https://karpathy.ai/zero-to-hero.html","kind":"course","topics":["neural-networks","backprop","transformers"]},
+    {"id":"hf-llm-course","title":"Hugging Face LLM Course","publisher":"Hugging Face","url":"https://huggingface.co/learn/llm-course/chapter1/1","kind":"course","topics":["tokenization","transformers","llm-training"]},
+    {"id":"sentence-transformers","title":"Sentence Transformers Documentation","publisher":"Sentence Transformers","url":"https://www.sbert.net/","kind":"official-docs","topics":["embeddings","semantic-search","retrieval-eval"]},
+    {"id":"rag-paper","title":"Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks","publisher":"arXiv","url":"https://arxiv.org/abs/2005.11401","kind":"paper","topics":["rag"]},
+    {"id":"qdrant-docs","title":"Qdrant Documentation","publisher":"Qdrant","url":"https://qdrant.tech/documentation/","kind":"official-docs","topics":["vector-db","semantic-search"]},
+    {"id":"hnsw-paper","title":"Efficient and Robust Approximate Nearest Neighbor Search Using Hierarchical Navigable Small World Graphs","publisher":"arXiv","url":"https://arxiv.org/abs/1603.09320","kind":"paper","topics":["vector-db"]},
+    {"id":"langgraph-docs","title":"LangGraph Documentation","publisher":"LangChain","url":"https://docs.langchain.com/oss/python/langgraph/overview","kind":"official-docs","topics":["agents","memory-routing"]},
+    {"id":"anthropic-agents","title":"Building Effective Agents","publisher":"Anthropic","url":"https://www.anthropic.com/research/building-effective-agents","kind":"primary-guidance","topics":["tool-use","agents","memory-routing"]},
+    {"id":"anthropic-evals","title":"Demystifying Evals for AI Agents","publisher":"Anthropic","url":"https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents","kind":"primary-guidance","topics":["ai-evals","agents"]}
+  ]
+}

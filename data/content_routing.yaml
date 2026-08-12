@@ -1,0 +1,33 @@
+routing:
+  principles:
+    - prefer_primary_sources
+    - use_minimum_sufficient_depth
+    - return_to_main_mission_after_side_quest
+    - preserve_evidence
+  layers:
+    L1:
+      name: intuition
+      output: mental_model
+    L2:
+      name: practitioner
+      output: working_usage
+    L3:
+      name: engineer
+      output: mechanism_explanation
+    L4:
+      name: builder
+      output: simplified_implementation
+    L5:
+      name: expert
+      output: theory_and_research
+  side_quest:
+    default_minutes: 120
+    trigger: blocker_detected
+    return_required: true
+  fast_moving_topics:
+    refresh_required: true
+    examples:
+      - frameworks
+      - APIs
+      - agent_orchestration
+      - deployment_tools

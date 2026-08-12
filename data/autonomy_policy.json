@@ -1,0 +1,33 @@
+{
+  "levels": [
+    {
+      "level": "A1",
+      "name": "Apprentice",
+      "ai_role": "Explain, question, review, small debugging assistance",
+      "learner_ownership": ["problem framing", "key implementation", "explanation", "tests"]
+    },
+    {
+      "level": "A2",
+      "name": "Builder",
+      "ai_role": "Implement bounded components after specification",
+      "learner_ownership": ["requirements", "interfaces", "tests", "review"]
+    },
+    {
+      "level": "A3",
+      "name": "System Builder",
+      "ai_role": "Implement subsystems under explicit architecture constraints",
+      "learner_ownership": ["architecture", "trade-offs", "evaluation", "failure analysis"]
+    },
+    {
+      "level": "A4",
+      "name": "AI Systems Lead",
+      "ai_role": "Coordinate multiple agents and implementation streams",
+      "learner_ownership": ["system boundaries", "quality gates", "risk", "technical decisions"]
+    }
+  ],
+  "ratchet_rules": {
+    "increase": ["successful_no_ai_gate", "successful_transfer", "successful_review"],
+    "decrease": ["dependency_without_understanding", "failed_transfer", "repeated_gate_failure"],
+    "principle": "Increase AI autonomy only when independent competence evidence increases."
+  }
+}

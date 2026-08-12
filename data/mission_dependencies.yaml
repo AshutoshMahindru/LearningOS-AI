@@ -1,0 +1,43 @@
+dependencies:
+  M01: {blocking: [], helpful: []}
+  M02: {blocking: [M01], helpful: []}
+  M03: {blocking: [M02], helpful: []}
+  M04: {blocking: [M03], helpful: []}
+  M05: {blocking: [M03], helpful: []}
+  M06: {blocking: [M04], helpful: []}
+  M07: {blocking: [M04, M05, M06], helpful: []}
+  M08: {blocking: [M07], helpful: []}
+  M09: {blocking: [M07], helpful: [M08]}
+  M10: {blocking: [M09], helpful: []}
+  M11: {blocking: [M09], helpful: []}
+  M12: {blocking: [M11], helpful: []}
+  M13: {blocking: [M09], helpful: [M15]}
+  M14: {blocking: [M06], helpful: [M15]}
+  M15: {blocking: [M05], helpful: []}
+  M16: {blocking: [M15], helpful: []}
+  M17: {blocking: [M09], helpful: [M10]}
+  M18: {blocking: [M17], helpful: []}
+  M19: {blocking: [M16, M17], helpful: []}
+  M20: {blocking: [M19], helpful: []}
+  M21: {blocking: [M20], helpful: []}
+  M22: {blocking: [M21], helpful: []}
+  M23: {blocking: [M16, M22], helpful: []}
+  M24: {blocking: [M19, M23], helpful: []}
+  M25: {blocking: [M24], helpful: []}
+  M26: {blocking: [M25], helpful: []}
+  M27: {blocking: [M03], helpful: [M15]}
+  M28: {blocking: [M15, M27], helpful: []}
+  M29: {blocking: [M16, M28], helpful: []}
+  M30: {blocking: [M29], helpful: []}
+  M31: {blocking: [M30], helpful: []}
+  M32: {blocking: [M31], helpful: []}
+  M33: {blocking: [M28], helpful: []}
+  M34: {blocking: [M31, M33], helpful: []}
+  M35: {blocking: [M34], helpful: []}
+  M36: {blocking: [M35], helpful: [M33]}
+  M37: {blocking: [M32], helpful: []}
+  M38: {blocking: [M37], helpful: []}
+  M39: {blocking: [M38], helpful: []}
+  M40: {blocking: [M34, M39], helpful: []}
+  M41: {blocking: [M40], helpful: []}
+  M42: {blocking: [M41], helpful: []}
