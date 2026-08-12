@@ -1,0 +1,9 @@
+sources:
+  - name: scikit-learn getting started
+    sections: model fitting, prediction, evaluation
+experiments:
+  - split
+  - features
+  - model choice
+  - hyperparameters
+  - corrupted labels
