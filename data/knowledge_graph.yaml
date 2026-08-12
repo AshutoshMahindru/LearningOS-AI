@@ -1,0 +1,3126 @@
+- id: K001
+  domain: Computing
+  concept: program execution
+  prerequisites: []
+  first_mission: M38
+  minimum_viable_understanding: Can explain program execution in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - variables
+  - files
+  - CLI
+- id: K002
+  domain: Computing
+  concept: variables
+  prerequisites:
+  - program execution
+  first_mission: M03
+  minimum_viable_understanding: Can explain variables in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - strings and text
+  - numbers and strings
+  - lists
+  - dictionaries
+  - conditionals
+  - functions
+  - function
+- id: KTXT
+  domain: Computing
+  concept: strings and text
+  prerequisites:
+  - variables
+  first_mission: ''
+  minimum_viable_understanding: Can explain strings and text in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K003
+  domain: Computing
+  concept: numbers and strings
+  prerequisites:
+  - variables
+  first_mission: ''
+  minimum_viable_understanding: Can explain numbers and strings in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - numerical precision
+  - coordinate
+- id: K004
+  domain: Computing
+  concept: lists
+  prerequisites:
+  - variables
+  first_mission: M03
+  minimum_viable_understanding: Can explain lists in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - loops
+  - array
+- id: K005
+  domain: Computing
+  concept: dictionaries
+  prerequisites:
+  - variables
+  first_mission: M03
+  minimum_viable_understanding: Can explain dictionaries in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K006
+  domain: Computing
+  concept: conditionals
+  prerequisites:
+  - variables
+  first_mission: ''
+  minimum_viable_understanding: Can explain conditionals in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - functions
+- id: K007
+  domain: Computing
+  concept: loops
+  prerequisites:
+  - lists
+  first_mission: M03
+  minimum_viable_understanding: Can explain loops in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K008
+  domain: Computing
+  concept: functions
+  prerequisites:
+  - variables
+  - conditionals
+  first_mission: M03
+  minimum_viable_understanding: Can explain functions in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - modules
+  - exceptions
+  - classes
+  - functions as interfaces
+  - testing
+  - refactoring
+- id: K009
+  domain: Computing
+  concept: modules
+  prerequisites:
+  - functions
+  first_mission: ''
+  minimum_viable_understanding: Can explain modules in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - imports
+  - refactoring
+- id: K010
+  domain: Computing
+  concept: imports
+  prerequisites:
+  - modules
+  first_mission: M03
+  minimum_viable_understanding: Can explain imports in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - packages
+- id: K011
+  domain: Computing
+  concept: packages
+  prerequisites:
+  - imports
+  first_mission: ''
+  minimum_viable_understanding: Can explain packages in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - virtual environments
+- id: K012
+  domain: Computing
+  concept: virtual environments
+  prerequisites:
+  - packages
+  first_mission: ''
+  minimum_viable_understanding: Can explain virtual environments in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - reproducibility
+- id: K013
+  domain: Computing
+  concept: files
+  prerequisites:
+  - program execution
+  first_mission: ''
+  minimum_viable_understanding: Can explain files in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - CSV
+  - JSON
+  - Git
+  - document ingestion
+- id: K014
+  domain: Computing
+  concept: CSV
+  prerequisites:
+  - files
+  first_mission: ''
+  minimum_viable_understanding: Can explain CSV in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - DataFrame
+- id: K015
+  domain: Computing
+  concept: JSON
+  prerequisites:
+  - files
+  first_mission: M37
+  minimum_viable_understanding: Can explain JSON in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - HTTP
+  - APIs
+  - tool schema
+  - agent state
+- id: K016
+  domain: Computing
+  concept: exceptions
+  prerequisites:
+  - functions
+  first_mission: ''
+  minimum_viable_understanding: Can explain exceptions in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - fallback
+- id: K017
+  domain: Computing
+  concept: classes
+  prerequisites:
+  - functions
+  first_mission: ''
+  minimum_viable_understanding: Can explain classes in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - objects
+  - nn.Module
+- id: K018
+  domain: Computing
+  concept: objects
+  prerequisites:
+  - classes
+  first_mission: ''
+  minimum_viable_understanding: Can explain objects in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K019
+  domain: Computing
+  concept: CLI
+  prerequisites:
+  - program execution
+  first_mission: M13
+  minimum_viable_understanding: Can explain CLI in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - shell paths
+- id: K020
+  domain: Computing
+  concept: shell paths
+  prerequisites:
+  - CLI
+  first_mission: ''
+  minimum_viable_understanding: Can explain shell paths in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K021
+  domain: Computing
+  concept: Git
+  prerequisites:
+  - files
+  first_mission: M32
+  minimum_viable_understanding: Can explain Git in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - reproducibility
+- id: K022
+  domain: Computing
+  concept: HTTP
+  prerequisites:
+  - JSON
+  first_mission: ''
+  minimum_viable_understanding: Can explain HTTP in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - APIs
+- id: K023
+  domain: Computing
+  concept: APIs
+  prerequisites:
+  - HTTP
+  - JSON
+  first_mission: ''
+  minimum_viable_understanding: Can explain APIs in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - tool schema
+  - latency
+  - cost
+  - system boundary
+- id: K024
+  domain: Computing
+  concept: functions as interfaces
+  prerequisites:
+  - functions
+  first_mission: M03
+  minimum_viable_understanding: Can explain functions as interfaces in plain language, recognize it in a working
+    system, and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - workflow
+- id: K025
+  domain: Computing
+  concept: testing
+  prerequisites:
+  - functions
+  first_mission: M18
+  minimum_viable_understanding: Can explain testing in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - evaluation set
+  - tracing
+- id: K026
+  domain: Computing
+  concept: refactoring
+  prerequisites:
+  - functions
+  - modules
+  first_mission: ''
+  minimum_viable_understanding: Can explain refactoring in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K027
+  domain: Computing
+  concept: reproducibility
+  prerequisites:
+  - virtual environments
+  - Git
+  first_mission: M07
+  minimum_viable_understanding: Can explain reproducibility in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - random seed
+- id: K028
+  domain: Data
+  concept: DataFrame
+  prerequisites:
+  - CSV
+  first_mission: M04
+  minimum_viable_understanding: Can explain DataFrame in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - Series
+  - data types
+  - missing data
+  - filtering
+  - sorting
+  - groupby
+  - joins
+  - reshaping
+  - feature engineering
+  - visualization
+  - labels
+  - population and sample
+  - batch
+  - Dataset
+- id: K029
+  domain: Data
+  concept: Series
+  prerequisites:
+  - DataFrame
+  first_mission: ''
+  minimum_viable_understanding: Can explain Series in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K030
+  domain: Data
+  concept: data types
+  prerequisites:
+  - DataFrame
+  first_mission: M04
+  minimum_viable_understanding: Can explain data types in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K031
+  domain: Data
+  concept: missing data
+  prerequisites:
+  - DataFrame
+  first_mission: M04
+  minimum_viable_understanding: Can explain missing data in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K032
+  domain: Data
+  concept: filtering
+  prerequisites:
+  - DataFrame
+  first_mission: M04
+  minimum_viable_understanding: Can explain filtering in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K033
+  domain: Data
+  concept: sorting
+  prerequisites:
+  - DataFrame
+  first_mission: ''
+  minimum_viable_understanding: Can explain sorting in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K034
+  domain: Data
+  concept: groupby
+  prerequisites:
+  - DataFrame
+  first_mission: M04
+  minimum_viable_understanding: Can explain groupby in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K035
+  domain: Data
+  concept: joins
+  prerequisites:
+  - DataFrame
+  first_mission: ''
+  minimum_viable_understanding: Can explain joins in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K036
+  domain: Data
+  concept: reshaping
+  prerequisites:
+  - DataFrame
+  first_mission: ''
+  minimum_viable_understanding: Can explain reshaping in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K037
+  domain: Data
+  concept: feature engineering
+  prerequisites:
+  - DataFrame
+  first_mission: M02
+  minimum_viable_understanding: Can explain feature engineering in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - data leakage
+  - data pipeline
+  - features
+- id: K038
+  domain: Data
+  concept: data leakage
+  prerequisites:
+  - feature engineering
+  first_mission: ''
+  minimum_viable_understanding: Can explain data leakage in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - train-test split
+- id: K039
+  domain: Data
+  concept: train-test split
+  prerequisites:
+  - data leakage
+  first_mission: M07
+  minimum_viable_understanding: Can explain train-test split in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - cross-validation
+  - data pipeline
+  - generalization
+- id: K040
+  domain: Data
+  concept: cross-validation
+  prerequisites:
+  - train-test split
+  first_mission: ''
+  minimum_viable_understanding: Can explain cross-validation in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K041
+  domain: Data
+  concept: visualization
+  prerequisites:
+  - DataFrame
+  first_mission: M06
+  minimum_viable_understanding: Can explain visualization in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - histogram
+  - scatter plot
+  - bar chart
+  - line chart
+- id: K042
+  domain: Data
+  concept: histogram
+  prerequisites:
+  - visualization
+  first_mission: M06
+  minimum_viable_understanding: Can explain histogram in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K043
+  domain: Data
+  concept: scatter plot
+  prerequisites:
+  - visualization
+  first_mission: M06
+  minimum_viable_understanding: Can explain scatter plot in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - outliers
+- id: K044
+  domain: Data
+  concept: bar chart
+  prerequisites:
+  - visualization
+  first_mission: M06
+  minimum_viable_understanding: Can explain bar chart in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K045
+  domain: Data
+  concept: line chart
+  prerequisites:
+  - visualization
+  first_mission: M06
+  minimum_viable_understanding: Can explain line chart in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K046
+  domain: Data
+  concept: outliers
+  prerequisites:
+  - scatter plot
+  first_mission: M06
+  minimum_viable_understanding: Can explain outliers in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K047
+  domain: Data
+  concept: data pipeline
+  prerequisites:
+  - feature engineering
+  - train-test split
+  first_mission: M07
+  minimum_viable_understanding: Can explain data pipeline in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - privacy
+- id: K048
+  domain: Numerical Computing
+  concept: array
+  prerequisites:
+  - lists
+  first_mission: M05
+  minimum_viable_understanding: Can explain array in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - shape
+  - indexing
+  - vectorized operation
+  - tensor
+  - vector
+  - matrix
+- id: K049
+  domain: Numerical Computing
+  concept: shape
+  prerequisites:
+  - array
+  first_mission: M05
+  minimum_viable_understanding: Can explain shape in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - dimension
+  - broadcasting
+  - matrix
+- id: K050
+  domain: Numerical Computing
+  concept: dimension
+  prerequisites:
+  - shape
+  first_mission: M05
+  minimum_viable_understanding: Can explain dimension in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - tensor
+- id: K051
+  domain: Numerical Computing
+  concept: indexing
+  prerequisites:
+  - array
+  first_mission: M05
+  minimum_viable_understanding: Can explain indexing in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K052
+  domain: Numerical Computing
+  concept: vectorized operation
+  prerequisites:
+  - array
+  first_mission: ''
+  minimum_viable_understanding: Can explain vectorized operation in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - broadcasting
+- id: K053
+  domain: Numerical Computing
+  concept: broadcasting
+  prerequisites:
+  - shape
+  - vectorized operation
+  first_mission: M05
+  minimum_viable_understanding: Can explain broadcasting in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K054
+  domain: Numerical Computing
+  concept: tensor
+  prerequisites:
+  - array
+  - dimension
+  first_mission: M25
+  minimum_viable_understanding: Can explain tensor in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - PyTorch tensor
+- id: K055
+  domain: Numerical Computing
+  concept: numerical precision
+  prerequisites:
+  - numbers and strings
+  first_mission: M10
+  minimum_viable_understanding: Can explain numerical precision in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K056
+  domain: Numerical Computing
+  concept: random seed
+  prerequisites:
+  - reproducibility
+  first_mission: M12
+  minimum_viable_understanding: Can explain random seed in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K057
+  domain: Machine Learning
+  concept: features
+  prerequisites:
+  - feature engineering
+  first_mission: M02
+  minimum_viable_understanding: Can explain features in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - model
+  - regression
+  - classification
+  - clustering
+  - dimensionality reduction
+- id: K058
+  domain: Machine Learning
+  concept: labels
+  prerequisites:
+  - DataFrame
+  first_mission: M02
+  minimum_viable_understanding: Can explain labels in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - model
+  - loss function
+- id: K059
+  domain: Machine Learning
+  concept: model
+  prerequisites:
+  - features
+  - labels
+  first_mission: M01
+  minimum_viable_understanding: Can explain model in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - parameter
+  - hyperparameter
+  - training
+- id: K060
+  domain: Machine Learning
+  concept: parameter
+  prerequisites:
+  - model
+  first_mission: ''
+  minimum_viable_understanding: Can explain parameter in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K061
+  domain: Machine Learning
+  concept: hyperparameter
+  prerequisites:
+  - model
+  first_mission: ''
+  minimum_viable_understanding: Can explain hyperparameter in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K062
+  domain: Machine Learning
+  concept: training
+  prerequisites:
+  - model
+  first_mission: M02
+  minimum_viable_understanding: Can explain training in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - inference
+  - epoch
+  - fine-tuning
+- id: K063
+  domain: Machine Learning
+  concept: inference
+  prerequisites:
+  - training
+  first_mission: M02
+  minimum_viable_understanding: Can explain inference in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - prediction
+- id: K064
+  domain: Machine Learning
+  concept: prediction
+  prerequisites:
+  - inference
+  first_mission: M02
+  minimum_viable_understanding: Can explain prediction in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - loss function
+  - baseline
+  - regression
+  - classification
+- id: K065
+  domain: Machine Learning
+  concept: loss function
+  prerequisites:
+  - prediction
+  - labels
+  first_mission: M03
+  minimum_viable_understanding: Can explain loss function in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - objective function
+- id: K066
+  domain: Machine Learning
+  concept: baseline
+  prerequisites:
+  - prediction
+  first_mission: M07
+  minimum_viable_understanding: Can explain baseline in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K067
+  domain: Machine Learning
+  concept: generalization
+  prerequisites:
+  - train-test split
+  first_mission: ''
+  minimum_viable_understanding: Can explain generalization in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - overfitting
+  - underfitting
+- id: K068
+  domain: Machine Learning
+  concept: overfitting
+  prerequisites:
+  - generalization
+  first_mission: M26
+  minimum_viable_understanding: Can explain overfitting in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - regularization
+  - pruning
+- id: K069
+  domain: Machine Learning
+  concept: underfitting
+  prerequisites:
+  - generalization
+  first_mission: ''
+  minimum_viable_understanding: Can explain underfitting in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K070
+  domain: Machine Learning
+  concept: regularization
+  prerequisites:
+  - overfitting
+  first_mission: M26
+  minimum_viable_understanding: Can explain regularization in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - dropout
+  - weight decay
+- id: K071
+  domain: Machine Learning
+  concept: regression
+  prerequisites:
+  - features
+  - prediction
+  first_mission: M08
+  minimum_viable_understanding: Can explain regression in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - linear regression
+- id: K072
+  domain: Machine Learning
+  concept: linear regression
+  prerequisites:
+  - regression
+  first_mission: M08
+  minimum_viable_understanding: Can explain linear regression in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - residual
+  - neuron
+- id: K073
+  domain: Machine Learning
+  concept: residual
+  prerequisites:
+  - linear regression
+  first_mission: M08
+  minimum_viable_understanding: Can explain residual in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - mean absolute error
+  - mean squared error
+- id: K074
+  domain: Machine Learning
+  concept: mean absolute error
+  prerequisites:
+  - residual
+  first_mission: M08
+  minimum_viable_understanding: Can explain mean absolute error in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K075
+  domain: Machine Learning
+  concept: mean squared error
+  prerequisites:
+  - residual
+  first_mission: M08
+  minimum_viable_understanding: Can explain mean squared error in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K076
+  domain: Machine Learning
+  concept: classification
+  prerequisites:
+  - features
+  - prediction
+  first_mission: M09
+  minimum_viable_understanding: Can explain classification in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - binary classification
+  - decision tree
+  - KNN
+- id: K077
+  domain: Machine Learning
+  concept: binary classification
+  prerequisites:
+  - classification
+  first_mission: M09
+  minimum_viable_understanding: Can explain binary classification in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - logistic regression
+  - classification threshold
+- id: K078
+  domain: Machine Learning
+  concept: logistic regression
+  prerequisites:
+  - binary classification
+  first_mission: M08
+  minimum_viable_understanding: Can explain logistic regression in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - sigmoid
+- id: K079
+  domain: Machine Learning
+  concept: sigmoid
+  prerequisites:
+  - logistic regression
+  first_mission: M09
+  minimum_viable_understanding: Can explain sigmoid in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K080
+  domain: Machine Learning
+  concept: classification threshold
+  prerequisites:
+  - binary classification
+  first_mission: M09
+  minimum_viable_understanding: Can explain classification threshold in plain language, recognize it in a working
+    system, and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - confusion matrix
+  - ROC curve
+- id: K081
+  domain: Machine Learning
+  concept: confusion matrix
+  prerequisites:
+  - classification threshold
+  first_mission: M10
+  minimum_viable_understanding: Can explain confusion matrix in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - precision
+  - recall
+- id: K082
+  domain: Machine Learning
+  concept: precision
+  prerequisites:
+  - confusion matrix
+  first_mission: M10
+  minimum_viable_understanding: Can explain precision in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - F1 score
+- id: K083
+  domain: Machine Learning
+  concept: recall
+  prerequisites:
+  - confusion matrix
+  first_mission: M10
+  minimum_viable_understanding: Can explain recall in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - F1 score
+- id: K084
+  domain: Machine Learning
+  concept: F1 score
+  prerequisites:
+  - precision
+  - recall
+  first_mission: ''
+  minimum_viable_understanding: Can explain F1 score in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K085
+  domain: Machine Learning
+  concept: ROC curve
+  prerequisites:
+  - classification threshold
+  first_mission: ''
+  minimum_viable_understanding: Can explain ROC curve in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - AUC
+- id: K086
+  domain: Machine Learning
+  concept: AUC
+  prerequisites:
+  - ROC curve
+  first_mission: M10
+  minimum_viable_understanding: Can explain AUC in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K087
+  domain: Machine Learning
+  concept: decision tree
+  prerequisites:
+  - classification
+  first_mission: M11
+  minimum_viable_understanding: Can explain decision tree in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - tree split
+  - pruning
+  - bagging
+  - boosting
+- id: K088
+  domain: Machine Learning
+  concept: tree split
+  prerequisites:
+  - decision tree
+  first_mission: M07
+  minimum_viable_understanding: Can explain tree split in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - Gini impurity
+  - entropy split
+- id: K089
+  domain: Machine Learning
+  concept: Gini impurity
+  prerequisites:
+  - tree split
+  first_mission: M11
+  minimum_viable_understanding: Can explain Gini impurity in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K090
+  domain: Machine Learning
+  concept: entropy split
+  prerequisites:
+  - tree split
+  first_mission: M07
+  minimum_viable_understanding: Can explain entropy split in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K091
+  domain: Machine Learning
+  concept: pruning
+  prerequisites:
+  - decision tree
+  - overfitting
+  first_mission: M11
+  minimum_viable_understanding: Can explain pruning in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K092
+  domain: Machine Learning
+  concept: bagging
+  prerequisites:
+  - decision tree
+  first_mission: M12
+  minimum_viable_understanding: Can explain bagging in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - random forest
+- id: K093
+  domain: Machine Learning
+  concept: random forest
+  prerequisites:
+  - bagging
+  first_mission: M12
+  minimum_viable_understanding: Can explain random forest in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K094
+  domain: Machine Learning
+  concept: boosting
+  prerequisites:
+  - decision tree
+  first_mission: M12
+  minimum_viable_understanding: Can explain boosting in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - gradient boosting
+- id: K095
+  domain: Machine Learning
+  concept: gradient boosting
+  prerequisites:
+  - boosting
+  first_mission: M12
+  minimum_viable_understanding: Can explain gradient boosting in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K096
+  domain: Machine Learning
+  concept: KNN
+  prerequisites:
+  - classification
+  first_mission: M13
+  minimum_viable_understanding: Can explain KNN in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - feature scaling
+- id: K097
+  domain: Machine Learning
+  concept: feature scaling
+  prerequisites:
+  - KNN
+  first_mission: M02
+  minimum_viable_understanding: Can explain feature scaling in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K098
+  domain: Machine Learning
+  concept: clustering
+  prerequisites:
+  - features
+  first_mission: M14
+  minimum_viable_understanding: Can explain clustering in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - K-means
+  - hierarchical clustering
+  - DBSCAN
+- id: K099
+  domain: Machine Learning
+  concept: K-means
+  prerequisites:
+  - clustering
+  first_mission: M14
+  minimum_viable_understanding: Can explain K-means in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - centroid
+- id: K100
+  domain: Machine Learning
+  concept: centroid
+  prerequisites:
+  - K-means
+  first_mission: M14
+  minimum_viable_understanding: Can explain centroid in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K101
+  domain: Machine Learning
+  concept: hierarchical clustering
+  prerequisites:
+  - clustering
+  first_mission: M14
+  minimum_viable_understanding: Can explain hierarchical clustering in plain language, recognize it in a working
+    system, and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K102
+  domain: Machine Learning
+  concept: DBSCAN
+  prerequisites:
+  - clustering
+  first_mission: M14
+  minimum_viable_understanding: Can explain DBSCAN in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K103
+  domain: Machine Learning
+  concept: dimensionality reduction
+  prerequisites:
+  - features
+  first_mission: M13
+  minimum_viable_understanding: Can explain dimensionality reduction in plain language, recognize it in a working
+    system, and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - PCA
+- id: K104
+  domain: Machine Learning
+  concept: PCA
+  prerequisites:
+  - dimensionality reduction
+  first_mission: ''
+  minimum_viable_understanding: Can explain PCA in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K105
+  domain: Mathematics
+  concept: coordinate
+  prerequisites:
+  - numbers and strings
+  first_mission: ''
+  minimum_viable_understanding: Can explain coordinate in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - vector
+- id: K106
+  domain: Mathematics
+  concept: vector
+  prerequisites:
+  - coordinate
+  - array
+  first_mission: M05
+  minimum_viable_understanding: Can explain vector in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - vector magnitude
+  - vector direction
+  - dot product
+  - matrix multiplication
+  - basis
+  - gradient
+  - embedding
+- id: K107
+  domain: Mathematics
+  concept: vector magnitude
+  prerequisites:
+  - vector
+  first_mission: M05
+  minimum_viable_understanding: Can explain vector magnitude in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - cosine similarity
+- id: K108
+  domain: Mathematics
+  concept: vector direction
+  prerequisites:
+  - vector
+  first_mission: M05
+  minimum_viable_understanding: Can explain vector direction in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K109
+  domain: Mathematics
+  concept: dot product
+  prerequisites:
+  - vector
+  first_mission: M15
+  minimum_viable_understanding: Can explain dot product in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - cosine similarity
+  - projection
+  - weighted sum
+  - attention score
+- id: K110
+  domain: Mathematics
+  concept: cosine similarity
+  prerequisites:
+  - dot product
+  - vector magnitude
+  first_mission: M15
+  minimum_viable_understanding: Can explain cosine similarity in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - semantic similarity
+  - semantic search
+  - nearest neighbor search
+- id: K111
+  domain: Mathematics
+  concept: matrix
+  prerequisites:
+  - array
+  - shape
+  first_mission: M10
+  minimum_viable_understanding: Can explain matrix in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - matrix multiplication
+  - transpose
+  - rank
+  - SVD
+- id: K112
+  domain: Mathematics
+  concept: matrix multiplication
+  prerequisites:
+  - matrix
+  - vector
+  first_mission: M10
+  minimum_viable_understanding: Can explain matrix multiplication in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - linear transformation
+  - scaled dot-product attention
+- id: K113
+  domain: Mathematics
+  concept: transpose
+  prerequisites:
+  - matrix
+  first_mission: M16
+  minimum_viable_understanding: Can explain transpose in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K114
+  domain: Mathematics
+  concept: linear transformation
+  prerequisites:
+  - matrix multiplication
+  first_mission: M08
+  minimum_viable_understanding: Can explain linear transformation in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - eigenvector
+- id: K115
+  domain: Mathematics
+  concept: projection
+  prerequisites:
+  - dot product
+  first_mission: M16
+  minimum_viable_understanding: Can explain projection in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K116
+  domain: Mathematics
+  concept: basis
+  prerequisites:
+  - vector
+  first_mission: ''
+  minimum_viable_understanding: Can explain basis in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K117
+  domain: Mathematics
+  concept: rank
+  prerequisites:
+  - matrix
+  first_mission: M16
+  minimum_viable_understanding: Can explain rank in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - SVD
+- id: K118
+  domain: Mathematics
+  concept: eigenvector
+  prerequisites:
+  - linear transformation
+  first_mission: ''
+  minimum_viable_understanding: Can explain eigenvector in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K119
+  domain: Mathematics
+  concept: SVD
+  prerequisites:
+  - matrix
+  - rank
+  first_mission: ''
+  minimum_viable_understanding: Can explain SVD in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K120
+  domain: Mathematics
+  concept: random variable
+  prerequisites:
+  - probability
+  first_mission: M03
+  minimum_viable_understanding: Can explain random variable in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K121
+  domain: Mathematics
+  concept: probability
+  prerequisites: []
+  first_mission: M09
+  minimum_viable_understanding: Can explain probability in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - random variable
+  - distribution
+  - conditional probability
+  - likelihood
+  - hypothesis test
+  - information
+  - softmax
+- id: K122
+  domain: Mathematics
+  concept: distribution
+  prerequisites:
+  - probability
+  first_mission: M06
+  minimum_viable_understanding: Can explain distribution in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - expectation
+  - entropy
+- id: K123
+  domain: Mathematics
+  concept: expectation
+  prerequisites:
+  - distribution
+  first_mission: M17
+  minimum_viable_understanding: Can explain expectation in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - variance
+- id: K124
+  domain: Mathematics
+  concept: variance
+  prerequisites:
+  - expectation
+  first_mission: M12
+  minimum_viable_understanding: Can explain variance in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - standard deviation
+  - correlation
+- id: K125
+  domain: Mathematics
+  concept: conditional probability
+  prerequisites:
+  - probability
+  first_mission: M09
+  minimum_viable_understanding: Can explain conditional probability in plain language, recognize it in a working
+    system, and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - Bayes theorem
+- id: K126
+  domain: Mathematics
+  concept: Bayes theorem
+  prerequisites:
+  - conditional probability
+  first_mission: M17
+  minimum_viable_understanding: Can explain Bayes theorem in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K127
+  domain: Mathematics
+  concept: likelihood
+  prerequisites:
+  - probability
+  first_mission: ''
+  minimum_viable_understanding: Can explain likelihood in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K128
+  domain: Mathematics
+  concept: population and sample
+  prerequisites:
+  - DataFrame
+  first_mission: M18
+  minimum_viable_understanding: Can explain population and sample in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - standard error
+  - hypothesis test
+- id: K129
+  domain: Mathematics
+  concept: standard deviation
+  prerequisites:
+  - variance
+  first_mission: M18
+  minimum_viable_understanding: Can explain standard deviation in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - standard error
+- id: K130
+  domain: Mathematics
+  concept: standard error
+  prerequisites:
+  - standard deviation
+  - population and sample
+  first_mission: M08
+  minimum_viable_understanding: Can explain standard error in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - confidence interval
+- id: K131
+  domain: Mathematics
+  concept: confidence interval
+  prerequisites:
+  - standard error
+  first_mission: M18
+  minimum_viable_understanding: Can explain confidence interval in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K132
+  domain: Mathematics
+  concept: correlation
+  prerequisites:
+  - variance
+  first_mission: M18
+  minimum_viable_understanding: Can explain correlation in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K133
+  domain: Mathematics
+  concept: hypothesis test
+  prerequisites:
+  - population and sample
+  - probability
+  first_mission: M18
+  minimum_viable_understanding: Can explain hypothesis test in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K134
+  domain: Mathematics
+  concept: function
+  prerequisites:
+  - variables
+  first_mission: M03
+  minimum_viable_understanding: Can explain function in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - slope
+  - computational graph
+- id: K135
+  domain: Mathematics
+  concept: slope
+  prerequisites:
+  - function
+  first_mission: M08
+  minimum_viable_understanding: Can explain slope in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - derivative
+- id: K136
+  domain: Mathematics
+  concept: derivative
+  prerequisites:
+  - slope
+  first_mission: M19
+  minimum_viable_understanding: Can explain derivative in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - partial derivative
+  - chain rule
+- id: K137
+  domain: Mathematics
+  concept: partial derivative
+  prerequisites:
+  - derivative
+  first_mission: M19
+  minimum_viable_understanding: Can explain partial derivative in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - gradient
+- id: K138
+  domain: Mathematics
+  concept: gradient
+  prerequisites:
+  - partial derivative
+  - vector
+  first_mission: M19
+  minimum_viable_understanding: Can explain gradient in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - gradient descent
+- id: K139
+  domain: Mathematics
+  concept: chain rule
+  prerequisites:
+  - derivative
+  first_mission: M19
+  minimum_viable_understanding: Can explain chain rule in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - backpropagation
+- id: K140
+  domain: Mathematics
+  concept: objective function
+  prerequisites:
+  - loss function
+  first_mission: M03
+  minimum_viable_understanding: Can explain objective function in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - gradient descent
+- id: K141
+  domain: Mathematics
+  concept: gradient descent
+  prerequisites:
+  - gradient
+  - objective function
+  first_mission: M19
+  minimum_viable_understanding: Can explain gradient descent in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - learning rate
+  - SGD
+  - optimizer
+- id: K142
+  domain: Mathematics
+  concept: learning rate
+  prerequisites:
+  - gradient descent
+  first_mission: M01
+  minimum_viable_understanding: Can explain learning rate in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K143
+  domain: Mathematics
+  concept: SGD
+  prerequisites:
+  - gradient descent
+  first_mission: M20
+  minimum_viable_understanding: Can explain SGD in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - momentum
+- id: K144
+  domain: Mathematics
+  concept: momentum
+  prerequisites:
+  - SGD
+  first_mission: M20
+  minimum_viable_understanding: Can explain momentum in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - Adam
+- id: K145
+  domain: Mathematics
+  concept: Adam
+  prerequisites:
+  - momentum
+  first_mission: M20
+  minimum_viable_understanding: Can explain Adam in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K146
+  domain: Mathematics
+  concept: information
+  prerequisites:
+  - probability
+  first_mission: M11
+  minimum_viable_understanding: Can explain information in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - entropy
+- id: K147
+  domain: Mathematics
+  concept: entropy
+  prerequisites:
+  - information
+  - distribution
+  first_mission: M11
+  minimum_viable_understanding: Can explain entropy in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - cross-entropy
+- id: K148
+  domain: Mathematics
+  concept: cross-entropy
+  prerequisites:
+  - entropy
+  first_mission: M31
+  minimum_viable_understanding: Can explain cross-entropy in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - KL divergence
+  - pretraining
+- id: K149
+  domain: Mathematics
+  concept: KL divergence
+  prerequisites:
+  - cross-entropy
+  first_mission: ''
+  minimum_viable_understanding: Can explain KL divergence in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K150
+  domain: Deep Learning
+  concept: neuron
+  prerequisites:
+  - linear regression
+  first_mission: M22
+  minimum_viable_understanding: Can explain neuron in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - weighted sum
+  - bias term
+  - neural layer
+- id: K151
+  domain: Deep Learning
+  concept: weighted sum
+  prerequisites:
+  - neuron
+  - dot product
+  first_mission: M22
+  minimum_viable_understanding: Can explain weighted sum in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - activation function
+- id: K152
+  domain: Deep Learning
+  concept: bias term
+  prerequisites:
+  - neuron
+  first_mission: ''
+  minimum_viable_understanding: Can explain bias term in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K153
+  domain: Deep Learning
+  concept: activation function
+  prerequisites:
+  - weighted sum
+  first_mission: M03
+  minimum_viable_understanding: Can explain activation function in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - ReLU
+- id: K154
+  domain: Deep Learning
+  concept: ReLU
+  prerequisites:
+  - activation function
+  first_mission: M22
+  minimum_viable_understanding: Can explain ReLU in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K155
+  domain: Deep Learning
+  concept: neural layer
+  prerequisites:
+  - neuron
+  first_mission: M21
+  minimum_viable_understanding: Can explain neural layer in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - neural network
+  - normalization
+  - residual connection
+  - logits
+- id: K156
+  domain: Deep Learning
+  concept: neural network
+  prerequisites:
+  - neural layer
+  first_mission: M21
+  minimum_viable_understanding: Can explain neural network in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - forward pass
+  - weight initialization
+  - nn.Module
+  - feed-forward network
+- id: K157
+  domain: Deep Learning
+  concept: forward pass
+  prerequisites:
+  - neural network
+  first_mission: M23
+  minimum_viable_understanding: Can explain forward pass in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K158
+  domain: Deep Learning
+  concept: batch
+  prerequisites:
+  - DataFrame
+  first_mission: M21
+  minimum_viable_understanding: Can explain batch in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - DataLoader
+- id: K159
+  domain: Deep Learning
+  concept: epoch
+  prerequisites:
+  - training
+  first_mission: M21
+  minimum_viable_understanding: Can explain epoch in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K160
+  domain: Deep Learning
+  concept: computational graph
+  prerequisites:
+  - function
+  first_mission: M24
+  minimum_viable_understanding: Can explain computational graph in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - backpropagation
+- id: K161
+  domain: Deep Learning
+  concept: backpropagation
+  prerequisites:
+  - chain rule
+  - computational graph
+  first_mission: M24
+  minimum_viable_understanding: Can explain backpropagation in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - automatic differentiation
+- id: K162
+  domain: Deep Learning
+  concept: automatic differentiation
+  prerequisites:
+  - backpropagation
+  first_mission: ''
+  minimum_viable_understanding: Can explain automatic differentiation in plain language, recognize it in a working
+    system, and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K163
+  domain: Deep Learning
+  concept: weight initialization
+  prerequisites:
+  - neural network
+  first_mission: M22
+  minimum_viable_understanding: Can explain weight initialization in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K164
+  domain: Deep Learning
+  concept: dropout
+  prerequisites:
+  - regularization
+  first_mission: M26
+  minimum_viable_understanding: Can explain dropout in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K165
+  domain: Deep Learning
+  concept: weight decay
+  prerequisites:
+  - regularization
+  first_mission: M22
+  minimum_viable_understanding: Can explain weight decay in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K166
+  domain: Deep Learning
+  concept: normalization
+  prerequisites:
+  - neural layer
+  first_mission: M26
+  minimum_viable_understanding: Can explain normalization in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - layer normalization
+- id: K167
+  domain: Deep Learning
+  concept: PyTorch tensor
+  prerequisites:
+  - tensor
+  first_mission: M25
+  minimum_viable_understanding: Can explain PyTorch tensor in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K168
+  domain: Deep Learning
+  concept: Dataset
+  prerequisites:
+  - DataFrame
+  first_mission: M25
+  minimum_viable_understanding: Can explain Dataset in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - DataLoader
+- id: K169
+  domain: Deep Learning
+  concept: DataLoader
+  prerequisites:
+  - Dataset
+  - batch
+  first_mission: M25
+  minimum_viable_understanding: Can explain DataLoader in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K170
+  domain: Deep Learning
+  concept: nn.Module
+  prerequisites:
+  - classes
+  - neural network
+  first_mission: M25
+  minimum_viable_understanding: Can explain nn.Module in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K171
+  domain: Deep Learning
+  concept: optimizer
+  prerequisites:
+  - gradient descent
+  first_mission: M25
+  minimum_viable_understanding: Can explain optimizer in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K172
+  domain: Foundation Models
+  concept: tokenization
+  prerequisites: []
+  first_mission: M27
+  minimum_viable_understanding: Can explain tokenization in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - vocabulary
+- id: K173
+  domain: Foundation Models
+  concept: vocabulary
+  prerequisites:
+  - tokenization
+  first_mission: M27
+  minimum_viable_understanding: Can explain vocabulary in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - subword token
+  - token ID
+- id: K174
+  domain: Foundation Models
+  concept: subword token
+  prerequisites:
+  - vocabulary
+  first_mission: M27
+  minimum_viable_understanding: Can explain subword token in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - BPE
+- id: K175
+  domain: Foundation Models
+  concept: BPE
+  prerequisites:
+  - subword token
+  first_mission: M27
+  minimum_viable_understanding: Can explain BPE in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K176
+  domain: Foundation Models
+  concept: token ID
+  prerequisites:
+  - vocabulary
+  first_mission: M27
+  minimum_viable_understanding: Can explain token ID in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - context window
+  - positional information
+  - next-token prediction
+- id: K177
+  domain: Foundation Models
+  concept: context window
+  prerequisites:
+  - token ID
+  first_mission: M27
+  minimum_viable_understanding: Can explain context window in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K178
+  domain: Foundation Models
+  concept: embedding
+  prerequisites:
+  - vector
+  first_mission: M15
+  minimum_viable_understanding: Can explain embedding in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - semantic similarity
+  - representation learning
+  - query vector
+  - key vector
+  - value vector
+  - embedding pipeline
+  - bi-encoder
+- id: K179
+  domain: Foundation Models
+  concept: semantic similarity
+  prerequisites:
+  - embedding
+  - cosine similarity
+  first_mission: M15
+  minimum_viable_understanding: Can explain semantic similarity in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K180
+  domain: Foundation Models
+  concept: representation learning
+  prerequisites:
+  - embedding
+  first_mission: M01
+  minimum_viable_understanding: Can explain representation learning in plain language, recognize it in a working
+    system, and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K181
+  domain: Foundation Models
+  concept: query vector
+  prerequisites:
+  - embedding
+  first_mission: M05
+  minimum_viable_understanding: Can explain query vector in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - attention score
+- id: K182
+  domain: Foundation Models
+  concept: key vector
+  prerequisites:
+  - embedding
+  first_mission: M05
+  minimum_viable_understanding: Can explain key vector in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - attention score
+- id: K183
+  domain: Foundation Models
+  concept: value vector
+  prerequisites:
+  - embedding
+  first_mission: M04
+  minimum_viable_understanding: Can explain value vector in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - attention
+- id: K184
+  domain: Foundation Models
+  concept: attention score
+  prerequisites:
+  - query vector
+  - key vector
+  - dot product
+  first_mission: M29
+  minimum_viable_understanding: Can explain attention score in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - attention weight
+- id: K185
+  domain: Foundation Models
+  concept: softmax
+  prerequisites:
+  - probability
+  first_mission: M29
+  minimum_viable_understanding: Can explain softmax in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - attention weight
+  - temperature
+- id: K186
+  domain: Foundation Models
+  concept: attention weight
+  prerequisites:
+  - attention score
+  - softmax
+  first_mission: M22
+  minimum_viable_understanding: Can explain attention weight in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - attention
+- id: K187
+  domain: Foundation Models
+  concept: attention
+  prerequisites:
+  - attention weight
+  - value vector
+  first_mission: M29
+  minimum_viable_understanding: Can explain attention in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - scaled dot-product attention
+  - causal mask
+- id: K188
+  domain: Foundation Models
+  concept: scaled dot-product attention
+  prerequisites:
+  - attention
+  - matrix multiplication
+  first_mission: M29
+  minimum_viable_understanding: Can explain scaled dot-product attention in plain language, recognize it in a working
+    system, and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - multi-head attention
+- id: K189
+  domain: Foundation Models
+  concept: multi-head attention
+  prerequisites:
+  - scaled dot-product attention
+  first_mission: M29
+  minimum_viable_understanding: Can explain multi-head attention in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - transformer block
+- id: K190
+  domain: Foundation Models
+  concept: feed-forward network
+  prerequisites:
+  - neural network
+  first_mission: M21
+  minimum_viable_understanding: Can explain feed-forward network in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - transformer block
+- id: K191
+  domain: Foundation Models
+  concept: residual connection
+  prerequisites:
+  - neural layer
+  first_mission: M08
+  minimum_viable_understanding: Can explain residual connection in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - transformer block
+- id: K192
+  domain: Foundation Models
+  concept: layer normalization
+  prerequisites:
+  - normalization
+  first_mission: M21
+  minimum_viable_understanding: Can explain layer normalization in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - transformer block
+- id: K193
+  domain: Foundation Models
+  concept: positional information
+  prerequisites:
+  - token ID
+  first_mission: M11
+  minimum_viable_understanding: Can explain positional information in plain language, recognize it in a working
+    system, and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K194
+  domain: Foundation Models
+  concept: causal mask
+  prerequisites:
+  - attention
+  first_mission: ''
+  minimum_viable_understanding: Can explain causal mask in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K195
+  domain: Foundation Models
+  concept: transformer block
+  prerequisites:
+  - multi-head attention
+  - feed-forward network
+  - residual connection
+  - layer normalization
+  first_mission: M30
+  minimum_viable_understanding: Can explain transformer block in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - transformer
+- id: K196
+  domain: Foundation Models
+  concept: transformer
+  prerequisites:
+  - transformer block
+  first_mission: M30
+  minimum_viable_understanding: Can explain transformer in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - next-token prediction
+  - cross-encoder
+  - RAG
+  - tool calling
+  - LLM judge
+- id: K197
+  domain: Foundation Models
+  concept: next-token prediction
+  prerequisites:
+  - transformer
+  - token ID
+  first_mission: M02
+  minimum_viable_understanding: Can explain next-token prediction in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - pretraining
+- id: K198
+  domain: Foundation Models
+  concept: pretraining
+  prerequisites:
+  - next-token prediction
+  - cross-entropy
+  first_mission: M31
+  minimum_viable_understanding: Can explain pretraining in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - instruction tuning
+- id: K199
+  domain: Foundation Models
+  concept: logits
+  prerequisites:
+  - neural layer
+  first_mission: M32
+  minimum_viable_understanding: Can explain logits in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - temperature
+  - top-k sampling
+  - top-p sampling
+- id: K200
+  domain: Foundation Models
+  concept: temperature
+  prerequisites:
+  - logits
+  - softmax
+  first_mission: M32
+  minimum_viable_understanding: Can explain temperature in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K201
+  domain: Foundation Models
+  concept: top-k sampling
+  prerequisites:
+  - logits
+  first_mission: M32
+  minimum_viable_understanding: Can explain top-k sampling in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K202
+  domain: Foundation Models
+  concept: top-p sampling
+  prerequisites:
+  - logits
+  first_mission: M32
+  minimum_viable_understanding: Can explain top-p sampling in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K203
+  domain: Foundation Models
+  concept: instruction tuning
+  prerequisites:
+  - pretraining
+  first_mission: M32
+  minimum_viable_understanding: Can explain instruction tuning in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K204
+  domain: Foundation Models
+  concept: fine-tuning
+  prerequisites:
+  - training
+  first_mission: M32
+  minimum_viable_understanding: Can explain fine-tuning in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - LoRA
+- id: K205
+  domain: Foundation Models
+  concept: LoRA
+  prerequisites:
+  - fine-tuning
+  first_mission: M32
+  minimum_viable_understanding: Can explain LoRA in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - QLoRA
+- id: K206
+  domain: Foundation Models
+  concept: QLoRA
+  prerequisites:
+  - LoRA
+  first_mission: M32
+  minimum_viable_understanding: Can explain QLoRA in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K207
+  domain: AI Systems
+  concept: document ingestion
+  prerequisites:
+  - files
+  first_mission: ''
+  minimum_viable_understanding: Can explain document ingestion in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - chunking
+  - BM25
+- id: K208
+  domain: AI Systems
+  concept: chunking
+  prerequisites:
+  - document ingestion
+  first_mission: M33
+  minimum_viable_understanding: Can explain chunking in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - embedding pipeline
+- id: K209
+  domain: AI Systems
+  concept: embedding pipeline
+  prerequisites:
+  - chunking
+  - embedding
+  first_mission: M07
+  minimum_viable_understanding: Can explain embedding pipeline in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - vector index
+- id: K210
+  domain: AI Systems
+  concept: vector index
+  prerequisites:
+  - embedding pipeline
+  first_mission: M05
+  minimum_viable_understanding: Can explain vector index in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - semantic search
+  - metadata filter
+  - vector database
+- id: K211
+  domain: AI Systems
+  concept: semantic search
+  prerequisites:
+  - vector index
+  - cosine similarity
+  first_mission: M28
+  minimum_viable_understanding: Can explain semantic search in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - top-k retrieval
+  - hybrid retrieval
+- id: K212
+  domain: AI Systems
+  concept: top-k retrieval
+  prerequisites:
+  - semantic search
+  first_mission: M32
+  minimum_viable_understanding: Can explain top-k retrieval in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - reranking
+  - retrieval recall
+  - RAG
+- id: K213
+  domain: AI Systems
+  concept: metadata filter
+  prerequisites:
+  - vector index
+  first_mission: M04
+  minimum_viable_understanding: Can explain metadata filter in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K214
+  domain: AI Systems
+  concept: reranking
+  prerequisites:
+  - top-k retrieval
+  first_mission: M35
+  minimum_viable_understanding: Can explain reranking in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - ranking precision
+- id: K215
+  domain: AI Systems
+  concept: bi-encoder
+  prerequisites:
+  - embedding
+  first_mission: M35
+  minimum_viable_understanding: Can explain bi-encoder in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K216
+  domain: AI Systems
+  concept: cross-encoder
+  prerequisites:
+  - transformer
+  first_mission: M35
+  minimum_viable_understanding: Can explain cross-encoder in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K217
+  domain: AI Systems
+  concept: retrieval recall
+  prerequisites:
+  - top-k retrieval
+  first_mission: M10
+  minimum_viable_understanding: Can explain retrieval recall in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K218
+  domain: AI Systems
+  concept: ranking precision
+  prerequisites:
+  - reranking
+  first_mission: M10
+  minimum_viable_understanding: Can explain ranking precision in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K219
+  domain: AI Systems
+  concept: RAG
+  prerequisites:
+  - top-k retrieval
+  - transformer
+  first_mission: M01
+  minimum_viable_understanding: Can explain RAG in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - context construction
+  - answerability
+- id: K220
+  domain: AI Systems
+  concept: context construction
+  prerequisites:
+  - RAG
+  first_mission: M27
+  minimum_viable_understanding: Can explain context construction in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - grounding
+- id: K221
+  domain: AI Systems
+  concept: grounding
+  prerequisites:
+  - context construction
+  first_mission: M34
+  minimum_viable_understanding: Can explain grounding in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K222
+  domain: AI Systems
+  concept: answerability
+  prerequisites:
+  - RAG
+  first_mission: ''
+  minimum_viable_understanding: Can explain answerability in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K223
+  domain: AI Systems
+  concept: vector database
+  prerequisites:
+  - vector index
+  first_mission: M05
+  minimum_viable_understanding: Can explain vector database in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K224
+  domain: AI Systems
+  concept: nearest neighbor search
+  prerequisites:
+  - cosine similarity
+  first_mission: M13
+  minimum_viable_understanding: Can explain nearest neighbor search in plain language, recognize it in a working
+    system, and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - approximate nearest neighbor
+- id: K225
+  domain: AI Systems
+  concept: approximate nearest neighbor
+  prerequisites:
+  - nearest neighbor search
+  first_mission: M13
+  minimum_viable_understanding: Can explain approximate nearest neighbor in plain language, recognize it in a working
+    system, and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - HNSW
+- id: K226
+  domain: AI Systems
+  concept: HNSW
+  prerequisites:
+  - approximate nearest neighbor
+  first_mission: M36
+  minimum_viable_understanding: Can explain HNSW in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K227
+  domain: AI Systems
+  concept: BM25
+  prerequisites:
+  - document ingestion
+  first_mission: M36
+  minimum_viable_understanding: Can explain BM25 in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - hybrid retrieval
+- id: K228
+  domain: AI Systems
+  concept: hybrid retrieval
+  prerequisites:
+  - BM25
+  - semantic search
+  first_mission: M34
+  minimum_viable_understanding: Can explain hybrid retrieval in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K229
+  domain: AI Systems
+  concept: tool schema
+  prerequisites:
+  - JSON
+  - APIs
+  first_mission: M37
+  minimum_viable_understanding: Can explain tool schema in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - tool calling
+- id: K230
+  domain: AI Systems
+  concept: tool calling
+  prerequisites:
+  - tool schema
+  - transformer
+  first_mission: M37
+  minimum_viable_understanding: Can explain tool calling in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - tool validation
+  - agent
+- id: K231
+  domain: AI Systems
+  concept: tool validation
+  prerequisites:
+  - tool calling
+  first_mission: M37
+  minimum_viable_understanding: Can explain tool validation in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K232
+  domain: AI Systems
+  concept: agent state
+  prerequisites:
+  - JSON
+  first_mission: M01
+  minimum_viable_understanding: Can explain agent state in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - memory
+- id: K233
+  domain: AI Systems
+  concept: workflow
+  prerequisites:
+  - functions as interfaces
+  first_mission: M38
+  minimum_viable_understanding: Can explain workflow in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - agent
+  - stop condition
+  - routing
+- id: K234
+  domain: AI Systems
+  concept: agent
+  prerequisites:
+  - tool calling
+  - workflow
+  first_mission: M01
+  minimum_viable_understanding: Can explain agent in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - planning
+- id: K235
+  domain: AI Systems
+  concept: planning
+  prerequisites:
+  - agent
+  first_mission: M38
+  minimum_viable_understanding: Can explain planning in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K236
+  domain: AI Systems
+  concept: stop condition
+  prerequisites:
+  - workflow
+  first_mission: M03
+  minimum_viable_understanding: Can explain stop condition in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K237
+  domain: AI Systems
+  concept: memory
+  prerequisites:
+  - agent state
+  first_mission: M39
+  minimum_viable_understanding: Can explain memory in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K238
+  domain: AI Systems
+  concept: routing
+  prerequisites:
+  - workflow
+  first_mission: M39
+  minimum_viable_understanding: Can explain routing in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - fallback
+- id: K239
+  domain: AI Systems
+  concept: fallback
+  prerequisites:
+  - exceptions
+  - routing
+  first_mission: M39
+  minimum_viable_understanding: Can explain fallback in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - graceful degradation
+- id: K240
+  domain: AI Systems
+  concept: evaluation set
+  prerequisites:
+  - testing
+  first_mission: M02
+  minimum_viable_understanding: Can explain evaluation set in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - rubric
+  - regression evaluation
+- id: K241
+  domain: AI Systems
+  concept: rubric
+  prerequisites:
+  - evaluation set
+  first_mission: M40
+  minimum_viable_understanding: Can explain rubric in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - LLM judge
+  - human evaluation
+- id: K242
+  domain: AI Systems
+  concept: LLM judge
+  prerequisites:
+  - rubric
+  - transformer
+  first_mission: M40
+  minimum_viable_understanding: Can explain LLM judge in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K243
+  domain: AI Systems
+  concept: human evaluation
+  prerequisites:
+  - rubric
+  first_mission: M02
+  minimum_viable_understanding: Can explain human evaluation in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K244
+  domain: AI Systems
+  concept: tracing
+  prerequisites:
+  - testing
+  first_mission: M40
+  minimum_viable_understanding: Can explain tracing in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - observability
+- id: K245
+  domain: AI Systems
+  concept: regression evaluation
+  prerequisites:
+  - evaluation set
+  first_mission: M02
+  minimum_viable_understanding: Can explain regression evaluation in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K246
+  domain: AI Systems
+  concept: observability
+  prerequisites:
+  - tracing
+  first_mission: M40
+  minimum_viable_understanding: Can explain observability in plain language, recognize it in a working system, and
+    use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K247
+  domain: AI Systems
+  concept: latency
+  prerequisites:
+  - APIs
+  first_mission: M41
+  minimum_viable_understanding: Can explain latency in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K248
+  domain: AI Systems
+  concept: cost
+  prerequisites:
+  - APIs
+  first_mission: M41
+  minimum_viable_understanding: Can explain cost in plain language, recognize it in a working system, and use it
+    at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K249
+  domain: AI Systems
+  concept: privacy
+  prerequisites:
+  - data pipeline
+  first_mission: M41
+  minimum_viable_understanding: Can explain privacy in plain language, recognize it in a working system, and use
+    it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K250
+  domain: AI Systems
+  concept: system boundary
+  prerequisites:
+  - APIs
+  first_mission: ''
+  minimum_viable_understanding: Can explain system boundary in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables:
+  - architecture diagram
+- id: K251
+  domain: AI Systems
+  concept: graceful degradation
+  prerequisites:
+  - fallback
+  first_mission: M39
+  minimum_viable_understanding: Can explain graceful degradation in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
+- id: K252
+  domain: AI Systems
+  concept: architecture diagram
+  prerequisites:
+  - system boundary
+  first_mission: M41
+  minimum_viable_understanding: Can explain architecture diagram in plain language, recognize it in a working system,
+    and use it at the depth required by the current mission.
+  defer_until_later: Formal proofs, specialist variants, and advanced implementation details unless they block the
+    current mission.
+  enables: []
