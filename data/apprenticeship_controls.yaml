@@ -1,0 +1,54 @@
+invariant: Start from the useful whole. Map and interrogate before terminology. Descend
+  only to the narrowest blocker. Rebuild, break, transfer, and prove independent competence.
+weekly_controls:
+- control: Whole first
+  cadence: Every mission
+  requirement: Run/observe the working system or real behavior before deep theory.
+- control: System map
+  cadence: Every mission
+  requirement: Sketch actors/components, boundaries, inputs/outputs, state and data/control
+    flow.
+- control: Questions before theory
+  cadence: Every mission
+  requirement: Write at least 2 predictions/questions before consuming deeper content.
+- control: No-AI competency zone
+  cadence: Every mission
+  requirement: 30-60 minutes where AI does not write the answer/code.
+- control: Code/artefact reading
+  cadence: Every coding session
+  requirement: 10-15 minutes tracing unfamiliar code, tensor/data shapes, state, dependencies
+    and failure paths.
+- control: Prediction discipline
+  cadence: Every experiment
+  requirement: Prediction -> Run -> Observation -> Explanation -> Generalization ->
+    Transfer.
+- control: Controlled failure
+  cadence: Every mission
+  requirement: Break one relevant assumption and diagnose with evidence.
+- control: Chaos Day
+  cadence: Every 2 missions
+  requirement: Diagnose hidden faults from symptoms without being told the layer;
+    add prevention.
+- control: Git engineering record
+  cadence: Every project change
+  requirement: Issue -> branch -> diff -> validation/tests -> review -> merge; preserve
+    evidence.
+- control: Engineering review
+  cadence: Every 4 missions or phase end
+  requirement: Present architecture, diff/artifact, failure analysis, decision record
+    and one uncertainty.
+- control: Maturity dashboard
+  cadence: Every 4 missions
+  requirement: Score 0-4 across macro maturity dimensions using evidence, not self-feeling.
+- control: ADR discipline
+  cadence: Consequential decisions from M07 onward
+  requirement: Record decision, alternatives, evidence, trade-offs and revisit conditions.
+- control: Flagship system
+  cadence: All year
+  requirement: Evolve one Operations Intelligence System through 12 tagged/released
+    versions.
+study_limit: Do not spend more than about 2 hours on a concept without using it in
+  code, an experiment, a design decision, or a system diagnosis.
+side_quest_limit_minutes: 120
+review_response_rule: Reviewer comments must be accepted, rejected, or deferred with
+  written reasoning; never auto-implement feedback.
