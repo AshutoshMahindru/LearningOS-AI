@@ -1,0 +1,12 @@
+- {id: V01, missions: M03-M07, name: Structured Data Workbench, architecture_step: 'Python + Pandas + NumPy + reproducible data-to-model pipeline', release_tag: v01-data-workbench}
+- {id: V02, missions: M08-M10, name: Predictive Decision System, architecture_step: 'Regression + classification + consequence-aware evaluation', release_tag: v02-predictive-decision-system}
+- {id: V03, missions: M11-M14, name: Model Comparison & Diagnostics, architecture_step: 'Trees + ensembles + neighbors + clustering', release_tag: v03-model-diagnostics}
+- {id: V04, missions: M15-M20, name: Mathematical Instrumentation Layer, architecture_step: 'Vectors + matrices + probability + statistics + gradients + optimization', release_tag: v04-math-instrumentation}
+- {id: V05, missions: M21-M26, name: Neural Learning Component, architecture_step: 'Neural network + NumPy + backprop + PyTorch + failure diagnosis', release_tag: v05-neural-component}
+- {id: V06, missions: M27-M30, name: Language Representation Layer, architecture_step: 'Tokenization + embeddings + attention + transformer block', release_tag: v06-language-representation}
+- {id: V07, missions: M31-M32, name: LLM Inference & Adaptation Layer, architecture_step: 'Training objective + decoding + adaptation choices', release_tag: v07-llm-inference-adaptation}
+- {id: V08, missions: M33, name: Semantic Search Service, architecture_step: 'Ingestion + embeddings + similarity + retrieval', release_tag: v08-semantic-search}
+- {id: V09, missions: M34-M36, name: Grounded Knowledge System, architecture_step: 'RAG + reranking + vector DB + hybrid retrieval', release_tag: v09-rag-system}
+- {id: V10, missions: M37-M39, name: Tool-Using Agent System, architecture_step: 'Tool calling + stateful workflow + memory + routing + fallbacks', release_tag: v10-agent-system}
+- {id: V11, missions: M40-M41, name: Evaluated & Observable AI System, architecture_step: 'Evaluation harness + architecture boundaries + reliability controls', release_tag: v11-evaluated-system}
+- {id: V12, missions: M42, name: Integrated AI Systems Capstone, architecture_step: 'Structured/unstructured data + retrieval + tools + evals + observability', release_tag: v12-capstone}

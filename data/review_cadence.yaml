@@ -1,0 +1,7 @@
+fortnightly_cycle:
+  odd_mission: 'Build: extend flagship, content/lab, code reading, no-AI block, ledger.'
+  even_mission: 'Stress: hidden fault/chaos, one-page review brief, defend one decision, update evidence.'
+formal_review_missions: [M02, M04, M07, M08, M12, M14, M16, M20, M24, M26, M28, M32, M36, M40, M42]
+review_brief_requires: [architecture/system map, meaningful diff or artifact, failure diagnosis, ADR if applicable, current tests/evals, one unresolved uncertainty]
+reviewer_questions: ['Why this design?', 'What fails?', 'What evidence supports your claim?', 'Where is state?', 'Who owns the data?', 'What is exposed?', 'What can be removed?', 'What would make you change this decision?']
+learner_obligation: Accept, reject, or defer every substantive comment with written reasoning.

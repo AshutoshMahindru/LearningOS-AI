@@ -1,0 +1,30 @@
+- id: A1
+  name: Apprentice
+  missions: M01-M10
+  ai_allowed: Tutor + pair programmer; code generation only in small reviewable chunks.
+  must_do_unaided: [Run and modify working Python, Read tracebacks, Basic Git operations, Train/evaluate a baseline, Explain data flow and model loop]
+  evidence: Weekly no-AI gate + one independent modification per mission.
+- id: A2
+  name: Builder
+  missions: M11-M20
+  ai_allowed: AI engineer may implement bounded components behind tests, diffs and acceptance criteria.
+  must_do_unaided: [Diagnose model behavior, Read unfamiliar ML code, Reason about leakage/metrics, Perform core vector/probability/gradient exercises]
+  evidence: Independent debugging task + ADR-quality explanation at review gates.
+- id: A3
+  name: Mechanism Engineer
+  missions: M21-M32
+  ai_allowed: AI may make cross-file changes only after the learner states design, tensor/data contracts and failure cases.
+  must_do_unaided: [Trace tensor shapes, Write/modify training loop fragments, Diagnose learning failure, Explain backprop/attention from mechanism to math]
+  evidence: Fortnightly hostile review + no-AI reconstruction challenge.
+- id: A4
+  name: AI Systems Architect
+  missions: M33-M40
+  ai_allowed: AI may implement subsystems under explicit architecture, evaluations and rollback criteria.
+  must_do_unaided: [Diagnose retrieval failures, Design RAG/tool boundaries, Specify evals, Reason about fallbacks/state/memory, Review repository-scale diffs]
+  evidence: Independent subsystem decision + chaos diagnosis + review brief.
+- id: A5
+  name: AI Systems Lead
+  missions: M41-M42
+  ai_allowed: Multiple AI agents may build in parallel under learner-owned architecture and acceptance tests.
+  must_do_unaided: [Design vertical slice, Defend architecture, Diagnose injected faults, Reject weak AI proposals with evidence, Explain end-to-end system without notes]
+  evidence: Final architecture defense + capstone evidence bundle + independent transfer exam.

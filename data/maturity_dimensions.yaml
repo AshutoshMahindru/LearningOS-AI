@@ -1,0 +1,12 @@
+- {id: MAT01, name: Build, question: 'Can I turn a requirement into a working artifact?'}
+- {id: MAT02, name: Code Reading, question: 'Can I trace unfamiliar code, state, shapes and dependencies?'}
+- {id: MAT03, name: Debugging, question: 'Can I go symptom -> hypothesis -> test -> root cause -> prevention?'}
+- {id: MAT04, name: Data Reasoning, question: 'Can I inspect, transform and challenge data quality and leakage?'}
+- {id: MAT05, name: ML Experiment Design, question: 'Can I isolate variables and choose evidence-bearing experiments?'}
+- {id: MAT06, name: Mathematical Reasoning, question: 'Can I connect mechanisms to vectors, probability, gradients and assumptions?'}
+- {id: MAT07, name: Deep Learning Mechanisms, question: 'Can I trace tensors, losses, gradients and network behavior?'}
+- {id: MAT08, name: AI System Architecture, question: 'Can I choose boundaries among models, retrieval, tools, memory and deterministic code?'}
+- {id: MAT09, name: Evaluation & Reliability, question: 'Can I define tests/evals, diagnose regressions and design fallbacks?'}
+- {id: MAT10, name: Git & Change Discipline, question: 'Can I make reversible, reviewable, tested changes with evidence?'}
+- {id: MAT11, name: AI Direction, question: 'Can I specify, review, challenge and reject AI-generated work?'}
+- {id: MAT12, name: Independence, question: 'Can I perform core tasks and transfer understanding without answer generation?'}
