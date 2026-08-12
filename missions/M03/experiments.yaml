@@ -1,0 +1,7 @@
+experiments:
+  - name: working_program
+    task: modify outputs by changing existing code
+  - name: debugging
+    task: repair NameError TypeError KeyError condition and off-by-one bugs
+  - name: controlled_failure
+    task: trace hypothesis test fix
