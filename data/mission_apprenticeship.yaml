@@ -1,0 +1,23 @@
+version: 1
+purpose: Merge adaptive ML missions with engineering apprenticeship controls.
+required_fields:
+  - mission_id
+  - flagship_version
+  - no_ai_block
+  - code_reading
+  - chaos_requirement
+  - evidence
+  - review_requirement
+  - adr_requirement
+example:
+  mission_id: M08
+  flagship_version: V02
+  no_ai_block: implement_baseline_without_ai
+  code_reading: inspect_regression_pipeline
+  chaos_requirement: diagnose_leakage_failure
+  evidence:
+    - notebook
+    - explanation
+    - experiment_log
+  review_requirement: architecture_and_failure_analysis
+  adr_requirement: model_selection_decision
