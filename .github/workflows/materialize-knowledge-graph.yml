@@ -1,0 +1,52 @@
+name: Materialize canonical knowledge graph
+
+on:
+  push:
+    branches:
+      - migration/canonical-knowledge-graph
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: migration/canonical-knowledge-graph
+      - name: Materialize exact canonical files
+        run: |
+          set -eu
+          if [ ! -f data/knowledge_graph.csv ]; then
+            base64 -d data/knowledge_graph.csv.gz.b64 | gunzip > data/knowledge_graph.csv
+          fi
+          if [ ! -f data/knowledge_graph.yaml ]; then
+            base64 -d data/knowledge_graph.yaml.gz.b64 | gunzip > data/knowledge_graph.yaml
+          fi
+      - name: Validate materialized payloads
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          rows = list(csv.DictReader(Path('data/knowledge_graph.csv').open(encoding='utf-8')))
+          ids = [row['id'] for row in rows]
+          if len(rows) != 253:
+              raise SystemExit(f'Expected 253 graph rows, found {len(rows)}')
+          if len(set(ids)) != 253:
+              raise SystemExit('Knowledge graph IDs are not unique')
+          if 'KTXT' not in ids or 'K001' not in ids or 'K252' not in ids:
+              raise SystemExit('Expected canonical IDs KTXT, K001 and K252')
+          print('Canonical knowledge graph materialized:', len(rows), 'nodes')
+          PY
+      - name: Commit materialized files once
+        run: |
+          if git status --porcelain data/knowledge_graph.csv data/knowledge_graph.yaml | grep -q .; then
+            git config user.name github-actions[bot]
+            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+            git add data/knowledge_graph.csv data/knowledge_graph.yaml
+            git commit -m "Materialize canonical 253-node knowledge graph"
+            git push origin HEAD:migration/canonical-knowledge-graph
+          else
+            echo "Canonical files already materialized"
+          fi
