@@ -1,2 +1,16 @@
-status: implemented
-validation: pending_external_execution
+mission: M02
+package_status: implemented
+learner_status: not_populated
+formal_engineering_review: required
+runtime:
+  cpu_only: true
+  secrets_required: false
+  network_required: false
+validation_contract:
+  notebook_restart_run_all: required
+  mission_tests: required
+  repository_tests: required
+  repository_validator: required
+notes:
+  - Implementation status is not learner completion.
+  - Expected evidence is defined in evidence_contract.yaml; no learner evidence is pre-populated.
