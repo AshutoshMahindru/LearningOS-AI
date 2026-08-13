@@ -1,0 +1,25 @@
+id: M01
+title: Map the AI/ML Landscape
+phase: P0
+flagship: V00
+objective: Build a whole-system map of modern AI/ML and distinguish major system layers.
+competencies:
+  - AI systems vocabulary
+  - system mapping
+pedagogy: whole-first
+formal_engineering_review: false
+notebook: labs/M01_ai_ml_landscape.ipynb
+requirements: requirements/m01.txt
+mission_test: tests/missions/test_m01.py
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+completion_requires:
+  - runnable_toy_system_map
+  - training_inference_boundary_explanation
+  - controlled_failure_diagnosis
+  - no_ai_system_map
+  - transfer_assessment

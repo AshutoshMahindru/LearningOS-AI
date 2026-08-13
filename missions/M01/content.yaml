@@ -1,0 +1,82 @@
+mission_id: M01
+registry_scope: mission_local_only
+verified_on: 2026-08-12
+source_policy:
+  preference: primary_or_official_documentation
+  global_content_registry_modified: false
+sources:
+  - id: M01-S1
+    publisher: scikit-learn
+    title: Getting Started
+    url: https://scikit-learn.org/stable/getting_started.html
+    version_context: stable documentation; 1.9.0 observed at verification
+    exact_sections:
+      - Fitting and predicting: estimator basics
+      - Transformers and pre-processors
+      - Pipelines: chaining pre-processors and estimators
+      - Model evaluation
+    used_for:
+      - classical ML system boundary
+      - fit versus predict
+      - preprocessing and evaluation as separate system concerns
+  - id: M01-S2
+    publisher: PyTorch
+    title: Learn the Basics
+    url: https://docs.pytorch.org/tutorials/beginner/basics/intro.html
+    version_context: current PyTorch tutorials; 2.13.0 documentation observed at verification
+    exact_sections:
+      - Build Model
+      - Automatic Differentiation with torch.autograd
+      - Optimizing Model Parameters
+      - Save and Load the Model
+    used_for:
+      - neural-network training loop
+      - learned parameters
+      - training versus evaluation/inference boundary
+  - id: M01-S3
+    publisher: Hugging Face Transformers
+    title: RAG
+    url: https://huggingface.co/docs/transformers/model_doc/rag
+    version_context: current Transformers documentation observed at verification
+    exact_sections:
+      - RAG
+      - RagRetriever
+      - RetrievAugLMOutput
+    used_for:
+      - retrieval-augmented generation
+      - document embeddings
+      - retrieved context versus parametric model state
+  - id: M01-S4
+    publisher: OpenAI
+    title: OpenAI Agents SDK
+    url: https://openai.github.io/openai-agents-python/
+    version_context: current official Agents SDK documentation observed at verification
+    exact_sections:
+      - Why use the Agents SDK
+      - Agents SDK or Responses API?
+      - Choose your path
+    companion_sections:
+      - page: https://openai.github.io/openai-agents-python/tools/
+        section: Choosing a tool type
+      - page: https://openai.github.io/openai-agents-python/sessions/
+        section: Core session behavior
+      - page: https://openai.github.io/openai-agents-python/running_agents/
+        section: Tracing and observability
+    used_for:
+      - agents and control loops
+      - tools
+      - memory/session state
+      - tracing and observability
+route:
+  sequence:
+    - whole_system_map
+    - executable_toy_system
+    - training_inference_boundary
+    - classical_ml_vs_neural_networks_vs_llms
+    - embeddings_retrieval_rag
+    - tools_agents_memory
+    - evaluation_observability
+    - compute_infrastructure
+    - controlled_failure
+    - no_ai_gate
+    - transfer_assessment

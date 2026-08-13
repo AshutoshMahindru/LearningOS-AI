@@ -1,0 +1,6 @@
+# The notebook runtime itself uses only the Python 3.11+ standard library.
+# These packages support notebook execution/validation in development.
+nbformat>=5.9
+nbclient>=0.10
+jupyter-core>=5.0
+PyYAML>=6.0
