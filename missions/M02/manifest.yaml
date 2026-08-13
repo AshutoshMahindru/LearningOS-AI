@@ -2,5 +2,52 @@ id: M02
 title: Run and Interrogate Your First ML System
 phase: P0
 flagship: V00
-objective: Run a complete ML system before internal mechanisms
-review: true
+objective: Run a complete ML system before learning its internal mechanisms.
+competencies:
+  - ML system orientation
+  - experimental reasoning
+formal_engineering_review: true
+prerequisites:
+  blocking:
+    - M01
+  helpful: []
+whole_first_sequence:
+  - raw data
+  - features and target
+  - train/test split
+  - training
+  - predictions
+  - metric
+  - interrogation
+runtime:
+  cpu_only: true
+  secrets_required: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M02_first_ml_system.ipynb
+dataset:
+  path: datasets/M02/wine.csv
+  provenance: scikit-learn packaged Wine recognition dataset, originating from the UCI Machine Learning Repository
+requirements: requirements/m02.txt
+test: tests/missions/test_m02.py
+mission_artifacts:
+  - missions/M02/manifest.yaml
+  - missions/M02/README.md
+  - missions/M02/content.yaml
+  - missions/M02/experiments.yaml
+  - missions/M02/code_reading.md
+  - missions/M02/no_ai_gate.md
+  - missions/M02/controlled_failure.md
+  - missions/M02/assessment.yaml
+  - missions/M02/evidence_contract.yaml
+  - missions/M02/flagship_integration.md
+  - missions/M02/status.yaml
+  - missions/M02/review_brief.md
+  - labs/M02_first_ml_system.ipynb
+  - datasets/M02/README.md
+  - datasets/M02/wine.csv
+  - requirements/m02.txt
+  - tests/missions/test_m02.py
+constraints:
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
