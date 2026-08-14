@@ -1,4 +1,23 @@
-evidence:
-  - working_program_changes
-  - debugging_trace
-  - learner_explanation
+mission_id: M03
+required_evidence:
+  - id: baseline_behavior
+    description: Recorded explanation of what the initial working program does.
+  - id: prediction_log
+    description: Predictions recorded before selected modifications.
+  - id: modification_diff
+    description: At least three targeted modifications covering control flow, functions or data structures.
+  - id: debugging_trace
+    description: Trace and hypothesis evidence for at least one exception and one logic failure.
+  - id: controlled_failure_repair
+    description: Symptom, hypothesis, smallest test, repair and verification for the seeded failure.
+  - id: code_reading_trace
+    description: Manual trace of unfamiliar code before execution.
+  - id: no_ai_transfer
+    description: Fresh-program modification and repair completed without AI-generated code.
+  - id: learner_explanation
+    description: Plain-language explanation of what changed and why.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_selected_experiments: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited

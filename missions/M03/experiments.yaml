@@ -1,7 +1,51 @@
+mission_id: M03
 experiments:
-  - name: working_program
-    task: modify outputs by changing existing code
-  - name: debugging
-    task: repair NameError TypeError KeyError condition and off-by-one bugs
-  - name: controlled_failure
-    task: trace hypothesis test fix
+  - id: E1
+    name: Change inputs and constants
+    prediction_required: true
+    action: Change order values or configuration constants without rewriting the program.
+    evidence:
+      - prediction
+      - observed_output
+      - explanation
+  - id: E2
+    name: Change control flow
+    prediction_required: true
+    action: Change a condition and a loop behavior, then trace which branches execute.
+    evidence:
+      - branch_prediction
+      - trace
+      - explanation
+  - id: E3
+    name: Change function behavior
+    prediction_required: true
+    action: Change a function parameter or returned value while preserving the surrounding program.
+    evidence:
+      - before_after_behavior
+      - smallest_code_change
+  - id: E4
+    name: Diagnose Python failures
+    prediction_required: true
+    action: Diagnose NameError, TypeError and KeyError examples from symptoms and traces.
+    evidence:
+      - error_type
+      - hypothesis
+      - repair
+  - id: E5
+    name: Diagnose logic failures
+    prediction_required: true
+    action: Diagnose a reversed condition and an off-by-one failure.
+    evidence:
+      - failing_case
+      - trace
+      - repair
+  - id: E6
+    name: Controlled failure
+    prediction_required: true
+    action: Find one narrow root cause behind a plausible but incorrect order total.
+    evidence:
+      - symptom
+      - hypothesis
+      - smallest_test
+      - repair
+      - verification

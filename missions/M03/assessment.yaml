@@ -1,6 +1,31 @@
+mission_id: M03
 assessment:
+  mode: performance_and_transfer
   transfer_required: true
-  tests:
-    - modify unfamiliar program
-    - explain debugging evidence
-    - predict behavior change
+  pass_requires:
+    - predict_behavior_before_execution
+    - modify_unfamiliar_working_code
+    - preserve_unrelated_behavior
+    - diagnose_failure_from_evidence
+    - repair_with_smallest_reasonable_change
+    - explain_python_behavior_in_plain_language
+  rubric:
+    prediction:
+      weight: 20
+      evidence: Prediction is recorded before execution and later compared with observation.
+    modification:
+      weight: 20
+      evidence: Learner makes targeted changes rather than replacing the program.
+    debugging:
+      weight: 30
+      evidence: Learner uses symptoms, traces, hypotheses and verification.
+    explanation:
+      weight: 15
+      evidence: Learner explains variables, control flow, functions and data changes accurately.
+    transfer:
+      weight: 15
+      evidence: Learner succeeds on a fresh program without AI-generated code.
+  failure_conditions:
+    - random_editing_without_diagnostic_reasoning
+    - working_output_without_explanation
+    - inability_to_transfer_to_fresh_code
