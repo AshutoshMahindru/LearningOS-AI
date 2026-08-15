@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import ast
 import csv
+import importlib.util
 import json
 import os
 import re
@@ -12,6 +14,12 @@ ROOT = Path(__file__).resolve().parents[2]
 MISSION = ROOT / "missions" / "M16"
 NOTEBOOK = ROOT / "labs" / "M16_matrix_transformations.ipynb"
 DATASET = ROOT / "datasets" / "M16" / "shape_points.csv"
+RUNTIME_DEPENDENCIES = ("numpy", "matplotlib")
+MISSING_RUNTIME_DEPENDENCIES = tuple(
+    name
+    for name in RUNTIME_DEPENDENCIES
+    if importlib.util.find_spec(name) is None
+)
 
 
 def cell_source(cell: dict) -> str:
@@ -69,6 +77,26 @@ class M16MissionPackageTests(unittest.TestCase):
             "batch_transform: X_times_A_transpose",
         ]:
             self.assertIn(expected, manifest)
+
+    def test_requirements_declare_runtime_and_validation_dependencies(self) -> None:
+        requirements = {
+            line.strip()
+            for line in (ROOT / "requirements" / "m16.txt")
+            .read_text(encoding="utf-8")
+            .splitlines()
+            if line.strip() and not line.lstrip().startswith("#")
+        }
+
+        self.assertEqual(
+            requirements,
+            {
+                "numpy>=1.26",
+                "matplotlib>=3.8",
+                "nbformat>=5.10",
+                "jupyter>=1.0",
+                "pytest>=8",
+            },
+        )
 
     def test_registered_sources_cover_numpy_and_visual_linear_algebra(self) -> None:
         registry = json.loads(
@@ -176,12 +204,29 @@ class M16MissionPackageTests(unittest.TestCase):
         ]
         self.assertGreaterEqual(len(prediction_cells), 10)
 
-    def test_notebook_code_compiles_and_has_no_runtime_network_or_secrets(self) -> None:
+    def test_notebook_code_is_syntax_valid_and_ast_offline_safe(self) -> None:
         notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
         code_cells = [cell for cell in notebook["cells"] if cell["cell_type"] == "code"]
+        imported_roots = set()
 
         for index, cell in enumerate(code_cells):
-            compile(cell_source(cell), f"M16-cell-{index}", "exec")
+            source = cell_source(cell)
+            compile(source, f"M16-cell-{index}", "exec")
+            tree = ast.parse(source, filename=f"M16-cell-{index}")
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Import):
+                    imported_roots.update(
+                        alias.name.split(".", 1)[0] for alias in node.names
+                    )
+                elif isinstance(node, ast.ImportFrom) and node.module:
+                    imported_roots.add(node.module.split(".", 1)[0])
+
+        self.assertTrue({"numpy", "matplotlib"}.issubset(imported_roots))
+        self.assertTrue(
+            imported_roots.isdisjoint(
+                {"requests", "httpx", "urllib", "socket", "openai"}
+            )
+        )
 
         all_code = "\n".join(cell_source(cell) for cell in code_cells)
         for forbidden in [
@@ -203,6 +248,11 @@ class M16MissionPackageTests(unittest.TestCase):
                 self.assertIsNone(cell.get("execution_count"))
                 self.assertEqual(cell.get("outputs", []), [])
 
+    @unittest.skipUnless(
+        not MISSING_RUNTIME_DEPENDENCIES,
+        "install requirements/m16.txt to run the M16 notebook runtime test; "
+        f"missing: {', '.join(MISSING_RUNTIME_DEPENDENCIES)}",
+    )
     def test_every_notebook_code_cell_executes_in_order(self) -> None:
         notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
         namespace = {"__name__": "__m16_test__"}
@@ -254,6 +304,32 @@ class M16MissionPackageTests(unittest.TestCase):
 
         self.assertIn("x @ a", controlled)
         self.assertIn("x @ a.t", controlled)
+
+    def test_no_ai_gate_and_assessment_preserve_transfer_requirements(self) -> None:
+        no_ai = (MISSION / "no_ai_gate.md").read_text(encoding="utf-8").lower()
+        assessment = (MISSION / "assessment.yaml").read_text(
+            encoding="utf-8"
+        ).lower()
+
+        for phrase in [
+            "without ai-generated code",
+            "prediction before execution",
+            "composite matrix",
+            "shape table",
+            "counterexample",
+            "dense ml layer",
+        ]:
+            self.assertIn(phrase, no_ai)
+
+        for requirement in [
+            "transfer_required: true",
+            "predict_landmark_motion_before_execution",
+            "state_composition_application_order",
+            "transform_a_row_major_batch_using_transpose",
+            "diagnose_plausible_wrong_order_and_orientation_outputs",
+            "complete_representation_adr",
+        ]:
+            self.assertIn(requirement, assessment)
 
     def test_review_and_adr_require_engineering_decisions_and_invariants(self) -> None:
         review = (MISSION / "review_brief.md").read_text(encoding="utf-8")
