@@ -1,0 +1,67 @@
+mission_id: M18
+version: 1
+purpose: Define acceptable learner-produced evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_action
+      - reason_for_prediction
+      - observation
+      - revision_after_surprise
+  - id: descriptive_and_sampling_analysis
+    artifact_type: reproducible_notebook_run_and_explanation
+    must_show:
+      - mean_median_variance_and_distribution
+      - repeated_sample_means
+      - empirical_standard_error
+      - sample_size_comparison
+  - id: inference_report
+    artifact_type: decision_note
+    must_show:
+      - population_sample_unit_and_estimand
+      - point_estimate
+      - analytic_confidence_interval
+      - bootstrap_interval
+      - absolute_and_relative_effect_size
+      - useful_hypothesis_test
+      - assumptions_and_limitations
+  - id: controlled_failure_diagnosis
+    artifact_type: full_audit_trace_and_repair
+    must_show:
+      - all_comparisons
+      - cherry_picked_subset
+      - familywise_error_simulation
+      - pre_specified_repair
+      - adjusted_threshold_or_control
+  - id: causal_boundary
+    artifact_type: written_argument
+    must_show:
+      - observed_correlation
+      - plausible_confounder
+      - rejected_causal_claim
+      - proposed_identification_evidence
+  - id: no_ai_transfer
+    artifact_type: fresh_scenario_calculation_and_oral_explanation
+    conditions:
+      - completed_without_ai_generated_code_or_prose
+      - no_copying_from_checkout_lab
+      - reproducible_from_blank_page
+  - id: inference_policy_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - decision
+      - alternatives
+      - evidence
+      - trade_offs
+      - revisit_conditions
+quality_bar:
+  - Claims stay on the scale of the estimand and acknowledge sampling uncertainty.
+  - Statistical evidence, practical importance, and causal identification remain distinct.
+  - Exploratory comparisons remain visible and are not relabeled as confirmatory.
+  - Conclusions identify what additional data or design would change the decision.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited

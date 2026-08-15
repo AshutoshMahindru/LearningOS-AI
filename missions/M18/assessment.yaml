@@ -1,0 +1,38 @@
+mission_id: M18
+assessment:
+  mode: performance_and_transfer
+  pass_score: 8
+  max_score: 10
+  transfer_required: true
+  rules:
+    - Do not award credit for a p-value without its hypothesis, comparison family, effect estimate, and assumptions.
+    - Do not award causal credit for correlation alone.
+    - Treat failure to reject as unresolved evidence, not proof of equality.
+    - Require predictions timestamped before the corresponding computation.
+  tasks:
+    - id: A1
+      points: 2
+      prompt: Explain repeated-sample variation and why standard error changes with sample size.
+      full_credit: Uses sampling distributions and the inverse-square-root relationship while naming bias that sample size does not remove.
+    - id: A2
+      points: 2
+      prompt: Analyze the checkout difference with descriptive statistics, an estimate, and analytic plus bootstrap intervals.
+      full_credit: Reports units and sample sizes, interprets compatible values, and states resampling assumptions.
+    - id: A3
+      points: 2
+      prompt: Make a decision using effect size, uncertainty, operational stakes, and a useful hypothesis test.
+      full_credit: Distinguishes evidence strength, practical relevance, and decision cost without threshold certainty.
+    - id: A4
+      points: 2
+      prompt: Diagnose and repair the controlled p-hacking failure.
+      full_credit: Exposes the complete comparison family, explains multiplicity, pre-specifies the repair, and separates exploration from confirmation.
+    - id: A5
+      points: 2
+      prompt: Complete the fresh no-AI transfer scenario and evaluate its causal limits.
+      full_credit: Reproduces the calculations, refuses unsupported causal claims, and proposes evidence that would reduce uncertainty.
+  automatic_failure_conditions:
+    - reports_correlation_as_causation
+    - says_p_value_is_probability_null_is_true
+    - hides_or_redefines_comparison_family_after_results
+    - treats_non_significance_as_equivalence
+    - submits_prefilled_or_ai_generated_no_ai_gate

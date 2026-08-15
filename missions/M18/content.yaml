@@ -1,0 +1,39 @@
+mission_id: M18
+source_ids:
+  - stanford-cs229
+source_focus:
+  - probability_review_and_random_variables
+  - estimators_sampling_distributions_and_variance
+  - statistical_inference_for_model_and_experiment_decisions
+concepts:
+  descriptive_statistics:
+    - mean
+    - median
+    - sample_variance
+    - distribution_shape
+  uncertainty:
+    - sampling_variation
+    - standard_error
+    - confidence_interval
+    - bootstrap_resampling
+  decisions:
+    - estimand
+    - absolute_and_relative_effect_size
+    - null_hypothesis
+    - test_statistic
+    - p_value
+    - practical_significance
+  validity_threats:
+    - correlation_without_identification
+    - correlation_vs_causation
+    - confounding
+    - multiple_comparisons
+    - optional_stopping
+    - cherry_picking
+interpretation_rules:
+  - A point estimate is not a population truth.
+  - A 95% confidence interval is a procedure with long-run coverage, not a 95% posterior probability that this fixed interval contains the parameter.
+  - A p-value is not the probability that the null hypothesis is true.
+  - Failure to reject is not proof of no effect.
+  - Statistical significance does not establish practical importance or causality.
+  - Comparison families and stopping rules must be defined before inspecting results.

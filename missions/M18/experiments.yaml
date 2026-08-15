@@ -1,0 +1,81 @@
+mission_id: M18
+prediction_rule: Record the prediction and reasoning before running each experiment.
+experiments:
+  - id: E1
+    title: Watch sampling variation shrink
+    prediction_required: true
+    prediction_prompt: Predict the centers and spreads of repeated conversion estimates for n=25 and n=400 when the population rate is fixed at 13%.
+    action: Simulate repeated Bernoulli samples at both sizes.
+    inspect:
+      - distribution_of_sample_means
+      - empirical_standard_error
+      - inverse_square_root_sample_size_relationship
+    success_condition: Explain why larger samples reduce random estimation noise without guaranteeing correctness.
+  - id: E2
+    title: Describe before inferring
+    prediction_required: true
+    prediction_prompt: Predict which summaries of binary outcomes and daily rates will be informative or misleading.
+    action: Compare mean, median, sample variance, and the observed distributions for A and B.
+    inspect:
+      - scale_and_units
+      - skew_or_discreteness
+      - center
+      - spread
+    success_condition: Use distribution context instead of treating one summary as the data.
+  - id: E3
+    title: Put uncertainty around B minus A
+    prediction_required: true
+    prediction_prompt: Predict whether a 95% interval for the observed +2 percentage-point difference will include zero.
+    action: Compute the unpooled standard error and normal confidence interval.
+    inspect:
+      - point_estimate
+      - standard_error
+      - interval_endpoints
+      - sample_size
+    success_condition: Interpret compatible effect values without declaring proof of equality or difference.
+  - id: E4
+    title: Bootstrap the effect
+    prediction_required: true
+    prediction_prompt: Predict how the bootstrap distribution will be centered and whether its percentile interval will agree with the analytic interval.
+    action: Resample A and B independently with a fixed seed.
+    inspect:
+      - resampling_unit
+      - bootstrap_distribution
+      - percentile_interval
+      - Monte_Carlo_stability
+    success_condition: Explain what the bootstrap approximates and which data-generating assumptions it cannot repair.
+  - id: E5
+    title: Use a hypothesis test as one decision input
+    prediction_required: true
+    prediction_prompt: State the null, test statistic direction, and expected p-value region before running the permutation and z tests.
+    action: Compare a randomization p-value with the normal approximation.
+    inspect:
+      - null_hypothesis
+      - exchangeability
+      - test_statistic
+      - p_value
+      - effect_size_and_interval
+    success_condition: Make a calibrated decision without converting a threshold into certainty.
+  - id: E6
+    title: Separate correlation from causation
+    prediction_required: true
+    prediction_prompt: Predict the three pairwise correlations and name a plausible common cause before computing them.
+    action: Analyze the seasonal ice-cream, temperature, and drowning fixture.
+    inspect:
+      - association_strength
+      - temporal_structure
+      - confounder
+      - missing_identification_strategy
+    success_condition: Refuse the causal claim and name evidence or design needed to support one.
+  - id: E7
+    title: Controlled failure—hunt for significance
+    prediction_required: true
+    prediction_prompt: Predict the chance that at least one of 20 independent null comparisons has p below 0.05.
+    action: Run many null comparisons, hide the others, and inspect the selected results.
+    inspect:
+      - number_of_comparisons
+      - minimum_p_value
+      - hidden_results
+      - familywise_false_positive_rate
+      - Bonferroni_threshold
+    success_condition: Diagnose the reported win as cherry-picking and repair the analysis plan before rerunning.

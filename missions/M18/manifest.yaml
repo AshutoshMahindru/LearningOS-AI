@@ -1,0 +1,76 @@
+id: M18
+title: Decide What Data Can Tell You
+phase: P3
+flagship: V04
+objective: Use statistical reasoning to distinguish signal from noise.
+competencies:
+  - statistics
+  - inference
+pedagogy: prediction-before-action
+formal_engineering_review: true
+prerequisites:
+  blocking:
+    - M17
+  helpful: []
+notebook: labs/M18_statistical_inference.ipynb
+simulation: simulations/M18/statistical_inference.py
+datasets:
+  - path: datasets/M18/checkout_experiment_daily.csv
+    kind: synthetic_grouped_binomial_experiment
+  - path: datasets/M18/seasonal_correlation.csv
+    kind: synthetic_confounding_fixture
+requirements: requirements/m18.txt
+mission_test: tests/missions/test_m18.py
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+inference_contract:
+  primary_metric: checkout_conversion
+  estimand: variant_B_rate_minus_variant_A_rate
+  confidence_level: 0.95
+  alpha: 0.05
+  planned_comparisons: 1
+  report_together:
+    - point_estimate
+    - uncertainty_interval
+    - effect_size
+    - sample_size
+    - assumptions
+completion_requires:
+  - explain_sampling_variation_and_standard_error
+  - compare_mean_median_variance_and_distribution
+  - construct_and_interpret_confidence_intervals
+  - run_deterministic_bootstrap_and_permutation_procedures
+  - distinguish_statistical_evidence_from_practical_effect_size
+  - state_a_useful_hypothesis_test_and_its_limits
+  - refuse_a_causal_claim_from_correlation_alone
+  - diagnose_cherry_picking_and_multiple_comparisons
+  - complete_no_ai_transfer_gate
+mission_artifacts:
+  - missions/M18/README.md
+  - missions/M18/manifest.yaml
+  - missions/M18/content.yaml
+  - missions/M18/experiments.yaml
+  - missions/M18/code_reading.md
+  - missions/M18/no_ai_gate.md
+  - missions/M18/controlled_failure.md
+  - missions/M18/assessment.yaml
+  - missions/M18/evidence_contract.yaml
+  - missions/M18/flagship_integration.md
+  - missions/M18/status.yaml
+  - missions/M18/review_brief.md
+  - missions/M18/adr_prompt.md
+  - labs/M18_statistical_inference.ipynb
+  - simulations/M18/statistical_inference.py
+  - datasets/M18/README.md
+  - datasets/M18/checkout_experiment_daily.csv
+  - datasets/M18/seasonal_correlation.csv
+  - requirements/m18.txt
+  - tests/missions/test_m18.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
