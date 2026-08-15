@@ -1,0 +1,37 @@
+mission: M19
+experiments:
+  - id: manual-weight-sweep
+    prediction_required: true
+    change: Evaluate several hand-chosen weights.
+    observation: Compare predictions and mean squared losses.
+    invariant: Dataset and model form stay fixed.
+  - id: loss-curve
+    prediction_required: true
+    change: Evaluate a dense range of weights.
+    observation: Locate the minimum and compare slope signs on either side.
+    invariant: One-parameter model only.
+  - id: finite-difference-check
+    prediction_required: true
+    change: Perturb the weight by plus and minus epsilon.
+    observation: Compare the estimate with the analytic derivative.
+    invariant: Same point on the same loss curve.
+  - id: one-step-update
+    prediction_required: true
+    change: Subtract learning-rate times gradient once.
+    observation: Verify that loss falls.
+    invariant: Positive learning rate and correct gradient.
+  - id: repeated-updates
+    prediction_required: true
+    change: Apply several correct updates.
+    observation: Inspect the parameter and loss trace.
+    invariant: Fixed data and learning rate.
+  - id: wrong-sign-failure
+    prediction_required: true
+    change: Add learning-rate times gradient.
+    observation: Verify that loss rises and identify the faulty line.
+    invariant: Same start, data, gradient, and learning rate as the correct step.
+  - id: weight-and-bias
+    prediction_required: true
+    change: Update a two-component gradient.
+    observation: Recover slope and intercept from the offset target.
+    invariant: Multiple parameters appear only after the one-parameter mechanism.

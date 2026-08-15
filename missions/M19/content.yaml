@@ -1,0 +1,15 @@
+mission: M19
+sources:
+  - id: 3b1b-calculus
+    use: Visual intuition for derivatives, slope, and direction of change.
+  - id: stanford-cs229
+    use: Regression loss and gradient-descent notation after the concrete experiment.
+concepts:
+  - parameter changes alter predictions
+  - prediction errors determine loss
+  - a gradient measures local loss change
+  - finite differences approximate that local change
+  - an analytic derivative predicts the same direction and magnitude
+  - subtracting a gradient can reduce loss
+  - a gradient vector extends the mechanism to multiple parameters
+sequence_rule: One parameter and manual changes must precede derivatives and multiple parameters.

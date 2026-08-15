@@ -1,0 +1,63 @@
+id: M19
+title: Make Models Learn with Gradients
+phase: P3
+flagship: V04
+objective: Connect changing parameters to changing loss through gradients.
+competencies:
+  - calculus
+  - gradients
+formal_engineering_review: true
+prerequisites:
+  blocking:
+    - M16
+    - M17
+  helpful: []
+learning_sequence:
+  - change one parameter manually
+  - map the one-parameter loss curve
+  - explain gradient direction and magnitude
+  - estimate a gradient with finite differences
+  - derive the analytic gradient
+  - apply one parameter update
+  - run multiple update steps
+  - diagnose the wrong-gradient-sign failure
+  - extend the mechanism to weight and bias
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M19_gradients.ipynb
+dataset:
+  path: datasets/M19/tiny_linear.csv
+  provenance: Deterministic synthetic fixture generated from y=3x and y=3x+2.
+requirements: requirements/m19.txt
+mission_test: tests/missions/test_m19.py
+mission_artifacts:
+  - missions/M19/manifest.yaml
+  - missions/M19/README.md
+  - missions/M19/content.yaml
+  - missions/M19/experiments.yaml
+  - missions/M19/code_reading.md
+  - missions/M19/no_ai_gate.md
+  - missions/M19/controlled_failure.md
+  - missions/M19/assessment.yaml
+  - missions/M19/evidence_contract.yaml
+  - missions/M19/flagship_integration.md
+  - missions/M19/review_brief.md
+  - missions/M19/adr_prompt.md
+  - missions/M19/status.yaml
+  - missions/M19/gradient_core.py
+  - labs/M19_gradients.ipynb
+  - datasets/M19/README.md
+  - datasets/M19/tiny_linear.csv
+  - requirements/m19.txt
+  - tests/missions/test_m19.py
+  - tests/test_m19.py
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_shared_registries: false

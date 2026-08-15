@@ -1,0 +1,12 @@
+mission_id: M19
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: required
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+parallel_safety:
+  prohibited_shared_files_modified: false
