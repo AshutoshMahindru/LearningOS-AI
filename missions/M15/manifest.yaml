@@ -1,0 +1,38 @@
+id: M15
+title: Represent Meaning and Data as Vectors
+phase: P3
+flagship: V04
+objective: Use vectors operationally before formalizing vector algebra.
+competencies:
+  - vectors
+  - similarity
+pedagogy: whole-first
+formal_engineering_review: false
+prerequisites:
+  blocking:
+    - M05
+  helpful: []
+sources:
+  - numpy-quickstart
+  - 3b1b-linear-algebra
+notebook: labs/M15_vectors.ipynb
+implementation: missions/M15/vector_ops.py
+fixtures:
+  - datasets/M15/vector_fixtures.json
+requirements: requirements/m15.txt
+mission_test: tests/test_m15.py
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+completion_requires:
+  - represent_numeric_features_positions_directions_and_meaning
+  - add_and_subtract_vectors_operationally
+  - compute_norm_dot_product_cosine_and_euclidean_distance
+  - normalize_vectors_safely
+  - rank_candidates_by_similarity
+  - diagnose_metric_disagreement
+  - connect_measurements_to_v04_instrumentation
+  - defend_metric_choice_in_an_adr

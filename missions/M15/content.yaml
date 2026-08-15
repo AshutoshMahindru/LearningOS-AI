@@ -1,0 +1,33 @@
+mission_id: M15
+approach: whole-first
+sequence:
+  - id: name_dimensions
+    purpose: Represent numeric features and meaning while preserving dimension labels.
+  - id: move_with_vectors
+    purpose: Use addition and subtraction to operate on positions and directions.
+  - id: measure_vectors
+    purpose: Measure magnitude, alignment, angular similarity and geometric distance.
+  - id: normalize_safely
+    purpose: Normalize nonzero vectors and make the zero-vector boundary explicit.
+  - id: rank_meaning
+    purpose: Rank small precomputed semantic embeddings without a model or network call.
+  - id: diagnose_metric_disagreement
+    purpose: Explain why cosine and Euclidean rankings can disagree.
+  - id: instrument_v04
+    purpose: Emit interpretable measurements for the V04 Mathematical Instrumentation Layer.
+just_in_time_concepts:
+  - vector
+  - coordinate
+  - vector_magnitude
+  - vector_direction
+  - vector_addition
+  - vector_subtraction
+  - dot_product
+  - l2_normalization
+  - cosine_similarity
+  - euclidean_distance
+  - similarity_ranking
+  - semantic_embedding
+source_references:
+  - numpy-quickstart
+  - 3b1b-linear-algebra
