@@ -1,0 +1,12 @@
+# CPU-only, offline notebook dependencies. Upper bounds protect the teaching API.
+numpy>=2.0,<3
+pandas>=2.2,<4
+scikit-learn>=1.5,<2
+matplotlib>=3.9,<4
+nbformat>=5.9,<6
+nbclient>=0.10,<1
+nbconvert>=7.16,<8
+ipykernel>=6,<8
+jupyter-core>=5,<6
+PyYAML>=6,<7
+pytest>=8,<10

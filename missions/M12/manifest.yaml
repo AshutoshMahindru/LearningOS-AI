@@ -1,0 +1,63 @@
+id: M12
+title: Improve Weak Trees with Ensembles
+phase: P2
+flagship: V03
+objective: Compare bagging and boosting through controlled experiments.
+competencies:
+  - ensembles
+  - bias variance
+pedagogy: whole-first
+experiment_protocol: prediction-before-action
+formal_engineering_review: true
+adr_required: true
+prerequisites:
+  blocking:
+    - M11
+  helpful:
+    - M10
+notebook: labs/M12_tree_ensembles.ipynb
+requirements: requirements/m12.txt
+mission_test: tests/missions/test_m12.py
+dataset:
+  path: datasets/M12/ensemble_fixture.csv
+  generator: datasets/M12/generate_fixture.py
+  provenance: deterministic synthetic two-moons classification fixture with derived and nuisance features
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+completion_requires:
+  - limited_tree_baseline
+  - bootstrap_prediction_variation
+  - tree_bagging_random_forest_comparison
+  - bagging_boosting_comparison
+  - estimator_count_experiment
+  - tree_depth_experiment
+  - controlled_failure_diagnosis
+  - formal_engineering_review
+  - ensemble_choice_adr
+mission_artifacts:
+  - missions/M12/manifest.yaml
+  - missions/M12/README.md
+  - missions/M12/content.yaml
+  - missions/M12/experiments.yaml
+  - missions/M12/code_reading.md
+  - missions/M12/no_ai_gate.md
+  - missions/M12/controlled_failure.md
+  - missions/M12/assessment.yaml
+  - missions/M12/evidence_contract.yaml
+  - missions/M12/flagship_integration.md
+  - missions/M12/status.yaml
+  - missions/M12/review_brief.md
+  - missions/M12/adr_prompt.md
+  - labs/M12_tree_ensembles.ipynb
+  - datasets/M12/README.md
+  - datasets/M12/ensemble_fixture.csv
+  - datasets/M12/generate_fixture.py
+  - requirements/m12.txt
+  - tests/missions/test_m12.py
+constraints:
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false

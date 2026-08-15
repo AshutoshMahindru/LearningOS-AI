@@ -1,0 +1,60 @@
+mission_id: M12
+version: 1
+purpose: Define learner-produced evidence without pre-populating learner results or decisions.
+required_evidence:
+  - id: prediction_log
+    artifact_type: written_predictions_and_revisions
+    must_show:
+      - prediction_before_each_experiment
+      - mechanism_based_reason
+      - observed_result
+      - belief_revision
+  - id: experimental_record
+    artifact_type: notebook_run_or_equivalent_report
+    must_show:
+      - fixed_split_and_seeds
+      - limited_tree_baseline
+      - bootstrap_prediction_disagreement
+      - tree_bagging_random_forest_comparison
+      - bagging_boosting_comparison
+      - estimator_count_sweep
+      - depth_sweep
+      - controlled_failure
+  - id: controlled_failure_diagnosis
+    artifact_type: written_diagnosis
+    must_show:
+      - excess_complexity_or_memorization_risk
+      - corrupted_label_signal
+      - why_more_trees_is_not_a_general_repair
+      - proposed_validation_or_data_repair
+  - id: ensemble_choice_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - decision
+      - context
+      - alternatives
+      - evidence
+      - trade_offs
+      - revisit_conditions
+  - id: formal_engineering_review
+    artifact_type: review_notes_and_verdict
+    must_show:
+      - experimental_validity
+      - reproducibility
+      - operational_trade_offs
+      - uncertainty
+      - required_follow_ups
+  - id: no_ai_gate
+    artifact_type: learner_created_diagrams_and_transfer_defense
+    conditions:
+      - completed_without_ai_assistance
+      - completed_before_reference_check
+quality_bar:
+  - Conclusions distinguish observations, inferences, and production recommendations.
+  - Comparisons hold data split and metric constant unless the change is explicit.
+  - Ensemble size and tree complexity are justified rather than maximized.
+forbidden_repository_content:
+  - prefilled learner answers
+  - fabricated learner scores
+  - fabricated review verdicts
+  - completed learner ADR

@@ -1,0 +1,26 @@
+mission_id: M12
+assessment_type: experiment_defense_and_transfer
+transfer_required: true
+pass_score: 9
+max_score: 12
+rules:
+  - Award claims only when tied to a controlled comparison or an explicit assumption.
+  - Do not accept bootstrap disagreement as a complete bias-variance decomposition.
+  - Do not accept more estimators as a substitute for validation, label quality, or capacity control.
+tasks:
+  - id: A1
+    points: 3
+    prompt: Explain the observed prediction variation across resampled trees and how bagging changes it.
+    full_credit: Distinguishes sample sensitivity, vote averaging, correlated errors, and the limits of the proxy.
+  - id: A2
+    points: 3
+    prompt: Contrast random-forest parallel averaging with boosting's sequential correction using notebook evidence.
+    full_credit: Identifies row and feature randomness, stage dependence, corrected and newly wrong cases, and computational implications.
+  - id: A3
+    points: 3
+    prompt: Interpret the estimator-count and depth sweeps without selecting on training score alone.
+    full_credit: Uses held-out metrics, generalization gaps, diminishing returns, and interaction among depth, learning rate, and stage count.
+  - id: A4
+    points: 3
+    prompt: Defend a fresh ensemble choice and its rejection criteria in an ADR and formal review.
+    full_credit: States context, alternatives, evidence, trade-offs, operational constraints, uncertainty, and revisit conditions.

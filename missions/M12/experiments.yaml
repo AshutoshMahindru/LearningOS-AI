@@ -1,0 +1,75 @@
+mission_id: M12
+prediction_rule: Record a directional prediction and a reason before running each experiment.
+fixed_controls:
+  dataset: datasets/M12/ensemble_fixture.csv
+  split_random_state: 1200
+  test_size: 0.30
+  primary_metric: balanced_accuracy
+  secondary_metrics:
+    - accuracy
+    - generalization_gap
+experiments:
+  - id: E1
+    title: Limited tree baseline
+    prediction_prompt: Predict whether a depth-2 tree will underfit, overfit, or balance the fixture.
+    change: Fit one DecisionTreeClassifier with max_depth 2.
+    inspect:
+      - train balanced accuracy
+      - test balanced accuracy
+      - train-test gap
+    success_condition: State whether the observed gap and error pattern support the prediction.
+  - id: E2
+    title: Bootstrap prediction variation
+    prediction_prompt: Predict which held-out cases will be unstable across resampled trees.
+    change: Fit 40 depth-4 trees to seeded bootstrap samples.
+    inspect:
+      - per-case positive-vote rate
+      - per-case disagreement
+      - most unstable cases
+    success_condition: Connect disagreement to sensitivity to the sampled training records without calling it a full variance decomposition.
+  - id: E3
+    title: Tree versus bagging and random forest
+    prediction_prompt: Rank a depth-4 tree, bagging, and random forest before fitting.
+    change: Hold the split and tree depth fixed; introduce row resampling, then row plus feature randomness.
+    inspect:
+      - train and test balanced accuracy
+      - generalization gap
+      - bootstrap diversity
+    success_condition: Explain the result from averaging and error correlation, including any result that violates the predicted ranking.
+  - id: E4
+    title: Bagging versus boosting
+    prediction_prompt: Predict whether shallow sequential correction beats averaging on this boundary.
+    change: Compare bagged depth-4 trees with depth-1 gradient boosting at matched stage count.
+    inspect:
+      - staged test error
+      - cases corrected between stages
+      - cases newly made incorrect
+      - final held-out metric
+    success_condition: Explain boosting as additive sequential correction, not resampling plus voting.
+  - id: E5
+    title: Number of estimators
+    prediction_prompt: Predict the point of diminishing returns for each ensemble.
+    change: Sweep 1, 5, 10, 25, 50, 100, and 200 estimators.
+    inspect:
+      - train score
+      - test score
+      - marginal test-score change
+    success_condition: Reject or qualify the claim that test quality must improve monotonically.
+  - id: E6
+    title: Tree complexity
+    prediction_prompt: Predict how depth changes bias, sensitivity, and train-test gap.
+    change: Sweep depths 1, 2, 4, and unlimited for single trees, bagging, and random forests; sweep boosting depths 1, 2, and 4.
+    inspect:
+      - train score
+      - test score
+      - generalization gap
+    success_condition: Identify a defensible operating region rather than a universally best depth.
+  - id: E7
+    title: Controlled failure
+    prediction_prompt: Predict whether 200 trees can repair labels corrupted in the training set.
+    change: Flip a seeded 28 percent of training labels and increase random-forest size.
+    inspect:
+      - clean-test score curve
+      - train score on corrupted labels
+      - diminishing or negative returns
+    success_condition: Diagnose why added estimators average the wrong training signal instead of repairing it.
