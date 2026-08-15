@@ -1,0 +1,63 @@
+id: M11
+title: Interrogate a Decision Tree
+phase: P2
+flagship: V03
+objective: Inspect a tree and explain how splits create decisions.
+competencies:
+  - decision trees
+  - model interpretation
+pedagogy: whole-first
+formal_engineering_review: true
+sources:
+  - sklearn-guide
+  - stanford-cs229
+prerequisites:
+  blocking:
+    - M09
+  helpful:
+    - M10
+notebook: labs/M11_decision_tree.ipynb
+dataset:
+  path: datasets/M11/learner_readiness.csv
+  provenance: Deterministic synthetic fixture authored for M11; not real learner data.
+requirements: requirements/m11.txt
+mission_test: tests/missions/test_m11.py
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+completion_requires:
+  - trace_individual_decision_paths
+  - explain_thresholds_nodes_branches_and_leaves
+  - explain_impurity_reduction_intuitively
+  - compare_depth_and_min_samples_constraints
+  - compare_train_and_test_performance
+  - perturb_one_feature_and_explain_path_change
+  - interpret_feature_importance_cautiously
+  - diagnose_overfitting_in_an_over_deep_tree
+  - reject_unjustified_causal_interpretation
+  - complete_no_ai_transfer_gate
+mission_artifacts:
+  - missions/M11/manifest.yaml
+  - missions/M11/README.md
+  - missions/M11/content.yaml
+  - missions/M11/experiments.yaml
+  - missions/M11/code_reading.md
+  - missions/M11/no_ai_gate.md
+  - missions/M11/controlled_failure.md
+  - missions/M11/assessment.yaml
+  - missions/M11/evidence_contract.yaml
+  - missions/M11/flagship_integration.md
+  - missions/M11/status.yaml
+  - missions/M11/review_brief.md
+  - missions/M11/adr_prompt.md
+  - labs/M11_decision_tree.ipynb
+  - datasets/M11/README.md
+  - datasets/M11/learner_readiness.csv
+  - requirements/m11.txt
+  - tests/missions/test_m11.py
+constraints:
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false

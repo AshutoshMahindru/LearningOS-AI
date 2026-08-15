@@ -1,0 +1,35 @@
+mission_id: M11
+assessment:
+  mode: performance_interpretation_and_transfer
+  transfer_required: true
+  pass_requires:
+    - predict_branch_behavior_before_execution
+    - trace_individual_rows_to_leaves
+    - explain_thresholds_nodes_branches_leaves_and_impurity
+    - compare_max_depth_and_min_samples_leaf
+    - diagnose_overfitting_from_train_test_evidence
+    - explain_one_feature_perturbation
+    - qualify_impurity_based_feature_importance
+    - reject_unjustified_causal_interpretation
+    - complete_fresh_tree_trace_without_ai
+  rubric:
+    path_reasoning:
+      weight: 25
+      evidence: Manual threshold comparisons agree with observed decision paths or divergences are diagnosed.
+    structure_and_impurity:
+      weight: 20
+      evidence: Nodes, branches, leaves, class counts, depth, and impurity reduction are explained using the fitted tree.
+    generalization:
+      weight: 25
+      evidence: Train/test results and leaf sizes support the overfitting diagnosis and constrained repair.
+    interpretation_boundaries:
+      weight: 15
+      evidence: Feature importance is model-specific and no causal conclusion is made from predictive splits.
+    transfer:
+      weight: 15
+      evidence: The fresh textual tree is traced and critiqued without AI-generated help.
+  failure_conditions:
+    - reports_only_final_predictions_without_paths
+    - chooses_model_using_training_accuracy_alone
+    - treats_feature_importance_as_causal_effect
+    - changes_multiple_experimental_controls_without_acknowledgment
