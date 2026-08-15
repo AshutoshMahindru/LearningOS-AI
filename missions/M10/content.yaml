@@ -1,0 +1,58 @@
+mission_id: M10
+registry_scope: mission_local_only
+verified_on: 2026-08-16
+source_policy:
+  preference: primary_or_official_documentation
+  global_content_registry_modified: false
+sources:
+  - id: M10-S1
+    publisher: scikit-learn
+    title: Metrics and scoring - quantifying the quality of predictions
+    url: https://scikit-learn.org/stable/modules/model_evaluation.html
+    version_context: stable documentation; 1.9.0 observed at verification
+    exact_sections:
+      - Classification metrics
+      - Precision, recall and F-measures
+      - Binary classification
+    used_for:
+      - confusion matrix
+      - accuracy precision recall and F1 definitions
+      - threshold-dependent metric interpretation
+  - id: M10-S2
+    publisher: scikit-learn
+    title: Post-tuning the decision threshold for cost-sensitive learning
+    url: https://scikit-learn.org/stable/auto_examples/model_selection/plot_cost_sensitive_learning.html
+    version_context: stable documentation; 1.9.0 observed at verification
+    exact_sections:
+      - The business problem
+      - The cost-sensitive learning problem
+      - Post-tuning the decision threshold
+    used_for:
+      - asymmetric misclassification costs
+      - separating score production from decision thresholding
+      - validation-based threshold selection
+  - id: M10-S3
+    publisher: scikit-learn
+    title: Precision-Recall
+    url: https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html
+    version_context: stable documentation; 1.9.0 observed at verification
+    exact_sections:
+      - Precision-Recall
+    used_for:
+      - precision recall trade-offs
+      - imbalanced-class interpretation
+route:
+  sequence:
+    - consequences_and_action
+    - confusion_matrix
+    - threshold_metrics
+    - imbalance_baseline
+    - controlled_failure
+    - expected_cost_value
+    - roc_pr_concepts
+    - lock_and_test
+    - cost_sensitivity
+    - adr
+    - formal_review
+    - no_ai_gate
+    - transfer_assessment

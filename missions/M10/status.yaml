@@ -1,0 +1,13 @@
+mission_id: M10
+implementation_status: implemented
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_validator: required
+  repository_unittest: required
+learner_evidence_status: intentionally_unpopulated
+parallel_safety:
+  modifies_global_content_registry: false
+  modifies_global_tracking: false
+  modifies_root_readme: false

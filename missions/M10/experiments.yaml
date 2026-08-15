@@ -1,0 +1,66 @@
+mission_id: M10
+prediction_rule: Record a prediction before executing every experiment or changing any threshold, cost, or constraint.
+experiments:
+  - id: E1
+    title: Translate consequences into a confusion matrix
+    prediction_required: true
+    action: At threshold 0.50, derive TP, FP, TN and FN and attach each count to an operational consequence.
+    inspect:
+      - confusion counts
+      - accuracy
+      - precision
+      - recall
+      - specificity
+      - F1
+    success_condition: Every metric is derived from correctly oriented confusion outcomes.
+  - id: E2
+    title: Expose the imbalance baseline
+    prediction_required: true
+    action: Compare the all-negative policy with thresholded policies.
+    inspect:
+      - positive prevalence
+      - all-negative accuracy
+      - false negatives
+      - expected cost
+    success_condition: Explain why high baseline accuracy can coexist with zero recall and poor utility.
+  - id: E3
+    title: Controlled metric failure
+    prediction_required: true
+    action: Select the validation threshold that maximizes accuracy, then compare it with the threshold that minimizes feasible expected cost.
+    inspect:
+      - selected thresholds
+      - confusion matrices
+      - expected cost
+      - value versus no-alert baseline
+    success_condition: Show with evidence that the more accurate threshold harms decision utility.
+  - id: E4
+    title: Interrogate F1 and ranking curves
+    prediction_required: true
+    action: Compare the F1-optimal threshold with cost-optimal selection and inspect ROC and PR points across thresholds.
+    inspect:
+      - F1 optimum
+      - ROC coordinates
+      - precision-recall coordinates
+      - ROC AUC
+      - average precision
+    success_condition: Explain what F1 and ranking summaries omit about consequences and operating constraints.
+  - id: E5
+    title: Lock on validation and open test once
+    prediction_required: true
+    action: Freeze the consequence-selected threshold, then evaluate it on the untouched test split.
+    inspect:
+      - locked threshold
+      - validation metrics
+      - test metrics
+      - validation-to-test drift
+    success_condition: Report test evidence without retuning the threshold on test outcomes.
+  - id: E6
+    title: Cost-sensitivity analysis
+    prediction_required: true
+    action: Vary the false-negative cost while preserving the observed validation scores.
+    inspect:
+      - threshold changes
+      - alert rate
+      - false negatives
+      - expected cost under each assumption
+    success_condition: Define a revisit condition tied to a material cost or capacity change.
