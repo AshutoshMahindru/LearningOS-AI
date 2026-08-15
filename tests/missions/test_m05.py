@@ -1,11 +1,21 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import re
 from pathlib import Path
 import unittest
 
-import numpy as np
+
+NUMPY_AVAILABLE = importlib.util.find_spec("numpy") is not None
+NUMPY_SKIP_REASON = (
+    "install requirements/m05.txt to run NumPy-dependent M05 tests"
+)
+
+if NUMPY_AVAILABLE:
+    import numpy as np
+else:
+    np = None
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -18,6 +28,7 @@ def cell_source(cell: dict) -> str:
     return "".join(source) if isinstance(source, list) else source
 
 
+@unittest.skipUnless(NUMPY_AVAILABLE, NUMPY_SKIP_REASON)
 class M05MissionPackageTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
