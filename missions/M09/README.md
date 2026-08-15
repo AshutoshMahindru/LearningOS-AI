@@ -18,6 +18,12 @@ For every threshold experiment, record a prediction before running the relevant 
 
 Completion requires the evidence in `evidence_contract.yaml`, the controlled-failure diagnosis, and the fresh decision in `no_ai_gate.md`. Generated notebook output is practice evidence, not proof that a learner completed the mission.
 
+## Threshold ADR handoff
+
+Choosing an operating threshold from FP/FN consequences and capacity is a consequential policy decision. After recording predictions and completing the threshold experiments, use `missions/M09/adr_prompt.md` and `templates/ADR.md` to create a **separate learner-authored ADR**. It must record the selected threshold and comparison rule, cost and capacity assumptions, alternatives, evidence, accepted trade-offs, owner/status/date, monitoring, rollback, and measurable revisit triggers.
+
+The repository prompt is intentionally unfilled and must not be converted into fabricated completion evidence. Notebook output alone does not satisfy the ADR requirement.
+
 ## Boundaries
 
 - CPU-only and deterministic where practical.

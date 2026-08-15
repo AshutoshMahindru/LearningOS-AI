@@ -8,6 +8,7 @@ competencies:
   - probability
 pedagogy: whole-first
 formal_engineering_review: false
+adr_required: true
 sources:
   - sklearn-guide
   - stanford-cs229
@@ -31,5 +32,6 @@ completion_requires:
   - compare_accuracy_precision_and_recall
   - diagnose_accuracy_only_reasoning_under_imbalance
   - choose_a_threshold_from_consequences
+  - document_threshold_policy_in_learner_authored_adr
   - explain_calibration_intuition
   - complete_a_fresh_no_ai_threshold_decision

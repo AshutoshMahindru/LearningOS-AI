@@ -17,6 +17,21 @@ NOTEBOOK = ROOT / "labs" / "M09_binary_classification.ipynb"
 DATASET_DIR = ROOT / "datasets" / "M09"
 DATASET = DATASET_DIR / "learner_disengagement.csv"
 GENERATOR = DATASET_DIR / "generate_dataset.py"
+ADR_PROMPT = MISSION / "adr_prompt.md"
+ADR_HEADINGS = [
+    "Decision",
+    "Context",
+    "Alternatives considered",
+    "Evidence",
+    "Trade-offs",
+    "Revisit conditions",
+    "Status",
+]
+ADR_RESPONSE_BLOCK = re.compile(
+    r"<!-- BEGIN LEARNER RESPONSE: ([A-Z_]+) -->(.*?)"
+    r"<!-- END LEARNER RESPONSE: \1 -->",
+    re.DOTALL,
+)
 
 
 def load_notebook() -> dict[str, object]:
@@ -49,6 +64,109 @@ def execute_notebook_code() -> dict[str, object]:
     return namespace
 
 
+def adr_response_blocks_are_empty(text: str) -> bool:
+    """Return whether every expected prompt block exists exactly once and is empty."""
+    blocks = ADR_RESPONSE_BLOCK.findall(text)
+    expected_labels = {
+        "DECISION",
+        "CONTEXT",
+        "ALTERNATIVES",
+        "EVIDENCE",
+        "TRADE_OFFS",
+        "REVISIT_CONDITIONS",
+        "STATUS",
+    }
+    labels = [label for label, _ in blocks]
+    return (
+        len(labels) == len(expected_labels)
+        and set(labels) == expected_labels
+        and len(labels) == len(set(labels))
+        and all(not response.strip() for _, response in blocks)
+    )
+
+
+def adr_submission_issues(text: str | None) -> list[str]:
+    """Apply a small, deterministic quality gate to a learner-authored ADR."""
+    if text is None or not text.strip():
+        return ["missing submission"]
+    if "BEGIN LEARNER RESPONSE" in text or "END LEARNER RESPONSE" in text:
+        return ["source prompt is not a learner-authored submission"]
+
+    sections: dict[str, str] = {}
+    for heading in ADR_HEADINGS:
+        match = re.search(
+            rf"(?ms)^## {re.escape(heading)}\s*\n(.*?)(?=^## |\Z)",
+            text,
+        )
+        if match:
+            sections[heading] = match.group(1).strip()
+
+    issues = [f"missing section: {heading}" for heading in ADR_HEADINGS if heading not in sections]
+    if issues:
+        return issues
+
+    minimum_words = {
+        "Decision": 18,
+        "Context": 28,
+        "Alternatives considered": 30,
+        "Evidence": 30,
+        "Trade-offs": 24,
+        "Revisit conditions": 24,
+        "Status": 8,
+    }
+    for heading, minimum in minimum_words.items():
+        words = re.findall(r"\b[\w.-]+\b", sections[heading])
+        if len(words) < minimum:
+            issues.append(f"superficial section: {heading}")
+
+    combined = "\n".join(sections.values()).lower()
+    required_terms = {
+        "threshold",
+        "false positive",
+        "false negative",
+        "cost",
+        "capacity",
+        "alternative",
+        "trade-off",
+        "revisit",
+        "owner",
+    }
+    for term in sorted(required_terms):
+        if term not in combined:
+            issues.append(f"missing decision concept: {term}")
+
+    evidence = sections["Evidence"].lower()
+    for token in ["tp", "tn", "fp", "fn", "precision", "recall", "holdout"]:
+        if re.search(rf"\b{token}\b", evidence) is None:
+            issues.append(f"missing evidence token: {token}")
+
+    decision = sections["Decision"].lower()
+    if re.search(r"\b0\.\d+\b", decision) is None:
+        issues.append("decision lacks a numeric threshold")
+    if ">=" not in decision and "comparison rule" not in decision:
+        issues.append("decision lacks an exact comparison rule")
+
+    alternatives = sections["Alternatives considered"].lower()
+    if alternatives.count("alternative") < 3:
+        issues.append("fewer than three explicit alternatives")
+
+    revisit = sections["Revisit conditions"].lower()
+    if not any(term in revisit for term in ["drift", "prevalence", "calibration"]):
+        issues.append("revisit conditions lack model or population change trigger")
+    if re.search(r"\b\d+(?:\.\d+)?%?\b", revisit) is None:
+        issues.append("revisit conditions lack a quantitative trigger")
+
+    status = sections["Status"].lower()
+    if not any(value in status for value in ["proposed", "accepted", "superseded", "rejected"]):
+        issues.append("status is not governed")
+    if re.search(r"\b20\d{2}-\d{2}-\d{2}\b", status) is None:
+        issues.append("status lacks an ISO date")
+    if any(token in combined for token in ["tbd", "todo", "fill this", "lorem ipsum"]):
+        issues.append("placeholder content remains")
+
+    return issues
+
+
 class M09MissionPackageTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -67,6 +185,7 @@ class M09MissionPackageTests(unittest.TestCase):
             "evidence_contract.yaml",
             "flagship_integration.md",
             "status.yaml",
+            "adr_prompt.md",
         ]
         missing = [name for name in required_mission_files if not (MISSION / name).is_file()]
         self.assertEqual(missing, [])
@@ -84,6 +203,7 @@ class M09MissionPackageTests(unittest.TestCase):
             "phase: P2",
             "flagship: V02",
             "pedagogy: whole-first",
+            "adr_required: true",
             "cpu_only: true",
             "requires_secrets: false",
             "requires_paid_api: false",
@@ -91,6 +211,7 @@ class M09MissionPackageTests(unittest.TestCase):
             "- classification",
             "- probability",
             "datasets/M09/learner_disengagement.csv",
+            "document_threshold_policy_in_learner_authored_adr",
         ]
         for fragment in expected_fragments:
             with self.subTest(fragment=fragment):
@@ -156,7 +277,7 @@ class M09MissionPackageTests(unittest.TestCase):
     def test_notebook_has_stable_ids_no_outputs_and_whole_first_route(self) -> None:
         notebook = load_notebook()
         self.assertEqual(notebook["nbformat"], 4)
-        self.assertGreaterEqual(len(notebook["cells"]), 30)
+        self.assertGreaterEqual(len(notebook["cells"]), 34)
 
         cell_ids = [cell.get("id") for cell in notebook["cells"]]
         self.assertTrue(all(cell_ids))
@@ -178,6 +299,9 @@ class M09MissionPackageTests(unittest.TestCase):
         )
         self.assertIn(route, markdown_text)
         self.assertGreaterEqual(markdown_text.count("Predict before running"), 7)
+        self.assertIn("## 11. Govern the threshold decision with an ADR", markdown_text)
+        self.assertIn("missions/M09/adr_prompt.md", markdown_text)
+        self.assertIn("separate learner-authored ADR", markdown_text)
 
     def test_notebook_code_is_syntactically_valid_offline_and_secret_free(self) -> None:
         notebook = load_notebook()
@@ -339,6 +463,102 @@ class M09MissionPackageTests(unittest.TestCase):
         self.assertIn("prefilled_learner_evidence: prohibited", evidence)
         self.assertIsNone(re.search(r"(?m)^\s*learner_evidence\s*:", evidence))
         self.assertIsNone(re.search(r"(?m)^\s*learner_response\s*:", evidence))
+
+    def test_adr_prompt_is_template_based_threshold_specific_and_unfilled(self) -> None:
+        template = (ROOT / "templates" / "ADR.md").read_text(encoding="utf-8")
+        adr = ADR_PROMPT.read_text(encoding="utf-8")
+
+        template_headings = re.findall(r"(?m)^## (.+)$", template)
+        self.assertEqual(template_headings, ADR_HEADINGS)
+        for heading in template_headings:
+            self.assertIn(f"## {heading}", adr)
+
+        normalized_adr = " ".join(adr.lower().split())
+        for phrase in [
+            "selected operating threshold",
+            "false-positive and false-negative costs",
+            "operating capacity",
+            "comparison rule",
+            "Alternatives considered",
+            "accepted FP/FN balance",
+            "measurable triggers",
+            "rollback",
+        ]:
+            with self.subTest(phrase=phrase):
+                self.assertIn(" ".join(phrase.lower().split()), normalized_adr)
+
+        self.assertTrue(adr_response_blocks_are_empty(adr))
+        self.assertNotIn("learner_evidence:", adr)
+        self.assertNotIn("learner_response:", adr)
+
+        prefilled = adr.replace(
+            "<!-- BEGIN LEARNER RESPONSE: DECISION -->\n",
+            "<!-- BEGIN LEARNER RESPONSE: DECISION -->\nUse threshold 0.20.\n",
+            1,
+        )
+        self.assertFalse(adr_response_blocks_are_empty(prefilled))
+
+    def test_adr_quality_gate_rejects_bad_artifacts_and_accepts_genuine_work(self) -> None:
+        superficial = "\n\n".join(f"## {heading}\nTBD" for heading in ADR_HEADINGS)
+        prompt = ADR_PROMPT.read_text(encoding="utf-8")
+        genuine = """# Learner threshold ADR
+
+## Decision
+I accept threshold 0.30 with the comparison rule probability >= 0.30 for proactive outreach. The policy owner is Learning Operations, and the ten-alert holdout volume fits the current weekly capacity of twelve cases.
+
+## Context
+The positive class means disengagement within 30 days and triggers outreach. A false positive spends one outreach unit on a learner who stays engaged, while a false negative misses a disengaging learner and costs five units. These toy costs and the capacity assumption remain uncertain and are not claims about real learners.
+
+## Alternatives considered
+Alternative one retained the default 0.50 threshold but missed too many positives. Alternative two used 0.20 and improved recall but exceeded the preferred ten-case operating load. Alternative three selected 0.30 as the feasible cost-aware policy. A fourth alternative used no automated outreach and was rejected because every positive would be missed.
+
+## Evidence
+On the 45-row holdout, threshold 0.30 produced TP 6, TN 30, FP 4 and FN 5, with accuracy 0.800, precision 0.600 and recall 0.545. Its modeled cost was 29 units. I compared those held-out counts with the majority baseline and the 0.20, 0.50 and 0.70 policies; the result remains limited by synthetic data and small calibration bins.
+
+## Trade-offs
+The selected trade-off accepts four false positives and their capacity load to recover more positives than 0.50, while avoiding the larger action volume at 0.20. Learning Operations owns rollback if capacity is breached or false-positive outreach causes unexpected harm. The cost ratio, calibration and population may change.
+
+## Revisit conditions
+The owner will review monthly and revisit if weekly capacity falls below ten, the false-negative cost ratio changes by 20%, prevalence drifts by 5 percentage points, calibration error worsens materially, or recall falls below 0.45 on at least 100 mature outcomes.
+
+## Status
+Status: Proposed. Owner: Learning Operations. Date: 2026-08-16. The policy requires human approval before acceptance.
+"""
+
+        self.assertTrue(adr_submission_issues(None))
+        self.assertTrue(adr_submission_issues(superficial))
+        self.assertTrue(adr_submission_issues(prompt))
+        self.assertEqual(adr_submission_issues(genuine), [])
+
+    def test_adr_requirement_is_wired_through_assessment_evidence_and_v02(self) -> None:
+        assessment = (MISSION / "assessment.yaml").read_text(encoding="utf-8")
+        evidence = (MISSION / "evidence_contract.yaml").read_text(encoding="utf-8")
+        readme = (MISSION / "README.md").read_text(encoding="utf-8")
+        flagship = (MISSION / "flagship_integration.md").read_text(encoding="utf-8")
+
+        for phrase in [
+            "adr: required",
+            "defend_threshold_policy_in_learner_authored_adr",
+            "adr_governance:",
+            "threshold_adr_missing_superficial_or_prefilled",
+        ]:
+            self.assertIn(phrase, assessment)
+
+        for phrase in [
+            "- id: threshold_adr",
+            "artifact_type: learner_authored_adr",
+            "false_positive_and_false_negative_costs",
+            "operating_capacity",
+            "monitoring_rollback_and_revisit_triggers",
+            "require_unfilled_repository_adr_prompt: true",
+        ]:
+            self.assertIn(phrase, evidence)
+
+        for document in [readme, flagship]:
+            self.assertIn("learner-authored ADR", document)
+            self.assertIn("capacity", document)
+            self.assertIn("trade-offs", document)
+            self.assertIn("revisit", document)
 
     def test_existing_authoritative_sources_are_reused_without_registry_mutation(self) -> None:
         registry = json.loads(

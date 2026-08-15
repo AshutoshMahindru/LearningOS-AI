@@ -1,6 +1,7 @@
 mission_id: M09
 assessment:
   mode: performance_and_transfer
+  adr: required
   transfer_required: true
   pass_score: 80
   max_score: 100
@@ -13,6 +14,7 @@ assessment:
     - compute_accuracy_precision_recall
     - diagnose_imbalance_and_accuracy_only_reasoning
     - choose_threshold_from_declared_consequences
+    - defend_threshold_policy_in_learner_authored_adr
     - explain_calibration_intuition
     - complete_fresh_no_ai_threshold_decision
   rubric:
@@ -26,8 +28,11 @@ assessment:
       weight: 25
       evidence: Correct TP/TN/FP/FN orientation and accuracy, precision and recall denominators.
     threshold_and_consequences:
-      weight: 25
+      weight: 15
       evidence: Compares policies on the same holdout and defends one using stated FP/FN consequences.
+    adr_governance:
+      weight: 10
+      evidence: Learner-authored ADR records the selected threshold, FP/FN costs, capacity, alternatives, trade-offs and measurable revisit triggers.
     calibration_and_limits:
       weight: 10
       evidence: Explains group-level probability agreement and the limitations of small bins.
@@ -40,4 +45,5 @@ assessment:
     - evaluates_on_training_data_only
     - confuses_probability_with_observed_outcome
     - reverses_precision_and_recall_denominators
+    - threshold_adr_missing_superficial_or_prefilled
     - fabricates_learner_evidence
