@@ -1,0 +1,44 @@
+mission_id: M07
+experiments:
+  - id: E1
+    name: Manual preprocessing versus one pipeline
+    prediction_required: true
+    invariant: Both approaches use the same raw train/test split and feature set.
+    evidence:
+      - predicted_failure_surface
+      - manual_test_accuracy
+      - pipeline_test_accuracy
+      - state_inventory
+  - id: E2
+    name: Change numerical feature treatment
+    prediction_required: true
+    action: Replace standard scaling with robust scaling while holding the split and estimator fixed.
+    evidence:
+      - predicted_metric_direction
+      - observed_metric
+      - explanation
+  - id: E3
+    name: Cross-validation through the pipeline
+    prediction_required: true
+    action: Pass the unfitted complete pipeline to cross_validate on training rows only.
+    evidence:
+      - fold_scores
+      - mean_score
+      - proof_original_pipeline_remains_unfitted
+  - id: E4
+    name: Serialize and reload
+    prediction_required: true
+    action: Persist the fitted pipeline with joblib and reload it.
+    evidence:
+      - identical_predictions
+      - identical_transformed_matrix
+      - library_version_warning
+  - id: E5
+    name: Controlled train/inference mismatch
+    prediction_required: true
+    action: One-hot encode training and unseen-category inference rows independently, observe the mismatch, then repair with the fitted pipeline.
+    evidence:
+      - predicted_exception
+      - train_and_inference_columns
+      - observed_exception
+      - repaired_prediction

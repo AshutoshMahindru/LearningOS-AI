@@ -1,0 +1,38 @@
+mission_id: M07
+assessment:
+  mode: performance_design_and_transfer
+  formal_engineering_review: required
+  adr: required
+  transfer_required: true
+  pass_requires:
+    - build_mixed_type_column_transformer_pipeline
+    - distinguish_fit_from_transform
+    - enforce_raw_split_before_preprocessing_fit
+    - cross_validate_complete_pipeline
+    - preserve_training_inference_parity
+    - diagnose_independent_encoding_mismatch
+    - prove_serialization_equivalence
+    - defend_consequential_design_choice_in_adr
+    - complete_fresh_no_ai_transfer
+  rubric:
+    pipeline_contract:
+      weight: 25
+      evidence: Numerical and categorical transformations plus estimator are one raw-row-to-prediction object.
+    leakage_and_cv:
+      weight: 25
+      evidence: Split and fold boundaries are explicit and learned preprocessing stays inside them.
+    inference_reproducibility:
+      weight: 20
+      evidence: Unseen-category inference and reload equivalence checks pass.
+    diagnosis:
+      weight: 15
+      evidence: Controlled mismatch is traced to independently learned feature schemas and repaired at the boundary.
+    engineering_judgment:
+      weight: 15
+      evidence: Formal review and ADR discuss alternatives, consequences and operational verification.
+  failure_conditions:
+    - target_or_post_outcome_feature_enters_model
+    - preprocessing_fit_before_split_or_outside_cv
+    - separate_unversioned_training_and_inference_transforms
+    - metric_reported_without_boundary_evidence
+    - serialization_claim_without_equivalence_check

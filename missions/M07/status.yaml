@@ -1,0 +1,18 @@
+mission_id: M07
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: required
+adr: required
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+parallel_safety:
+  modifies_global_content_registry: false
+  modifies_global_tracking: false
+  modifies_root_readme: false
+notes:
+  - Implementation status is not learner completion.
+  - The source notebook intentionally contains no execution outputs.
