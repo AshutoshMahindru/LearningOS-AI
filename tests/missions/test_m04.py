@@ -5,19 +5,23 @@ from pathlib import Path
 import re
 import unittest
 
-import pandas as pd
+try:
+    import pandas as pd
+except ModuleNotFoundError:  # Repository CI does not install mission-local extras.
+    pd = None
 
-from missions.M04.cleaning import (
-    ALLOWED_CATEGORIES,
-    ALLOWED_REGIONS,
-    ALLOWED_STATUSES,
-    MAX_ORDER_DATE,
-    MIN_ORDER_DATE,
-    assert_analysis_ready,
-    clean_orders,
-    load_raw,
-    raw_vs_clean_comparison,
-)
+if pd is not None:
+    from missions.M04.cleaning import (
+        ALLOWED_CATEGORIES,
+        ALLOWED_REGIONS,
+        ALLOWED_STATUSES,
+        MAX_ORDER_DATE,
+        MIN_ORDER_DATE,
+        assert_analysis_ready,
+        clean_orders,
+        load_raw,
+        raw_vs_clean_comparison,
+    )
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -26,6 +30,25 @@ DATASET = ROOT / "datasets" / "M04" / "customer_orders_dirty.csv"
 NOTEBOOK = ROOT / "labs" / "M04_messy_csv.ipynb"
 
 
+class M04DependencyContractTests(unittest.TestCase):
+    def test_mission_runtime_dependencies_are_declared(self) -> None:
+        requirements = {
+            line.strip()
+            for line in (ROOT / "requirements" / "m04.txt")
+            .read_text(encoding="utf-8")
+            .splitlines()
+            if line.strip()
+        }
+        self.assertEqual(
+            requirements,
+            {"pandas>=2.2", "nbformat>=5.10", "jupyter>=1.0", "pytest>=8"},
+        )
+
+
+@unittest.skipUnless(
+    pd is not None,
+    "install requirements/m04.txt to run pandas-dependent M04 tests",
+)
 class M04MissionPackageTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
