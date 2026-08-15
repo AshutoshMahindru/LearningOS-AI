@@ -1,0 +1,35 @@
+id: M09
+title: Make Binary Decisions
+phase: P2
+flagship: V02
+objective: Build a classifier and reason about probabilities and thresholds.
+competencies:
+  - classification
+  - probability
+pedagogy: whole-first
+formal_engineering_review: false
+sources:
+  - sklearn-guide
+  - stanford-cs229
+notebook: labs/M09_binary_classification.ipynb
+dataset: datasets/M09/learner_disengagement.csv
+requirements: requirements/m09.txt
+mission_test: tests/missions/test_m09.py
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+completion_requires:
+  - compare_against_majority_baseline
+  - preserve_a_held_out_test_split
+  - train_a_binary_probability_classifier
+  - interpret_predicted_probabilities
+  - derive_labels_from_an_explicit_threshold
+  - account_for_tp_tn_fp_fn
+  - compare_accuracy_precision_and_recall
+  - diagnose_accuracy_only_reasoning_under_imbalance
+  - choose_a_threshold_from_consequences
+  - explain_calibration_intuition
+  - complete_a_fresh_no_ai_threshold_decision

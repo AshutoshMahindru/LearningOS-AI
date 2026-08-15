@@ -1,0 +1,64 @@
+mission_id: M09
+prediction_rule: Record a prediction before running every threshold or consequence experiment.
+experiments:
+  - id: E1
+    name: Majority baseline before model fitting
+    prediction_required: true
+    action: Predict the all-negative classifier's confusion matrix and accuracy from the target counts.
+    evidence:
+      - class_counts
+      - majority_prediction
+      - baseline_confusion_matrix
+      - baseline_accuracy
+  - id: E2
+    name: Preserve a stratified holdout
+    prediction_required: true
+    action: Split each target class independently and verify that learner IDs do not cross the boundary.
+    evidence:
+      - train_and_test_sizes
+      - class_rates
+      - disjoint_ids
+  - id: E3
+    name: Fit and inspect probabilities
+    prediction_required: true
+    action: Fit the classifier on training rows only and inspect sorted held-out probabilities.
+    evidence:
+      - learned_coefficients
+      - probability_range
+      - ranked_examples
+  - id: E4
+    name: Apply the default threshold
+    prediction_required: true
+    action: Convert the same probabilities to labels at 0.50 and account for TP, TN, FP and FN.
+    evidence:
+      - threshold
+      - confusion_matrix
+      - accuracy
+      - precision
+      - recall
+  - id: E5
+    name: Move the threshold
+    prediction_required: true
+    action: Compare 0.20, 0.30, 0.50 and 0.70 without refitting the probability model.
+    evidence:
+      - changed_case_ids
+      - metric_table
+      - precision_recall_tradeoff
+  - id: E6
+    name: Price decision consequences
+    prediction_required: true
+    action: Assign explicit unit costs to FP and FN, then compare threshold policies.
+    evidence:
+      - declared_costs
+      - total_cost_by_threshold
+      - selected_threshold
+      - rejected_alternatives
+  - id: E7
+    name: Calibration intuition
+    prediction_required: true
+    action: Group held-out probabilities into broad bins and compare mean predicted risk with observed event rate.
+    evidence:
+      - bin_counts
+      - mean_predicted_probability
+      - observed_positive_rate
+      - small_sample_caveat

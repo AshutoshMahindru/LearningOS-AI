@@ -1,0 +1,46 @@
+mission_id: M09
+approach: whole-first
+registry_scope: mission_local_only
+source_policy:
+  preference: existing_authoritative_registry_sources
+  global_content_registry_modified: false
+source_references:
+  - sklearn-guide
+  - stanford-cs229
+sequence:
+  - id: baseline
+    purpose: Establish the majority-class accuracy that a classifier must be compared against.
+  - id: split
+    purpose: Preserve a deterministic stratified holdout before fitting or choosing a decision policy.
+  - id: classifier
+    purpose: Fit a binary logistic model that maps features to a score between zero and one.
+  - id: predicted_probabilities
+    purpose: Inspect probability rankings without prematurely collapsing them into labels.
+  - id: default_classification
+    purpose: Apply the conventional 0.50 threshold and make the policy step explicit.
+  - id: confusion_matrix
+    purpose: Account for TP, TN, FP and FN before summarizing performance.
+  - id: threshold_changes
+    purpose: Observe which decisions and metrics change as the threshold moves.
+  - id: consequences
+    purpose: Select a threshold using declared false-positive and false-negative consequences.
+just_in_time_concepts:
+  - binary_target
+  - probability_score
+  - logistic_regression
+  - classification_threshold
+  - true_positive
+  - true_negative
+  - false_positive
+  - false_negative
+  - accuracy
+  - precision
+  - recall
+  - class_imbalance
+  - calibration_intuition
+out_of_scope:
+  - production_deployment
+  - causal_claims
+  - fairness_certification
+  - advanced_calibration_methods
+  - automated_threshold_optimization

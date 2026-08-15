@@ -1,0 +1,26 @@
+mission_id: M09
+required_evidence:
+  - id: whole_system_trace
+    description: Annotated baseline-to-consequence trace with the model and threshold-policy boundary marked.
+  - id: split_integrity
+    description: Train/test sizes, class rates and proof that learner IDs are disjoint.
+  - id: probability_inspection
+    description: Ranked held-out probabilities with an explanation of why scores are not yet decisions.
+  - id: confusion_matrix_accounting
+    description: TP, TN, FP and FN at the default threshold with plain-language meanings.
+  - id: metric_comparison
+    description: Accuracy, precision and recall across multiple thresholds with correct denominators.
+  - id: controlled_failure_diagnosis
+    description: Evidence that default-threshold or accuracy-only reasoning can conceal costly false negatives.
+  - id: consequence_decision
+    description: Declared FP/FN costs, compared policy costs, chosen threshold and accepted trade-off.
+  - id: calibration_explanation
+    description: Broad-bin predicted-versus-observed comparison plus a small-sample limitation.
+  - id: no_ai_transfer
+    description: Fresh probability and threshold decision completed without AI-generated analysis or code.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_threshold_experiments: true
+  require_holdout_only_policy_comparison: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited
