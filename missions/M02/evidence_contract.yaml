@@ -1,6 +1,29 @@
-expected:
-  - notebook_run
-  - experiment_notes
-  - failure_diagnosis
-  - explanation
-learner_evidence: []
+mission: M02
+required_evidence:
+  - id: executed-system
+    artifact: fresh runnable notebook or script
+    proves: End-to-end supervised-system operation on CPU without network or secrets.
+  - id: system-map
+    artifact: annotated data-flow map
+    proves: Orientation across raw data, learning, inference, evaluation, and interrogation.
+  - id: prediction-log
+    artifact: predictions recorded before experiment execution
+    proves: Experimental reasoning rather than post-hoc storytelling.
+  - id: experiment-table
+    artifact: controlled comparisons across all six required dimensions
+    proves: Ability to isolate variables and interpret score changes.
+  - id: failure-diagnosis
+    artifact: diagnosis, repair, and verification for both seeded failures
+    proves: Evaluation-integrity and data-integrity reasoning.
+  - id: validation
+    artifact: restart-run-all result and integrity checks
+    proves: Reproducible execution and split/prediction invariants.
+  - id: explanation
+    artifact: no-AI boundary and limitations explanation
+    proves: Independent transfer beyond copied code.
+acceptance_rules:
+  source_notebook_outputs: absent
+  secrets: forbidden
+  runtime_network: forbidden
+  prefilled_learner_responses: forbidden
+  formal_review: required

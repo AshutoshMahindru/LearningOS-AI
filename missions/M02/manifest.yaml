@@ -2,34 +2,64 @@ id: M02
 title: Run and Interrogate Your First ML System
 phase: P0
 flagship: V00
-objective: Run a complete ML system before learning its internal mechanisms.
+objective: Run a complete supervised ML system before learning its internal mechanisms.
 competencies:
   - ML system orientation
   - experimental reasoning
+pedagogy: whole-first
 formal_engineering_review: true
 prerequisites:
   blocking:
     - M01
   helpful: []
+learning_outcomes:
+  - Map raw data, features, target, split, fit, predict, evaluation, and interrogation.
+  - Change one experimental dimension at a time and compare evidence.
+  - Distinguish an honest held-out metric from misleading evaluation.
+  - Diagnose corrupted labels using data checks and comparative results.
 whole_first_sequence:
   - raw data
   - features and target
   - train/test split
-  - training
+  - model fit
   - predictions
-  - metric
+  - evaluation
   - interrogation
+experiment_dimensions:
+  - split
+  - features
+  - model
+  - selected hyperparameters
+  - labels
+  - evaluation setup
+controlled_failures:
+  - corrupted training labels
+  - invalid self-comparison evaluation
+code_reading_boundaries:
+  fit: baseline_model.fit
+  prediction: baseline_model.predict
+  evaluation: accuracy_score
+no_ai_gate:
+  mode: fresh supervised system run
+  ai_assistance_allowed: false
+  requires_interrogation_and_explanation: true
 runtime:
   cpu_only: true
-  secrets_required: false
+  requires_secrets: false
+  requires_paid_api: false
   network_required: false
+  deterministic_seed: 7
   restart_run_all_required: true
 primary_artifact: labs/M02_first_ml_system.ipynb
 dataset:
   path: datasets/M02/wine.csv
   provenance: scikit-learn packaged Wine recognition dataset, originating from the UCI Machine Learning Repository
+  rows: 178
+  feature_columns: 13
+  target_column: target
 requirements: requirements/m02.txt
 test: tests/missions/test_m02.py
+review_brief: missions/M02/review_brief.md
 mission_artifacts:
   - missions/M02/manifest.yaml
   - missions/M02/README.md
