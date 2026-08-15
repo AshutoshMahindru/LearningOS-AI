@@ -1,0 +1,26 @@
+mission_id: M08
+sources:
+  - id: sklearn-guide
+    role: authoritative_implementation_reference
+    sections:
+      - model_selection
+      - regression_metrics
+      - cross_validation
+      - inspection_and_permutation_importance
+  - id: stanford-cs229
+    role: conceptual_reference
+    sections:
+      - supervised_learning
+      - regression
+just_in_time_topics:
+  - baseline_before_complexity
+  - train_test_boundary
+  - mae_rmse_r2
+  - residual_diagnostics
+  - underfitting_and_overfitting
+  - cross_validation_variability
+  - feature_influence_limits
+  - target_leakage
+runtime_content_policy:
+  network_required: false
+  bundled_dataset_required: true

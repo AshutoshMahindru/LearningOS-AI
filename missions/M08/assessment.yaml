@@ -1,0 +1,41 @@
+mission_id: M08
+assessment:
+  mode: performance_diagnosis_and_transfer
+  transfer_required: true
+  formal_engineering_review_required: true
+  adr_required: true
+  pass_requires:
+    - baseline_defined_before_model_claim
+    - train_test_boundary_preserved
+    - mae_rmse_r2_interpreted_correctly
+    - residual_pattern_diagnosed
+    - cross_validation_variability_reported
+    - underfitting_and_overfitting_distinguished
+    - feature_influence_interpreted_cautiously
+    - leakage_root_cause_identified
+    - invalid_evaluation_repaired
+    - model_and_evaluation_decision_recorded
+    - fresh_dataset_transfer_without_ai_generated_code
+  rubric:
+    system_and_baseline:
+      weight: 15
+      evidence: Prediction moment, target, baseline and feature boundary are explicit.
+    evaluation:
+      weight: 25
+      evidence: MAE, RMSE and R2 use held-out predictions and include correct units and limits.
+    diagnosis:
+      weight: 25
+      evidence: Residuals, cross-validation and train-validation gaps support the diagnosis.
+    failure_analysis:
+      weight: 20
+      evidence: Leakage and training-only optimism are traced to contract violations and prevented.
+    decision_and_transfer:
+      weight: 15
+      evidence: ADR and no-AI transfer connect evidence to a defensible decision.
+  failure_conditions:
+    - reporting_training_fit_as_generalization
+    - selecting_a_model_only_by_r2
+    - using_post_outcome_features
+    - treating_feature_importance_as_causal
+    - metric_report_without_residual_diagnosis
+    - learner_evidence_without_reproducible_artifacts
