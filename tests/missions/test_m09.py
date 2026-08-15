@@ -498,37 +498,76 @@ class M09MissionPackageTests(unittest.TestCase):
         )
         self.assertFalse(adr_response_blocks_are_empty(prefilled))
 
-    def test_adr_quality_gate_rejects_bad_artifacts_and_accepts_genuine_work(self) -> None:
-        superficial = "\n\n".join(f"## {heading}\nTBD" for heading in ADR_HEADINGS)
+    def test_adr_quality_gate_rejects_bad_artifacts_and_accepts_generic_fixture(self) -> None:
+        superficial = "\n\n".join(
+            f"## {heading}\nBrief statement." for heading in ADR_HEADINGS
+        )
+        placeholder = "\n\n".join(
+            f"## {heading}\n[Fill this section]" for heading in ADR_HEADINGS
+        )
         prompt = ADR_PROMPT.read_text(encoding="utf-8")
-        genuine = """# Learner threshold ADR
+        prefilled_prompt = prompt.replace(
+            "<!-- BEGIN LEARNER RESPONSE: DECISION -->\n",
+            "<!-- BEGIN LEARNER RESPONSE: DECISION -->\nRepository-injected answer.\n",
+            1,
+        )
+        completed_prompt = prompt
+        for label in [
+            "DECISION",
+            "CONTEXT",
+            "ALTERNATIVES",
+            "EVIDENCE",
+            "TRADE_OFFS",
+            "REVISIT_CONDITIONS",
+            "STATUS",
+        ]:
+            completed_prompt = completed_prompt.replace(
+                f"<!-- BEGIN LEARNER RESPONSE: {label} -->\n",
+                f"<!-- BEGIN LEARNER RESPONSE: {label} -->\n"
+                "Repository-injected completion.\n",
+                1,
+            )
+
+        # Parser-only fixture: unrelated to M09 learners, data, thresholds, or costs.
+        generic_non_m09_fixture = """# Generic orbital-greenhouse fan inspection ADR
 
 ## Decision
-I accept threshold 0.30 with the comparison rule probability >= 0.30 for proactive outreach. The policy owner is Learning Operations, and the ten-alert holdout volume fits the current weekly capacity of twelve cases.
+The generic controller uses threshold 0.61 with comparison rule fan-risk score >= 0.61 to request a mechanical inspection. Fixture Operations owns the policy, whose expected action volume fits the twelve-inspection weekly capacity.
 
 ## Context
-The positive class means disengagement within 30 days and triggers outreach. A false positive spends one outreach unit on a learner who stays engaged, while a false negative misses a disengaging learner and costs five units. These toy costs and the capacity assumption remain uncertain and are not claims about real learners.
+This parser fixture concerns synthetic orbital-greenhouse ventilation fans, not learners. A false positive spends two generic maintenance credits on a functioning fan, while a false negative risks twenty credits of crop-temperature loss. The cost units and operating capacity are illustrative test data only.
 
 ## Alternatives considered
-Alternative one retained the default 0.50 threshold but missed too many positives. Alternative two used 0.20 and improved recall but exceeded the preferred ten-case operating load. Alternative three selected 0.30 as the feasible cost-aware policy. A fourth alternative used no automated outreach and was rejected because every positive would be missed.
+Alternative one used 0.75 and reduced inspections but missed more failing fans. Alternative two used 0.61 and balanced modeled cost with capacity. Alternative three used 0.45 and exceeded the inspection queue. A fourth alternative disabled automatic requests and was rejected because every inspection would depend on manual discovery.
 
 ## Evidence
-On the 45-row holdout, threshold 0.30 produced TP 6, TN 30, FP 4 and FN 5, with accuracy 0.800, precision 0.600 and recall 0.545. Its modeled cost was 29 units. I compared those held-out counts with the majority baseline and the 0.20, 0.50 and 0.70 policies; the result remains limited by synthetic data and small calibration bins.
+In a generic 80-fan holdout, the structural fixture records TP 7, TN 60, FP 5 and FN 8, with accuracy 0.838, precision 0.583 and recall 0.467. The illustrative cost is 170 credits. These arbitrary values exist only to exercise required ADR fields and do not reproduce mission evidence.
 
 ## Trade-offs
-The selected trade-off accepts four false positives and their capacity load to recover more positives than 0.50, while avoiding the larger action volume at 0.20. Learning Operations owns rollback if capacity is breached or false-positive outreach causes unexpected harm. The cost ratio, calibration and population may change.
+The generic trade-off accepts some false-positive inspections and capacity load to reduce costly false negatives. Fixture Operations owns rollback if the queue exceeds twelve, maintenance credits rise, or the controller causes unexpected greenhouse downtime. Score calibration and fan populations may change independently.
 
 ## Revisit conditions
-The owner will review monthly and revisit if weekly capacity falls below ten, the false-negative cost ratio changes by 20%, prevalence drifts by 5 percentage points, calibration error worsens materially, or recall falls below 0.45 on at least 100 mature outcomes.
+The owner will revisit monthly if capacity falls below twelve inspections, the generic cost ratio changes by 25%, prevalence drifts by 6 percentage points, calibration error exceeds 0.10, or recall falls below 0.40 across 120 resolved fan cases.
 
 ## Status
-Status: Proposed. Owner: Learning Operations. Date: 2026-08-16. The policy requires human approval before acceptance.
+Status: Proposed. Owner: Fixture Operations. Date: 2030-01-15. This generic parser record has no operational or mission-evidence standing.
 """
 
-        self.assertTrue(adr_submission_issues(None))
-        self.assertTrue(adr_submission_issues(superficial))
-        self.assertTrue(adr_submission_issues(prompt))
-        self.assertEqual(adr_submission_issues(genuine), [])
+        rejected = {
+            "missing": None,
+            "superficial": superficial,
+            "placeholder": placeholder,
+            "prompt_marker": prompt,
+            "prefilled_repository_prompt": prefilled_prompt,
+            "completed_repository_prompt": completed_prompt,
+        }
+        for label, candidate in rejected.items():
+            with self.subTest(label=label):
+                self.assertTrue(adr_submission_issues(candidate))
+
+        self.assertFalse(adr_response_blocks_are_empty(prefilled_prompt))
+        self.assertFalse(adr_response_blocks_are_empty(completed_prompt))
+        self.assertEqual(adr_submission_issues(generic_non_m09_fixture), [])
 
     def test_adr_requirement_is_wired_through_assessment_evidence_and_v02(self) -> None:
         assessment = (MISSION / "assessment.yaml").read_text(encoding="utf-8")
