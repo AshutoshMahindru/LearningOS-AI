@@ -1,0 +1,70 @@
+id: M06
+title: See the Data Before Modeling It
+phase: P1
+flagship: V01
+objective: Use visualization to interrogate data before modeling.
+competencies:
+  - visualization
+  - data reasoning
+pedagogy: question-first
+formal_engineering_review: false
+review_brief_required: true
+adr_required: false
+prerequisites:
+  blocking:
+    - M04
+  helpful: []
+notebook: labs/M06_see_the_data.ipynb
+requirements: requirements/m06.txt
+mission_test: tests/missions/test_m06.py
+datasets:
+  guided:
+    path: datasets/M06/support_tickets.csv
+    provenance: deterministic synthetic support-ticket fixture created for M06
+  no_ai_transfer:
+    path: datasets/M06/community_programs_fresh.csv
+    provenance: deterministic synthetic community-program fixture reserved for the fresh gate
+investigations:
+  - distribution
+  - missingness
+  - outliers
+  - relationships
+  - groups
+  - possible_leakage
+  - target_class_imbalance
+reasoning_contract:
+  - visible_observation
+  - inference
+  - what_cannot_yet_be_concluded
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  stable_cell_ids: true
+  source_outputs_prefilled: false
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+mission_artifacts:
+  - missions/M06/manifest.yaml
+  - missions/M06/README.md
+  - missions/M06/content.yaml
+  - missions/M06/experiments.yaml
+  - missions/M06/code_reading.md
+  - missions/M06/no_ai_gate.md
+  - missions/M06/controlled_failure.md
+  - missions/M06/assessment.yaml
+  - missions/M06/evidence_contract.yaml
+  - missions/M06/flagship_integration.md
+  - missions/M06/status.yaml
+  - missions/M06/review_brief.md
+  - labs/M06_see_the_data.ipynb
+  - datasets/M06/README.md
+  - datasets/M06/support_tickets.csv
+  - datasets/M06/community_programs_fresh.csv
+  - requirements/m06.txt
+  - tests/missions/test_m06.py
+parallel_safety:
+  modifies_global_content_registry: false
+  modifies_global_tracking: false
+  modifies_root_readme: false

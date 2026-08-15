@@ -1,0 +1,38 @@
+mission_id: M06
+assessment:
+  mode: performance_and_transfer
+  transfer_required: true
+  pass_score: 8
+  max_score: 10
+  pass_requires:
+    - question_precedes_chart_choice
+    - prediction_precedes_action
+    - distribution_missingness_outliers_relationships_and_groups_examined
+    - target_imbalance_examined
+    - possible_leakage_field_timing_examined
+    - observation_inference_and_limits_separated
+    - misleading_visualization_diagnosed
+    - fresh_no_ai_transfer_completed
+  rubric:
+    framing_and_chart_choice:
+      points: 2
+      full_credit: Starts with a decision question and justifies an evidence-bearing chart from variable types and grain.
+    data_interrogation:
+      points: 3
+      full_credit: Examines all required dimensions, retains denominators, and investigates suspicious rows instead of silently deleting them.
+    reasoning_discipline:
+      points: 2
+      full_credit: Separates visible observation, inference, and what cannot yet be concluded without causal overclaiming.
+    failure_diagnosis:
+      points: 1
+      full_credit: Isolates the truncated scale, explains its rhetorical effect, and proposes a defensible repair.
+    transfer:
+      points: 2
+      full_credit: Independently chooses and defends a chart for the fresh dataset and states material limitations.
+  failure_conditions:
+    - chart_type_selected_before_question
+    - rates_without_denominators
+    - outliers_deleted_without_investigation
+    - post_outcome_field_treated_as_available_feature
+    - association_presented_as_causation
+    - learner_evidence_fabricated_or_prefilled

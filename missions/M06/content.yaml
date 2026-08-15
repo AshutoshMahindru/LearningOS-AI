@@ -1,0 +1,36 @@
+mission_id: M06
+registry_scope: mission_local_only
+source_policy:
+  global_source_registry_modified: false
+  authoritative_source_ids:
+    - pandas-start
+sources:
+  - id: pandas-start
+    publisher: pandas
+    title: pandas Getting Started
+    registry_path: data/source_registry.json
+    used_for:
+      - tabular inspection
+      - missing-value summaries
+      - grouping and aggregation
+      - plotting from data frames
+route:
+  sequence:
+    - frame_the_decision_question
+    - predict_what_evidence_might_appear
+    - validate_rows_columns_and_field_timing
+    - inspect_distribution
+    - inspect_missingness
+    - inspect_outliers
+    - inspect_relationships
+    - compare_groups_with_counts
+    - inspect_target_class_imbalance
+    - investigate_possible_leakage
+    - diagnose_misleading_scale
+    - complete_fresh_no_ai_transfer
+interpretation_rule:
+  required_labels:
+    - Visible observation
+    - Inference
+    - What cannot yet be concluded
+  prohibition: Do not present association, aggregation, or a visual pattern as causal proof.

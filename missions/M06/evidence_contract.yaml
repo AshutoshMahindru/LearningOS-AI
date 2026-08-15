@@ -1,0 +1,48 @@
+mission_id: M06
+version: 1
+purpose: Define learner-produced evidence without pre-populating answers or completion claims.
+required_evidence:
+  - id: question_and_prediction_log
+    must_show:
+      - decision_question_before_chart_type
+      - prediction_before_each_guided_experiment
+      - chart_choice_rationale
+  - id: interrogation_notebook
+    must_show:
+      - distribution
+      - missingness
+      - outliers
+      - relationships
+      - groups_with_denominators
+      - target_class_imbalance
+      - possible_leakage_and_field_timing
+  - id: interpretation_record
+    must_show:
+      - visible_observation
+      - inference
+      - what_cannot_yet_be_concluded
+      - next_question
+  - id: controlled_failure_diagnosis
+    must_show:
+      - unchanged_underlying_values
+      - misleading_scale_identified
+      - likely_reader_misinterpretation
+      - repaired_view
+      - prevention_check
+  - id: no_ai_transfer
+    conditions:
+      - fresh_dataset_and_question
+      - produced_without_ai_assistance
+      - chart_chosen_and_defended_by_learner
+      - limitations_stated
+quality_bar:
+  - Claims are traceable to a visible mark, table value, field definition, or explicit uncertainty.
+  - Aggregated rates preserve numerators and denominators.
+  - Candidate leakage is evaluated against decision-time availability.
+  - Outlier flags trigger investigation rather than automatic deletion.
+  - Association is not presented as causation.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited

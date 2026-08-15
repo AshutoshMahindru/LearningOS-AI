@@ -1,0 +1,65 @@
+mission_id: M06
+prediction_rule: Record a prediction and chart rationale before running each experiment.
+experiments:
+  - id: E1
+    question: What is the shape and typical range of first-response time?
+    chart_rationale: A distribution view preserves individual values while showing concentration and tails.
+    inspect:
+      - centre
+      - spread
+      - skew
+      - tail
+  - id: E2
+    question: Which fields are missing, how much is missing, and could absence itself be structured?
+    chart_rationale: Missing counts by field make completeness comparable without treating blanks as zeros.
+    inspect:
+      - missing_count
+      - missing_rate
+      - plausible_collection_process
+  - id: E3
+    question: Which response-time values are unusually far from the central mass?
+    chart_rationale: A boxplot and an explicit IQR rule expose candidate outliers without deleting them.
+    inspect:
+      - lower_fence
+      - upper_fence
+      - candidate_rows
+      - data_error_or_real_event
+  - id: E4
+    question: How do first-response time and satisfaction move together among observed survey responses?
+    chart_rationale: A scatter plot retains record-level pairs and can mark escalation groups.
+    inspect:
+      - direction
+      - overlap
+      - missing_pairs
+      - nonlinearity
+  - id: E5
+    question: Do escalation rates differ by channel, region, or issue type, and are group sizes comparable?
+    chart_rationale: Rate bars paired with counts prevent small groups from looking equally certain.
+    inspect:
+      - rate
+      - numerator
+      - denominator
+      - within_group_variation
+  - id: E6
+    question: Is the escalation target too imbalanced for accuracy to be an informative future baseline?
+    chart_rationale: Class counts and proportions reveal the naive majority-class baseline.
+    inspect:
+      - class_count
+      - class_share
+      - majority_baseline
+  - id: E7
+    question: Does any field contain information that would not exist when a new ticket is scored?
+    chart_rationale: A target-by-field cross-tab tests suspicious association after field timing is inspected.
+    inspect:
+      - availability_at_decision_time
+      - target_association
+      - operational_definition
+      - exclusion_candidate
+  - id: E8
+    question: Can an axis choice make modest group differences look operationally dramatic?
+    chart_rationale: Side-by-side charts of the same values isolate the effect of a truncated scale.
+    inspect:
+      - shared_data
+      - changed_encoding
+      - rhetorical_effect
+      - repaired_view
