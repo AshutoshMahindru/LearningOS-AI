@@ -1,0 +1,8 @@
+point_id,vertex_order,x,y,landmark
+tail_lower,0,-2.0,-0.45,false
+neck_lower,1,0.5,-0.45,false
+fin_lower,2,0.5,-1.2,false
+tip,3,2.0,0.0,true
+fin_upper,4,0.5,1.2,false
+neck_upper,5,0.5,0.45,true
+tail_upper,6,-2.0,0.45,false
