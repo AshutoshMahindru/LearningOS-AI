@@ -1,0 +1,19 @@
+mission_id: M17
+implementation_status: implemented
+learner_completion_status: intentionally_unpopulated
+formal_engineering_review: not_scheduled_for_this_mission
+adr_prompt: required
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+notes:
+  - Implementation status describes the mission package, not learner competence.
+  - Learner evidence and the ADR decision remain intentionally unpopulated.
+parallel_safety:
+  modifies_global_content_registry: false
+  modifies_global_lab_status: false
+  modifies_global_tracking: false
+  modifies_root_readme: false

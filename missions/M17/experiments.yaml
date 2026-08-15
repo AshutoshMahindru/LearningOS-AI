@@ -1,0 +1,75 @@
+mission_id: M17
+prediction_rule: Record a prediction before running or modifying every experiment.
+experiments:
+  - id: E1
+    name: Interrogate model-output groups
+    prediction_required: true
+    action: Group the supplied model probabilities and compare each probability with its observed event rate.
+    evidence:
+      - prediction
+      - group_counts
+      - observed_frequency
+      - calibration_gap
+  - id: E2
+    name: Watch frequency stabilize
+    prediction_required: true
+    action: Simulate the same event over 20, 200, and 20000 seeded trials.
+    evidence:
+      - predicted_short_run_variation
+      - observed_frequencies
+      - explanation_of_long_run_behavior
+  - id: E3
+    name: Reverse the screening condition
+    prediction_required: true
+    action: Build a complete screening count table and compare P(positive given condition) with P(condition given positive).
+    evidence:
+      - event_definition
+      - reference_population
+      - numerator_and_denominator
+      - both_conditional_probabilities
+  - id: E4
+    name: Diagnose base-rate neglect
+    prediction_required: true
+    action: Test the claim that 90% sensitivity means a positive result gives a 90% chance of the condition.
+    evidence:
+      - failed_claim
+      - neglected_base_rate
+      - false_positive_count
+      - repaired_probability
+      - verification
+  - id: E5
+    name: Test independence
+    prediction_required: true
+    action: Compare an observed joint alert rate with the product of the marginal alert rates.
+    evidence:
+      - marginal_rates
+      - observed_joint_rate
+      - independence_reference
+      - dependence_conclusion
+  - id: E6
+    name: Choose an action by expected loss
+    prediction_required: true
+    action: Compare the cost of acting now with the probability-weighted cost of missing an event.
+    evidence:
+      - probability
+      - consequence_assumptions
+      - expected_loss_by_action
+      - selected_action
+  - id: E7
+    name: Move the model threshold
+    prediction_required: true
+    action: Compare confusion counts and expected loss at several thresholds.
+    evidence:
+      - threshold_prediction
+      - confusion_counts
+      - expected_loss
+      - tradeoff_explanation
+  - id: E8
+    name: Stress calibration under deployment shift
+    prediction_required: true
+    action: Compare the stable cohorts with the deliberately shifted high-confidence cohort.
+    evidence:
+      - cohort_prediction
+      - reliability_table
+      - miscalibrated_group
+      - operational_implication

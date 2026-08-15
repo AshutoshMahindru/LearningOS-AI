@@ -1,0 +1,43 @@
+mission_id: M17
+assessment:
+  mode: performance_and_transfer
+  transfer_required: true
+  max_score: 100
+  pass_score: 80
+  pass_requires:
+    - define_event_and_reference_population
+    - record_prediction_before_action
+    - calculate_conditional_probability_from_counts
+    - distinguish_condition_direction
+    - account_for_base_rate
+    - test_independence_with_joint_and_marginal_rates
+    - compare_actions_by_expected_loss
+    - interpret_model_probability_without_claiming_certainty
+    - explain_calibration_from_group_frequencies
+    - complete_no_ai_transfer
+  rubric:
+    events_and_frequency:
+      weight: 15
+      evidence: Events, complements, reference populations, and empirical frequencies are explicit.
+    conditional_probability_and_base_rates:
+      weight: 25
+      evidence: Numerators and denominators are correct, condition direction is named, and base rates are retained.
+    independence_and_dependence:
+      weight: 15
+      evidence: Observed joint probability is compared with the product of marginal probabilities.
+    expected_loss_and_action:
+      weight: 15
+      evidence: The action follows declared probabilities and consequences rather than probability alone.
+    model_probabilities_and_calibration:
+      weight: 20
+      evidence: Group frequencies support a calibrated or miscalibrated conclusion without treating individual outcomes as guarantees.
+    transfer_and_explanation:
+      weight: 10
+      evidence: Fresh counts are solved without AI assistance and explained in plain language.
+  failure_conditions:
+    - sensitivity_used_as_posterior_probability
+    - unnamed_or_incorrect_denominator
+    - independence_assumed_without_joint_rate_check
+    - threshold_selected_without_consequences
+    - confidence_claimed_from_one_individual_outcome
+    - post_hoc_observation_presented_as_prediction
