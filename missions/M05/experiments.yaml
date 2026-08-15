@@ -1,0 +1,52 @@
+mission_id: M05
+prediction_rule: Write the requested prediction before running the following implementation cell.
+experiments:
+  - id: E1
+    title: Price three orders with Python loops
+    prediction_prompt: Calculate all three order totals by hand before running the loop.
+    change: Execute the complete pricing rule using nested Python loops.
+    inspect:
+      - gross subtotal
+      - discounted subtotal
+      - shipping decision
+      - final total
+    success_condition: Explain the useful computation and verify the manual totals.
+  - id: E2
+    title: Scale the workload safely
+    prediction_prompt: Predict the loop and NumPy times and which will be faster before measuring either.
+    change: Generate 200000 deterministic orders and time both representations.
+    inspect:
+      - row count
+      - loop seconds
+      - NumPy seconds
+      - observed speedup ratio
+    success_condition: Treat timing as measured evidence and avoid a hardware-dependent speed threshold.
+  - id: E3
+    title: Prove equivalence before trusting speed
+    prediction_prompt: Predict whether floating-point results should be exactly equal or tolerance-equal.
+    change: Compare every loop total with its vectorized counterpart using an explicit tolerance.
+    inspect:
+      - result shapes
+      - maximum absolute difference
+      - allclose result
+    success_condition: All results agree within the declared numerical tolerance.
+  - id: E4
+    title: Inspect broadcasting and aggregation
+    prediction_prompt: Write the shapes of quantities, prices, line values, discount columns, and each axis reduction.
+    change: Broadcast product prices across orders and discount rates across product columns, then aggregate by each axis.
+    inspect:
+      - shape
+      - dtype
+      - axis 0 result
+      - axis 1 result
+    success_condition: Explain each output shape from the input axes rather than from memorized syntax.
+  - id: E5
+    title: Diagnose shape and axis mistakes
+    prediction_prompt: Predict which trailing dimensions conflict and which semantic dimension a wrong axis preserves.
+    change: Run one incompatible broadcast and one wrong-axis assertion under explicit exception capture, then repair both.
+    inspect:
+      - exception type
+      - operand shapes
+      - wrong reduction shape
+      - repaired singleton axis
+    success_condition: Localize both failures to shape semantics and verify the repaired calculation.

@@ -1,0 +1,34 @@
+mission_id: M05
+assessment_type: transfer
+pass_score: 8
+max_score: 10
+rules:
+  - Require written shape and result predictions before implementation.
+  - Do not award speed claims without a correctness comparison.
+  - Reward explanations tied to axis meaning and business semantics.
+  - Do not require a fixed speedup because timing is hardware-dependent.
+tasks:
+  - id: A1
+    points: 3
+    scenario: A retailer has units shaped (stores, products), prices shaped (products,), and markdown rates shaped (stores, 1).
+    prompt: Predict every intermediate shape, implement vectorized net revenue, and explain both broadcasts.
+    rubric:
+      full_credit: Predictions precede code, shapes are correct, and vectorized results match a loop baseline.
+  - id: A2
+    points: 3
+    scenario: A valid aggregation returns product totals when the caller expects store totals.
+    prompt: Diagnose the axis mistake from shapes and meanings, make the smallest repair, and add a prevention check.
+    rubric:
+      full_credit: Identifies the removed axis, repairs it, and verifies shape plus numerical results.
+  - id: A3
+    points: 2
+    scenario: A vectorized implementation is faster but differs from the loop by very small floating-point amounts.
+    prompt: Choose and justify a correctness comparison rather than assuming either exact equality or correctness from speed.
+    rubric:
+      full_credit: Uses an explicit tolerance and explains why its scale is appropriate for the calculation.
+  - id: A4
+    points: 2
+    scenario: A benchmark includes random data generation inside the NumPy timing but prebuilt data in the loop timing.
+    prompt: Explain why the comparison is unfair and design a fairer CPU-only benchmark.
+    rubric:
+      full_credit: Moves common setup outside both timings, repeats measurements, reports raw durations, and avoids a universal speed threshold.

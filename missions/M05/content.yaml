@@ -1,0 +1,59 @@
+mission_id: M05
+registry_scope: mission_local_only
+verified_on: 2026-08-16
+source_policy:
+  preference: official_documentation
+  global_content_registry_modified: false
+sources:
+  - id: M05-S1
+    publisher: NumPy
+    title: NumPy - the absolute basics for beginners
+    url: https://numpy.org/doc/stable/user/absolute_beginners.html
+    version_context: NumPy 2.5 stable manual observed at verification
+    exact_sections:
+      - Why use NumPy?
+      - Array fundamentals
+      - Array attributes
+      - Indexing and slicing
+      - Basic array operations
+    used_for:
+      - ndarray motivation
+      - shape and dtype
+      - indexing and slicing
+      - axes and aggregation
+  - id: M05-S2
+    publisher: NumPy
+    title: Broadcasting
+    url: https://numpy.org/doc/stable/user/basics.broadcasting.html
+    version_context: NumPy 2.5 stable manual observed at verification
+    exact_sections:
+      - General broadcasting rules
+      - Broadcastable arrays
+    used_for:
+      - trailing-dimension compatibility rule
+      - singleton-axis repair
+      - controlled broadcasting failure
+  - id: M05-S3
+    publisher: NumPy
+    title: numpy.sum
+    url: https://numpy.org/doc/stable/reference/generated/numpy.sum.html
+    version_context: NumPy 2.5 stable manual observed at verification
+    exact_sections:
+      - Parameters
+      - Examples
+    used_for:
+      - axis semantics
+      - per-order and per-product aggregation
+route:
+  sequence:
+    - useful_loop_computation
+    - safe_scale
+    - predict_timing
+    - measure_loop
+    - vectorize
+    - compare_correctness
+    - compare_timing
+    - inspect_shape_dtype_and_axes
+    - diagnose_broadcasting_and_axis_failures
+    - no_ai_prediction_gate
+    - generalize

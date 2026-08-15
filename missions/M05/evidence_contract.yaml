@@ -1,0 +1,53 @@
+mission_id: M05
+version: 1
+purpose: Define acceptable learner-produced evidence without pre-populating predictions, timings, or scores.
+required_evidence:
+  - id: loop_baseline
+    artifact_type: annotated_code_and_result
+    must_show:
+      - useful_order_pricing_rule
+      - hand_calculated_small_example
+      - nested_python_loop
+      - verified_totals
+  - id: timing_experiment
+    artifact_type: prediction_and_measurement_log
+    must_show:
+      - prediction_recorded_before_timing
+      - workload_size
+      - loop_duration
+      - numpy_duration
+      - speedup_calculation
+      - hardware_dependent_interpretation
+  - id: correctness_and_shape_trace
+    artifact_type: executable_checks_and_explanation
+    must_show:
+      - tolerance_based_equivalence
+      - shape_trace
+      - dtype_trace
+      - axis_0_meaning
+      - axis_1_meaning
+      - both_broadcasts
+      - indexing_and_slicing
+  - id: controlled_failure_diagnosis
+    artifact_type: written_diagnosis_and_repair
+    must_show:
+      - incompatible_trailing_dimensions
+      - captured_value_error
+      - semantic_axis_error
+      - singleton_axis_repair
+      - post_repair_verification
+  - id: no_ai_gate
+    artifact_type: manual_predictions_then_fresh_implementation
+    conditions:
+      - produced_without_ai_assistance
+      - predictions_recorded_before_implementation
+      - tested_on_unseen_shape
+quality_bar:
+  - Correctness is established independently of timing.
+  - Shape claims name the business meaning of each axis.
+  - Timing reports observations and does not fabricate a universal performance guarantee.
+forbidden_repository_content:
+  - prefilled learner predictions
+  - fabricated benchmark results
+  - fabricated learner scores
+  - fabricated completion evidence
