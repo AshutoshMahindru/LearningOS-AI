@@ -1,0 +1,62 @@
+mission_id: M04
+experiments:
+  - id: E1
+    name: Predict the defect inventory
+    prediction_required: true
+    action: Inspect only the first raw sample, then predict defect types and affected columns.
+    evidence:
+      - prediction_timestamp_or_cell_order
+      - observed_defect_inventory
+      - prediction_comparison
+  - id: E2
+    name: Distinguish duplicate meanings
+    prediction_required: true
+    action: Compare exact-row fingerprints with normalized-ID groups before deduplication.
+    evidence:
+      - exact_duplicate_rows
+      - conflicting_id_rows
+      - deduplication_decision
+  - id: E3
+    name: Test normalization and parsing rules
+    prediction_required: true
+    action: Apply explicit alias, numeric and date policies to representative dirty values.
+    evidence:
+      - raw_value
+      - predicted_canonical_value
+      - observed_canonical_value
+      - parse_issue_code
+  - id: E4
+    name: Decide missingness treatment
+    prediction_required: true
+    action: Derive a blank total only when valid units and unit price provide direct evidence.
+    evidence:
+      - missing_field
+      - decision
+      - evidence
+      - uncertainty_or_information_loss
+  - id: E5
+    name: Investigate outliers
+    prediction_required: true
+    action: Compare statistical flags with notes and arithmetic constraints; retain every outlier.
+    evidence:
+      - threshold
+      - flagged_rows
+      - business_evidence
+      - judgment
+  - id: E6
+    name: Diagnose unsafe cleaning
+    prediction_required: true
+    action: Measure row and evidence loss from blanket dropna, aggressive dedupe, silent coercion and automatic outlier deletion.
+    evidence:
+      - predicted_loss
+      - observed_loss
+      - first_unsafe_operation
+      - safe_repair
+  - id: E7
+    name: Prove reproducibility and invariants
+    prediction_required: true
+    action: Run the pipeline twice, reconcile row counts and execute contract assertions.
+    evidence:
+      - deterministic_equality
+      - row_accounting
+      - invariant_results

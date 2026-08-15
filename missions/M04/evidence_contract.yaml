@@ -1,0 +1,38 @@
+mission_id: M04
+required_evidence:
+  - id: raw_state_profile
+    description: Raw shape, string-loading policy, samples, missingness and distinct-value evidence.
+  - id: defect_prediction_log
+    description: Predictions recorded before transformations and compared with observations.
+  - id: data_contract
+    description: Schema, identity, domain, numeric, date and reconciliation expectations.
+  - id: duplicate_analysis
+    description: Exact-duplicate audit log and separately preserved conflicting-ID rows.
+  - id: transformation_trace
+    description: Representative raw-to-canonical values with parse and normalization evidence.
+  - id: missingness_decisions
+    description: Each treatment states observed defect, hypothesis, decision, evidence and uncertainty.
+  - id: constraint_report
+    description: Issue counts and blocking-rule results before analysis-ready filtering.
+  - id: outlier_investigation
+    description: Thresholds, flagged rows, business evidence and retain/review judgments.
+  - id: controlled_failure_diagnosis
+    description: Quantified information loss and safe repair for unsafe cleaning shortcuts.
+  - id: reproducibility_check
+    description: Two deterministic cleaning runs produce equal audited tables.
+  - id: row_reconciliation
+    description: Every raw row is accounted for in cleaned data or the exact-duplicate log.
+  - id: invariant_assertions
+    description: Analysis-ready identity, domain, numeric, date and reconciliation assertions pass.
+  - id: formal_review
+    description: Review covers raw state, contract, architecture, evidence, failure, validation, uncertainty and V01 integration.
+  - id: no_ai_transfer
+    description: Fresh inventory CSV task completed without AI-generated code.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_selected_experiments: true
+  require_raw_value_provenance: true
+  require_row_accounting: true
+  require_uncertainty_statement: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited
