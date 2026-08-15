@@ -1,0 +1,25 @@
+mission_id: M13
+implementation_status: implemented
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_validator: required
+  repository_unittest: required
+learner_evidence_status: intentionally_unpopulated
+engineering_controls:
+  controlled_failure: included
+  no_ai_gate: included
+  code_reading: included
+  adr_prompt: included
+  formal_review_brief: not_required
+  formal_review_reason: M13 is neither a four-mission review checkpoint nor the P2 phase end.
+parallel_safety:
+  modifies_global_content_registry: false
+  modifies_global_tracking: false
+  modifies_root_readme: false
+runtime:
+  cpu_only: true
+  secrets_required: false
+  paid_api_required: false
+  network_required: false

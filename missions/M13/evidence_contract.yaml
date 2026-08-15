@@ -1,0 +1,32 @@
+mission_id: M13
+required_evidence:
+  - id: prediction_log
+    description: Predictions recorded before visualization, query, k, metric, scaling, failure and boundary experiments.
+  - id: data_geometry
+    description: Plot and explanation of local structure, scale ranges and ambiguous regions.
+  - id: query_neighbor_trace
+    description: Query coordinates, ordered neighbor IDs, distances, labels and vote.
+  - id: k_experiment
+    description: Fixed-split results and explanation for at least five k values.
+  - id: metric_experiment
+    description: Euclidean-versus-Manhattan neighbor comparison with geometry explanation.
+  - id: scaling_round_trip
+    description: Training-only scaler statistics plus transform/inverse-transform verification.
+  - id: controlled_failure_diagnosis
+    description: Metric, neighbor and per-feature distance evidence linking the weak high-scale feature to failure.
+  - id: repair_verification
+    description: Same split and query rerun after repair, including comparison with feature removal.
+  - id: boundary_explanation
+    description: Raw-versus-scaled boundary comparison tied to changed local neighbors.
+  - id: code_reading_trace
+    description: Shape, state and data-flow trace through the preprocessing/model pipeline.
+  - id: no_ai_transfer
+    description: Fresh hand calculation and implementation completed without AI-generated code.
+  - id: adr
+    description: Decision, alternatives, evidence, trade-offs and revisit conditions for the distance design.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_neighbor_identity_and_distance: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited
