@@ -2,5 +2,7 @@
 # These packages support notebook execution/validation in development.
 nbformat>=5.9
 nbclient>=0.10
+nbconvert>=7.16
+ipykernel>=6.29
 jupyter-core>=5.0
 PyYAML>=6.0

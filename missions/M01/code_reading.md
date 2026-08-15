@@ -18,8 +18,9 @@ Mark this function as **training** and justify the label from behavior, not from
 Follow one call to `predict(model, text)`.
 
 - Identify the input.
+- Identify where `tok(...)` converts raw text into the feature/representation consumed by the model.
 - Identify the model state read.
-- Identify the output.
+- Identify the prediction output (the selected label and all label scores).
 - Identify whether any learned state changes.
 - Explain why calculating scores is inference even though computation occurs.
 
@@ -38,9 +39,9 @@ Follow `run_application(...)` for two inputs:
 
 Draw arrows for both **data flow** and **control flow**. The controller reads a model output, may call retrieval, may call a tool, then mutates application memory. State which of those operations are model inference and which are application orchestration.
 
-## Pass 5 — Trace observability
+## Pass 5 — Separate evaluation from observability
 
-Find the trace events emitted by `run_application(...)`. For each event, identify what evidence it preserves about system behavior. Explain one failure that would be hard to diagnose without those events.
+Compare `evaluate(...)` with the trace events emitted by `run_application(...)`. Explain why labelled correctness is evaluation while event records are observability. For each trace event, identify what evidence it preserves about system behavior and one failure that would be hard to diagnose without it.
 
 ## Transfer prompt
 

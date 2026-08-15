@@ -6,14 +6,17 @@ required_evidence:
     artifact_type: diagram_or_structured_map
     must_show:
       - data
+      - features_or_representations
       - training
       - model_state
       - inference
+      - predictions
       - application
       - retrieval
       - tools
       - memory
-      - evaluation_observability
+      - evaluation
+      - observability
       - compute_infrastructure
       - data_flow
       - control_flow
