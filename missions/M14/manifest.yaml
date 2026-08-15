@@ -1,0 +1,62 @@
+id: M14
+title: Discover Structure Without Labels
+phase: P2
+flagship: V03
+objective: Use clustering to find structure without target labels.
+competencies:
+  - clustering
+  - unsupervised reasoning
+formal_engineering_review: true
+adr_required: true
+prerequisites:
+  blocking:
+    - M06
+  helpful:
+    - M15
+whole_first_sequence:
+  - inspect unlabelled observations
+  - define the feature and distance contract
+  - expose an unscaled K-means failure
+  - standardize selected features
+  - compare candidate values of k
+  - inspect centers and within-cluster structure
+  - stress arbitrary k, outliers, and visualization
+  - interpret clusters without calling them true classes
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M14_discover_structure_without_labels.ipynb
+dataset:
+  path: datasets/M14/learning_sessions.csv
+  provenance: deterministic synthetic fixture authored for M14; no people or target labels
+requirements: requirements/m14.txt
+mission_test: tests/missions/test_m14.py
+review_brief: missions/M14/review_brief.md
+adr_prompt: missions/M14/adr_prompt.md
+mission_artifacts:
+  - missions/M14/manifest.yaml
+  - missions/M14/README.md
+  - missions/M14/content.yaml
+  - missions/M14/experiments.yaml
+  - missions/M14/code_reading.md
+  - missions/M14/no_ai_gate.md
+  - missions/M14/controlled_failure.md
+  - missions/M14/assessment.yaml
+  - missions/M14/evidence_contract.yaml
+  - missions/M14/flagship_integration.md
+  - missions/M14/status.yaml
+  - missions/M14/review_brief.md
+  - missions/M14/adr_prompt.md
+  - labs/M14_discover_structure_without_labels.ipynb
+  - datasets/M14/README.md
+  - datasets/M14/learning_sessions.csv
+  - requirements/m14.txt
+  - tests/missions/test_m14.py
+constraints:
+  target_labels_available_to_lab: false
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false

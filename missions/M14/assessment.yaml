@@ -1,0 +1,34 @@
+mission_id: M14
+assessment_type: transfer
+pass_score: 8
+max_score: 10
+rules:
+  - Do not award credit for a cluster plot without a declared feature and distance contract.
+  - Do not treat maximum silhouette, an elbow, or stakeholder-requested k as ground truth.
+  - Reward evidence against the chosen interpretation and explicit uncertainty.
+  - Reject any claim that cluster numbers are ordinal or that clusters are true classes without external evidence.
+tasks:
+  - id: A1
+    points: 3
+    scenario: An unlabelled customer table mixes annual_spend, proportions, counts, and an account ID. A raw K-means plot shows three clean groups.
+    prompt: Specify feature selection and preprocessing, then explain how you would test whether scale or identifiers caused the partition.
+    rubric:
+      full_credit: Excludes identifiers, reasons about Euclidean distance and units, compares raw and justified scaled fits, and quantifies partition change.
+  - id: A2
+    points: 3
+    scenario: Candidate k values have similar silhouettes; k=5 has the lowest inertia, k=3 is most stable, and k=2 is easiest to explain.
+    prompt: Recommend a decision process and state what additional evidence you need.
+    rubric:
+      full_credit: Explains why inertia necessarily falls, weighs separation, stability, size and use-case constraints, and records uncertainty instead of inventing a true k.
+  - id: A3
+    points: 2
+    scenario: One cluster has a good mean silhouette but several negative-silhouette observations and two far-from-center points.
+    prompt: Diagnose the hidden within-cluster structure and propose the next check.
+    rubric:
+      full_credit: Uses sample-level evidence, inspects observations and possible outliers or overlap, and avoids deleting points solely to improve a metric.
+  - id: A4
+    points: 2
+    scenario: A two-dimensional projection appears to separate clusters perfectly.
+    prompt: State what can and cannot be concluded and design one external validation question.
+    rubric:
+      full_credit: Treats the projection as lossy, checks full-space diagnostics, and proposes validation tied to a real outcome or action without renaming clusters as classes.

@@ -1,0 +1,60 @@
+mission_id: M14
+version: 1
+purpose: Define acceptable learner-produced evidence without pre-populating learner work.
+required_evidence:
+  - id: feature_and_distance_contract
+    artifact_type: decision_record
+    must_show:
+      - included_features_with_rationale
+      - excluded_identifiers_and_non_features
+      - units_and_scale_audit
+      - preprocessing_fit_scope
+      - distance_metric_implications
+  - id: candidate_k_experiment
+    artifact_type: reproducible_table_and_explanation
+    must_show:
+      - predictions_recorded_before_execution
+      - at_least_four_candidate_k_values
+      - inertia
+      - mean_silhouette
+      - assignment_stability
+      - cluster_size_diagnostic
+      - evidence_against_selected_k
+  - id: cluster_profile
+    artifact_type: table_and_written_interpretation
+    must_show:
+      - inverse_transformed_centers
+      - per_cluster_counts
+      - within_cluster_silhouette_summary
+      - far_from_center_observations
+  - id: controlled_failure_diagnosis
+    artifact_type: written_diagnosis
+    must_show:
+      - raw_scale_mechanism
+      - arbitrary_k_consequence
+      - outlier_effect
+      - projection_limit
+      - quantified_comparison
+  - id: clustering_adr
+    artifact_type: architecture_decision_record
+    must_show:
+      - context
+      - consequential_choices
+      - alternatives
+      - consequences
+      - reversal_triggers
+  - id: no_ai_transfer
+    artifact_type: fresh_dataset_notebook_and_explanation
+    conditions:
+      - produced_without_ai_assistance
+      - uses_a_different_unlabelled_dataset
+      - contains_no_claim_of_true_classes_without_external_validation
+quality_bar:
+  - Every cluster claim is tied to observed internal or external evidence.
+  - Cluster identifiers are treated as nominal, not ordered or semantic labels.
+  - The submission names assumptions, counterevidence, and limits.
+forbidden_repository_content:
+  - target labels added to the M14 fixture
+  - prefilled learner predictions or responses
+  - fabricated learner scores
+  - fabricated mission completion evidence

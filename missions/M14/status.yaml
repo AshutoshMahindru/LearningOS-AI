@@ -1,0 +1,23 @@
+mission_id: M14
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: required
+adr: required
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+runtime:
+  cpu_only: true
+  secrets_required: false
+  paid_api_required: false
+  network_required: false
+parallel_safety:
+  modifies_global_content_registry: false
+  modifies_global_tracking: false
+  modifies_root_readme: false
+notes:
+  - Implementation status is not learner completion.
+  - No learner prediction, answer, score, or evidence is pre-populated.

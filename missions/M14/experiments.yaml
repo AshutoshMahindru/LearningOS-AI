@@ -1,0 +1,60 @@
+mission_id: M14
+prediction_rule: Record a prediction before running or changing each experiment.
+experiments:
+  - id: E1
+    title: Raw scale trap
+    prediction_prompt: Predict which feature contributes most to squared Euclidean distance on raw values and what the raw clusters will follow.
+    change: Fit K-means with k=3 before scaling.
+    inspect:
+      - feature ranges and standard deviations
+      - raw cluster sizes
+      - feature-level contribution to pairwise squared distance
+      - raw silhouette score
+    success_condition: Explain why an internally separated partition can still be mostly a unit-and-scale artifact.
+  - id: E2
+    title: Standardized candidate-k comparison
+    prediction_prompt: Predict which k in 2 through 6 will balance separation, stability, and useful cluster sizes.
+    change: Standardize the declared feature set and fit every candidate with fixed seeds and repeated initializations.
+    inspect:
+      - inertia
+      - mean silhouette
+      - minimum cluster size
+      - adjusted-Rand stability across seeds
+    success_condition: Defend k with converging evidence instead of declaring the elbow or maximum silhouette infallible.
+  - id: E3
+    title: Centers and within-cluster structure
+    prediction_prompt: Predict which original-unit features will most distinguish the fitted centers and which cluster will be least cohesive.
+    change: Inverse-transform centers and compute sample-level silhouettes and distances to assigned centers.
+    inspect:
+      - original-unit center profiles
+      - per-cluster count and silhouette distribution
+      - farthest observations
+    success_condition: Describe heterogeneity and boundary cases hidden by the mean score.
+  - id: E4
+    title: Arbitrary k
+    prediction_prompt: Predict what a forced k=5 will do to cluster sizes and within-cluster evidence.
+    change: Fit k=5 to the same standardized observations.
+    inspect:
+      - small clusters
+      - center splitting
+      - silhouette change
+    success_condition: Refuse to treat the requested number of segments as discovered truth.
+  - id: E5
+    title: Outlier sensitivity
+    prediction_prompt: Predict how one corrupted observation with extreme measurements will affect scaling, center placement, and assignments.
+    change: Inject one multi-feature outlier, refit preprocessing and K-means, and compare the original rows.
+    inspect:
+      - scaler statistics
+      - adjusted Rand agreement on original rows
+      - outlier assignment and distance
+      - center shifts
+    success_condition: Identify which conclusions survive and propose a justified next diagnostic or robust preprocessing alternative.
+  - id: E6
+    title: Projection seduction
+    prediction_prompt: Predict what information a two-component PCA view must discard.
+    change: Compare a feature-pair plot and PCA projection with full-space diagnostics.
+    inspect:
+      - explained variance of the projection
+      - apparent visual separation
+      - sample silhouettes in the full feature space
+    success_condition: Use visualization as a view of a result, never as proof of natural classes.
