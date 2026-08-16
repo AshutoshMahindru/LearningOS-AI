@@ -1,0 +1,37 @@
+mission_id: M16
+approach: visual-first
+sequence:
+  - id: see_transformation
+    purpose: Compare an original shape with a transformed shape before formal matrix notation.
+  - id: matrix_times_vector
+    purpose: Read each output coordinate as one matrix row dotted with an input vector.
+  - id: elementary_transforms
+    purpose: Build scaling, rotation and shearing matrices and predict landmark movement.
+  - id: composition
+    purpose: Compose transformations and distinguish written matrix order from application order.
+  - id: controlled_failures
+    purpose: Diagnose plausible output caused by wrong composition order and wrong row-batch orientation.
+  - id: batching
+    purpose: Transform many samples together and explain why the transpose appears.
+  - id: shape_reasoning
+    purpose: State inner and outer dimensions before multiplication and interpret hard failures.
+  - id: ml_layer_bridge
+    purpose: Map the same reasoning to batch, feature and output-unit dimensions in a dense layer.
+  - id: transfer
+    purpose: Design and verify a fresh transformation pipeline without AI-generated code.
+just_in_time_concepts:
+  - matrix_rows_and_columns
+  - matrix_vector_product
+  - scaling
+  - rotation
+  - shear
+  - composition
+  - non_commutativity
+  - transpose
+  - batch_axis
+  - feature_axis
+  - matrix_multiplication_shapes
+  - dense_layer
+source_references:
+  - numpy-quickstart
+  - 3b1b-linear-algebra

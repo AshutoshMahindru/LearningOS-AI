@@ -1,0 +1,35 @@
+mission_id: M16
+assessment:
+  mode: performance_and_transfer
+  transfer_required: true
+  pass_requires:
+    - predict_landmark_motion_before_execution
+    - compute_matrix_vector_product_by_rows
+    - construct_rotation_scaling_and_shearing_matrices
+    - state_composition_application_order
+    - explain_non_commutativity_with_evidence
+    - transform_a_row_major_batch_using_transpose
+    - diagnose_plausible_wrong_order_and_orientation_outputs
+    - trace_batch_features_weights_units_and_bias_in_an_ml_layer
+    - complete_representation_adr
+  rubric:
+    visual_and_prediction:
+      weight: 15
+      evidence: Predictions precede plots and identify landmark movement.
+    matrix_reasoning:
+      weight: 25
+      evidence: Learner computes products, constructs transformations and explains rows as output coordinates.
+    composition:
+      weight: 20
+      evidence: Learner traces intermediate vectors and distinguishes written from application order.
+    debugging:
+      weight: 20
+      evidence: Learner finds both plausible failures using counterexamples and invariants.
+    batching_and_ml_transfer:
+      weight: 20
+      evidence: Learner explains transpose, batch shapes and dense-layer equivalence.
+  failure_conditions:
+    - accepts_plausible_picture_without_landmark_or_numeric_check
+    - treats_matrix_multiplication_as_commutative
+    - chooses_transpose_by_trial_and_error
+    - reports_only_that_shapes_match_without_semantic_reasoning

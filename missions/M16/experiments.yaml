@@ -1,0 +1,42 @@
+mission_id: M16
+experiments:
+  - id: E1
+    name: Visual transformation first
+    prediction_required: true
+    action: Predict how an arrow changes, then compare original and transformed geometry.
+    evidence: [sketch_or_words, observed_landmarks, explanation]
+  - id: E2
+    name: Matrix times one vector
+    prediction_required: true
+    action: Compute output coordinates by hand and verify them with NumPy.
+    evidence: [row_dot_products, predicted_vector, observed_vector]
+  - id: E3
+    name: Scale rotate and shear
+    prediction_required: true
+    action: Predict the movement of basis vectors and a landmark under each elementary matrix.
+    evidence: [basis_predictions, plots, determinant_observation]
+  - id: E4
+    name: Composition order
+    prediction_required: true
+    action: Compare rotate-after-shear with shear-after-rotate.
+    evidence: [application_order, intermediate_vectors, visual_comparison]
+  - id: E5
+    name: Wrong-order controlled failure
+    prediction_required: true
+    action: Find why a plausible transformed batch violates the intended landmark result.
+    evidence: [symptom, smallest_counterexample, first_divergence, repair, invariant]
+  - id: E6
+    name: Batch orientation controlled failure
+    prediction_required: true
+    action: Diagnose why X-at-A runs for square matrices but applies the wrong single-vector transform.
+    evidence: [shape_table, landmark_counterexample, transpose_explanation, repair]
+  - id: E7
+    name: Shape reasoning
+    prediction_required: true
+    action: Predict valid and invalid products before executing them.
+    evidence: [operand_shapes, inner_dimension_check, output_shape, failure_explanation]
+  - id: E8
+    name: ML batch and layer
+    prediction_required: true
+    action: Trace a batch through weights, bias and ReLU and verify sample-wise equivalence.
+    evidence: [shape_trace, one_sample_calculation, batch_equivalence_assertion]

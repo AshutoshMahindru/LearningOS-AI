@@ -1,0 +1,26 @@
+mission_id: M16
+required_evidence:
+  - id: visual_prediction_log
+    description: Predictions recorded before at least three transformation plots, with landmark comparisons.
+  - id: matrix_vector_hand_calculation
+    description: Row dot products and output coordinates for one unseen vector.
+  - id: elementary_transform_table
+    description: Scaling, rotation and shearing matrices with basis-vector effects.
+  - id: composition_trace
+    description: Both intermediate vectors for two orders and an explanation of non-commutativity.
+  - id: wrong_order_diagnosis
+    description: Symptom, smallest counterexample, first divergence, repair and post-repair invariant.
+  - id: wrong_orientation_diagnosis
+    description: Shape/convention table, asymmetric-matrix counterexample and transpose explanation.
+  - id: batch_layer_trace
+    description: Batch, weight, output and bias shapes plus sample-wise equivalence evidence.
+  - id: no_ai_transfer
+    description: Fresh transformation task completed without AI-generated code.
+  - id: representation_adr
+    description: A decision record resolving vector orientation, batch layout, composition and validation conventions.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_selected_experiments: true
+  require_smallest_counterexample_for_plausible_failures: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited

@@ -1,0 +1,62 @@
+id: M16
+title: Use Matrices as Transformations
+phase: P3
+flagship: V04
+objective: Experience matrices as transformations and batched computation.
+competencies:
+  - matrices
+  - linear transformations
+pedagogy:
+  entry: visual-first
+  experiment_loop: prediction-before-action
+formal_engineering_review: true
+prerequisites:
+  blocking:
+    - M15
+  helpful: []
+sources:
+  - numpy-quickstart
+  - 3b1b-linear-algebra
+notebook: labs/M16_matrix_transformations.ipynb
+dataset: datasets/M16/shape_points.csv
+requirements: requirements/m16.txt
+mission_test: tests/missions/test_m16.py
+mission_artifacts:
+  - missions/M16/manifest.yaml
+  - missions/M16/README.md
+  - missions/M16/content.yaml
+  - missions/M16/experiments.yaml
+  - missions/M16/code_reading.md
+  - missions/M16/no_ai_gate.md
+  - missions/M16/controlled_failure.md
+  - missions/M16/assessment.yaml
+  - missions/M16/evidence_contract.yaml
+  - missions/M16/flagship_integration.md
+  - missions/M16/status.yaml
+  - missions/M16/review_brief.md
+  - missions/M16/adr_prompt.md
+  - labs/M16_matrix_transformations.ipynb
+  - datasets/M16/README.md
+  - datasets/M16/shape_points.csv
+  - requirements/m16.txt
+  - tests/missions/test_m16.py
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+conventions:
+  single_vector: column_vector_y_equals_Ax
+  batch_storage: one_sample_per_row
+  batch_transform: X_times_A_transpose
+completion_requires:
+  - interpret_matrix_vector_multiplication_as_a_transformation
+  - construct_and_compare_rotation_scaling_and_shearing_matrices
+  - predict_composition_order_before_execution
+  - explain_transpose_at_the_batch_boundary
+  - reason_about_shapes_before_multiplication
+  - diagnose_wrong_order_and_wrong_orientation_failures
+  - connect_batched_transforms_to_ml_layers
+  - complete_no_ai_transfer_and_adr
