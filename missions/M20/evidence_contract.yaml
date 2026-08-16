@@ -1,0 +1,70 @@
+mission_id: M20
+version: 1
+purpose: Define acceptable learner-produced evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_action
+      - expected_loss_curve_and_parameter_signs
+      - falsifiable_numeric_claim
+      - observation_and_revision
+  - id: learning_rate_sweep
+    artifact_type: reproducible_trace_bundle
+    must_show:
+      - fixed_objective_initialization_and_budget
+      - too_small_stable_oscillatory_and_too_large_regimes
+      - loss_parameter_and_update_traces
+      - evidence_based_dynamics_classification
+  - id: optimizer_comparison
+    artifact_type: controlled_comparison_table
+    must_show:
+      - gradient_descent
+      - seeded_stochastic_gradient_descent
+      - momentum
+      - adam
+      - complete_hyperparameters_and_seed
+      - no_universal_superiority_claim
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - stagnation_diagnosis
+      - outward_oscillation_diagnosis
+      - smallest_learning_rate_repair
+      - preserved_invariants
+  - id: code_reading_trace
+    artifact_type: annotated_value_flow
+    must_show:
+      - gradient
+      - optimizer_state
+      - applied_update
+      - parameter_after
+      - next_loss
+  - id: no_ai_transfer
+    artifact_type: independent_calculation_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+      - full_intermediate_state_visible
+  - id: optimizer_policy_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - chosen_optimizer_and_learning_rate_regime
+      - evidence
+      - alternatives
+      - trade_offs
+      - monitoring
+      - rollback_and_revisit_triggers
+      - owner_status_and_date
+quality_bar:
+  - Every comparison preserves its declared controls and names its horizon.
+  - Dynamics claims cite a trace rather than optimizer reputation.
+  - Stochastic evidence includes a seed and at least one seed-sensitivity check.
+  - Reference fixture results are not represented as production behavior.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited
+

@@ -1,0 +1,82 @@
+id: M20
+title: Understand Optimization Experimentally
+phase: P3
+flagship: V04
+objective: Study learning dynamics by manipulating optimization behavior.
+competencies:
+  - optimization
+  - learning dynamics
+pedagogy: prediction-before-action
+formal_engineering_review: true
+closes_flagship: V04
+prerequisites:
+  blocking:
+    - M19
+  helpful: []
+handoff:
+  receives: M19 gradient mechanism and parameter-to-update trace
+  provides: M21 optimizer-regime evidence and monitored training policy
+learning_sequence:
+  - restate the M19 gradient-update invariant
+  - predict loss-curve behavior before each run
+  - compare too-small, stable, oscillatory, and too-large learning rates
+  - distinguish stagnation, convergence, oscillation, and divergence from traces
+  - compare gradient descent and seeded stochastic gradient descent
+  - compare momentum and Adam on the same objective and initialization
+  - explain optimizer trade-offs without claiming universal superiority
+  - diagnose and repair controlled learning-rate failures
+  - complete the no-AI transfer gate
+  - submit an optimizer and learning-rate policy for formal review
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M20_optimization_experimentally.ipynb
+instrumentation: missions/M20/optimization_core.py
+requirements: requirements/m20.txt
+mission_test: tests/missions/test_m20.py
+objective_fixture:
+  form: one_half_times_sum_of_curvature_times_parameter_squared
+  curvatures: [1.0, 10.0]
+  initialization: [4.0, 4.0]
+  stochastic_component_noise_mean: [0.0, 0.0]
+comparison_controls:
+  same_objective: required
+  same_initialization: required_where_applicable
+  record_hyperparameters: required
+  record_seed_for_stochastic_runs: required
+  prediction_before_action: required
+mission_artifacts:
+  - missions/M20/README.md
+  - missions/M20/manifest.yaml
+  - missions/M20/content.yaml
+  - missions/M20/experiments.yaml
+  - missions/M20/code_reading.md
+  - missions/M20/no_ai_gate.md
+  - missions/M20/controlled_failure.md
+  - missions/M20/assessment.yaml
+  - missions/M20/evidence_contract.yaml
+  - missions/M20/flagship_integration.md
+  - missions/M20/review_brief.md
+  - missions/M20/adr_prompt.md
+  - missions/M20/status.yaml
+  - missions/M20/optimization_core.py
+  - labs/M20_optimization_experimentally.ipynb
+  - requirements/m20.txt
+  - tests/missions/test_m20.py
+  - tests/test_m20.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false
+
