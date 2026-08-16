@@ -59,7 +59,14 @@ jobs:
           python-version: '3.12'
       - name: Install repository and M01-M20 requirements
         run: |
-          python -m pip install -e . $(printf '%s ' requirements/m{01..20}.txt)
+          python -m pip install -e . \
+            -r requirements/m01.txt -r requirements/m02.txt -r requirements/m03.txt \
+            -r requirements/m04.txt -r requirements/m05.txt -r requirements/m06.txt \
+            -r requirements/m07.txt -r requirements/m08.txt -r requirements/m09.txt \
+            -r requirements/m10.txt -r requirements/m11.txt -r requirements/m12.txt \
+            -r requirements/m13.txt -r requirements/m14.txt -r requirements/m15.txt \
+            -r requirements/m16.txt -r requirements/m17.txt -r requirements/m18.txt \
+            -r requirements/m19.txt -r requirements/m20.txt
           python -m pip check
       - name: Validate repository
         run: python tools/validate_repo.py
