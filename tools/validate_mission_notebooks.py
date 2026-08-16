@@ -13,7 +13,7 @@ LABS = ROOT / "labs"
 
 def mission_notebooks() -> list[Path]:
     notebooks = []
-    for number in range(1, 20):
+    for number in range(1, 21):
         prefix = f"M{number:02d}_"
         matches = sorted(path for path in LABS.glob(f"{prefix}*.ipynb") if path.is_file())
         if len(matches) != 1:
@@ -55,7 +55,7 @@ def execute(path: Path) -> int:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Validate M01-M19 source notebooks and optionally execute them.")
+    parser = argparse.ArgumentParser(description="Validate M01-M20 source notebooks and optionally execute them.")
     parser.add_argument("--execute", action="store_true", help="Execute each notebook in a fresh kernel after source validation.")
     args = parser.parse_args()
 
