@@ -1,0 +1,34 @@
+mission: M21
+controls:
+  dataset: bundled sklearn digits dataset
+  split_seed: 2101
+  test_fraction: 0.25
+  baseline: majority-class accuracy on held-out test data
+  prediction_required_before_action: true
+  test_set_is_fit_excluded: true
+experiments:
+  - id: reference-black-box-run
+    prediction_required: true
+    change: Train the declared reference MLP pipeline end to end.
+    observation: Compare training loss, validation score, train accuracy, held-out accuracy, macro F1, and baseline.
+    invariant: Dataset, split, preprocessing, seed, architecture knobs, optimizer configuration, and budget are declared before fit.
+  - id: seed-replay-and-sensitivity
+    prediction_required: true
+    change: Replay model seed 2101 exactly, then change only the model seed to 2102.
+    observation: Verify exact same-seed replay and quantify bounded different-seed metric and curve changes.
+    invariant: Dataset split, preprocessing, architecture, optimizer settings, and budget remain fixed.
+  - id: undertraining-failure
+    prediction_required: true
+    change: Reduce only max_iter from the reference budget to one.
+    observation: Diagnose high loss and weak held-out metrics as insufficient training budget.
+    invariant: Dataset, split, preprocessing, architecture, optimizer, learning rate, and seed remain fixed.
+  - id: tiny-capacity-comparison
+    prediction_required: true
+    change: Reduce only hidden units from 64 to 4.
+    observation: Compare learning curve and held-out metrics while avoiding universal capacity claims.
+    invariant: Dataset split, preprocessing, optimizer settings, seed, and training budget remain fixed.
+  - id: shuffled-label-failure
+    prediction_required: true
+    change: Permute only the training labels with a recorded seed while leaving held-out labels intact.
+    observation: Diagnose near-baseline held-out behavior as broken target mapping rather than a reason to open network internals.
+    invariant: Input features, split membership, preprocessing, estimator configuration, optimizer settings, and model seed remain fixed.

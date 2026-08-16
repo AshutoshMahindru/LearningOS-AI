@@ -1,0 +1,97 @@
+id: M21
+title: Train a Neural Network as a Black Box
+phase: P4
+flagship: V05
+objective: Train a neural network end-to-end before opening its internals.
+competencies:
+  - neural networks
+  - training
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: false
+starts_flagship: V05
+prerequisites:
+  blocking:
+    - M20
+  helpful: []
+handoff:
+  receives: M20 monitored optimizer regime, seed policy, and failure-response discipline
+  provides: M22 black-box training trace, held-out error profile, and accepted experiment configuration
+learning_sequence:
+  - restate the M20 monitoring and reproducibility handoff
+  - inspect the offline dataset and majority baseline without opening network internals
+  - predict and train one complete reference neural network
+  - interpret training loss, validation score, held-out accuracy, macro F1, and confusion matrix
+  - replay the same seed and test a different model seed
+  - diagnose and repair a one-iteration undertraining failure
+  - compare a deliberately tiny network capacity under declared controls
+  - diagnose and repair shuffled-label corruption
+  - read the training harness as orchestration rather than neuron mathematics
+  - complete the no-AI whole-system transfer gate
+  - author a black-box training acceptance-policy ADR
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M21_train_neural_network_black_box.ipynb
+instrumentation: missions/M21/training_core.py
+requirements: requirements/m21.txt
+mission_test: tests/missions/test_m21.py
+reference_fixture:
+  dataset: sklearn.datasets.load_digits
+  split_seed: 2101
+  test_fraction: 0.25
+  preprocessing: StandardScaler on training data through a Pipeline
+  estimator: sklearn.neural_network.MLPClassifier
+  hidden_units: 64
+  activation: relu
+  solver: adam
+  learning_rate_init: 0.001
+  batch_size: 64
+  max_iter: 60
+  early_stopping: true
+  validation_fraction: 0.15
+  model_seed: 2101
+comparison_controls:
+  fixed_train_test_split: required_except_when_split_is_the_named_variable
+  held_out_test_not_used_for_fitting: required
+  record_model_seed: required
+  record_training_budget: required
+  prediction_before_action: required
+  no_internal_weight_or_activation_inspection: required
+mission_artifacts:
+  - missions/M21/README.md
+  - missions/M21/manifest.yaml
+  - missions/M21/content.yaml
+  - missions/M21/experiments.yaml
+  - missions/M21/code_reading.md
+  - missions/M21/no_ai_gate.md
+  - missions/M21/controlled_failure.md
+  - missions/M21/assessment.yaml
+  - missions/M21/evidence_contract.yaml
+  - missions/M21/flagship_integration.md
+  - missions/M21/review_brief.md
+  - missions/M21/adr_prompt.md
+  - missions/M21/status.yaml
+  - missions/M21/training_core.py
+  - labs/M21_train_neural_network_black_box.ipynb
+  - requirements/m21.txt
+  - tests/missions/test_m21.py
+  - tests/test_m21.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  neuron_layer_mechanics_deferred_to_m22: true
+  numpy_forward_pass_deferred_to_m23: true
+  backpropagation_deferred_to_m24: true
+  pytorch_training_loop_deferred_to_m25: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

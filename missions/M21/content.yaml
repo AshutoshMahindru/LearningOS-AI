@@ -1,0 +1,21 @@
+mission: M21
+boundary:
+  inherited_from_m20: Monitored optimizer configuration, seed policy, loss/update monitoring, and rollback discipline.
+  manipulated_here: Whole-network training configuration, data split, training budget, model seed, capacity, and training-label integrity.
+  deferred_to_m22: Neurons, activations, layers, weight matrices, and the internal meaning of a hidden layer.
+  deferred_to_m23: Manual NumPy forward-pass reconstruction.
+  deferred_to_m24: Backpropagation and chain-rule credit assignment.
+  deferred_to_m25: Framework-level autograd and a hand-authored PyTorch training loop.
+handoff_summary: M20 monitors optimization; M21 trains and diagnoses the whole neural system; M22 opens the neuron and layer.
+concepts:
+  - a neural network can be trained and evaluated before its internals are understood
+  - held-out performance must beat an explicit baseline before architecture stories matter
+  - training loss and validation score are time-series evidence, not proof of generalization
+  - deterministic seeds support replay while different seeds expose sensitivity
+  - training budget can cause undertraining even when the code path is correct
+  - capacity can affect fit but more units are not automatically better
+  - corrupted labels are a data-system failure that architecture changes should not hide
+  - a confusion matrix localizes black-box failure by class without opening neurons
+  - test data remains held out from fitting and early-stopping decisions
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M21 may describe observable system behavior but may not explain it with unverified neuron, activation, forward-pass, gradient, or backprop mechanisms.
