@@ -1,0 +1,51 @@
+mission_id: M01
+prediction_rule: Write a prediction before running or modifying each experiment.
+experiments:
+  - id: E1
+    title: Does inference retrain the model?
+    prediction_prompt: Predict whether one inference call changes the learned classifier state.
+    change: Run several unseen inputs through the trained toy classifier.
+    inspect:
+      - model-state digest before inference
+      - model-state digest after inference
+      - prediction outputs
+    success_condition: Explain why unchanged learned state places the operation on the inference side of the boundary.
+  - id: E2
+    title: Change training data, then retrain
+    prediction_prompt: Predict which model scores will move after adding one strongly labelled training example.
+    change: Add a training example, create a new model state, and compare predictions with the original model.
+    inspect:
+      - old versus new model-state digest
+      - changed token counts
+      - changed predictions or confidence ordering
+    success_condition: Attribute the change to a training operation rather than to inference.
+  - id: E3
+    title: Retrieval changes context without changing model state
+    prediction_prompt: Predict which knowledge document each query will retrieve and whether the classifier digest will change.
+    change: Run two semantically different queries through the toy embedding and retrieval index.
+    inspect:
+      - query vector
+      - similarity scores
+      - retrieved document
+      - classifier-state digest
+    success_condition: Distinguish external retrieved state from learned model state.
+  - id: E4
+    title: Controller chooses a tool or retrieval path
+    prediction_prompt: Predict the control-flow branch for a normal account request versus an urgent billing request.
+    change: Run both requests through the application controller.
+    inspect:
+      - classifier output
+      - branch selected
+      - retrieval event
+      - tool-call event
+      - memory update
+    success_condition: Separate model inference from controller policy, tool execution, and memory mutation.
+  - id: E5
+    title: Observability catches a layer mistake
+    prediction_prompt: Identify at least four incorrect labels in the deliberately confused architecture before running the diagnostic cell.
+    change: Compare claimed component roles with their observed inputs, outputs, and state changes.
+    inspect:
+      - mismatched layer labels
+      - data-flow edges
+      - control-flow edges
+    success_condition: Repair the architecture using behavior and boundaries rather than vocabulary recall.

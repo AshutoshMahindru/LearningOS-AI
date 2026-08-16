@@ -1,0 +1,33 @@
+mission_id: M01
+assessment_type: transfer
+pass_score: 8
+max_score: 10
+rules:
+  - Do not award credit for vocabulary lists without a system map.
+  - Reward explicit treatment of ambiguous boundaries and missing information.
+  - Penalize invented training steps when the scenario describes inference only.
+tasks:
+  - id: A1
+    points: 3
+    scenario: A retailer retrains a demand model nightly from sales tables, serves forecasts through an API, and sends drift metrics to a dashboard.
+    prompt: Map data, training, model state, inference, application, evaluation, and infrastructure. Identify the exact training/inference boundary.
+    rubric:
+      full_credit: Correct map plus explanation of what state changes nightly and what the API reads during serving.
+  - id: A2
+    points: 3
+    scenario: A question-answering assistant embeds a query, searches a vector index, sends retrieved passages to an LLM, sometimes calls a calculator, and stores session history.
+    prompt: Map retrieval, generation inference, tool use, controller/control flow, and memory. State whether the scenario describes model training.
+    rubric:
+      full_credit: Separates retrieval from learned model state, tool execution from model inference, and correctly refuses to invent a training step.
+  - id: A3
+    points: 2
+    scenario: Two teams disagree whether a new component belongs to the model layer or application layer. The component reads model scores, applies business constraints, and selects one action.
+    prompt: Classify the component and name the evidence that would change your classification.
+    rubric:
+      full_credit: Uses inputs, outputs, state mutation, and control responsibility rather than component naming.
+  - id: A4
+    points: 2
+    scenario: A production trace shows rising latency after retrieval but stable model inference time and unchanged answer accuracy.
+    prompt: Identify the most likely layer to investigate first and explain what additional observations you would collect.
+    rubric:
+      full_credit: Localizes the issue to retrieval/infrastructure before blaming training or model quality, while acknowledging uncertainty.

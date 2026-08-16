@@ -1,0 +1,57 @@
+mission_id: M01
+version: 1
+purpose: Define acceptable learner-produced evidence without pre-populating any learner evidence.
+required_evidence:
+  - id: system_map
+    artifact_type: diagram_or_structured_map
+    must_show:
+      - data
+      - features_or_representations
+      - training
+      - model_state
+      - inference
+      - predictions
+      - application
+      - retrieval
+      - tools
+      - memory
+      - evaluation
+      - observability
+      - compute_infrastructure
+      - data_flow
+      - control_flow
+  - id: toy_system_trace
+    artifact_type: annotated_execution_trace
+    must_show:
+      - component_inputs
+      - component_outputs
+      - mutable_state
+      - immutable_or_read_only_model_state_during_inference
+      - at_least_one_control_branch
+  - id: controlled_failure_diagnosis
+    artifact_type: written_diagnosis_and_repaired_map
+    must_show:
+      - conflated_layers_identified
+      - training_inference_boundary_repaired
+      - retrieval_model_state_distinction
+      - tool_and_memory_boundaries
+  - id: no_ai_gate
+    artifact_type: learner_created_map_and_explanation
+    conditions:
+      - produced_without_ai_assistance
+      - produced_from_memory_before_reference_check
+      - includes_fresh_transfer_scenario
+  - id: transfer_assessment
+    artifact_type: assessment_response
+    must_show:
+      - architecture_mapping_on_unseen_scenarios
+      - calibrated_uncertainty
+      - no_invented_training_step
+quality_bar:
+  - Evidence explains behavior and boundaries, not just labels.
+  - Claims are grounded in observed inputs, outputs, state changes, data flow, or control flow.
+  - Ambiguous architecture is marked as ambiguous rather than guessed.
+forbidden_repository_content:
+  - prefilled learner answers
+  - fabricated learner scores
+  - fabricated completion evidence
