@@ -1,0 +1,22 @@
+mission_id: M20
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: required
+flagship_status:
+  flagship: V04
+  implementation_closure: provided
+  learner_closure: pending_evidence_and_review
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+  exact_head_actions: required
+parallel_safety:
+  prohibited_shared_files_modified: false
+notes:
+  - Implementation status is not learner completion.
+  - Reference traces are fixture properties, not learner evidence.
+  - M21 remains blocked until the M20 learner and formal-review contracts are satisfied.
+

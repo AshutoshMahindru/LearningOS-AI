@@ -1,0 +1,31 @@
+mission: M20
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped loss-curve and parameter-path predictions before every run.
+    pass: Predictions are falsifiable and precede the corresponding execution evidence.
+  learning_rate_dynamics:
+    evidence: Controlled sweep with fixed objective, initialization, optimizer, and budget.
+    pass: Distinguishes stagnation, smooth convergence, decaying oscillation, and divergence from traces.
+  optimizer_mechanics:
+    evidence: Hand and code traces for SGD, momentum, and Adam state updates.
+    pass: Connects every optimizer state value to the applied parameter update.
+  controlled_comparison:
+    evidence: Same-objective comparison table with complete hyperparameters and seeds.
+    pass: Avoids changing objective or initialization while attributing a difference.
+  failure_diagnosis:
+    evidence: Too-small and too-large rate diagnoses plus smallest verified repair.
+    pass: Isolates learning rate and preserves every declared invariant.
+  trade_off_reasoning:
+    evidence: Comparison of progress, noise, overshoot, tuning, and monitoring burden.
+    pass: Rejects universal-superiority claims and states the comparison horizon.
+  code_reading:
+    evidence: Gradient-to-update trace through optimizer state.
+    pass: Names exact values and distinguishes gradient from optimizer-adjusted update.
+  no_ai_gate:
+    evidence: Independent scalar traces and transfer defense.
+    pass: Arithmetic, classifications, monitoring response, and oral defense are correct.
+  formal_review:
+    evidence: Learner-authored optimizer-policy ADR and reviewer decision.
+    pass: Decision, evidence, alternatives, trade-offs, monitoring, rollback, revisit triggers, and ownership are complete.
+

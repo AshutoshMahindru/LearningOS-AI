@@ -1,0 +1,42 @@
+mission: M20
+controls:
+  objective: fixed anisotropic quadratic
+  initialization: [4.0, 4.0]
+  metrics:
+    - loss_by_step
+    - parameter_path
+    - update_magnitude
+    - coordinate_sign_changes
+  prediction_required_before_action: true
+experiments:
+  - id: learning-rate-regimes
+    prediction_required: true
+    change: Sweep very small, stable, oscillatory, and too-large learning rates with exact gradient descent.
+    observation: Classify stagnation, smooth convergence, decaying oscillation, or divergence from full traces.
+    invariant: Objective, initialization, optimizer, and step budget stay fixed.
+  - id: stability-boundary
+    prediction_required: true
+    change: Compare learning rates immediately below and above the high-curvature stability boundary.
+    observation: Count sign changes and compare whether oscillation decays or expands.
+    invariant: Only learning rate changes.
+  - id: gd-versus-sgd
+    prediction_required: true
+    change: Replace the exact gradient with seeded zero-mean component gradients.
+    observation: Compare trace noise, reproducibility, and final loss.
+    invariant: Same aggregate objective, initialization, learning rate, and update budget.
+  - id: momentum-trade-off
+    prediction_required: true
+    change: Add momentum state to exact gradient descent.
+    observation: Compare early progress, overshoot, non-monotonic loss, and horizon-dependent final loss.
+    invariant: Same objective, initialization, learning rate, and step budget.
+  - id: adam-trade-off
+    prediction_required: true
+    change: Add bias-corrected first and second moment estimates.
+    observation: Compare coordinate scaling, tuning cost, and fixed-budget loss.
+    invariant: Same objective and initialization; all optimizer-specific hyperparameters are recorded.
+  - id: too-large-rate-failure
+    prediction_required: true
+    change: Cross the exact-gradient stability boundary with one controlled learning-rate change.
+    observation: Diagnose alternating signs with increasing magnitude and loss.
+    invariant: Objective, gradient, initialization, optimizer, and code path remain fixed.
+
