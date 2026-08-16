@@ -1,0 +1,38 @@
+mission_id: M07
+approach: build_compare_break_repair
+sequence:
+  - id: inspect_contract
+    purpose: Separate identifiers, pre-outcome features and target before modeling.
+  - id: manual_baseline
+    purpose: Expose the state and ordering hidden in manual preprocessing.
+  - id: pipeline_baseline
+    purpose: Bind numerical and categorical preprocessing to the estimator.
+  - id: change_treatment
+    purpose: Change one numerical treatment while holding the split fixed.
+  - id: cross_validate_safely
+    purpose: Fit the whole pipeline independently inside every fold.
+  - id: persist_artifact
+    purpose: Serialize and reload one fitted inference artifact.
+  - id: controlled_failure
+    purpose: Diagnose a train/inference feature mismatch caused by separate encoding.
+  - id: formal_review
+    purpose: Defend boundaries, failure handling and verification evidence.
+  - id: adr
+    purpose: Record the consequential preprocessing-boundary decision.
+  - id: transfer_without_ai
+    purpose: Build a fresh mixed-type pipeline without AI-generated code.
+just_in_time_concepts:
+  - Pipeline
+  - ColumnTransformer
+  - fit
+  - transform
+  - fit_transform
+  - numerical_imputation
+  - scaling
+  - categorical_imputation
+  - one_hot_encoding
+  - cross_validation
+  - data_leakage
+  - model_persistence
+source_references:
+  - sklearn-guide

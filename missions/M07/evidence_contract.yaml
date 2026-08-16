@@ -1,0 +1,30 @@
+mission_id: M07
+required_evidence:
+  - id: pipeline_topology
+    description: Named numerical and categorical branches connected to one estimator.
+  - id: fit_transform_explanation
+    description: Accurate inventory of state learned by fit and reused by transform and predict.
+  - id: manual_vs_pipeline
+    description: Same-split comparison including operational failure surfaces, not only scores.
+  - id: treatment_change
+    description: Prediction and observation for one isolated feature-treatment change.
+  - id: cv_boundary
+    description: Fold scores from cross-validation of the complete unfitted pipeline on training rows only.
+  - id: leakage_argument
+    description: Proof that identifiers, target and undeclared post-outcome columns are excluded.
+  - id: controlled_failure_repair
+    description: Predicted and observed mismatch, root cause, smallest repair and verification.
+  - id: serialization_equivalence
+    description: Exact equality of predictions and numerical equality of transformed features after reload.
+  - id: formal_review
+    description: Engineering review covering architecture, risks, tests and residual uncertainty.
+  - id: adr
+    description: Architecture decision record with alternatives, consequences and validation plan.
+  - id: no_ai_transfer
+    description: Fresh mixed-type pipeline completed without AI-generated code.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_selected_experiments: true
+  require_artifact_hash_or_version_context_for_persistence: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited

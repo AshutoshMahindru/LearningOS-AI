@@ -1,0 +1,55 @@
+id: M07
+title: Build a Reusable Data-to-Model Pipeline
+phase: P1
+flagship: V01
+objective: Package preprocessing and modeling into a reproducible pipeline.
+competencies:
+  - pipelines
+  - reproducibility
+formal_engineering_review: true
+adr_required: true
+source_ids:
+  - sklearn-guide
+runtime:
+  cpu_only: true
+  secrets_required: false
+  paid_api_required: false
+  network_required: false
+  deterministic_where_practical: true
+  restart_run_all_required: true
+primary_artifact: labs/M07_reusable_pipeline.ipynb
+implementation_module: missions/M07/pipeline.py
+dataset:
+  path: datasets/M07/customer_renewals.csv
+  provenance: deterministic synthetic teaching fixture created for M07
+requirements: requirements/m07.txt
+test: tests/missions/test_m07.py
+mission_artifacts:
+  - missions/M07/README.md
+  - missions/M07/content.yaml
+  - missions/M07/experiments.yaml
+  - missions/M07/code_reading.md
+  - missions/M07/no_ai_gate.md
+  - missions/M07/controlled_failure.md
+  - missions/M07/assessment.yaml
+  - missions/M07/evidence_contract.yaml
+  - missions/M07/flagship_integration.md
+  - missions/M07/status.yaml
+  - missions/M07/review_brief.md
+  - missions/M07/adr_prompt.md
+completion_requires:
+  - numerical_and_categorical_preprocessing
+  - explain_fit_vs_transform
+  - training_inference_parity
+  - leakage_boundary_demonstration
+  - manual_vs_pipeline_comparison
+  - feature_treatment_experiment
+  - cross_validation_through_pipeline
+  - serialize_reload_equivalence
+  - controlled_failure_diagnosis
+  - formal_engineering_review
+  - architecture_decision_record
+  - no_ai_transfer_gate
+constraints:
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
