@@ -1,0 +1,24 @@
+mission: M19
+transfer_required: true
+criteria:
+  manual_parameter_reasoning:
+    evidence: Predict and explain how hand-chosen weights change predictions and loss.
+    pass: Correctly identifies the loss-minimizing region before derivative notation.
+  gradient_estimation:
+    evidence: Compute a central finite-difference estimate and compare it with the analytic derivative.
+    pass: Direction agrees and absolute difference is below 1.0e-6 for the supplied fixture.
+  update_reasoning:
+    evidence: Calculate one update manually and interpret the next loss.
+    pass: Arithmetic, direction, and loss comparison are correct.
+  failure_diagnosis:
+    evidence: Repair the wrong-sign loop from trace evidence.
+    pass: Changes only the faulty operator and verifies decreasing loss.
+  multi_parameter_transfer:
+    evidence: Explain the weight and bias components of a gradient vector.
+    pass: Connects each partial derivative to its own parameter update.
+  code_reading:
+    evidence: Trace parameter → prediction → loss → gradient → update.
+    pass: Names the concrete value flowing through every stage.
+  no_ai_gate:
+    evidence: Complete the manual tiny update and unfamiliar-loop repair without AI assistance.
+    pass: All calculations, repair, trace, and explanation are independently produced.

@@ -1,0 +1,23 @@
+mission: M19
+required_evidence:
+  - id: manual-sweep-prediction
+    artifact: Prediction table completed before the manual sweep.
+  - id: finite-difference-calculation
+    artifact: Hand calculation plus numeric comparison with the analytic gradient.
+  - id: update-trace
+    artifact: One-step arithmetic and multi-step parameter/loss trace.
+  - id: controlled-failure-diagnosis
+    artifact: Predicted failure, isolated root cause, minimal repair, and verification.
+  - id: code-reading-explanation
+    artifact: Parameter-to-update trace in the learner's own words.
+  - id: no-ai-gate
+    artifact: Signed manual calculation and repaired four-step loop produced without AI.
+  - id: multi-parameter-transfer
+    artifact: Explanation of separate weight and bias partial derivatives.
+acceptance:
+  notebook_restart_run_all: required
+  predictions_timestamped_before_actions: required
+  controlled_failure_repaired: required
+  no_ai_gate_passed: required
+  reviewer_signoff: required
+privacy: Store reasoning evidence, not secrets or personal data.
