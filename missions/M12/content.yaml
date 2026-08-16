@@ -1,0 +1,64 @@
+mission_id: M12
+registry_scope: mission_local_only
+verified_on: 2026-08-16
+source_policy:
+  preference: primary_or_official_documentation
+  global_content_registry_modified: false
+sources:
+  - id: M12-S1
+    publisher: scikit-learn
+    title: Ensembles — gradient boosting, random forests, bagging, voting, stacking
+    url: https://scikit-learn.org/stable/modules/ensemble.html
+    version_context: stable 1.9.0 documentation observed at verification
+    exact_sections:
+      - Gradient-boosted trees
+      - Random forests and other randomized tree ensembles
+      - Bagging meta-estimator
+    used_for:
+      - bagging versus boosting mechanism
+      - feature randomness in random forests
+      - ensemble hyperparameters
+  - id: M12-S2
+    publisher: scikit-learn
+    title: Single estimator versus bagging — bias-variance decomposition
+    url: https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html
+    version_context: stable 1.9.0 example observed at verification
+    exact_sections:
+      - Single estimator versus bagging
+    used_for:
+      - prediction variation intuition
+      - limits of bias and variance claims
+  - id: M12-S3
+    publisher: scikit-learn
+    title: RandomForestClassifier API reference
+    url: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
+    version_context: stable 1.9.0 API observed at verification
+    exact_sections:
+      - RandomForestClassifier
+      - Parameters
+      - Notes
+    used_for:
+      - bootstrap behavior
+      - max_features
+      - random_state
+  - id: M12-S4
+    publisher: scikit-learn
+    title: Gradient boosting regularization
+    url: https://scikit-learn.org/stable/auto_examples/ensemble/plot_gradient_boosting_regularization.html
+    version_context: stable 1.9.0 example observed at verification
+    exact_sections:
+      - Gradient boosting regularization
+    used_for:
+      - learning-rate and estimator-count interaction
+      - overfitting controls
+route:
+  sequence:
+    - limited_tree_baseline
+    - bootstrap_variation
+    - bagging_and_random_forest
+    - boosting_sequential_correction
+    - estimator_count
+    - tree_depth
+    - controlled_failure
+    - adr
+    - formal_review
