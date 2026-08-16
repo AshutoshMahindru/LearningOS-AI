@@ -1,0 +1,36 @@
+mission: M02
+passing_score: 14
+max_score: 16
+automatic_failures:
+  - no fresh executable supervised run
+  - test data used during fitting
+  - no prediction recorded before action
+  - AI-generated work submitted for the no-AI gate
+rubric:
+  - criterion: system_map
+    points: 2
+    evidence: Correct raw-data through interrogation flow with inputs and outputs.
+  - criterion: runnable_baseline
+    points: 2
+    evidence: Restart and Run All succeeds offline on CPU.
+  - criterion: experimental_reasoning
+    points: 3
+    evidence: Predictions, controlled changes, constants, observations, and conclusions.
+  - criterion: boundary_explanation
+    points: 2
+    evidence: Fit, prediction, and evaluation boundaries are distinguished.
+  - criterion: failure_diagnosis
+    points: 3
+    evidence: Root cause, smallest repair, and verification for corrupted labels and invalid evaluation.
+  - criterion: validation_and_limitations
+    points: 2
+    evidence: Integrity assertions, honest metrics, and bounded claims.
+  - criterion: v00_integration
+    points: 2
+    evidence: Explains how the work supports the first end-to-end V00 experience.
+no_ai_gate:
+  required: true
+  transfer_required: true
+  fresh_supervised_system: true
+  predict_behavior_before_execution: true
+  diagnose_failure_from_evidence: true

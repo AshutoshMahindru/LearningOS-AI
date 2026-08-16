@@ -1,0 +1,37 @@
+mission: M02
+protocol:
+  prediction_before_action: required
+  change_one_dimension_at_a_time: required
+  record_constants: required
+  compare_against: honest_baseline
+experiments:
+  - id: split
+    variable: split seed and test proportion
+    constants: [dataset, features, model, evaluation metric]
+    prediction_prompt: How much should the held-out score move when different rows are sampled?
+    evidence: test size, class counts, accuracy, balanced accuracy
+  - id: features
+    variable: full feature set versus two-feature subset
+    constants: [split seed, model, hyperparameters, evaluation metric]
+    prediction_prompt: Will two chemically informative features preserve baseline performance?
+    evidence: selected columns and held-out metrics
+  - id: model
+    variable: logistic regression versus shallow decision tree
+    constants: [dataset, features, split, evaluation metric]
+    prediction_prompt: Which inductive bias will work better on this split?
+    evidence: held-out metrics and train/test gap
+  - id: hyperparameter
+    variable: logistic-regression C
+    constants: [dataset, features, split, preprocessing, evaluation metric]
+    prediction_prompt: Does weaker or stronger regularization improve the held-out score?
+    evidence: C value, train accuracy, test accuracy
+  - id: labels
+    variable: intact versus deterministically shuffled training labels
+    constants: [features, split, model, evaluation metric]
+    prediction_prompt: What score should a model trained on labels unrelated to rows approach?
+    evidence: label-disagreement rate and honest held-out metrics
+  - id: evaluation-setup
+    variable: single holdout versus five-fold stratified cross-validation
+    constants: [dataset, features, model, metric]
+    prediction_prompt: Will an average over folds be more stable than one holdout?
+    evidence: fold scores, mean, standard deviation, and holdout score

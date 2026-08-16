@@ -1,0 +1,27 @@
+mission: M02
+source_ids:
+  - sklearn-guide
+topics:
+  - supervised classification
+  - train/test separation
+  - fitting and prediction boundaries
+  - evaluation integrity
+learning_sequence:
+  - id: whole-system
+    action: Run the complete baseline from local raw data to interrogation.
+    evidence: Baseline metrics, confusion matrix, and inspected errors.
+  - id: boundary-reading
+    action: Locate the exact fitting, prediction, and evaluation calls.
+    evidence: Boundary map explaining inputs, outputs, and forbidden information flow.
+  - id: experiments
+    action: Predict, change one dimension, run, and compare.
+    evidence: Six-dimension experiment log with constants and observations.
+  - id: controlled-failure
+    action: Run corrupted-label and invalid-evaluation cases.
+    evidence: Root-cause diagnosis and repaired evaluation protocol.
+  - id: transfer
+    action: Complete the no-AI gate as a fresh supervised run.
+    evidence: Independent system map, results, interrogation, explanation, and limitations.
+scope_limits:
+  - The mission orients the learner; it does not derive model mathematics.
+  - One small benchmark does not establish production readiness or generalization.
