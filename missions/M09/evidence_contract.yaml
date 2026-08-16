@@ -1,0 +1,45 @@
+mission_id: M09
+required_evidence:
+  - id: whole_system_trace
+    description: Annotated baseline-to-consequence trace with the model and threshold-policy boundary marked.
+  - id: split_integrity
+    description: Train/test sizes, class rates and proof that learner IDs are disjoint.
+  - id: probability_inspection
+    description: Ranked held-out probabilities with an explanation of why scores are not yet decisions.
+  - id: confusion_matrix_accounting
+    description: TP, TN, FP and FN at the default threshold with plain-language meanings.
+  - id: metric_comparison
+    description: Accuracy, precision and recall across multiple thresholds with correct denominators.
+  - id: controlled_failure_diagnosis
+    description: Evidence that default-threshold or accuracy-only reasoning can conceal costly false negatives.
+  - id: consequence_decision
+    description: Declared FP/FN costs, compared policy costs, chosen threshold and accepted trade-off.
+  - id: threshold_adr
+    artifact_type: learner_authored_adr
+    source_prompt: missions/M09/adr_prompt.md
+    description: Separate learner-authored decision record governing the consequential operating threshold.
+    must_show:
+      - selected_threshold_and_comparison_rule
+      - false_positive_and_false_negative_costs
+      - operating_capacity
+      - alternatives_and_rejected_reasons
+      - held_out_evidence
+      - accepted_trade_offs
+      - owner_status_and_date
+      - monitoring_rollback_and_revisit_triggers
+    conditions:
+      - repository_prompt_remains_unfilled
+      - response_is_learner_authored
+      - notebook_output_alone_is_not_completion_evidence
+  - id: calibration_explanation
+    description: Broad-bin predicted-versus-observed comparison plus a small-sample limitation.
+  - id: no_ai_transfer
+    description: Fresh probability and threshold decision completed without AI-generated analysis or code.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_threshold_experiments: true
+  require_holdout_only_policy_comparison: true
+  require_unfilled_repository_adr_prompt: true
+  require_learner_authored_threshold_adr: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited

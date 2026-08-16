@@ -1,0 +1,8 @@
+# The M09 notebook model and metrics use only the Python 3.11+ standard library.
+# These packages support notebook execution and mission validation.
+jupyter>=1.0
+nbconvert>=7.16
+nbformat>=5.10
+ipykernel>=6.29
+pytest>=8.0
+PyYAML>=6.0

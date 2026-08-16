@@ -1,0 +1,49 @@
+mission_id: M09
+assessment:
+  mode: performance_and_transfer
+  adr: required
+  transfer_required: true
+  pass_score: 80
+  max_score: 100
+  pass_requires:
+    - define_a_binary_target
+    - compare_to_a_majority_baseline
+    - preserve_holdout_integrity
+    - distinguish_probability_from_classification
+    - compute_tp_tn_fp_fn
+    - compute_accuracy_precision_recall
+    - diagnose_imbalance_and_accuracy_only_reasoning
+    - choose_threshold_from_declared_consequences
+    - defend_threshold_policy_in_learner_authored_adr
+    - explain_calibration_intuition
+    - complete_fresh_no_ai_threshold_decision
+  rubric:
+    system_trace:
+      weight: 15
+      evidence: Correctly traces baseline, split, fit, probability, threshold and consequence stages.
+    probability_reasoning:
+      weight: 15
+      evidence: Treats probability as a graded estimate rather than a label or guarantee.
+    confusion_matrix_and_metrics:
+      weight: 25
+      evidence: Correct TP/TN/FP/FN orientation and accuracy, precision and recall denominators.
+    threshold_and_consequences:
+      weight: 15
+      evidence: Compares policies on the same holdout and defends one using stated FP/FN consequences.
+    adr_governance:
+      weight: 10
+      evidence: Learner-authored ADR records the selected threshold, FP/FN costs, capacity, alternatives, trade-offs and measurable revisit triggers.
+    calibration_and_limits:
+      weight: 10
+      evidence: Explains group-level probability agreement and the limitations of small bins.
+    transfer:
+      weight: 10
+      evidence: Completes the fresh capacity-constrained no-AI decision without copied results.
+  failure_conditions:
+    - accepts_default_threshold_without_consequence_reasoning
+    - reports_accuracy_without_confusion_matrix
+    - evaluates_on_training_data_only
+    - confuses_probability_with_observed_outcome
+    - reverses_precision_and_recall_denominators
+    - threshold_adr_missing_superficial_or_prefilled
+    - fabricates_learner_evidence
