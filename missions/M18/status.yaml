@@ -1,0 +1,18 @@
+mission_id: M18
+implementation_status: implemented
+formal_engineering_review: required
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+learner_evidence_status: intentionally_unpopulated
+parallel_safety:
+  modifies_global_content_registry: false
+  modifies_global_tracking: false
+  modifies_root_readme: false
+notes:
+  - Implementation status is not learner completion.
+  - Dataset results are fixture properties, not learner evidence or production claims.
+  - The review brief and ADR prompt are required before a learner marks the mission complete.
