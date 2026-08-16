@@ -87,13 +87,14 @@ lab_path = ROOT / "data" / "lab_status.json"
 if lab_path.exists():
     labs = json.loads(lab_path.read_text(encoding="utf-8"))
     expected_executable = [f"M{i:02d}" for i in range(1, 20)]
-    expected_spec_only = [f"M{i:02d}" for i in range(20, 43)]
+    source_executable = ["M01", "M02", "M03", "M08"]
+    expected_source_spec_only = [mid for mid in mission_ids if mid not in source_executable]
     if labs.get("repository_executable") != expected_executable:
         errors.append("repository executable lab inventory must be exactly M01..M19")
-    if set(labs.get("source_package_executable", [])) != {"M01", "M02", "M03", "M08"}:
+    if labs.get("source_package_executable") != source_executable:
         errors.append("source package executable provenance must remain exactly M01, M02, M03, M08")
-    if labs.get("source_package_specification_only") != expected_spec_only:
-        errors.append("source package specification-only inventory must be exactly M20..M42 after M01-M19 migration")
+    if labs.get("source_package_specification_only") != expected_source_spec_only:
+        errors.append("source package specification-only provenance must remain the complement of M01, M02, M03, M08")
     for mid in expected_executable:
         matches = list((ROOT / "labs").glob(f"{mid}_*.ipynb"))
         if len(matches) != 1:
