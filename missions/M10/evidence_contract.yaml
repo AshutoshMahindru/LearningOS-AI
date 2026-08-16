@@ -1,0 +1,73 @@
+mission_id: M10
+version: 1
+purpose: Define acceptable learner-produced evidence without pre-populating any learner evidence.
+required_evidence:
+  - id: consequence_map
+    artifact_type: decision_and_consequence_table
+    must_show:
+      - positive_event
+      - triggered_action
+      - tp_fp_tn_fn_operational_meaning
+      - cost_units_and_owner
+      - capacity_or_policy_constraints
+  - id: metric_derivation
+    artifact_type: hand_calculation_and_notebook_trace
+    must_show:
+      - confusion_matrix
+      - accuracy
+      - precision
+      - recall
+      - specificity
+      - f1
+      - zero_denominator_convention
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_diagnosis_and_repair
+    must_show:
+      - attractive_accuracy_result
+      - harmed_decision_utility
+      - root_cause
+      - consequence_aligned_repair
+      - verification
+  - id: threshold_decision
+    artifact_type: validation_threshold_sweep
+    must_show:
+      - validation_only_selection
+      - expected_cost_or_value
+      - capacity_check
+      - tie_break_rule
+      - locked_threshold
+      - one_time_test_evaluation
+  - id: architecture_decision_record
+    artifact_type: completed_adr
+    must_show:
+      - decision
+      - context
+      - alternatives
+      - evidence
+      - trade_offs
+      - monitoring
+      - revisit_conditions
+  - id: formal_review
+    artifact_type: review_record
+    must_show:
+      - artifact_and_architecture
+      - failure_analysis
+      - uncertainty
+      - reviewer_comments
+      - accept_reject_defer_dispositions
+  - id: no_ai_gate
+    artifact_type: independent_unseen_scenario_response
+    conditions:
+      - produced_without_ai_assistance
+      - prediction_recorded_before_calculation
+      - uses_unseen_consequences_and_evidence
+quality_bar:
+  - Metric and threshold choices trace to consequences, constraints and observed counts.
+  - Test evidence is never used for selection.
+  - Aggregate metrics are accompanied by confusion counts and action volume.
+  - Unknown or unstable costs are surfaced and sensitivity-tested.
+forbidden_repository_content:
+  - prefilled learner answers
+  - fabricated learner scores
+  - fabricated review dispositions
+  - fabricated completion evidence

@@ -1,0 +1,5 @@
+outcome,predicted_alert,actual_failure,operational_meaning,cost_units
+TP,1,1,inspect an asset that would fail within 30 days,0
+FP,1,0,spend inspection capacity on an asset that would not fail,2
+TN,0,0,do not inspect an asset that would not fail,0
+FN,0,1,miss an asset failure within 30 days,18

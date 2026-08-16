@@ -1,0 +1,37 @@
+mission_id: M10
+assessment_type: performance_and_transfer
+pass_score: 8
+max_score: 10
+transfer_required: true
+rules:
+  - Begin from asymmetric consequences and the triggered action.
+  - Do not award credit for naming metrics without orienting the confusion matrix.
+  - Do not permit threshold tuning on test evidence.
+  - Require uncertainty, monitoring, and a revisit condition.
+tasks:
+  - id: A1
+    points: 2
+    prompt: Given a consequence description, define the positive class, action, TP, FP, TN and FN, then calculate accuracy, precision, recall, specificity and F1 from supplied counts.
+    rubric:
+      full_credit: Correct orientation, formulas, arithmetic and operational interpretations.
+  - id: A2
+    points: 3
+    prompt: Diagnose why an accuracy-optimal threshold harms decision utility in an imbalanced validation set and show the repair using expected cost or value.
+    rubric:
+      full_credit: Compares confusion counts and costs, identifies objective misalignment, and does not merely substitute F1.
+  - id: A3
+    points: 2
+    prompt: Explain what ROC and precision-recall sweeps reveal, what F1 summarizes, and why none alone chooses a consequential operating threshold.
+    rubric:
+      full_credit: Separates ranking summaries from thresholded action and connects PR interpretation to prevalence.
+  - id: A4
+    points: 3
+    prompt: Complete the unseen no-AI scenario, choose a feasible threshold, and defend an ADR with monitoring and revisit conditions.
+    rubric:
+      full_credit: Selects from validation evidence, respects capacity, quantifies cost, makes assumptions explicit and preserves the test boundary.
+failure_conditions:
+  - threshold_selected_from_test_outcomes
+  - metric_selected_without_consequence_mapping
+  - confusion_matrix_orientation_error
+  - attractive_metric_reported_without_error_counts
+  - adr_or_review_missing_for_consequential_choice

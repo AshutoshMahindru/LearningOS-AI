@@ -1,0 +1,63 @@
+id: M10
+title: Make Metrics Reflect Consequences
+phase: P2
+flagship: V02
+objective: Choose metrics and thresholds that reflect decision costs.
+competencies:
+  - metrics
+  - decision reasoning
+pedagogy: consequence-first
+formal_engineering_review: true
+adr_required: true
+prerequisites:
+  blocking:
+    - M09
+  helpful: []
+notebook: labs/M10_metrics_consequences.ipynb
+requirements: requirements/m10.txt
+mission_test: tests/missions/test_m10.py
+datasets:
+  - datasets/M10/asset_alert_scores.csv
+  - datasets/M10/consequence_matrix.csv
+  - datasets/M10/unseen_threshold_evidence.csv
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+completion_requires:
+  - asymmetric_consequences_before_metric_definitions
+  - confusion_matrix_and_metric_derivation
+  - imbalance_baseline_diagnosis
+  - threshold_sweep_on_validation_only
+  - controlled_failure_accuracy_harms_utility
+  - expected_cost_and_value_reasoning
+  - locked_threshold_test_evaluation
+  - consequential_threshold_adr
+  - formal_engineering_review
+  - no_ai_unseen_consequence_gate
+mission_artifacts:
+  - missions/M10/manifest.yaml
+  - missions/M10/README.md
+  - missions/M10/content.yaml
+  - missions/M10/experiments.yaml
+  - missions/M10/code_reading.md
+  - missions/M10/no_ai_gate.md
+  - missions/M10/controlled_failure.md
+  - missions/M10/assessment.yaml
+  - missions/M10/evidence_contract.yaml
+  - missions/M10/flagship_integration.md
+  - missions/M10/status.yaml
+  - missions/M10/review_brief.md
+  - missions/M10/adr_prompt.md
+  - labs/M10_metrics_consequences.ipynb
+  - datasets/M10/README.md
+  - datasets/M10/asset_alert_scores.csv
+  - datasets/M10/consequence_matrix.csv
+  - datasets/M10/unseen_threshold_evidence.csv
+  - requirements/m10.txt
+  - tests/missions/test_m10.py
+constraints:
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
