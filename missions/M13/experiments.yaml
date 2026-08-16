@@ -1,0 +1,63 @@
+mission_id: M13
+prediction_discipline: prediction_before_action
+experiments:
+  - id: E1
+    name: Visualize the cases
+    prediction_required: true
+    action: Predict the local class pattern, then plot practice hours against assessment score.
+    evidence:
+      - predicted_pattern
+      - observed_pattern
+      - ambiguous_regions
+  - id: E2
+    name: Query and inspect nearest neighbors
+    prediction_required: true
+    action: Classify one fixed query and retrieve the exact neighbor rows, distances and votes.
+    evidence:
+      - predicted_class
+      - neighbor_ids
+      - distances
+      - vote_explanation
+  - id: E3
+    name: Vary k
+    prediction_required: true
+    action: Compare k values 1, 3, 5, 9, 15 and 25 using a fixed split and query.
+    evidence:
+      - accuracy_by_k
+      - query_prediction_by_k
+      - sensitivity_explanation
+  - id: E4
+    name: Compare distance metrics
+    prediction_required: true
+    action: Compare Euclidean and Manhattan distance with all other choices held fixed.
+    evidence:
+      - metric_prediction
+      - neighbor_overlap
+      - geometry_explanation
+  - id: E5
+    name: Scale and inverse-scale
+    prediction_required: true
+    action: Fit StandardScaler on training data, transform train/test/query, and inverse-transform the query.
+    evidence:
+      - training_statistics
+      - raw_and_scaled_neighbors
+      - round_trip_check
+  - id: E6
+    name: Controlled scale failure
+    prediction_required: true
+    action: Add independent interface_event_count without scaling and inspect per-feature squared-distance contributions.
+    evidence:
+      - failure_prediction
+      - metric_change
+      - dominant_feature_share
+      - neighbor_identity_change
+      - smallest_repair
+  - id: E7
+    name: Boundary and prediction changes
+    prediction_required: true
+    action: Plot raw and standardized decision regions and connect changed regions to changed neighbor sets.
+    evidence:
+      - boundary_prediction
+      - boundary_observation
+      - local_neighbor_explanation
+      - transfer_rule

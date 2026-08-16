@@ -1,0 +1,37 @@
+mission_id: M13
+assessment:
+  mode: performance_explanation_and_transfer
+  transfer_required: true
+  pass_requires:
+    - predict_before_each_experiment
+    - explain_prediction_as_neighbor_vote
+    - calculate_and_compare_distances
+    - explain_effect_of_k
+    - distinguish_euclidean_and_manhattan_geometry
+    - fit_preprocessing_on_training_data_only
+    - diagnose_high_scale_irrelevant_feature
+    - connect_boundary_change_to_neighbor_change
+    - complete_no_ai_transfer
+    - record_distance_design_adr
+  rubric:
+    prediction_and_observation:
+      weight: 15
+      evidence: Predictions are timestamped or otherwise fixed before runs and compared with observations.
+    neighbor_reasoning:
+      weight: 25
+      evidence: Query outcomes are explained with neighbor identities, distances and votes.
+    experimental_control:
+      weight: 20
+      evidence: k, metric, scaling and feature-set comparisons change one factor at a time.
+    failure_diagnosis:
+      weight: 25
+      evidence: Per-feature distance contributions identify the incompatible-scale root cause before repair.
+    transfer_and_decision:
+      weight: 15
+      evidence: A fresh no-AI solution and ADR justify the adopted distance design and revisit conditions.
+  failure_conditions:
+    - reporting_accuracy_without_neighbor_evidence
+    - fitting_scaler_before_train_test_split
+    - changing_multiple_factors_without_control
+    - treating_standardization_as_proof_of_feature_relevance
+    - working_code_without_no_ai_transfer

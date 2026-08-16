@@ -1,0 +1,78 @@
+id: M13
+title: Learn from Neighbors
+phase: P2
+flagship: V03
+objective: Understand instance-based learning through KNN behavior.
+competencies:
+  - KNN
+  - distance reasoning
+pedagogy: whole-first
+formal_engineering_review: false
+review_brief_required: false
+adr_required: true
+prerequisites:
+  blocking:
+    - M09
+  helpful:
+    - M15
+sources:
+  - sklearn-guide
+notebook: labs/M13_knn.ipynb
+dataset:
+  path: datasets/M13/knn_scale_cases.csv
+  readme: datasets/M13/README.md
+  generator: datasets/M13/generate_dataset.py
+  provenance: Deterministic synthetic two-moons classification data generated locally with seed 13.
+requirements: requirements/m13.txt
+mission_test: tests/missions/test_m13.py
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+experiments:
+  - visualize_cases
+  - inspect_query_neighbors
+  - vary_k
+  - compare_distance_metrics
+  - scale_and_inverse_scale
+  - introduce_irrelevant_high_scale_feature
+  - compare_boundaries_and_predictions
+controlled_failure:
+  root_cause: Incompatible feature scales allow an irrelevant high-scale feature to dominate distance.
+  repair: Fit scaling on training data inside a pipeline, then justify whether the irrelevant feature belongs at all.
+completion_requires:
+  - predictions_recorded_before_actions
+  - nearest_neighbor_trace_for_query
+  - k_comparison
+  - metric_comparison
+  - scaling_round_trip
+  - controlled_failure_diagnosis_and_repair
+  - boundary_or_prediction_change_explanation
+  - unfamiliar_code_reading
+  - no_ai_transfer_gate
+  - adr_for_distance_design
+mission_artifacts:
+  - missions/M13/manifest.yaml
+  - missions/M13/README.md
+  - missions/M13/content.yaml
+  - missions/M13/experiments.yaml
+  - missions/M13/code_reading.md
+  - missions/M13/no_ai_gate.md
+  - missions/M13/controlled_failure.md
+  - missions/M13/assessment.yaml
+  - missions/M13/evidence_contract.yaml
+  - missions/M13/flagship_integration.md
+  - missions/M13/adr_prompt.md
+  - missions/M13/status.yaml
+  - labs/M13_knn.ipynb
+  - datasets/M13/README.md
+  - datasets/M13/generate_dataset.py
+  - datasets/M13/knn_scale_cases.csv
+  - requirements/m13.txt
+  - tests/missions/test_m13.py
+constraints:
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false

@@ -1,0 +1,33 @@
+mission_id: M13
+approach: whole-first
+sequence:
+  - id: run_and_visualize
+    purpose: Run the complete classifier and see the geometry before studying KNN terminology.
+  - id: interrogate_query
+    purpose: Connect one query prediction to exact training cases, distances and votes.
+  - id: vary_k
+    purpose: Observe how neighborhood size changes local sensitivity and boundary smoothness.
+  - id: compare_metrics
+    purpose: See that Euclidean and Manhattan distance encode different meanings of near.
+  - id: scale_and_unscale
+    purpose: Standardize with training statistics and verify inverse transformation returns original units.
+  - id: controlled_failure
+    purpose: Let a weak high-scale feature dominate, diagnose its distance contribution and repair the design.
+  - id: compare_boundaries
+    purpose: Explain prediction and boundary changes through changed neighbor membership.
+  - id: transfer
+    purpose: Rebuild a small neighbor classifier and reason about a fresh query without AI-generated code.
+just_in_time_concepts:
+  - instance_based_learning
+  - euclidean_distance
+  - manhattan_distance
+  - nearest_neighbor_search
+  - majority_vote
+  - neighborhood_size
+  - decision_boundary
+  - feature_scaling
+  - training_only_preprocessing
+  - irrelevant_features
+  - pipeline_consistency
+source_references:
+  - sklearn-guide
