@@ -33,18 +33,20 @@ class RetrievalTests(unittest.TestCase):
         labs = LabRegistry(ROOT)
         for number in range(1, 20):
             mission = f"M{number:02d}"
-            status = labs.status(mission)
-            self.assertTrue(status["repository_executable"], mission)
-            self.assertFalse(status["specification_only_in_source_package"], mission)
+            self.assertTrue(labs.status(mission)["repository_executable"], mission)
 
         for number in range(20, 43):
             mission = f"M{number:02d}"
-            status = labs.status(mission)
-            self.assertFalse(status["repository_executable"], mission)
-            self.assertTrue(status["specification_only_in_source_package"], mission)
+            self.assertFalse(labs.status(mission)["repository_executable"], mission)
 
-        for mission in ["M01", "M02", "M03", "M08"]:
-            self.assertTrue(labs.status(mission)["source_artifact_available"])
+    def test_source_package_status_remains_historical_provenance(self):
+        labs = LabRegistry(ROOT)
+        source_executable = {"M01", "M02", "M03", "M08"}
+        for number in range(1, 43):
+            mission = f"M{number:02d}"
+            status = labs.status(mission)
+            self.assertEqual(status["source_artifact_available"], mission in source_executable, mission)
+            self.assertEqual(status["specification_only_in_source_package"], mission not in source_executable, mission)
 
 
 if __name__ == "__main__":
