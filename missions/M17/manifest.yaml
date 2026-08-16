@@ -1,0 +1,67 @@
+id: M17
+title: Quantify Uncertainty
+phase: P3
+flagship: V04
+objective: Reason with probability through model outputs and uncertainty.
+competencies:
+  - probability
+  - uncertainty
+pedagogy: simulation-and-model-outputs-before-formalism
+formal_engineering_review: false
+adr_prompt_required: true
+notebook: labs/M17_probability_uncertainty.ipynb
+dataset: datasets/M17/model_predictions.csv
+requirements: requirements/m17.txt
+mission_test: tests/missions/test_m17.py
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+concepts:
+  - events
+  - empirical_frequency
+  - conditional_probability
+  - base_rates
+  - independence_and_dependence
+  - expected_loss
+  - model_probabilities
+  - calibration
+controlled_failure:
+  type: base_rate_neglect
+  seeded_root_cause: confusing_test_sensitivity_with_probability_of_condition_given_positive_result
+completion_requires:
+  - predictions_recorded_before_experiments
+  - model_output_reliability_analysis
+  - frequency_simulation
+  - conditional_probability_from_counts
+  - base_rate_neglect_diagnosis
+  - dependence_check
+  - expected_loss_decision
+  - calibration_explanation
+  - unfamiliar_code_reading
+  - no_ai_transfer_gate
+  - adr_response_for_threshold_decision
+mission_artifacts:
+  - missions/M17/manifest.yaml
+  - missions/M17/README.md
+  - missions/M17/content.yaml
+  - missions/M17/experiments.yaml
+  - missions/M17/code_reading.md
+  - missions/M17/no_ai_gate.md
+  - missions/M17/controlled_failure.md
+  - missions/M17/assessment.yaml
+  - missions/M17/evidence_contract.yaml
+  - missions/M17/flagship_integration.md
+  - missions/M17/adr_prompt.md
+  - missions/M17/status.yaml
+  - labs/M17_probability_uncertainty.ipynb
+  - datasets/M17/README.md
+  - datasets/M17/model_predictions.csv
+  - requirements/m17.txt
+  - tests/missions/test_m17.py
+constraints:
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false

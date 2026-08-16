@@ -1,0 +1,86 @@
+mission_id: M17
+version: 1
+purpose: Define acceptable learner-created evidence without pre-populating learner work.
+required_evidence:
+  - id: prediction_log
+    artifact_type: experiment_record
+    must_show:
+      - prediction_timestamp_or_order_before_action
+      - observed_result
+      - explanation
+      - transfer_claim
+  - id: reliability_analysis
+    artifact_type: table_and_explanation
+    must_show:
+      - probability_groups
+      - group_counts
+      - predicted_probability
+      - observed_frequency
+      - calibration_gap
+      - deployment_shift_interpretation
+  - id: screening_count_table
+    artifact_type: complete_two_by_two_count_table
+    must_show:
+      - affected_and_unaffected_counts
+      - true_positive
+      - false_negative
+      - false_positive
+      - true_negative
+      - named_condition_direction
+  - id: controlled_failure_diagnosis
+    artifact_type: written_diagnosis
+    must_show:
+      - failed_claim
+      - base_rate
+      - numerator_and_denominator
+      - repaired_probability
+      - counterfactual_base_rate_check
+      - operational_harm
+  - id: dependence_check
+    artifact_type: calculation_and_explanation
+    must_show:
+      - both_marginal_probabilities
+      - observed_joint_probability
+      - product_under_independence
+      - conclusion
+  - id: consequence_aware_decision
+    artifact_type: expected_loss_table
+    must_show:
+      - action_cost
+      - miss_cost
+      - expected_loss_by_action
+      - chosen_action
+      - sensitivity_to_changed_assumption
+  - id: code_reading_trace
+    artifact_type: annotated_trace
+    must_show:
+      - inputs
+      - accumulator_state
+      - denominator
+      - output
+      - one_edge_case
+  - id: no_ai_transfer
+    artifact_type: independent_calculation_and_explanation
+    conditions:
+      - produced_without_ai_assistance
+      - uses_fresh_counts
+      - prediction_precedes_cost_change
+  - id: adr_response
+    artifact_type: decision_record
+    must_show:
+      - decision
+      - alternatives
+      - evidence
+      - tradeoffs
+      - revisit_conditions
+evidence_rules:
+  require_observation_not_claim: true
+  require_named_reference_population: true
+  require_prediction_before_experiment: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited
+forbidden_repository_content:
+  - fabricated_learner_responses
+  - fabricated_learner_scores
+  - fabricated_completion_status
+  - completed_adr_on_behalf_of_learner

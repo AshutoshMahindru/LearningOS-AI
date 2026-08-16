@@ -1,0 +1,43 @@
+mission_id: M17
+approach: simulation-and-model-outputs-before-formalism
+sequence:
+  - id: inspect_model_outputs
+    purpose: Observe a useful probability-output workflow before introducing notation.
+  - id: simulate_frequency
+    purpose: Compare short-run variation with long-run empirical frequency.
+  - id: screen_with_counts
+    purpose: Derive conditional probability from a complete count table.
+  - id: diagnose_base_rate_neglect
+    purpose: Repair a plausible but incorrect interpretation of a positive result.
+  - id: test_dependence
+    purpose: Compare an observed intersection with the product expected under independence.
+  - id: choose_by_expected_loss
+    purpose: Connect probabilities to consequences and actions.
+  - id: evaluate_thresholds
+    purpose: Observe that one model probability can support different actions under different costs.
+  - id: inspect_calibration
+    purpose: Compare predicted probabilities with observed frequencies by group.
+  - id: transfer_without_ai
+    purpose: Rebuild the reasoning from fresh counts without AI-generated work.
+just_in_time_concepts:
+  - event_and_complement
+  - empirical_frequency
+  - joint_event
+  - conditional_probability
+  - base_rate
+  - independence
+  - dependence
+  - expected_loss
+  - threshold
+  - calibration
+local_assets:
+  - datasets/M17/model_predictions.csv
+  - datasets/M17/README.md
+optional_post_lab_references:
+  - title: NIST/SEMATECH e-Handbook of Statistical Methods — Probability Distributions
+    use: Consult after the simulation when a formal probability reference is useful.
+  - title: scikit-learn User Guide — Probability calibration
+    use: Consult after explaining reliability groups from the local fixture.
+runtime_source_policy:
+  self_contained: true
+  network_required: false
