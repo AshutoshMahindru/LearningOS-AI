@@ -1,0 +1,37 @@
+order_id,customer_name,region,category,units,unit_price,order_total,order_date,email,status,notes
+ORD-1001,Asha Rao,North,Electronics,2,"₹1,250.00","₹2,500.00",2026-01-05,asha@example.com,Complete,
+" ord-1002 ","  Vikram  Sen "," north ","electronics ",3,"1,099","3,297",05/01/2026,VIKRAM@EXAMPLE.COM,complete," whitespace and case "
+ORD-1003,Meera Nair,South,Home & Kitchen,1,"₹2,499.00","₹2,499.00",Jan 7 2026,meera@example.com,Completed,
+ORD-1003,Meera Nair,South,Home & Kitchen,1,"₹2,499.00","₹2,499.00",Jan 7 2026,meera@example.com,Completed,
+ORD-1004,Rohan Das,EAST,home/kitchen,4,750,"3,000",2026/01/08,rohan@example.com,DONE,
+ORD-1005,Leela Shah,West,Grocery,10,125,"1,250",09-01-2026,leela@example.com,Complete,first system record
+ORD-1005,Leela Shah,West,Grocery,12,125,"1,500",09-01-2026,leela@example.com,Complete,conflicting quantity for same ID
+ORD-1006,,Central,Apparel,2,899,"1,798",2026-01-10,unknown@example.com,Complete,missing customer name
+ORD-1007,Farah Ali,,Office Supplies,5,220,"1,100",2026-01-11,farah@example.com,Pending,missing region
+ORD-1008,Kabir Mehta,Atlantis,Electronics,1,59999,"59,999",2026-01-12,kabir@example.com,Complete,invalid region
+ORD-1009,Nina Bose,South,Luxury,1,12000,"12,000",2026-01-13,nina@example.com,Complete,unknown category
+ORD-1010,Dev Iyer,North,Apparel,two,499,998,2026-01-14,dev@example.com,Complete,malformed units
+ORD-1011,Sara Khan,East,Grocery,3,"₹1,2O0","₹3,600",2026-01-15,sara@example.com,Complete,letter O in price
+ ord-1012 , Anil  Jain ,South,home and kitchen,2,1500,3000,01/02/2026,ANIL@example.com,in progress,ambiguous slash date
+ORD-1012,Anil Jain,South,Home & Kitchen,3,1500,4500,2026-02-01,anil@example.com,Pending,normalized ID collision
+ORD-1013,Preeti Gill,West,Office,2,800,,2026-01-17,preeti@example.com,Complete,missing total can be derived
+ORD-1014,Mohan Lal,North,Electronics,-2,1200,-2400,2026-01-18,mohan@example.com,Complete,negative units and total
+ORD-1015,Ira Roy,Central,Grocery,3,-75,-225,2026-01-19,ira@example.com,Complete,negative price
+ORD-1016,Tara Singh,East,Apparel,2,999,1998,31/02/2026,tara@example.com,Complete,impossible date
+ORD-1017,Omar Sheikh,South,Electronics,1,4500,4500,not a date,omar@example.com,Complete,malformed date
+ORD-1018,Pooja Menon,West,Grocery,6,150,900,2099-01-01,pooja@example.com,Complete,future date
+ORD-1019,Arjun Kapur,North,Office,3,300,not recorded,2026-01-23,arjun@example.com,Complete,malformed total
+ORD-1020,Kiran Patel,Central,Apparel,2,650,1200,2026-01-24,kiran@example.com,Complete,total does not reconcile
+ORD 1021,Sonia Gupta,West,Grocery,2,100,200,2026-01-25,sonia@example.com,Complete,invalid ID punctuation
+ORD-1022,Simran Kaur,East,Electronics,1,3200,3200,2026-01-26,bad-email,Complete,invalid email
+ORD-1023,Yusuf Khan,South,Grocery,4,180,720,2026-01-27,yusuf@example.com,,missing status
+ORD-1024,Ritu Malhotra,West,Office Supplies,7,₹ 250,"₹ 1,750",2026-01-28,ritu@example.com,Returned,currency spaces
+ORD-1025,Neel Joshi,Central,apparel,2,900,1800,2026-13-01,neel@example.com,Complete,month 13
+ORD-1026,Aditi Rao,N,consumer electronics,1,"₹75,000","₹75,000",2026-01-30,aditi@example.com,Complete,region and category aliases
+ORD-1027,Raj Verma,south zone,groceries,8,110,880,2026-01-31,raj@example.com,Cancelled,aliases
+ORD-1028,Wholesale Co,West,Office,750,200,"150,000",2026-02-02,ops@wholesale.example,Complete,approved wholesale order
+ORD-1029,Joy Thomas,North,Electronics,3,999,"9,999,999",2026-02-03,joy@example.com,Pending,suspicious total requires review
+ORD-1030,Maya Nair,East,Home & Kitchen,1,2499,2499,2026-02-04,maya@example.com,Complete,"  trailing note whitespace  "
+,No ID,North,Grocery,2,100,200,2026-02-05,noid@example.com,Complete,missing order ID
+ORD-1031,Siddharth Rao,Central,Office,1,500,500,,siddharth@example.com,Complete,missing date
+ORD-1032,Uma Devi,West,Apparel,1,1200,1200,2026-02-06,uma@example.com,Shipped,unmapped status

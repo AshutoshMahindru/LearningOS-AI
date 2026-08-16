@@ -1,0 +1,45 @@
+mission_id: M04
+assessment:
+  mode: performance_transfer_and_formal_review
+  transfer_required: true
+  formal_engineering_review_required: true
+  pass_requires:
+    - predict_defects_before_action
+    - declare_quality_expectations
+    - distinguish_exact_duplicates_from_identity_conflicts
+    - preserve_raw_values_and_provenance
+    - normalize_and_parse_with_evidence
+    - justify_missingness_decisions
+    - validate_constraints
+    - investigate_outliers_without_automatic_deletion
+    - diagnose_unsafe_cleaning_from_measured_loss
+    - reconcile_raw_and_clean_rows
+    - pass_analysis_ready_invariants
+    - explain_uncertainty_and_information_loss
+    - complete_no_ai_transfer
+  rubric:
+    prediction_and_contract:
+      weight: 15
+      evidence: Predictions precede transformations and expectations are testable.
+    duplicate_and_identity_reasoning:
+      weight: 15
+      evidence: Exact duplicates are logged separately from conflicting IDs.
+    transformation_quality:
+      weight: 20
+      evidence: Raw values survive and parsing failures have explicit issue codes.
+    missingness_and_outlier_judgment:
+      weight: 15
+      evidence: Decisions cite evidence and preserve unresolved uncertainty.
+    validation_and_reproducibility:
+      weight: 20
+      evidence: Row reconciliation, deterministic rerun and invariants pass.
+    communication_and_transfer:
+      weight: 15
+      evidence: Review explains architecture, failure, evidence, uncertainty and fresh transfer.
+  failure_conditions:
+    - blanket_row_deletion_without_row_accounting
+    - identity_conflicts_discarded_as_duplicates
+    - silent_numeric_or_date_coercion
+    - automatic_outlier_deletion_without_domain_evidence
+    - clean_output_without_raw_provenance
+    - assertions_that_only_check_file_existence

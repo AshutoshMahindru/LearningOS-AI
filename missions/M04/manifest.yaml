@@ -1,0 +1,64 @@
+id: M04
+title: Turn a Messy CSV into Usable Data
+phase: P1
+flagship: V01
+objective: Clean and transform imperfect tabular data for analysis.
+competencies:
+  - Pandas
+  - data quality
+pedagogy: whole-first
+formal_engineering_review: true
+prerequisites:
+  blocking:
+    - M03
+  helpful: []
+sources:
+  - pandas-start
+notebook: labs/M04_messy_csv.ipynb
+dataset: datasets/M04/customer_orders_dirty.csv
+pipeline: missions/M04/cleaning.py
+requirements: requirements/m04.txt
+mission_test: tests/missions/test_m04.py
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+completion_requires:
+  - predict_defects_before_cleaning
+  - declare_data_quality_expectations
+  - distinguish_exact_duplicates_from_conflicting_ids
+  - preserve_raw_values_and_row_provenance
+  - parse_numeric_and_date_fields_with_issue_evidence
+  - make_explicit_missingness_decisions
+  - validate_analysis_ready_constraints
+  - investigate_and_retain_outliers_pending_judgment
+  - diagnose_unsafe_cleaning_failure
+  - reconcile_raw_and_clean_row_counts
+  - assert_analysis_ready_invariants
+  - complete_formal_engineering_review
+mission_artifacts:
+  - missions/M04/README.md
+  - missions/M04/manifest.yaml
+  - missions/M04/content.yaml
+  - missions/M04/experiments.yaml
+  - missions/M04/code_reading.md
+  - missions/M04/no_ai_gate.md
+  - missions/M04/controlled_failure.md
+  - missions/M04/assessment.yaml
+  - missions/M04/evidence_contract.yaml
+  - missions/M04/flagship_integration.md
+  - missions/M04/status.yaml
+  - missions/M04/review_brief.md
+  - missions/M04/cleaning.py
+  - labs/M04_messy_csv.ipynb
+  - datasets/M04/README.md
+  - datasets/M04/customer_orders_dirty.csv
+  - requirements/m04.txt
+  - tests/missions/test_m04.py
+parallel_safety:
+  modifies_global_content_registry: false
+  modifies_global_tracking: false
+  modifies_root_readme: false

@@ -1,0 +1,43 @@
+mission_id: M04
+approach: whole-first
+sequence:
+  - id: raw_and_inspect
+    purpose: Load raw strings losslessly and inspect shape, types, samples and distinct values.
+  - id: predict_defects
+    purpose: Record defect predictions before transformations reveal the answers.
+  - id: declare_expectations
+    purpose: State schema, identity, category, numeric, date and reconciliation rules.
+  - id: duplicate_analysis
+    purpose: Separate exact duplicate rows from normalized-ID conflicts.
+  - id: normalization
+    purpose: Normalize whitespace, case and declared aliases while preserving raw values.
+  - id: parsing
+    purpose: Parse numeric, currency and date text with explicit failure evidence.
+  - id: missingness
+    purpose: Derive only a genuinely missing total and refuse unsupported guesses.
+  - id: constraints
+    purpose: Validate IDs, domains, positivity, dates, emails and arithmetic reconciliation.
+  - id: outlier_investigation
+    purpose: Flag statistical extremes and apply documented human judgment without deletion.
+  - id: controlled_failure
+    purpose: Measure information loss from unsafe blanket cleaning.
+  - id: reproducible_pipeline
+    purpose: Run the same deterministic pipeline twice and compare results.
+  - id: raw_vs_clean
+    purpose: Reconcile every input row to a retained row or an exact-duplicate audit record.
+  - id: invariant_assertions
+    purpose: Prove the analysis-ready table satisfies the declared contract.
+just_in_time_concepts:
+  - pandas_string_loading
+  - row_provenance
+  - duplicate_semantics
+  - canonicalization
+  - explicit_alias_maps
+  - numeric_parsing
+  - date_parsing_policy
+  - missingness_mechanisms
+  - constraint_validation
+  - outlier_judgment
+  - invariant_assertions
+source_references:
+  - pandas-start
