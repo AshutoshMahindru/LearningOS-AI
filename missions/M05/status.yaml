@@ -1,0 +1,12 @@
+mission_id: M05
+implementation_status: implemented
+validation_contract:
+  notebook_restart_run_all: required
+  mission_tests: required
+  repository_validator: required
+  relevant_repository_tests: required
+learner_evidence_status: intentionally_unpopulated
+parallel_safety:
+  modifies_global_content_registry: false
+  modifies_global_tracking: false
+  modifies_root_readme: false

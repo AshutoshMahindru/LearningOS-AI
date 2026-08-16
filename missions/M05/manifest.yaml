@@ -1,0 +1,31 @@
+id: M05
+title: Understand Arrays by Making Python Too Slow
+phase: P1
+flagship: V01
+objective: Experience why arrays and vectorization matter computationally.
+competencies:
+  - NumPy
+  - vectorization
+pedagogy: whole-first
+formal_engineering_review: false
+adr_required: false
+notebook: labs/M05_array_vectorization.ipynb
+requirements: requirements/m05.txt
+mission_test: tests/missions/test_m05.py
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+completion_requires:
+  - useful_python_loop_baseline
+  - safe_scaled_workload
+  - written_timing_prediction_before_measurement
+  - loop_and_numpy_timing_comparison
+  - numerical_correctness_comparison
+  - shape_dtype_axis_and_broadcasting_explanation
+  - indexing_slicing_aggregation_and_vectorized_arithmetic
+  - controlled_shape_broadcasting_and_axis_failure
+  - no_ai_manual_shape_and_result_prediction
+  - unfamiliar_array_transfer
