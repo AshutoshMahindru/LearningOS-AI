@@ -1,0 +1,67 @@
+mission_id: M14
+registry_scope: mission_local_only
+verified_on: 2026-08-16
+source_policy:
+  preference: official_documentation
+  global_content_registry_modified: false
+sources:
+  - id: M14-S1
+    publisher: scikit-learn
+    title: Clustering — K-means
+    url: https://scikit-learn.org/stable/modules/clustering.html#k-means
+    version_context: stable documentation; 1.9.0 observed at verification
+    exact_sections:
+      - K-means
+      - Low-level parallelism
+    used_for:
+      - squared Euclidean objective and inertia
+      - center-based assignment
+      - initialization and convergence constraints
+  - id: M14-S2
+    publisher: scikit-learn
+    title: StandardScaler
+    url: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
+    version_context: stable documentation; 1.9.0 observed at verification
+    exact_sections:
+      - standard-score definition
+      - sensitivity to feature variance
+      - sensitivity to outliers
+    used_for:
+      - scaling decision
+      - controlled scale and outlier failures
+  - id: M14-S3
+    publisher: scikit-learn
+    title: silhouette_score
+    url: https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html
+    version_context: stable documentation
+    exact_sections:
+      - mean Silhouette Coefficient
+      - valid label-count range
+      - interpretation of positive, near-zero, and negative values
+    used_for:
+      - candidate-k internal diagnostic
+      - diagnostic limitations
+  - id: M14-S4
+    publisher: scikit-learn
+    title: Selecting the number of clusters with silhouette analysis
+    url: https://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_silhouette_analysis.html
+    version_context: stable example gallery
+    exact_sections:
+      - silhouette analysis for KMeans clustering
+      - per-cluster silhouette plots
+    used_for:
+      - within-cluster inspection
+      - choice-of-k workflow
+route:
+  sequence:
+    - feature_contract
+    - raw_scale_failure
+    - standardization
+    - k_diagnostics
+    - center_profiles
+    - within_cluster_structure
+    - outlier_and_visualization_stress
+    - interpretation_boundary
+    - adr
+    - no_ai_gate
+    - transfer_assessment
