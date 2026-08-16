@@ -39,4 +39,4 @@ State-changing operations remain in the CLI/runtime so a browser refresh cannot 
 
 ## Design constraint
 
-The dashboard displays the repository's lab status truthfully. Until notebook migration is complete, the remote executable-lab count remains zero even though four executable source artifacts (M01, M02, M03 and M08) are known to exist outside the remote branch.
+The dashboard must reflect repository lab availability rather than planned curriculum state. M01-M19 are now implemented and validated as repository-executable labs. M20-M42 remain non-executable until their mission packages are implemented and pass the same repository and notebook validation gates.
