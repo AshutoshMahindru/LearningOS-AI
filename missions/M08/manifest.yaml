@@ -1,0 +1,74 @@
+id: M08
+title: Predict a Continuous Outcome
+phase: P2
+flagship: V02
+objective: Build and diagnose a regression system.
+competencies:
+  - regression
+  - evaluation
+pedagogy: whole-first
+formal_engineering_review: true
+adr_required: true
+sources:
+  - sklearn-guide
+  - stanford-cs229
+prerequisites:
+  blocking:
+    - M07
+  helpful: []
+whole_first_sequence:
+  - baseline
+  - train/test split
+  - fit
+  - predict
+  - metrics
+  - residuals
+  - diagnose
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+notebook: labs/M08_regression.ipynb
+dataset:
+  path: datasets/M08/housing_regression.csv
+  generator: datasets/M08/generate_dataset.py
+  provenance: Deterministic synthetic housing transactions generated locally for M08.
+requirements: requirements/m08.txt
+mission_test: tests/missions/test_m08.py
+mission_artifacts:
+  - missions/M08/manifest.yaml
+  - missions/M08/README.md
+  - missions/M08/content.yaml
+  - missions/M08/experiments.yaml
+  - missions/M08/code_reading.md
+  - missions/M08/no_ai_gate.md
+  - missions/M08/controlled_failure.md
+  - missions/M08/assessment.yaml
+  - missions/M08/evidence_contract.yaml
+  - missions/M08/flagship_integration.md
+  - missions/M08/status.yaml
+  - missions/M08/review_brief.md
+  - missions/M08/adr_prompt.md
+  - labs/M08_regression.ipynb
+  - datasets/M08/README.md
+  - datasets/M08/generate_dataset.py
+  - datasets/M08/housing_regression.csv
+  - requirements/m08.txt
+  - tests/missions/test_m08.py
+completion_requires:
+  - baseline_comparison
+  - held_out_mae_rmse_and_r2
+  - residual_diagnosis
+  - cross_validation_evidence
+  - underfit_overfit_diagnosis
+  - cautious_feature_influence_interpretation
+  - leakage_failure_diagnosis_and_repair
+  - model_and_evaluation_adr
+  - formal_engineering_review
+  - no_ai_transfer
+constraints:
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false

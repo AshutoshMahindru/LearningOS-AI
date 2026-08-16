@@ -1,0 +1,68 @@
+mission_id: M08
+prediction_protocol:
+  sequence:
+    - prediction
+    - action
+    - observation
+    - explanation
+    - generalization
+    - transfer
+experiments:
+  - id: E1
+    name: Beat the mean baseline
+    prediction_required: true
+    action: Compare the safe model with a training-mean baseline on the untouched test partition.
+    evidence:
+      - predicted_direction_of_change
+      - mae_rmse_r2_table
+      - unit_aware_explanation
+  - id: E2
+    name: Inspect residual behavior
+    prediction_required: true
+    action: Plot and slice held-out residuals by predicted value and selected feature ranges.
+    evidence:
+      - residual_plot
+      - residual_summary
+      - systematic_pattern_hypothesis
+  - id: E3
+    name: Estimate cross-validation variability
+    prediction_required: true
+    action: Run shuffled five-fold cross-validation only on the training partition.
+    evidence:
+      - fold_mae_values
+      - mean_and_standard_deviation
+      - comparison_with_test_mae
+  - id: E4
+    name: Diagnose capacity
+    prediction_required: true
+    action: Compare shallow, moderate and unrestricted decision trees using training and cross-validation error.
+    evidence:
+      - train_cv_gap
+      - underfit_diagnosis
+      - overfit_diagnosis
+  - id: E5
+    name: Inspect feature influence cautiously
+    prediction_required: true
+    action: Measure held-out permutation importance and state at least two interpretation limits.
+    evidence:
+      - importance_with_variability
+      - model_dependence_caveat
+      - non_causal_interpretation
+  - id: E6
+    name: Controlled leakage failure
+    prediction_required: true
+    action: Admit a post-outcome assessment, observe the deceptive score and repair the feature contract.
+    evidence:
+      - deceptively_strong_metrics
+      - availability_audit
+      - root_cause
+      - repaired_feature_set
+      - prevention_control
+  - id: E7
+    name: Invalid evaluation failure
+    prediction_required: true
+    action: Contrast an unrestricted tree evaluated on its training rows with its cross-validation error.
+    evidence:
+      - training_metric
+      - cross_validation_metric
+      - optimism_explanation

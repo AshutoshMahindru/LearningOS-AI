@@ -1,0 +1,22 @@
+mission: M08
+implementation_status: implemented
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+  diff_check: required
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: required
+adr: required
+runtime:
+  cpu_only: true
+  secrets_required: false
+  paid_api_required: false
+  network_required: false
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_shared_registries: false

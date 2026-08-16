@@ -1,0 +1,33 @@
+mission_id: M08
+required_evidence:
+  - id: system_boundary
+    description: Prediction timestamp, continuous target, permitted inputs and excluded post-outcome fields.
+  - id: prediction_log
+    description: Predictions recorded before baseline, residual, CV, capacity and leakage experiments.
+  - id: baseline_comparison
+    description: Held-out baseline and model MAE, RMSE and R2 with unit-aware interpretation.
+  - id: residual_diagnosis
+    description: Residual plots, numerical slices and a supported pattern diagnosis.
+  - id: cross_validation
+    description: Training-only fold scores, mean, variability and comparison with final test error.
+  - id: capacity_diagnosis
+    description: Training and validation evidence distinguishing underfit from overfit behavior.
+  - id: feature_influence
+    description: Held-out permutation result plus model-dependence, correlation and causality caveats.
+  - id: controlled_failure
+    description: Leakage symptom, availability audit, root cause, repair, verification and prevention control.
+  - id: invalid_evaluation
+    description: Training-only optimism compared with cross-validation evidence.
+  - id: decision_record
+    description: ADR covering model and evaluation protocol, alternatives, evidence, trade-offs and revisit conditions.
+  - id: formal_review
+    description: Review outcome with every comment accepted, rejected or deferred with reasoning.
+  - id: no_ai_transfer
+    description: Fresh regression system completed without AI-generated code or prose.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_selected_experiments: true
+  require_held_out_evaluation: true
+  require_failure_prevention: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited
