@@ -1,0 +1,39 @@
+mission_id: M15
+assessment:
+  mode: performance_diagnosis_and_transfer
+  transfer_required: true
+  pass_requires:
+    - label_vector_dimensions
+    - predict_results_before_execution
+    - apply_addition_and_subtraction_to_positions
+    - compute_norm_dot_cosine_euclidean_and_normalization
+    - rank_vectors_with_a_declared_metric
+    - diagnose_cosine_euclidean_disagreement
+    - reject_zero_vector_normalization
+    - defend_metric_choice_for_v04
+    - complete_fresh_no_ai_transfer
+  rubric:
+    representation:
+      weight: 20
+      evidence: Dimensions and the role of magnitude are explicit.
+    operations:
+      weight: 25
+      evidence: Vector operations and boundary cases are correct.
+    prediction:
+      weight: 15
+      evidence: Predictions are recorded before selected calculations.
+    diagnosis:
+      weight: 20
+      evidence: Metric disagreement is explained using direction, distance and normalization.
+    decision:
+      weight: 10
+      evidence: The ADR connects a metric to the intended invariant and consequences.
+    transfer:
+      weight: 10
+      evidence: The learner succeeds on fresh vectors without AI-generated code.
+  failure_conditions:
+    - unlabeled_coordinates
+    - treating_similarity_as_metric_independent
+    - interpreting_raw_dot_product_as_cosine
+    - silent_zero_vector_normalization
+    - ranking_without_prediction_or_explanation

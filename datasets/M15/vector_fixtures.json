@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "numeric_features": {
+    "dimensions": ["practice_minutes", "quiz_accuracy", "hints_used"],
+    "records": [
+      {"id": "session-alpha", "vector": [35.0, 0.82, 2.0]},
+      {"id": "session-beta", "vector": [20.0, 0.76, 5.0]},
+      {"id": "session-gamma", "vector": [50.0, 0.91, 1.0]}
+    ]
+  },
+  "geometry": {
+    "dimensions": ["x", "y"],
+    "start_position": [2.0, 1.0],
+    "displacement": [3.0, -2.0],
+    "expected_end_position": [5.0, -1.0]
+  },
+  "metric_disagreement": {
+    "dimensions": ["east_west", "north_south"],
+    "query": [1.0, 0.0],
+    "candidates": [
+      {"id": "same-direction-large-magnitude", "vector": [5.0, 0.0]},
+      {"id": "nearby-mixed-direction", "vector": [1.0, 0.8]},
+      {"id": "opposite-direction", "vector": [-1.0, 0.0]}
+    ],
+    "expected_top": {
+      "cosine": "same-direction-large-magnitude",
+      "euclidean": "nearby-mixed-direction"
+    }
+  },
+  "semantic_embeddings": {
+    "dimensions": ["vector_math", "retrieval", "cooking"],
+    "query": {"id": "how-vectors-measure-similarity", "vector": [0.9, 0.4, 0.0]},
+    "documents": [
+      {"id": "vector-operations", "vector": [0.95, 0.25, 0.0]},
+      {"id": "semantic-search", "vector": [0.65, 0.8, 0.05]},
+      {"id": "bread-recipe", "vector": [0.05, 0.05, 0.95]}
+    ],
+    "expected_cosine_order": ["vector-operations", "semantic-search", "bread-recipe"]
+  }
+}

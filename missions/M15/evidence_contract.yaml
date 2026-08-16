@@ -1,0 +1,26 @@
+mission_id: M15
+required_evidence:
+  - id: representation_map
+    description: Dimension labels and interpretations for numeric, geometric and semantic vectors.
+  - id: prediction_log
+    description: Predictions recorded before selected operations and rankings.
+  - id: operation_checks
+    description: Addition, subtraction, norm, normalization and dot-product calculations with invariants.
+  - id: similarity_ranking
+    description: Scored cosine and Euclidean rankings with ordering direction stated.
+  - id: controlled_failure_diagnosis
+    description: Evidence-based explanation of the deliberate cosine/Euclidean disagreement and normalization mistake.
+  - id: zero_vector_boundary
+    description: Observed rejection of zero-vector normalization and guardrail explanation.
+  - id: v04_measurement_report
+    description: Interpretable measurements suitable for the Mathematical Instrumentation Layer.
+  - id: metric_adr
+    description: A completed metric decision record using the supplied prompt.
+  - id: no_ai_transfer
+    description: Fresh representation and ranking completed without AI-generated code.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_selected_experiments: true
+  require_metric_and_preprocessing_disclosure: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited

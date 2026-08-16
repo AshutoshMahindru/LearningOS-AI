@@ -1,0 +1,61 @@
+mission_id: M15
+experiments:
+  - id: E1
+    name: Position and displacement
+    prediction_required: true
+    action: Add a displacement to a position, then recover the displacement by subtraction.
+    evidence:
+      - dimension_labels
+      - predicted_end_position
+      - observed_end_position
+      - inverse_check
+  - id: E2
+    name: Magnitude and direction
+    prediction_required: true
+    action: Compute a norm, normalize a nonzero vector and verify unit magnitude.
+    evidence:
+      - predicted_magnitude
+      - observed_magnitude
+      - normalized_vector
+      - unit_norm_check
+  - id: E3
+    name: Dot product and cosine
+    prediction_required: true
+    action: Compare alignment before and after removing magnitude with normalization.
+    evidence:
+      - dot_product
+      - cosine_similarity
+      - magnitude_explanation
+  - id: E4
+    name: Semantic similarity ranking
+    prediction_required: true
+    action: Rank the precomputed semantic fixtures with cosine similarity.
+    evidence:
+      - predicted_order
+      - scored_order
+      - interpretation
+  - id: E5
+    name: Controlled metric disagreement
+    prediction_required: true
+    action: Compare cosine and Euclidean rankings on a deliberately adversarial fixture.
+    evidence:
+      - cosine_ranking
+      - euclidean_ranking
+      - disagreement_diagnosis
+      - intended_invariant
+  - id: E6
+    name: Normalization boundary
+    prediction_required: true
+    action: Attempt to normalize a zero vector and diagnose why a safe implementation rejects it.
+    evidence:
+      - predicted_failure
+      - observed_failure
+      - guardrail_explanation
+  - id: E7
+    name: V04 measurement report
+    prediction_required: true
+    action: Produce a report containing magnitudes, dot products, cosine scores, distances and rankings.
+    evidence:
+      - measurement_report
+      - metric_choice
+      - adr
