@@ -1,0 +1,35 @@
+mission_id: M03
+approach: whole-first
+sequence:
+  - id: run_baseline
+    purpose: Run and interrogate a useful working Python program before formal language study.
+  - id: change_values
+    purpose: Modify inputs, constants and values and compare predicted with observed behavior.
+  - id: change_control_flow
+    purpose: Modify conditions and loops while tracing execution.
+  - id: change_functions
+    purpose: Modify function parameters, intermediate values and return behavior.
+  - id: change_data_structures
+    purpose: Inspect and modify lists and dictionaries used by the working program.
+  - id: debug_failures
+    purpose: Diagnose NameError, TypeError, KeyError, condition and off-by-one failures.
+  - id: controlled_failure
+    purpose: Trace one misleading symptom back to one narrow root cause.
+  - id: read_unfamiliar_code
+    purpose: Trace unfamiliar code before changing it.
+  - id: transfer_without_ai
+    purpose: Modify and repair a fresh program without AI-generated code.
+just_in_time_concepts:
+  - values_and_variables
+  - strings_and_numbers
+  - lists_and_dictionaries
+  - indexing_and_lookup
+  - conditions
+  - loops
+  - functions
+  - arguments_and_returns
+  - exceptions
+  - assertions
+  - execution_tracing
+source_references:
+  - python-tutorial

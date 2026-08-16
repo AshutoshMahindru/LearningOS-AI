@@ -1,0 +1,30 @@
+id: M03
+title: Modify Python Before Learning Python
+phase: P1
+flagship: V01
+objective: Gain Python fluency by modifying a working program and diagnosing failures before studying Python systematically.
+competencies:
+  - Python
+  - debugging
+pedagogy: whole-first
+formal_engineering_review: false
+sources:
+  - python-tutorial
+notebook: labs/M03_python_modification.ipynb
+requirements: requirements/m03.txt
+mission_test: tests/missions/test_m03.py
+execution:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+completion_requires:
+  - run_working_program_before_formal_study
+  - predict_before_modification
+  - modify_values_conditions_loops_functions_and_data_structures
+  - diagnose_multiple_python_failure_modes
+  - controlled_failure_trace_and_repair
+  - unfamiliar_code_reading
+  - no_ai_transfer_gate
+  - explain_changes_in_plain_language
