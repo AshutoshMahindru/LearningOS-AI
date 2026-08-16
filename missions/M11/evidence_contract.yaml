@@ -1,0 +1,33 @@
+mission_id: M11
+required_evidence:
+  - id: shallow_tree_baseline
+    description: Reproducible baseline metrics and a textual representation of the trained shallow tree.
+  - id: structure_explanation
+    description: Explanation of thresholds, nodes, branches, leaves, class counts, depth, and impurity using specific fitted nodes.
+  - id: individual_path_trace
+    description: At least two pre-action manual path predictions compared with observed node sequences.
+  - id: depth_sweep
+    description: max_depth comparison with tree size and train/test metrics.
+  - id: shallow_deep_comparison
+    description: Held-out diagnosis of the unconstrained tree and its generalization gap.
+  - id: perturbation_trace
+    description: One-feature counterfactual-to-the-model comparison with original and perturbed paths.
+  - id: min_samples_comparison
+    description: min_samples_leaf comparison including smallest observed leaf size.
+  - id: importance_interpretation
+    description: Ranked impurity-based importances plus limitations about correlation, instability, and causation.
+  - id: controlled_failure_repair
+    description: Overfitting hypothesis, constrained repair, unchanged-test comparison, and residual uncertainty.
+  - id: causal_claim_audit
+    description: Rejected causal claim, missing causal evidence, and safer model-specific rewrite.
+  - id: adr
+    description: Decision record choosing tree constraints for the stated use case with evidence, trade-offs, and revisit conditions.
+  - id: no_ai_transfer
+    description: Fresh textual-tree trace and interpretation completed without AI-generated code or prose.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_selected_experiments: true
+  require_held_out_evaluation: true
+  require_interpretation_scope_statement: true
+  require_transfer: true
+  prefilled_learner_evidence: prohibited

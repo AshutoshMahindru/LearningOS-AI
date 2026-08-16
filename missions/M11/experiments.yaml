@@ -1,0 +1,64 @@
+mission_id: M11
+experiments:
+  - id: E1
+    name: Individual decision paths
+    prediction_required: true
+    action: Manually predict the branch sequence for selected test rows, then verify it with decision_path.
+    evidence:
+      - predicted_branches
+      - observed_node_ids
+      - leaf_class_counts
+      - prediction_observation_comparison
+  - id: E2
+    name: max_depth sweep
+    prediction_required: true
+    action: Fit otherwise identical trees across several max_depth values.
+    evidence:
+      - predicted_complexity_direction
+      - node_count
+      - leaf_count
+      - train_accuracy
+      - test_accuracy
+  - id: E3
+    name: Shallow versus deep
+    prediction_required: true
+    action: Compare a constrained tree with an unconstrained tree on both train and test partitions.
+    evidence:
+      - predicted_generalization_gap
+      - measured_train_test_gap
+      - overfitting_diagnosis
+  - id: E4
+    name: One-feature perturbation
+    prediction_required: true
+    action: Hold three features constant, change one feature, and compare paths and predictions.
+    evidence:
+      - predicted_first_changed_branch
+      - original_path
+      - perturbed_path
+      - scope_limit
+  - id: E5
+    name: Minimum leaf size
+    prediction_required: true
+    action: Vary min_samples_leaf while holding the split and all other settings fixed.
+    evidence:
+      - predicted_leaf_count_direction
+      - smallest_leaf_size
+      - train_accuracy
+      - test_accuracy
+  - id: E6
+    name: Controlled overfitting failure
+    prediction_required: true
+    action: Fit an unconstrained tree to noisy labels and diagnose its apparent success using held-out evidence.
+    evidence:
+      - seductive_training_metric
+      - held_out_metric
+      - generalization_gap
+      - repair_constraint
+  - id: E7
+    name: Causal-claim audit
+    prediction_required: true
+    action: Evaluate the claim that increasing the most important feature will cause the target outcome.
+    evidence:
+      - verdict
+      - missing_causal_evidence
+      - safer_model_specific_statement

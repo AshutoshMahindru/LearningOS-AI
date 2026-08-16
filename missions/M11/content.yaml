@@ -1,0 +1,44 @@
+mission_id: M11
+approach: whole-first-interrogation
+sequence:
+  - id: run_shallow_tree
+    purpose: Begin with a trained, useful, deliberately shallow classifier.
+  - id: inspect_structure
+    purpose: Connect node arrays and an exported tree to thresholds, branches, leaves, sample counts, and predictions.
+  - id: build_impurity_intuition
+    purpose: Treat impurity reduction as making child groups less class-mixed than the parent.
+  - id: trace_individual_paths
+    purpose: Predict and verify the exact nodes traversed by selected rows.
+  - id: vary_depth
+    purpose: Measure how max_depth changes structure, train fit, and test behavior.
+  - id: compare_shallow_deep
+    purpose: Diagnose memorization using train/test comparisons rather than tree size alone.
+  - id: perturb_feature
+    purpose: Change one feature while holding the others fixed and explain any path change.
+  - id: constrain_leaf_size
+    purpose: Examine how min_samples_leaf prevents tiny terminal groups.
+  - id: qualify_importance
+    purpose: Report impurity-based feature importance as model behavior, not causal evidence.
+  - id: controlled_failure
+    purpose: Diagnose an over-deep tree and reject an unjustified causal conclusion.
+  - id: transfer_without_ai
+    purpose: Trace and critique a fresh textual tree without AI-generated help.
+concepts:
+  - threshold
+  - node
+  - left_and_right_branches
+  - leaf
+  - class_counts
+  - gini_impurity
+  - weighted_impurity_reduction
+  - depth
+  - max_depth
+  - min_samples_leaf
+  - decision_path
+  - train_test_generalization_gap
+  - feature_perturbation
+  - impurity_based_feature_importance
+  - association_not_causation
+source_references:
+  - sklearn-guide
+  - stanford-cs229
