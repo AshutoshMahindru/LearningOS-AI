@@ -3,6 +3,7 @@ boundary:
   inherited_from_m19: Gradients explain local loss change and the descent update.
   manipulated_here: Optimizer state, stochasticity, learning rate, and resulting dynamics.
   deferred_to_m21: End-to-end neural-network training and architecture internals.
+handoff_summary: M19 explains gradients; M20 manipulates learning dynamics; M21 consumes the monitored training policy.
 concepts:
   - learning rate scales each update but interacts with objective curvature
   - gradient descent uses the exact objective gradient
@@ -19,4 +20,3 @@ objective:
   interpretation: Unequal curvature exposes direction-specific stability limits.
 sequence_rule: Every experiment prediction must be recorded before its execution cell.
 claims_boundary: Reference traces are fixture behavior, not universal optimizer rankings.
-

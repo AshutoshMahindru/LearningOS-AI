@@ -12,15 +12,15 @@ Run exact gradient descent from the reference initialization with `learning_rate
 controlled cause is update scale. Diagnose stagnation from relative progress and
 update magnitudes rather than from an arbitrary single loss threshold.
 
-Small progress is not zero progress. The repair must preserve the objective,
+Small progress is not zero progress. Update scale is the one controlled cause. The repair must preserve the objective,
 initialization, gradient, and budget, then choose a rate supported by the sweep.
 
 ## Failure B: too-large learning rate
 
 Run the same experiment with `learning_rate = 0.21`. The high-curvature coordinate
 multiplier is `1 - learning_rate * 10`, so the parameter crosses zero while its
-magnitude expands. The controlled cause is the learning rate crossing the stability
-boundary; do not blame the gradient inherited from M19.
+magnitude expands. The learning rate crossing the stability boundary is the one
+controlled cause; do not blame the gradient inherited from M19.
 
 ## Evidence and smallest repair
 
@@ -33,4 +33,3 @@ boundary; do not blame the gradient inherited from M19.
 
 A repair is rejected if it changes curvature, initialization, step budget, loss
 function, gradient, or optimizer to hide the failure.
-
