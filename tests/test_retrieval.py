@@ -1,4 +1,3 @@
-import json
 import unittest
 from pathlib import Path
 
@@ -30,12 +29,22 @@ class RetrievalTests(unittest.TestCase):
         self.assertEqual(set(graph.blocking("M34")), {"M31", "M33"})
         self.assertIn("M15", graph.helpful("M13"))
 
-    def test_remote_lab_status_is_not_overclaimed(self):
+    def test_repository_lab_status_matches_implemented_wave(self):
         labs = LabRegistry(ROOT)
-        for mission in ["M01", "M02", "M03", "M08"]:
+        for number in range(1, 20):
+            mission = f"M{number:02d}"
             status = labs.status(mission)
-            self.assertFalse(status["repository_executable"])
-            self.assertTrue(status["source_artifact_available"])
+            self.assertTrue(status["repository_executable"], mission)
+            self.assertFalse(status["specification_only_in_source_package"], mission)
+
+        for number in range(20, 43):
+            mission = f"M{number:02d}"
+            status = labs.status(mission)
+            self.assertFalse(status["repository_executable"], mission)
+            self.assertTrue(status["specification_only_in_source_package"], mission)
+
+        for mission in ["M01", "M02", "M03", "M08"]:
+            self.assertTrue(labs.status(mission)["source_artifact_available"])
 
 
 if __name__ == "__main__":

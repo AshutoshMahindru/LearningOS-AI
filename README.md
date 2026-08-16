@@ -52,7 +52,7 @@ ADVANCE / TARGETED REPAIR
 3. Open [`dashboard.html`](dashboard.html) locally.
 4. Start **M01** in [`docs/MISSION_PLAYBOOK.md`](docs/MISSION_PLAYBOOK.md).
 5. Use the exact content route in [`docs/CONTENT_MAP_42_MISSIONS.md`](docs/CONTENT_MAP_42_MISSIONS.md).
-6. Record evidence under `tracking/`.
+6. Record learner evidence under `tracking/`; repository implementation status is tracked separately in `data/lab_status.json` and mission-local status files.
 7. Run `python tools/validate_repo.py` before committing structural changes.
 
 ## Flagship release spine
@@ -86,7 +86,11 @@ ADVANCE / TARGETED REPAIR
 
 ## Implementation status
 
-The architecture, 42-mission route, content map and apprenticeship overlays are instantiated. Existing executable starter notebooks are currently M01, M02, M03 and M08; the remaining mission labs are specifications to be implemented progressively rather than falsely marked complete.
+The architecture, 42-mission route, canonical 253-node graph, content routing and apprenticeship overlays are instantiated.
+
+**M01-M19 are implemented and repository-executable.** Their mission packages, tests and 19 source notebooks have passed combined minimal-runtime and full-dependency validation, including clean notebook execution. **M20-M42 remain specification-only** and must not be advertised as executable until they pass the same implementation and validation gates.
+
+Learner progress is intentionally separate from repository implementation progress: merging a mission does not mark a learner as having completed it.
 
 ## Repository map
 
@@ -98,6 +102,7 @@ ai-learning-os/
 ├── data/
 ├── labs/
 ├── datasets/
+├── missions/
 ├── prompts/
 ├── templates/
 ├── tracking/
@@ -107,10 +112,14 @@ ai-learning-os/
 └── .github/
 ```
 
+## Validation
+
+The default CI keeps a dependency-light runtime job and a full M01-M19 mission-validation job. The full job installs the union of mission requirements, runs repository and mission tests, validates source notebook invariants, and executes all repository-executable notebooks in fresh kernels.
+
 ## Source policy
 
 Prefer primary/official sources. The AI tutor supplements rather than replaces canonical material. Fast-moving implementation resources must be rechecked at the cadence recorded in `data/resource_library.csv`.
 
 ## Status
 
-**Merged architecture v1.0 — repository-ready.**
+**M01-M19 integrated and verified; M20-M42 pending implementation.**

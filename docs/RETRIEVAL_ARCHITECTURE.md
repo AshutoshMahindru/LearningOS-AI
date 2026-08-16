@@ -30,11 +30,10 @@ Tutor / CLI / future dashboard
 ## Current scope
 
 - The runtime mission graph covers M01-M42.
-- A bootstrap concept graph is present to exercise graph contracts.
-- The canonical 253-node knowledge graph is **not yet migrated**.
-- The source/content registry is a curated starter set, not the full canonical content map.
+- The canonical 253-node knowledge graph is migrated and validated by `tools/validate_repo.py`.
+- The source/content registry is a curated canonical routing layer; mission-local content files extend it without requiring every mission detail to live in one global registry.
 - Local retrieval uses bag-of-words vectors with cosine similarity. It is a graceful-degradation fallback, not a replacement for embeddings.
-- No notebook is currently present on this remote branch. M01, M02, M03 and M08 are recorded only as executable source artifacts awaiting migration.
+- M01-M19 now have repository-executable notebooks and validated mission packages. M20-M42 remain specification-only until implemented and validated.
 
 ## Contract for external retrieval
 
