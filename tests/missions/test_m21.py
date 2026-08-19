@@ -296,13 +296,15 @@ class M21RuntimeTests(unittest.TestCase):
     def test_shuffled_label_failure_is_near_baseline(self):
         self.assertLess(self.shuffle.test_accuracy, 0.20)
         self.assertLess(abs(self.shuffle.test_accuracy - self.shuffle.majority_baseline_accuracy), 0.06)
+        # Held-out labels stay true. train_accuracy is scored against the
+        # permuted fit labels, so it is not the near-baseline diagnosis stat.
 
     def test_tiny_capacity_and_confusion_matrix_are_observable(self):
         self.assertLess(self.tiny.test_accuracy, self.reference.test_accuracy - 0.10)
         self.assertEqual(sum(map(sum, self.reference.confusion_matrix)), self.reference.test_size)
         true_class, predicted_class, count = CORE.most_confused_pair(self.reference)
         self.assertNotEqual(true_class, predicted_class)
-        self.assertGreaterEqual(count, 0)
+        self.assertGreaterEqual(count, 1)
 
 
 if __name__ == "__main__":

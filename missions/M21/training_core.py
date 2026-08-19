@@ -39,7 +39,7 @@ class TrainingRun:
     feature_count: int
     class_count: int
     majority_baseline_accuracy: float
-    train_accuracy: float
+    train_accuracy: float  # scored against the labels passed to fit
     test_accuracy: float
     macro_f1: float
     iterations: int
@@ -235,7 +235,7 @@ def train_black_box(
         feature_count=int(X.shape[1]),
         class_count=int(len(classes)),
         majority_baseline_accuracy=float(baseline),
-        train_accuracy=float(d["accuracy_score"](y_train, train_predictions)),
+        train_accuracy=float(d["accuracy_score"](fit_labels, train_predictions)),
         test_accuracy=float(d["accuracy_score"](y_test, test_predictions)),
         macro_f1=float(d["f1_score"](y_test, test_predictions, average="macro")),
         iterations=int(network.n_iter_),
@@ -289,6 +289,9 @@ def print_run_evidence(run: TrainingRun, *, label: str = "run") -> None:
 
     print(f"=== {label} ===")
     print("majority_baseline_accuracy", round(run.majority_baseline_accuracy, 4))
+    print("train_accuracy (vs labels used at fit)", round(run.train_accuracy, 4))
+    if run.shuffled_labels:
+        print("note: shuffled_labels=True; train_accuracy is not vs the original y_train")
     print("compact_report", compact_report(run))
     print("loss_curve", [round(value, 4) for value in run.loss_curve])
     print("validation_scores", [round(value, 4) for value in run.validation_scores])
