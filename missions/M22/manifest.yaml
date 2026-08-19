@@ -1,0 +1,90 @@
+id: M22
+title: Open the Neuron and Layer
+phase: P4
+flagship: V05
+objective: Decompose the network into neurons, activations and layers.
+competencies:
+  - neurons
+  - activations
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: false
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M21
+  helpful: []
+handoff:
+  receives: M21 black-box training evidence, accepted hidden-layer configuration, and the need to explain the internal layer without yet discussing gradients
+  provides: M23 explicit layer equations, shape contracts, activation placement, and trusted hand-computed reference outputs
+learning_sequence:
+  - restate the M21 black-box configuration without opening training mechanics
+  - predict one fixed neuron output before calculation
+  - separate weighted sum, bias, and activation
+  - sweep a declared pre-activation sequence through ReLU, sigmoid, and tanh
+  - lift the neuron to a dense layer and annotate every dimension
+  - run a batch and reconcile row orientation with M16
+  - compose two affine layers with and without a nonlinearity
+  - read the layer implementation and predict malformed-shape behavior
+  - diagnose the controlled layer-boundary failure
+  - complete the no-AI neuron/layer transfer
+  - author a teaching activation/width ADR
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M22_neuron_layer.ipynb
+instrumentation: missions/M22/neuron_layer_core.py
+requirements: requirements/m22.txt
+mission_test: tests/missions/test_m22.py
+reference_fixture:
+  neuron_x: [1.0, 2.0]
+  neuron_weights: [0.5, -0.25]
+  neuron_bias: 0.5
+  neuron_preactivation: 0.5
+  layer_layout: row-batch X (batch, n_in) times W (n_in, n_out) plus b (n_out,)
+  activation_placement: after the affine map
+canonical_sources:
+  - 3b1b-neural-networks
+  - fastai-course
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_gradient_or_backprop: required
+  no_multilayer_inference_stack: required
+  no_framework_autograd: required
+mission_artifacts:
+  - missions/M22/README.md
+  - missions/M22/manifest.yaml
+  - missions/M22/content.yaml
+  - missions/M22/experiments.yaml
+  - missions/M22/code_reading.md
+  - missions/M22/no_ai_gate.md
+  - missions/M22/controlled_failure.md
+  - missions/M22/assessment.yaml
+  - missions/M22/evidence_contract.yaml
+  - missions/M22/flagship_integration.md
+  - missions/M22/review_brief.md
+  - missions/M22/adr_prompt.md
+  - missions/M22/status.yaml
+  - missions/M22/neuron_layer_core.py
+  - labs/M22_neuron_layer.ipynb
+  - requirements/m22.txt
+  - tests/missions/test_m22.py
+  - tests/test_m22.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  numpy_forward_pass_stack_deferred_to_m23: true
+  backpropagation_deferred_to_m24: true
+  pytorch_training_loop_deferred_to_m25: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false
