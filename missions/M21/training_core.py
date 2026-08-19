@@ -11,7 +11,6 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import dataclass
 import math
-from typing import Sequence
 import warnings
 
 
@@ -114,6 +113,55 @@ def dataset_summary() -> dict[str, int | float]:
     }
 
 
+def _split_digits(
+    d: dict,
+    *,
+    test_size: float,
+    split_seed: int,
+):
+    X, y = d["load_digits"](return_X_y=True)
+    X_train, X_test, y_train, y_test = d["train_test_split"](
+        X,
+        y,
+        test_size=test_size,
+        random_state=split_seed,
+        stratify=y,
+    )
+    return X, y, X_train, X_test, y_train, y_test
+
+
+def inspect_holdout_split(
+    *,
+    split_seed: int = DEFAULT_SPLIT_SEED,
+    test_size: float = DEFAULT_TEST_SIZE,
+) -> dict[str, object]:
+    """Return split sizes and majority baseline without fitting a network."""
+
+    if not 0.1 <= test_size <= 0.5:
+        raise ValueError("test_size must be between 0.1 and 0.5")
+    d = _require_dependencies()
+    X, _y, X_train, X_test, y_train, y_test = _split_digits(
+        d, test_size=test_size, split_seed=split_seed
+    )
+    counts = Counter(int(value) for value in y_test)
+    majority_class, majority_count = max(counts.items(), key=lambda item: item[1])
+    return {
+        "split_seed": int(split_seed),
+        "test_fraction": float(test_size),
+        "train_size": int(len(y_train)),
+        "test_size": int(len(y_test)),
+        "feature_count": int(X.shape[1]),
+        "train_feature_count": int(X_train.shape[1]),
+        "test_feature_count": int(X_test.shape[1]),
+        "class_count": int(len(counts)),
+        "test_class_counts": dict(sorted(counts.items())),
+        "majority_class": int(majority_class),
+        "majority_baseline_accuracy": float(majority_count / len(y_test)),
+        "preprocessing": "StandardScaler fitted on training data only through a Pipeline",
+        "early_stopping_split": "validation_fraction=0.15 taken from the training split only",
+    }
+
+
 def train_black_box(
     *,
     split_seed: int = DEFAULT_SPLIT_SEED,
@@ -136,13 +184,8 @@ def train_black_box(
     )
     d = _require_dependencies()
     np = d["np"]
-    X, y = d["load_digits"](return_X_y=True)
-    X_train, X_test, y_train, y_test = d["train_test_split"](
-        X,
-        y,
-        test_size=test_size,
-        random_state=split_seed,
-        stratify=y,
+    X, _y, X_train, X_test, y_train, y_test = _split_digits(
+        d, test_size=test_size, split_seed=split_seed
     )
 
     fit_labels = y_train
@@ -227,10 +270,29 @@ def compact_report(run: TrainingRun) -> dict[str, float | int | bool | None]:
         "learning_rate_init": run.learning_rate_init,
         "model_seed": run.model_seed,
         "shuffled_labels": run.shuffled_labels,
+        "scale_inputs": run.scale_inputs,
         "iterations": run.iterations,
+        "majority_baseline_accuracy": round(run.majority_baseline_accuracy, 4),
         "train_accuracy": round(run.train_accuracy, 4),
         "test_accuracy": round(run.test_accuracy, 4),
         "macro_f1": round(run.macro_f1, 4),
+        "first_loss": round(run.loss_curve[0], 4) if run.loss_curve else None,
         "final_loss": round(run.final_loss, 4),
+        "n_loss_curve_points": len(run.loss_curve),
+        "n_validation_scores": len(run.validation_scores),
         "best_validation_score": round(run.best_validation_score, 4),
     }
+
+
+def print_run_evidence(run: TrainingRun, *, label: str = "run") -> None:
+    """Print baseline, traces, metrics, and confusion matrix without opening internals."""
+
+    print(f"=== {label} ===")
+    print("majority_baseline_accuracy", round(run.majority_baseline_accuracy, 4))
+    print("compact_report", compact_report(run))
+    print("loss_curve", [round(value, 4) for value in run.loss_curve])
+    print("validation_scores", [round(value, 4) for value in run.validation_scores])
+    print("confusion_matrix classes", run.classes)
+    for row in run.confusion_matrix:
+        print(row)
+    print("most_confused_pair", most_confused_pair(run))
