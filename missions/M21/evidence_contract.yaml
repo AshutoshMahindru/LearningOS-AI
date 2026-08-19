@@ -1,0 +1,71 @@
+mission_id: M21
+version: 1
+purpose: Define acceptable learner-produced black-box neural-training evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_training_action
+      - falsifiable_metric_or_curve_claim
+      - observation_and_revision
+  - id: reference_training_run
+    artifact_type: reproducible_training_report
+    must_show:
+      - split_and_seed_policy
+      - declared_preprocessing_and_estimator_configuration
+      - majority_baseline
+      - loss_curve_and_validation_scores
+      - train_accuracy_test_accuracy_and_macro_f1
+      - confusion_matrix
+  - id: seed_sensitivity
+    artifact_type: controlled_replay_comparison
+    must_show:
+      - exact_same_seed_replay
+      - one_different_model_seed
+      - bounded_interpretation_without_cherry_picking
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - one_iteration_undertraining
+      - shuffled_training_labels
+      - smallest_repair
+      - preserved_invariants
+  - id: capacity_comparison
+    artifact_type: controlled_comparison_table
+    must_show:
+      - reference_hidden_units
+      - tiny_hidden_units
+      - fixed_split_seed_optimizer_and_budget
+      - no_universal_capacity_claim
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - split_boundary
+      - preprocessing_fit_boundary
+      - estimator_fit_call
+      - held_out_evaluation_boundary
+      - no_internal_network_inspection
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: training_acceptance_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - acceptance_metrics
+      - seed_and_replay_policy
+      - monitored_training_signals
+      - rollback_and_revisit_triggers
+      - alternatives_trade_offs_owner_status_and_date
+quality_bar:
+  - Held-out test data never influences fitting or early stopping.
+  - Claims cite observable metrics or curves rather than invented neuron-level explanations.
+  - Same-seed replay and different-seed sensitivity are both retained.
+  - Failures are repaired by restoring the named contract rather than changing multiple knobs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: false
+  prefilled_learner_evidence: prohibited

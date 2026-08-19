@@ -1,0 +1,30 @@
+mission: M21
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped whole-system predictions before each training action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  baseline_and_holdout:
+    evidence: Majority baseline plus held-out accuracy and macro F1 from a fit-excluded test set.
+    pass: Learner distinguishes fitting evidence from held-out generalization evidence.
+  learning_curve_reasoning:
+    evidence: Training-loss and validation-score traces for the reference run.
+    pass: Claims are bounded to the observed run and do not invent internal mechanisms.
+  reproducibility:
+    evidence: Exact same-seed replay plus different-seed sensitivity comparison.
+    pass: Same configuration and seed replay exactly; changed seed is reported rather than cherry-picked.
+  controlled_failure_diagnosis:
+    evidence: Undertraining and shuffled-label predictions, diagnoses, smallest repairs, and reruns.
+    pass: Each failure names one controlled cause and preserves all other declared invariants.
+  capacity_reasoning:
+    evidence: Reference-versus-tiny-capacity comparison under fixed controls.
+    pass: Learner reports trade-offs without claiming larger networks are universally better.
+  code_reading:
+    evidence: Annotated training-harness flow from split through held-out evaluation.
+    pass: Learner identifies fit boundaries and avoids weight, activation, forward-pass, and backprop inspection.
+  no_ai_gate:
+    evidence: Independent whole-system diagnosis and transfer defense.
+    pass: Quantitative reasoning, failure isolation, rollback logic, and oral defense are correct.
+  adr:
+    evidence: Learner-authored black-box neural training acceptance policy.
+    pass: Acceptance metrics, seed policy, monitoring, failure response, alternatives, owner, status, and revisit triggers are complete.
