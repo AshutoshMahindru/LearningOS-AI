@@ -1,0 +1,41 @@
+mission: M30
+controls:
+  d_model: 4
+  n_heads: 2
+  d_head: 2
+  d_ff: 8
+  activation: relu
+  convention: pre_norm
+  scale: inverse_sqrt_d_k
+  softmax_axis: keys
+  teaching_sequences:
+    cash: [river, bank, cash]
+    water: [river, bank, water]
+  prediction_required_before_action: true
+  no_llm_training_or_inference: true
+experiments:
+  - id: head-decomposition
+    prediction_required: true
+    change: Inspect per-head outputs before merge and output projection.
+    observation: Verify head shapes, merge width, and reconstructed projected output.
+    invariant: Input tensor and projection matrices stay fixed.
+  - id: residual-ablation
+    prediction_required: true
+    change: Remove the attention residual add in the teaching fixture.
+    observation: Observe changed residual-stream statistics without training claims.
+    invariant: Learned parameters, mask, and convention stay fixed.
+  - id: norm-placement
+    prediction_required: true
+    change: Compare labeled pre-norm and post-norm on the same parameters.
+    observation: Observe different named checkpoints and state architecture dependence.
+    invariant: Same parameters and input; only graph order is labeled and changed.
+  - id: feed-forward-change
+    prediction_required: true
+    change: Switch only the FFN activation from ReLU to identity.
+    observation: Confirm the attention residual is unchanged while FFN hidden/output move.
+    invariant: Attention path, residual adds, and FFN weights stay fixed.
+  - id: reference-parity
+    prediction_required: true
+    change: Compare named intermediates with the trusted pre-norm golden fixture.
+    observation: Require tolerance at each TRACE_CHECKPOINTS boundary.
+    invariant: Same parameters, input, convention, and defect-free path.

@@ -1,0 +1,36 @@
+mission: M30
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped block predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  dataflow_and_shapes:
+    evidence: Annotated x/q_heads/concat/residual/ffn/output shapes on the teaching block.
+    pass: Shapes follow (B, T, D), (B, T, H, d_head), (B, T, H*d_head), (B, T, d_ff).
+  head_decomposition:
+    evidence: Per-head outputs before merge and W_O, plus an explicit no-mythology statement.
+    pass: Merge reconstructs concat; heads are not assigned unsupported human roles.
+  residual_identity:
+    evidence: Independent stream + sublayer arithmetic matching attn_add and ffn_add.
+    pass: Residual is defended as a matching-shape add, including after ablation.
+  declared_norm_convention:
+    evidence: Pre-norm versus labeled post-norm on fixed parameters.
+    pass: Placement is treated as architecture-dependent, not a universal rule.
+  feed_forward_per_position:
+    evidence: Activation or width change with the attention residual held fixed.
+    pass: FFN is a position-wise MLP; it does not remix tokens.
+  reference_parity:
+    evidence: Named-checkpoint comparison against the golden pre-norm fixture.
+    pass: Tolerance holds at each TRACE_CHECKPOINTS boundary on the defect-free path.
+  controlled_failure_diagnosis:
+    evidence: Symptom, residual/norm hypothesis, first_divergence, repair_block from the broken trace, regression.
+    pass: Diagnosis precedes repair; only residual addend or first-norm boundary is restored.
+  code_reading:
+    evidence: Annotated split -> M29 call -> merge -> W_O -> residual -> LN -> FFN flow.
+    pass: Learner predicts shapes and the pre-norm residual identity; no M31 trainer inspection.
+  no_ai_gate:
+    evidence: Independent diagram, shapes, residual/LN arithmetic, wrong-placement call, M29-inside-block list.
+    pass: Arithmetic and convention reasoning are correct without generated help.
+  adr:
+    evidence: Learner-authored V06 teaching-block convention record.
+    pass: Pre/post-norm, activation, head dims, checkpoints, and version identity are complete without training claims.
