@@ -19,6 +19,11 @@ experiments:
     change: Inspect per-head outputs before merge and output projection.
     observation: Verify head shapes, merge width, and reconstructed projected output.
     invariant: Input tensor and projection matrices stay fixed.
+  - id: output-projection
+    prediction_required: true
+    change: Replace identity W_O with a half-scale matrix.
+    observation: First divergence is attn_projected; concat is unchanged.
+    invariant: Input, Q/K/V, and head split stay fixed.
   - id: residual-ablation
     prediction_required: true
     change: Remove the attention residual add in the teaching fixture.

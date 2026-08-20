@@ -196,6 +196,7 @@ class M30StaticContractTests(unittest.TestCase):
             ("predict-whole", "run-whole"),
             ("predict-m29-sublayer", "run-m29-sublayer"),
             ("predict-heads", "run-heads"),
+            ("predict-wo", "run-wo"),
             ("predict-residual", "run-residual"),
             ("predict-ablation", "run-ablation"),
             ("predict-norm", "run-norm"),
@@ -215,7 +216,7 @@ class M30StaticContractTests(unittest.TestCase):
         markdown = "\n".join(
             cell_source(cell) for cell in cells if cell.get("cell_type") == "markdown"
         )
-        self.assertGreaterEqual(markdown.count("Predict before running"), 12)
+        self.assertGreaterEqual(markdown.count("Predict before running"), 13)
         for phrase in (
             "predict → act → observe → explain",
             "timestamp",
@@ -611,6 +612,18 @@ class M30RuntimeTests(unittest.TestCase):
             )
         with self.assertRaises(ValueError):
             CORE.transformer_block(CORE.X_CASH_CONTEXT, convention="rmsnorm")
+        with self.assertRaises(ValueError):
+            CORE.transformer_block(
+                CORE.X_CASH_CONTEXT,
+                convention="post_norm",
+                defect="residual_wrong_branch",
+            )
+        with self.assertRaises(ValueError):
+            CORE.transformer_block(
+                CORE.X_CASH_CONTEXT,
+                convention="post_norm",
+                defect="norm_wrong_boundary",
+            )
 
     def test_transfer_fixture_is_hand_computable_without_spoiling_the_gate(self):
         residual = independent_add(CORE.TRANSFER_X, CORE.TRANSFER_SUBLAYER)

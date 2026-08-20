@@ -684,6 +684,8 @@ def transformer_block(
     skip = _normalize_skip(skip_residual)
     if defect_key != "none" and skip is not None:
         raise ValueError("do not mix a named defect with residual ablation")
+    if declared == "post_norm" and defect_key != "none":
+        raise ValueError("do not mix labeled post_norm with a named defect")
     sequence = as_sequence(x, name="X", last_dim=block_params.d_model)
 
     use_pre_attn_norm = True
