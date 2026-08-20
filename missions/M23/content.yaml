@@ -1,0 +1,22 @@
+mission: M23
+boundary:
+  inherited_from_m22: Affine-then-activate dense layers, row-batch shapes, bias as a translation, and hand-computed first-layer reference outputs.
+  inherited_from_m16: Row-batch orientation — one example per row, features as columns, trailing-axis broadcast.
+  manipulated_here: NumPy matrix multiplication, bias broadcasting, two-layer composition with named intermediates, batches, logits, and stable class-axis softmax.
+  deferred_to_m24: Parameter gradients, chain-rule credit assignment, and learning updates.
+  deferred_to_m25: Framework autograd and a hand-authored PyTorch training loop.
+handoff_summary: M22 opens the neuron and layer; M23 reconstructs a multi-layer forward pass from those equations; M24 may assign blame only after named intermediates and forward parity are trusted.
+concepts:
+  - a forward pass is a named sequence of array operations, not a training loop
+  - bias broadcasts along the batch axis because it is shaped (n_out,)
+  - logits are unnormalized class scores; probabilities are a simplex along the class axis
+  - stable softmax subtracts the per-example maximum before exp
+  - softmax must reduce the class axis, never the batch axis
+  - a batch is stacked singletons; reordering rows reorders outputs
+  - mismatch diagnosis compares named intermediates, not only argmax
+  - changing one weight at inference time is not backpropagation
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M23 may explain inference composition, broadcasting, logits, and softmax from array operations. It may not introduce gradients, backpropagation, losses, or a framework training loop.
+canonical_sources:
+  - numpy-quickstart
+  - 3b1b-neural-networks
