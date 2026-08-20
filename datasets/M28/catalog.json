@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "provenance": {
+    "authored_for": "M28",
+    "kind": "synthetic-teaching-fixture",
+    "downloaded": false,
+    "network_required": false,
+    "personal_data": false
+  },
+  "corpus": [
+    {
+      "id": "d-password-forgot",
+      "text": "I forgot my password and cannot sign in.",
+      "tags": [
+        "account",
+        "paraphrase-set"
+      ]
+    },
+    {
+      "id": "d-login-reset",
+      "text": "Please reset the login credentials.",
+      "tags": [
+        "account",
+        "paraphrase-set",
+        "lexical-trap-source"
+      ]
+    },
+    {
+      "id": "d-cannot-signin",
+      "text": "I cannot sign in to my account.",
+      "tags": [
+        "account",
+        "paraphrase-set",
+        "low-overlap"
+      ]
+    },
+    {
+      "id": "d-printer-reset",
+      "text": "Please reset the printer.",
+      "tags": [
+        "device",
+        "lexical-trap"
+      ]
+    },
+    {
+      "id": "d-printer-queue",
+      "text": "The printer needs a reset because the queue is stuck.",
+      "tags": [
+        "device",
+        "long-doc"
+      ]
+    },
+    {
+      "id": "d-approve-refund",
+      "text": "Approve the customer refund.",
+      "tags": [
+        "refund",
+        "negation-pair"
+      ]
+    },
+    {
+      "id": "d-deny-refund",
+      "text": "Do not approve the customer refund.",
+      "tags": [
+        "refund",
+        "negation-pair"
+      ]
+    },
+    {
+      "id": "d-pay-fifty",
+      "text": "The customer paid fifty dollars.",
+      "tags": [
+        "payment",
+        "numeric-pair"
+      ]
+    },
+    {
+      "id": "d-pay-thousand",
+      "text": "The customer paid five thousand dollars.",
+      "tags": [
+        "payment",
+        "numeric-pair"
+      ]
+    },
+    {
+      "id": "d-ticket-4412",
+      "text": "Ticket 4412 is waiting for inspection.",
+      "tags": [
+        "ticket",
+        "entity-pair"
+      ]
+    },
+    {
+      "id": "d-ticket-4413",
+      "text": "Ticket 4413 is waiting for inspection.",
+      "tags": [
+        "ticket",
+        "entity-pair"
+      ]
+    },
+    {
+      "id": "d-rain",
+      "text": "Rain is expected tomorrow in the valley.",
+      "tags": [
+        "weather",
+        "domain"
+      ]
+    },
+    {
+      "id": "d-legal",
+      "text": "The service agreement forbids assignment.",
+      "tags": [
+        "legal",
+        "domain"
+      ]
+    },
+    {
+      "id": "d-invoice",
+      "text": "Please process invoice 99281 now.",
+      "tags": [
+        "payment",
+        "ticket"
+      ]
+    }
+  ],
+  "queries": [
+    {
+      "id": "q-password",
+      "text": "I forgot my password and cannot sign in.",
+      "experiment": "useful-whole",
+      "relevant": [
+        "d-password-forgot",
+        "d-login-reset",
+        "d-cannot-signin"
+      ],
+      "traps": [
+        "d-printer-reset",
+        "d-printer-queue"
+      ]
+    },
+    {
+      "id": "q-paraphrase",
+      "text": "Please reset my login password.",
+      "experiment": "paraphrase",
+      "relevant": [
+        "d-login-reset",
+        "d-password-forgot",
+        "d-cannot-signin"
+      ],
+      "traps": [
+        "d-printer-reset",
+        "d-printer-queue"
+      ]
+    },
+    {
+      "id": "q-printer",
+      "text": "Please reset the printer.",
+      "experiment": "lexical-semantic",
+      "relevant": [
+        "d-printer-reset",
+        "d-printer-queue"
+      ],
+      "traps": [
+        "d-login-reset"
+      ]
+    },
+    {
+      "id": "q-low-overlap",
+      "text": "I cannot access my account.",
+      "experiment": "lexical-semantic",
+      "relevant": [
+        "d-cannot-signin",
+        "d-password-forgot",
+        "d-login-reset"
+      ],
+      "traps": [
+        "d-printer-reset"
+      ]
+    },
+    {
+      "id": "q-negation",
+      "text": "Do not approve the customer refund.",
+      "experiment": "negation",
+      "relevant": [
+        "d-deny-refund"
+      ],
+      "hard_neighbor": "d-approve-refund"
+    },
+    {
+      "id": "q-numeric",
+      "text": "The customer paid fifty dollars.",
+      "experiment": "numeric",
+      "relevant": [
+        "d-pay-fifty"
+      ],
+      "hard_neighbor": "d-pay-thousand"
+    },
+    {
+      "id": "q-entity",
+      "text": "ticket 4412",
+      "experiment": "entity",
+      "relevant": [
+        "d-ticket-4412"
+      ],
+      "hard_neighbor": "d-ticket-4413"
+    },
+    {
+      "id": "q-domain",
+      "text": "weather forecast for tomorrow",
+      "experiment": "domain",
+      "relevant": [
+        "d-rain"
+      ],
+      "traps": [
+        "d-legal",
+        "d-invoice"
+      ]
+    }
+  ],
+  "expected": {
+    "q-password_top3": [
+      "d-password-forgot",
+      "d-cannot-signin",
+      "d-login-reset"
+    ],
+    "q-paraphrase_top3": [
+      "d-login-reset",
+      "d-password-forgot",
+      "d-cannot-signin"
+    ],
+    "q-printer_top2": [
+      "d-printer-reset",
+      "d-printer-queue"
+    ],
+    "q-negation_top2": [
+      "d-deny-refund",
+      "d-approve-refund"
+    ],
+    "q-numeric_top2": [
+      "d-pay-fifty",
+      "d-pay-thousand"
+    ],
+    "q-entity_top2": [
+      "d-ticket-4412",
+      "d-ticket-4413"
+    ],
+    "q-domain_top1": "d-rain",
+    "q-low-overlap_top3": [
+      "d-cannot-signin",
+      "d-password-forgot",
+      "d-login-reset"
+    ],
+    "mixed_password_top3": [
+      "d-printer-queue",
+      "d-printer-reset",
+      "d-login-reset"
+    ],
+    "negation_approve_score": 0.911699,
+    "numeric_thousand_score": 0.945173,
+    "entity_margin": 0.000617,
+    "printer_vs_login_cosine": {
+      "printer": 1.0,
+      "login": 0.316481
+    }
+  },
+  "pairwise_subset": [
+    "d-password-forgot",
+    "d-login-reset",
+    "d-printer-reset",
+    "d-approve-refund",
+    "d-deny-refund",
+    "d-rain"
+  ]
+}

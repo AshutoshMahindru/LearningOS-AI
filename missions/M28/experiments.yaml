@@ -1,0 +1,38 @@
+mission: M28
+controls:
+  embedding_family: v06-teaching-embed
+  embedding_model: v06-teaching-meanpool
+  embedding_version: v06.1
+  dimensions: 12
+  metric: cosine
+  normalization: l2
+  pooling: mean
+  offline_fixture: datasets/M28/embeddings.json
+  prediction_required_before_action: true
+  no_attention_or_service: true
+experiments:
+  - id: paraphrase-retrieval
+    prediction_required: true
+    change: Replace a password/login query with a paraphrase.
+    observation: Compare top neighbors and the margin to printer traps.
+    invariant: Corpus and vector model/version fixed.
+  - id: lexical-semantic-disagreement
+    prediction_required: true
+    change: Use a high-overlap/different-meaning pair and a low-overlap/similar-meaning pair.
+    observation: Compare Jaccard rank with cosine rank on the same corpus.
+    invariant: Same corpus and encoder.
+  - id: negation-numeric-hard-case
+    prediction_required: true
+    change: Change only negation or a critical number/entity, then inspect a domain query.
+    observation: Deceptively high cosine for approve-vs-deny, fifty-vs-thousand, and 4412-vs-4413; weather stays in-domain.
+    invariant: Other text and the encoder stay fixed.
+  - id: normalization-policy
+    prediction_required: true
+    change: Compare declared cosine-on-L2 with inner product on sum-pooled raw vectors.
+    observation: Cosine ranking stays scale-invariant; inner product prefers the long document.
+    invariant: Same texts and token table.
+  - id: version-compatibility
+    prediction_required: true
+    change: Score a v06.1 query against v06.2 swapped-axis unnormalized corpus vectors with the provenance gate off.
+    observation: Unchecked cosine ranking looks like retrieval; the gate rejects the mix.
+    invariant: No silent mixing after repair.

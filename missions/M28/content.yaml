@@ -1,0 +1,21 @@
+mission: M28
+boundary:
+  inherited_from_m15: Named dimensions, L2, cosine, inner product, ranking, and the fact that a score is a chosen metric rather than an intrinsic property.
+  inherited_from_m27: Text becomes tokens and IDs with a named tokenizer and an honest token budget. This mission does not re-teach segmentation, specials, padding, or truncation.
+  manipulated_here: Sentence and document vectors, width, mean pooling, L2 normalization, cosine ranking, nearest neighbors, lexical versus semantic disagreement, hard cases (negation, numbers, entities, domain shift), and provenance compatibility.
+  deferred_to_m29: Attention, queries/keys/values, softmax weights, and context-dependent token vectors.
+  deferred_to_m33: A retrieval service, index, filters, latency, and production chunk identity beyond this tiny corpus.
+handoff_summary: M15 supplies metric discipline; M27 supplies the text boundary; M28 attaches offline vectors with a mix-or-refuse contract; M29/M33 consume the intuition and the fixtures.
+concepts:
+  - an embedding is a learned vector used operationally for similarity
+  - cosine measures direction after (or via) normalization
+  - nearest-neighbor rank is not a relevance oracle
+  - lexical overlap and embedding rank can disagree
+  - negation, numbers, entities, and domain shift are honest hard cases
+  - metric and normalization are a contract, not a default
+  - model, version, width, metric, normalization, and pooling must match before scoring
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M28 may explain embeddings, cosine, ranking, lexical baselines, hard cases, and provenance. It may not introduce attention or a search service.
+canonical_sources:
+  - sentence-transformers
+  - hf-llm-course

@@ -1,0 +1,101 @@
+id: M28
+title: Search Meaning with Embeddings
+phase: P5
+flagship: V06
+objective: Use embeddings to retrieve semantically related items.
+competencies:
+  - embeddings
+  - semantic similarity
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M15
+    - M27
+  helpful: []
+handoff:
+  receives: M15 cosine/vector ranking and M27 token/text boundary; no attention or search service
+  provides: M29 receives contextual vector intuition; M33 receives a validated embedding/metric/provenance contract and retrieval fixtures
+learning_sequence:
+  - inspect bundled texts, vector shape, norms, and provenance
+  - predict nearest items before computing similarities
+  - compute pairwise cosine similarity
+  - rank neighbors and inspect matches and misses
+  - compare lexical overlap with embedding ranking
+  - test paraphrase, negation, numeric, entity, and domain cases
+  - verify the declared L2/cosine policy against inner-product length bias
+  - introduce mismatched vector provenance
+  - diagnose the compatibility failure and refuse silent mixing
+  - complete no-AI ranking on a fresh vector set
+  - author a V06/V08 embedding provenance ADR
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M28_embeddings.ipynb
+instrumentation: missions/M28/embedding_core.py
+requirements: requirements/m28.txt
+mission_test: tests/missions/test_m28.py
+reference_fixture:
+  embedding_family: v06-teaching-embed
+  embedding_model: v06-teaching-meanpool
+  embedding_version: v06.1
+  dimensions: 12
+  metric: cosine
+  normalization: l2
+  pooling: mean
+  mismatch_model: v06-teaching-meanpool-alt
+  mismatch_version: v06.2
+canonical_sources:
+  - sentence-transformers
+  - hf-llm-course
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_attention: required
+  no_search_service: required
+  no_network_encoder_download: required
+mission_artifacts:
+  - missions/M28/README.md
+  - missions/M28/manifest.yaml
+  - missions/M28/content.yaml
+  - missions/M28/experiments.yaml
+  - missions/M28/code_reading.md
+  - missions/M28/no_ai_gate.md
+  - missions/M28/controlled_failure.md
+  - missions/M28/assessment.yaml
+  - missions/M28/evidence_contract.yaml
+  - missions/M28/flagship_integration.md
+  - missions/M28/review_brief.md
+  - missions/M28/adr_prompt.md
+  - missions/M28/status.yaml
+  - missions/M28/embedding_core.py
+  - labs/M28_embeddings.ipynb
+  - datasets/M28/README.md
+  - datasets/M28/catalog.json
+  - datasets/M28/embeddings.json
+  - datasets/M28/mismatch.json
+  - datasets/M28/token_table.json
+  - datasets/M28/transfer.json
+  - datasets/M28/generate_embeddings.py
+  - requirements/m28.txt
+  - tests/missions/test_m28.py
+  - tests/test_m28.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  attention_deferred_to_m29: true
+  search_service_deferred_to_m33: true
+  bundled_vectors_required: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

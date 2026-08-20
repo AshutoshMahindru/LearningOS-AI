@@ -1,0 +1,30 @@
+mission: M28
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped embedding-retrieval predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  ranking_correctness:
+    evidence: Cosine rankings on the bundled vectors, including paraphrase neighbors.
+    pass: Rankings match the fixture contract; ties use (-score, id).
+  provenance_as_contract:
+    evidence: Fingerprint comparison and a refused mixed retrieve.
+    pass: Model, version, metric, normalization, and pooling are checked before scoring.
+  hard_cases_honest:
+    evidence: Negation, numeric, entity, and domain inspections with scores.
+    pass: High cosine is not reported as proof of equivalence or intent.
+  lexical_versus_semantic:
+    evidence: Jaccard versus cosine on the printer/login pair and the low-overlap account pair.
+    pass: Disagreement is attributed to overlap versus geometry, not to a universal winner.
+  controlled_failure_diagnosis:
+    evidence: Mixed-store symptom, metadata diagnosis, ProvenanceError repair, regression.
+    pass: Diagnosis precedes the repair; only the compatibility gate is restored.
+  code_reading:
+    evidence: Annotated encode → provenance → score → rank → tie flow.
+    pass: Learner predicts unit-norm shape and a refused mix; no attention inspection.
+  no_ai_gate:
+    evidence: Independent ranking on transfer.json and transfer defense.
+    pass: Hand cosine, one success, one failure, mismatch fields, and non-proof statement are correct.
+  adr:
+    evidence: Learner-authored V06/V08 embedding model/version/normalization/metric/compatibility policy.
+    pass: Identity, metric, normalization, logging, and mix-refusal triggers are complete without global-optimality claims.
