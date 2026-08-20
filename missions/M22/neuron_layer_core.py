@@ -29,7 +29,7 @@ REFERENCE_LAYER_W = (
 )
 REFERENCE_LAYER_BIAS = (0.0, 0.5)
 
-SUPPORTED_ACTIVATIONS = ("identity", "relu", "sigmoid", "tanh")
+SUPPORTED_ACTIVATIONS = ("identity", "linear", "relu", "sigmoid", "tanh")
 
 
 def _require_numpy():

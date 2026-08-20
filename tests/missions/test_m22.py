@@ -127,6 +127,7 @@ class M22StaticContractTests(unittest.TestCase):
             ("predict-dense-layer", "run-dense-layer"),
             ("predict-batch", "run-batch"),
             ("predict-linearity", "run-linearity"),
+            ("predict-activation-boundary", "run-activation-boundary"),
             ("predict-failure", "run-failure"),
             ("predict-failure-repair", "run-failure-repair"),
         )
@@ -168,6 +169,7 @@ class M22StaticContractTests(unittest.TestCase):
             "REFERENCE_PREACTIVATION",
             'hidden_activation="relu"',
             'defect="transposed_weights"',
+            'defect="activation_before_affine"',
         ):
             with self.subTest(token=token):
                 self.assertIn(token, code)
@@ -181,7 +183,7 @@ class M22StaticContractTests(unittest.TestCase):
                 self.assertIn(">=", matching[0])
                 self.assertIn("<", matching[0])
 
-    def test_training_core_defers_optional_imports_until_runtime(self):
+    def test_neuron_layer_core_defers_optional_imports_until_runtime(self):
         source = (MISSION / "neuron_layer_core.py").read_text(encoding="utf-8")
         module = ast.parse(source)
         top_level_imports = [
@@ -283,11 +285,12 @@ class M22RuntimeTests(unittest.TestCase):
         x = CORE.REFERENCE_LAYER_X
         w1 = CORE.REFERENCE_LAYER_W
         b1 = CORE.REFERENCE_LAYER_BIAS
-        w2 = ((1.0, 0.0), (0.0, 1.0))
+        w2 = ((1.0, 2.0), (0.0, 1.0))
         b2 = (0.25, -0.25)
         composed = CORE.compose_two_layers(x, w1, b1, w2, b2, hidden_activation="identity")
         weights_eq, bias_eq = CORE.collapsed_affine(w1, b1, w2, b2)
         collapsed = CORE.dense_forward(x, weights_eq, bias_eq, "identity")
+        self.assertFalse(np.allclose(weights_eq, w1))
         self.assertTrue(np.allclose(composed, collapsed))
         nonlinear = CORE.compose_two_layers(x, w1, b1, w2, b2, hidden_activation="relu")
         self.assertFalse(np.allclose(nonlinear, collapsed))
@@ -325,6 +328,8 @@ class M22RuntimeTests(unittest.TestCase):
             CORE.neuron_trace((1.0,), CORE.REFERENCE_WEIGHTS, 0.0)
         with self.assertRaises(ValueError):
             CORE.apply_activation(0.0, "gelu")
+        listed = CORE.apply_activation(0.0, "linear")
+        self.assertAlmostEqual(float(listed.reshape(-1)[0]), 0.0)
 
     def test_sigmoid_matches_independent_formula(self):
         value = 0.5
