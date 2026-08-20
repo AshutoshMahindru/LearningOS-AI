@@ -1,0 +1,72 @@
+mission_id: M28
+version: 1
+purpose: Define acceptable learner-produced embedding-retrieval evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_retrieval_action
+      - falsifiable_neighbor_or_score_claim
+      - observation_and_revision
+  - id: paraphrase_retrieval
+    artifact_type: ranking_trace
+    must_show:
+      - original_and_paraphrase_queries
+      - top_neighbors_and_margin
+      - fixed_corpus_and_model
+  - id: lexical_semantic_disagreement
+    artifact_type: dual_ranking
+    must_show:
+      - high_overlap_different_meaning
+      - low_overlap_similar_meaning
+      - jaccard_versus_cosine
+  - id: hard_cases
+    artifact_type: negation_numeric_entity_domain_trace
+    must_show:
+      - deceptively_high_or_shifted_similarity
+      - no_intent_language
+      - named_invariants
+  - id: normalization_policy
+    artifact_type: metric_convention_trace
+    must_show:
+      - declared_cosine_on_l2
+      - inner_product_length_bias
+      - same_texts
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_mixed_provenance_defect
+      - mismatched_fingerprint_fields
+      - smallest_compatibility_repair
+      - regression_that_silent_mixing_is_rejected
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - encode_pool_normalize
+      - provenance_fingerprint
+      - cosine_rank_ties
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: v06_embedding_provenance_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - model_version_width
+      - normalization_and_metric
+      - compatibility_and_logging
+      - alternatives_and_trade_offs
+      - owner_status_and_date
+quality_bar:
+  - Rankings match the bundled vectors, not a downloaded encoder.
+  - Provenance is treated as a data contract.
+  - Hard cases are reported without anthropomorphizing embeddings.
+  - Future-mission mechanisms (attention, search services) stay closed.
+  - Failures are repaired by restoring the compatibility rule rather than changing several knobs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited

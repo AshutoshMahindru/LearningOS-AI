@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "purpose": "Fresh no-AI ranking. Learner answers are not stored.",
+  "provenance": {
+    "family": "v06-teaching-embed",
+    "model": "v06-teaching-hand",
+    "version": "v06.1-transfer",
+    "dimensions": 4,
+    "dimension_names": [
+      "outage",
+      "facility",
+      "baking",
+      "negation"
+    ],
+    "metric": "cosine",
+    "normalization": "l2",
+    "pooling": "hand",
+    "downloaded": false,
+    "network_required": false,
+    "not_sentence_transformers": true,
+    "not_model_hub": true
+  },
+  "query": {
+    "id": "t-query",
+    "text": "the server is down",
+    "vector": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "corpus": [
+    {
+      "id": "t-host",
+      "text": "the host stopped responding",
+      "vector": [
+        0.96,
+        0.28,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "id": "t-paint",
+      "text": "the server is painted down the hall",
+      "vector": [
+        0.2,
+        0.9797958971,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "id": "t-bread",
+      "text": "bake the bread longer",
+      "vector": [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "id": "t-not-down",
+      "text": "the server is not down",
+      "vector": [
+        0.8,
+        0.0,
+        0.0,
+        0.6
+      ]
+    }
+  ],
+  "mismatch_probe": {
+    "id": "t-query-alt",
+    "text": "the server is down",
+    "vector": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "provenance": {
+      "family": "v06-teaching-embed",
+      "model": "other-encoder",
+      "version": "v09.0",
+      "dimensions": 4,
+      "metric": "dot",
+      "normalization": "none",
+      "pooling": "hand",
+      "downloaded": false,
+      "network_required": false
+    }
+  }
+}

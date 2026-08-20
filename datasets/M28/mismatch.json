@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "provenance": {
+    "family": "v06-teaching-embed",
+    "model": "v06-teaching-meanpool-alt",
+    "version": "v06.2",
+    "dimensions": 12,
+    "dimension_names": [
+      "account_access",
+      "credentials",
+      "device_print",
+      "refund",
+      "negation",
+      "payment",
+      "magnitude",
+      "ticket_ops",
+      "weather",
+      "legal",
+      "glue",
+      "residual"
+    ],
+    "metric": "cosine",
+    "normalization": "none",
+    "pooling": "mean",
+    "downloaded": false,
+    "network_required": false,
+    "not_sentence_transformers": true,
+    "not_model_hub": true,
+    "authored_for": "M28"
+  },
+  "defect": "account and print axes swapped; stored without L2; different model/version",
+  "items": [
+    {
+      "id": "d-password-forgot",
+      "role": "document",
+      "vector": [
+        0.0,
+        0.5375,
+        0.8625,
+        0.0,
+        0.0375,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.0117384604
+      ]
+    },
+    {
+      "id": "d-login-reset",
+      "role": "document",
+      "vector": [
+        0.055,
+        0.4875,
+        0.48,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2,
+        -0.025787747
+      ]
+    },
+    {
+      "id": "d-cannot-signin",
+      "role": "document",
+      "vector": [
+        0.0,
+        0.4833333333,
+        0.8666666667,
+        0.0,
+        0.05,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.0427655451
+      ]
+    },
+    {
+      "id": "d-printer-reset",
+      "role": "document",
+      "vector": [
+        0.4066666667,
+        0.0,
+        0.0733333333,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2666666667,
+        -0.0211783017
+      ]
+    },
+    {
+      "id": "d-printer-queue",
+      "role": "document",
+      "vector": [
+        0.604,
+        0.0,
+        0.044,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.11,
+        -0.0074871748
+      ]
+    },
+    {
+      "id": "d-approve-refund",
+      "role": "document",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.7166666667,
+        0.0,
+        0.1833333333,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.0045455609
+      ]
+    },
+    {
+      "id": "d-deny-refund",
+      "role": "document",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.5375,
+        0.25,
+        0.1375,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.0001721218
+      ]
+    },
+    {
+      "id": "d-pay-fifty",
+      "role": "document",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.0625,
+        0.0,
+        0.6125,
+        0.075,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0081525902
+      ]
+    },
+    {
+      "id": "d-pay-thousand",
+      "role": "document",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.05,
+        0.0,
+        0.51,
+        0.25,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0062356909
+      ]
+    },
+    {
+      "id": "d-ticket-4412",
+      "role": "document",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.016545,
+        0.75,
+        0.0,
+        0.0,
+        0.025,
+        0.0090675212
+      ]
+    },
+    {
+      "id": "d-ticket-4413",
+      "role": "document",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.01654875,
+        0.75,
+        0.0,
+        0.0,
+        0.025,
+        -0.0153456931
+      ]
+    },
+    {
+      "id": "d-rain",
+      "role": "document",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0.0,
+        0.025,
+        -0.013600061
+      ]
+    },
+    {
+      "id": "d-legal",
+      "role": "document",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.05,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7625,
+        0.0,
+        -0.0232840467
+      ]
+    },
+    {
+      "id": "d-invoice",
+      "role": "document",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3375,
+        0.2482025,
+        0.1625,
+        0.0,
+        0.0,
+        0.1625,
+        -0.0378991379
+      ]
+    }
+  ]
+}
