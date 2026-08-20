@@ -1,0 +1,41 @@
+mission: M23
+controls:
+  layout: row-batch X (batch, n_in); W (n_in, n_out); b (n_out,)
+  softmax_axis: class-axis last
+  arithmetic: transparent NumPy or equivalent
+  dtype: float64
+  atol: 1e-12
+  rtol: 0.0
+  prediction_required_before_action: true
+  no_autograd: true
+experiments:
+  - id: scalar-to-vectorized-parity
+    prediction_required: true
+    change: Replace explicit per-example arithmetic with a batched NumPy expression.
+    observation: Verify equivalent outputs within declared tolerance.
+    invariant: Same data, parameters, activation, ordering.
+  - id: single-weight-perturbation
+    prediction_required: true
+    change: Change exactly one weight slightly.
+    observation: Trace which intermediate and final values change.
+    invariant: No retraining; all other parameters fixed.
+  - id: softmax-shift-invariance
+    prediction_required: true
+    change: Add the same constant to all logits for one example.
+    observation: Verify probabilities remain unchanged within tolerance.
+    invariant: Relative logits and class order fixed.
+  - id: batch-reordering
+    prediction_required: true
+    change: Reorder input rows only.
+    observation: Verify outputs reorder correspondingly without cross-row contamination.
+    invariant: Parameters and feature order fixed.
+  - id: reference-parity
+    prediction_required: true
+    change: Run trusted M22 dense_forward composition and the NumPy stack on identical inputs/parameters.
+    observation: Require intermediate and final parity.
+    invariant: Declared dtype/tolerance fixed.
+  - id: wrong-axis-or-omitted-activation
+    prediction_required: true
+    change: Softmax across the batch axis, or omit the hidden activation.
+    observation: Diagnose with one-example versus batch parity and named-intermediate checks.
+    invariant: Intended X, W, b, and activation name stay fixed; only the named boundary is wrong.

@@ -1,0 +1,36 @@
+mission: M23
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped forward-pass predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  scalar_vectorized_parity:
+    evidence: Loop-level one-example arithmetic matches the batched NumPy stack.
+    pass: Named intermediates agree within the declared tolerance.
+  named_intermediates:
+    evidence: Annotated shapes for hidden pre-activation, hidden activation, logits, and probabilities.
+    pass: Shapes match the row-batch contract; softmax is on the class axis.
+  logits_versus_probabilities:
+    evidence: Softmax maps logits to a simplex; a uniform logit row is 1/n_classes.
+    pass: Row sums are 1; values are non-negative; logits are not treated as probabilities.
+  softmax_shift_invariance:
+    evidence: Adding a constant to one example's logits leaves probabilities unchanged.
+    pass: Relative logits and class order stay fixed; only a shift is applied.
+  reference_parity:
+    evidence: NumPy stack matches M22 dense_forward composition on the teaching fixture.
+    pass: Every named intermediate agrees within dtype/tolerance policy.
+  mismatch_uses_intermediates:
+    evidence: Diagnosis cites which named array diverged, not only the final argmax.
+    pass: One-example versus batch parity or an intermediate check is the discriminator.
+  controlled_failure_diagnosis:
+    evidence: Named wrong-axis softmax or omitted-activation defect, diagnosis, smallest repair, rerun.
+    pass: Diagnosis precedes the repair; only the named boundary is restored.
+  code_reading:
+    evidence: Annotated two_layer_forward flow from shape checks through stable softmax.
+    pass: Learner predicts wrong-axis and omitted-activation behavior and avoids gradient inspection.
+  no_ai_gate:
+    evidence: Independent two-layer forward, shape annotations, and wrong-axis diagnosis.
+    pass: Fresh parameter dictionary, one hand-verified example, logits-versus-probabilities explanation.
+  adr:
+    evidence: Learner-authored inference-parity and numerical-tolerance policy.
+    pass: Intermediates compared, dtype, tolerance, and failure handling are explicit without global-optimality claims.

@@ -1,0 +1,81 @@
+mission_id: M23
+version: 1
+purpose: Define acceptable learner-produced forward-pass evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_forward_action
+      - falsifiable_value_or_shape_claim
+      - observation_and_revision
+  - id: first_layer_hand_calculation
+    artifact_type: worked_arithmetic
+    must_show:
+      - m22_reference_hidden_preactivation
+      - relu_hidden_activation
+      - named_shape_annotations
+  - id: scalar_vectorized_parity
+    artifact_type: one_example_versus_batch
+    must_show:
+      - loop_level_intermediates
+      - batched_numpy_intermediates
+      - declared_tolerance
+  - id: named_graph
+    artifact_type: annotated_computational_graph
+    must_show:
+      - hidden_preactivation
+      - hidden_activation
+      - logits
+      - probabilities
+      - class_axis_softmax
+  - id: softmax_invariants
+    artifact_type: probability_simplex_and_shift
+    must_show:
+      - row_sums_equal_one
+      - shift_invariance_on_one_example
+      - logits_are_not_probabilities
+  - id: reference_parity
+    artifact_type: trusted_stack_comparison
+    must_show:
+      - m22_dense_forward_composition
+      - numpy_stack
+      - every_named_intermediate
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_wrong_axis_or_omitted_activation_defect
+      - one_example_versus_batch_or_intermediate_discriminator
+      - smallest_repair
+      - preserved_invariants
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - shape_validation
+      - matmul_and_bias_broadcast
+      - activation_after_affine
+      - stable_softmax_axis
+      - parity_tolerances
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: inference_parity_tolerance_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - intermediates_compared
+      - dtype_assumptions
+      - tolerance
+      - failure_handling
+      - owner_status_and_date
+quality_bar:
+  - Hand calculations match the deterministic reference.
+  - Claims cite named intermediates and axes rather than "the network is working."
+  - Future-mission mechanisms (gradients, autograd, training loops) stay closed.
+  - Failures are repaired by restoring the named boundary rather than changing several knobs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: false
+  prefilled_learner_evidence: prohibited

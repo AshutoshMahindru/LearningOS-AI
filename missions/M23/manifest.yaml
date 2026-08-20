@@ -1,0 +1,96 @@
+id: M23
+title: Implement a Forward Pass with NumPy
+phase: P4
+flagship: V05
+objective: Reconstruct inference from array operations.
+competencies:
+  - forward pass
+  - NumPy
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: false
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M16
+    - M22
+  helpful: []
+handoff:
+  receives: M22 layer equations, activation-after-affine placement, row-batch shapes, and trusted hand-computed reference outputs
+  provides: M24 a transparent computational graph, named intermediates, and a trusted forward-parity test
+learning_sequence:
+  - load M22 deterministic parameters and reference outputs
+  - predict the first layer output before vectorized code
+  - implement affine plus activation for one example
+  - vectorize for a batch and prove row-by-row parity
+  - compose the next layer while recording named intermediates
+  - introduce logits and stable softmax
+  - compare every named intermediate with the trusted reference
+  - perturb one weight and predict which outputs should change
+  - diagnose the wrong-axis or omitted-activation failure
+  - complete a fresh no-AI forward pass
+  - author an inference-parity / tolerance ADR
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M23_numpy_forward_pass.ipynb
+instrumentation: missions/M23/forward_core.py
+requirements: requirements/m23.txt
+mission_test: tests/missions/test_m23.py
+reference_fixture:
+  x: [[1.0, 0.0, -1.0], [0.5, 0.5, 0.5]]
+  w1: [[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]]
+  b1: [0.0, 0.5]
+  w2: [[1.0, 0.0, -1.0], [0.0, 1.0, 0.5]]
+  b2: [0.0, 0.0, 0.0]
+  hidden_activation: relu
+  layer_layout: row-batch X (batch, n_in) times W (n_in, n_out) plus b (n_out,)
+  softmax_axis: class-axis last
+  named_intermediates:
+    - hidden_preactivation
+    - hidden_activation
+    - logits
+    - probabilities
+canonical_sources:
+  - numpy-quickstart
+  - 3b1b-neural-networks
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_gradient_or_backprop: required
+  no_framework_autograd: required
+mission_artifacts:
+  - missions/M23/README.md
+  - missions/M23/manifest.yaml
+  - missions/M23/content.yaml
+  - missions/M23/experiments.yaml
+  - missions/M23/code_reading.md
+  - missions/M23/no_ai_gate.md
+  - missions/M23/controlled_failure.md
+  - missions/M23/assessment.yaml
+  - missions/M23/evidence_contract.yaml
+  - missions/M23/flagship_integration.md
+  - missions/M23/review_brief.md
+  - missions/M23/adr_prompt.md
+  - missions/M23/status.yaml
+  - missions/M23/forward_core.py
+  - labs/M23_numpy_forward_pass.ipynb
+  - requirements/m23.txt
+  - tests/missions/test_m23.py
+  - tests/test_m23.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  backpropagation_deferred_to_m24: true
+  pytorch_training_loop_deferred_to_m25: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false
