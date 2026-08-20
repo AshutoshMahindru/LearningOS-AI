@@ -332,6 +332,12 @@ class M26StaticContractTests(unittest.TestCase):
             CORE._normalize_defect("tokenization")
         with self.assertRaises(ValueError):
             CORE._normalize_defect("attention_dropout")
+        with self.assertRaises(ValueError):
+            CORE._normalize_defect("not_a_defect")
+        with self.assertRaises(ValueError):
+            CORE.prepare_fault("not_a_defect")
+        with self.assertRaises(ValueError):
+            CORE.cheapest_discriminator("not_a_hypothesis")
 
     def test_chaos_mapping_is_seeded_and_hidden_repr_redacts_category(self):
         self.assertEqual(CORE.defect_for_seed(CORE.HIDDEN_PRACTICE_SEED), "frozen_layer")
@@ -397,6 +403,9 @@ class M26StaticContractTests(unittest.TestCase):
         self.assertEqual(blocked[0], "blocked_gradient_path")
         leaked = CORE.rank_hypotheses({"claimed_n_is_train_sized": True, "claimed_val_better_than_held_out": True})
         self.assertEqual(leaked[0], "eval_split_leakage")
+        self.assertEqual(set(leaked), {"eval_split_leakage"})
+        self.assertNotIn("blocked_gradient_path", labels)
+        self.assertNotIn("labels_corrupted", blocked)
 
 
 @unittest.skipUnless(TORCH_AVAILABLE, "install requirements/m26.txt to run PyTorch-dependent M26 tests")
@@ -527,9 +536,16 @@ class M26TorchRuntimeTests(unittest.TestCase):
         self.assertNotIn("n_hidden", payload["symptoms"])
         self.assertNotIn("learning_rate", payload["symptoms"])
         self.assertIn("train_losses", payload["symptoms"])
+        self.assertNotIn("layer_moved", payload["symptoms"])
+        self.assertNotIn("fc1_requires_grad", payload["symptoms"])
+        self.assertNotIn("fc1_grad_norm", payload["symptoms"])
         self.assertTrue(payload["fault"].hidden)
         self.assertIn("tiny_hidden", repr(payload["fault"].original_defect))
         self.assertNotIn("tiny_hidden", repr(payload["fault"]))
+        battery = CORE.diagnostic_battery(payload["diag"])
+        self.assertNotIn("n_hidden", battery["tiny_overfit_current_knobs"])
+        self.assertNotIn("learning_rate", battery["tiny_overfit_current_knobs"])
+        self.assertIn("overfit", battery["tiny_overfit_current_knobs"])
         failures = CORE.invariant_failures(payload["diag"])
         self.assertTrue(set(CORE.signature_for_defect("tiny_hidden")) <= set(failures))
         repaired = CORE.repair_and_verify(payload["diag"])
@@ -551,13 +567,6 @@ class M26TorchRuntimeTests(unittest.TestCase):
         self.assertIn("labels_match_clusters", CORE.invariant_failures(labels))
         self.assertFalse(CORE.healthy_invariants_hold(frozen))
         self.assertFalse(CORE.healthy_invariants_hold(labels))
-
-    def test_invalid_loop_inputs_fail_loudly(self):
-        with self.assertRaises(ValueError):
-            CORE.prepare_fault("not_a_defect")
-        with self.assertRaises(ValueError):
-            CORE.cheapest_discriminator("not_a_hypothesis")
-
 
 if __name__ == "__main__":
     unittest.main()

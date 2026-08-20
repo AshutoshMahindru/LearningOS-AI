@@ -331,9 +331,9 @@ def prepare_fault(
 ) -> PreparedFault:
     """Inject one named fault into a clone of the M25 fixture. Does not train."""
 
+    key = _normalize_defect(defect)
     m25 = _load_m25()
     _align_m25(m25)
-    key = _normalize_defect(defect)
     meta = CATALOGUE[key]
     bundle = clone_split_bundle(splits if splits is not None else m25.make_classification_fixture(split_seed))
     m25.assert_protected_splits(bundle)
@@ -700,6 +700,13 @@ def _losses_finite(losses: Sequence[float]) -> bool:
     return bool(losses) and all(math.isfinite(float(v)) for v in losses)
 
 
+def _public_overfit_view(payload: dict[str, object], *, hide_knobs: bool) -> dict[str, object]:
+    if not hide_knobs:
+        return dict(payload)
+    omitted = {"n_hidden", "learning_rate", "freeze_fc1", "dropout_p"}
+    return {key: value for key, value in payload.items() if key not in omitted}
+
+
 def public_symptoms(diag: DiagnosticRun) -> dict[str, object]:
     """Learner-facing symptoms. Hidden runs omit defect, category, and knobs."""
 
@@ -718,11 +725,6 @@ def public_symptoms(diag: DiagnosticRun) -> dict[str, object]:
         "claimed_model_training": claimed.model_training,
         "claimed_n": claimed.n,
         "held_out_n": held.n,
-        "layer_moved": dict(diag.layer_moved),
-        "fc1_grad_norm": diag.grad_report["fc1_grad_norm"],
-        "fc2_grad_norm": diag.grad_report["fc2_grad_norm"],
-        "fc1_requires_grad": diag.grad_report["fc1_requires_grad"],
-        "dead_relu_fraction": diag.grad_report["dead_relu_fraction"],
         "finite_train_losses": _losses_finite(diag.train_losses),
         "train_loss_oscillates": _loss_oscillates(diag.train_losses),
         "epochs": diag.fault.epochs,
@@ -741,6 +743,11 @@ def public_symptoms(diag: DiagnosticRun) -> dict[str, object]:
         out["repaired"] = diag.fault.repaired
         out["honest_val_loss"] = diag.honest_val.loss
         out["honest_val_accuracy"] = diag.honest_val.accuracy
+        out["layer_moved"] = dict(diag.layer_moved)
+        out["fc1_grad_norm"] = diag.grad_report["fc1_grad_norm"]
+        out["fc2_grad_norm"] = diag.grad_report["fc2_grad_norm"]
+        out["fc1_requires_grad"] = diag.grad_report["fc1_requires_grad"]
+        out["dead_relu_fraction"] = diag.grad_report["dead_relu_fraction"]
     return out
 
 
@@ -764,6 +771,7 @@ def diagnostic_battery(diag: DiagnosticRun) -> dict[str, object]:
         freeze_fc1=False,
         dropout_p=DEFAULT_DROPOUT_P,
     )
+    hide_knobs = bool(fault.hidden and not fault.repaired)
     return {
         "cluster_agreement": cluster_label_agreement(fault.splits),
         "feature_scales": feature_column_scales(fault.splits),
@@ -776,8 +784,8 @@ def diagnostic_battery(diag: DiagnosticRun) -> dict[str, object]:
             "fc1_grad_is_none": diag.grad_report["fc1_grad_is_none"],
             "dead_relu_fraction": diag.grad_report["dead_relu_fraction"],
         },
-        "tiny_overfit_current_knobs": tiny_current,
-        "tiny_overfit_restored_knobs": tiny_wide,
+        "tiny_overfit_current_knobs": _public_overfit_view(tiny_current, hide_knobs=hide_knobs),
+        "tiny_overfit_restored_knobs": _public_overfit_view(tiny_wide, hide_knobs=hide_knobs),
         "honest_val_loss": diag.honest_val.loss,
         "honest_val_accuracy": diag.honest_val.accuracy,
         "claimed_val_loss": diag.claimed_val.loss,
@@ -873,9 +881,7 @@ def rank_hypotheses(signals: dict[str, object]) -> tuple[str, ...]:
     ):
         scores["eval_split_leakage"] += 4.0
     ranked = sorted(scores.items(), key=lambda item: (-item[1], item[0]))
-    return tuple(name for name, score in ranked if score > 0.0) + tuple(
-        name for name, score in ranked if score == 0.0
-    )
+    return tuple(name for name, score in ranked if score > 0.0)
 
 
 def regression_flags(diag: DiagnosticRun) -> dict[str, bool]:
