@@ -188,10 +188,12 @@ class M29StaticContractTests(unittest.TestCase):
             ("predict-qkv", "run-qkv"),
             ("predict-scores", "run-scores"),
             ("predict-causal", "run-causal"),
+            ("predict-padding", "run-padding"),
             ("predict-scale", "run-scale"),
             ("predict-qk-perturb", "run-qk-perturb"),
             ("predict-value", "run-value"),
-            ("predict-failure", "run-failure"),
+            ("predict-failure-axis", "run-failure-axis"),
+            ("predict-failure-mask", "run-failure-mask"),
             ("predict-failure-repair", "run-failure-repair"),
         )
         for prediction, action in pairs:
@@ -203,7 +205,7 @@ class M29StaticContractTests(unittest.TestCase):
         markdown = "\n".join(
             cell_source(cell) for cell in cells if cell.get("cell_type") == "markdown"
         )
-        self.assertGreaterEqual(markdown.count("Predict before running"), 9)
+        self.assertGreaterEqual(markdown.count("Predict before running"), 11)
         for phrase in (
             "predict → act → observe → explain",
             "timestamp",
@@ -228,6 +230,7 @@ class M29StaticContractTests(unittest.TestCase):
             "dot_product_scores",
             "scale_scores",
             "causal_additive_mask",
+            "padding_additive_mask",
             "softmax_over_keys",
             "aggregate_values",
             "attention_with_defect",
@@ -529,6 +532,14 @@ class M29RuntimeTests(unittest.TestCase):
             defect="mask_after_softmax",
         )
         self.assertEqual(broken.mask_timing, "after_softmax")
+        np = CORE._require_numpy()
+        self.assertFalse(np.allclose(broken.masked_scores, broken.scaled_scores))
+        self.assertTrue(
+            np.allclose(
+                broken.masked_scores,
+                CORE.apply_additive_mask(broken.scaled_scores, broken.mask),
+            )
+        )
         invariants = broken.invariants()
         self.assertTrue(invariants["future_mass_zero"])
         self.assertFalse(invariants["rows_sum_to_one"])

@@ -21,6 +21,11 @@ experiments:
     change: Toggle a causal mask on the cash sequence.
     observation: Verify future key positions receive no mass; bank can no longer mix cash.
     invariant: Pre-mask scores, Q, K, V, and scale stay fixed.
+  - id: padding-mask
+    prediction_required: true
+    change: Apply a padding additive mask so the last cash key is invalid.
+    observation: Blocked-key mass is zero; remaining keys still sum to 1.
+    invariant: Q, K, V, and scale stay fixed; only which keys are valid changes.
   - id: scale-factor
     prediction_required: true
     change: Compare unscaled scores with scores divided by sqrt(d_k) on a d_k=8 fixture.

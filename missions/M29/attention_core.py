@@ -463,7 +463,7 @@ def scaled_dot_product_attention(
         weights = softmax_over_queries(masked_scores)
         softmax_axis = QUERY_AXIS
     elif defect_key == "mask_after_softmax":
-        masked_scores = scaled.copy()
+        masked_scores = apply_additive_mask(scaled, mask)
         weights = softmax_over_keys(scaled)
         if mask is not None:
             keep = (~_blocked_from_mask(mask, weights)).astype(float)
