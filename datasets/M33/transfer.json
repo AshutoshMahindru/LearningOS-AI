@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "purpose": "Fresh no-AI exact top-k, labeled success, and stale-index diagnosis. Learner answers are not stored.",
+  "provenance": {
+    "family": "v08-teaching-embed",
+    "model": "v08-teaching-hand",
+    "version": "v08.1-transfer",
+    "dimensions": 3,
+    "dimension_names": [
+      "outage",
+      "facility",
+      "baking"
+    ],
+    "metric": "cosine",
+    "normalization": "l2",
+    "pooling": "hand",
+    "downloaded": false,
+    "network_required": false,
+    "not_sentence_transformers": true,
+    "not_model_hub": true
+  },
+  "corpus": {
+    "version": "m33.transfer.v1",
+    "authored_for": "M33",
+    "documents": [
+      {
+        "document_id": "doc-outage",
+        "title": "Outage notes",
+        "metadata": {
+          "topic": "infra",
+          "source": "ops",
+          "locale": "en"
+        },
+        "chunks": [
+          {
+            "chunk_id": "t-offline",
+            "local_id": "c0",
+            "text": "the server is unreachable",
+            "m28_id": "",
+            "metadata": {
+              "topic": "infra",
+              "source": "ops",
+              "locale": "en"
+            }
+          },
+          {
+            "chunk_id": "t-host",
+            "local_id": "c1",
+            "text": "the host stopped responding",
+            "m28_id": "",
+            "metadata": {
+              "topic": "infra",
+              "source": "ops",
+              "locale": "en"
+            }
+          }
+        ]
+      },
+      {
+        "document_id": "doc-facility",
+        "title": "Facility notes",
+        "metadata": {
+          "topic": "facility",
+          "source": "ops",
+          "locale": "en"
+        },
+        "chunks": [
+          {
+            "chunk_id": "t-not-down",
+            "local_id": "c0",
+            "text": "the server is not down",
+            "m28_id": "",
+            "metadata": {
+              "topic": "facility",
+              "source": "ops",
+              "locale": "en"
+            }
+          },
+          {
+            "chunk_id": "t-paint",
+            "local_id": "c1",
+            "text": "the server is painted down the hall",
+            "m28_id": "",
+            "metadata": {
+              "topic": "facility",
+              "source": "ops",
+              "locale": "en"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "vectors": [
+    {
+      "chunk_id": "t-offline",
+      "vector": [
+        1.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "chunk_id": "t-host",
+      "vector": [
+        0.8,
+        0.6,
+        0.0
+      ]
+    },
+    {
+      "chunk_id": "t-not-down",
+      "vector": [
+        0.96,
+        0.0,
+        0.28
+      ]
+    },
+    {
+      "chunk_id": "t-paint",
+      "vector": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    }
+  ],
+  "queries": [
+    {
+      "id": "t-q-down",
+      "text": "the server is down",
+      "experiment": "transfer",
+      "relevant": [
+        "t-offline",
+        "t-host"
+      ],
+      "traps": [
+        "t-not-down",
+        "t-paint"
+      ]
+    }
+  ],
+  "query": {
+    "id": "t-q-down",
+    "text": "the server is down",
+    "vector": [
+      1.0,
+      0.0,
+      0.0
+    ]
+  },
+  "stale_probe": {
+    "chunk_id": "t-offline",
+    "indexed_text": "the server is unreachable",
+    "live_text": "the server was patched and is healthy",
+    "note": "Change live text without rebuilding. Unchecked search still returns indexed_text."
+  },
+  "expected": {
+    "ranking": [
+      "t-offline",
+      "t-not-down",
+      "t-host",
+      "t-paint"
+    ],
+    "scores": [
+      1.0,
+      0.96,
+      0.8,
+      0.0
+    ],
+    "recall_at_2": 0.5,
+    "hit_at_1": true,
+    "high_score_not_relevant": "t-not-down"
+  },
+  "downloaded": false,
+  "network_required": false
+}

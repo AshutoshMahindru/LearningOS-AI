@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "version": "m33.corpus.v1",
+  "authored_for": "M33",
+  "source_mission": "M28",
+  "kind": "synthetic-teaching-fixture",
+  "downloaded": false,
+  "network_required": false,
+  "personal_data": false,
+  "separator": "\\n\\n",
+  "filter_schema": [
+    "topic",
+    "source",
+    "locale"
+  ],
+  "documents": [
+    {
+      "document_id": "doc-account-access",
+      "title": "Account access",
+      "metadata": {
+        "topic": "account",
+        "source": "kb-support",
+        "locale": "en"
+      },
+      "chunks": [
+        {
+          "chunk_id": "doc-account-access::c0",
+          "local_id": "c0",
+          "text": "I forgot my password and cannot sign in.",
+          "m28_id": "d-password-forgot",
+          "metadata": {
+            "topic": "account",
+            "source": "kb-support",
+            "locale": "en"
+          }
+        },
+        {
+          "chunk_id": "doc-account-access::c1",
+          "local_id": "c1",
+          "text": "Please reset the login credentials.",
+          "m28_id": "d-login-reset",
+          "metadata": {
+            "topic": "account",
+            "source": "kb-support",
+            "locale": "en"
+          }
+        },
+        {
+          "chunk_id": "doc-account-access::c2",
+          "local_id": "c2",
+          "text": "I cannot sign in to my account.",
+          "m28_id": "d-cannot-signin",
+          "metadata": {
+            "topic": "account",
+            "source": "kb-support",
+            "locale": "en"
+          }
+        }
+      ]
+    },
+    {
+      "document_id": "doc-device-printer",
+      "title": "Printer hardware",
+      "metadata": {
+        "topic": "device",
+        "source": "kb-hardware",
+        "locale": "en"
+      },
+      "chunks": [
+        {
+          "chunk_id": "doc-device-printer::c0",
+          "local_id": "c0",
+          "text": "Please reset the printer.",
+          "m28_id": "d-printer-reset",
+          "metadata": {
+            "topic": "device",
+            "source": "kb-hardware",
+            "locale": "en"
+          }
+        },
+        {
+          "chunk_id": "doc-device-printer::c1",
+          "local_id": "c1",
+          "text": "The printer needs a reset because the queue is stuck.",
+          "m28_id": "d-printer-queue",
+          "metadata": {
+            "topic": "device",
+            "source": "kb-hardware",
+            "locale": "en"
+          }
+        }
+      ]
+    },
+    {
+      "document_id": "doc-refund-policy",
+      "title": "Refund decisions",
+      "metadata": {
+        "topic": "refund",
+        "source": "kb-policy",
+        "locale": "en"
+      },
+      "chunks": [
+        {
+          "chunk_id": "doc-refund-policy::c0",
+          "local_id": "c0",
+          "text": "Approve the customer refund.",
+          "m28_id": "d-approve-refund",
+          "metadata": {
+            "topic": "refund",
+            "source": "kb-policy",
+            "locale": "en"
+          }
+        },
+        {
+          "chunk_id": "doc-refund-policy::c1",
+          "local_id": "c1",
+          "text": "Do not approve the customer refund.",
+          "m28_id": "d-deny-refund",
+          "metadata": {
+            "topic": "refund",
+            "source": "kb-policy",
+            "locale": "en"
+          }
+        }
+      ]
+    },
+    {
+      "document_id": "doc-payments",
+      "title": "Payments and invoices",
+      "metadata": {
+        "topic": "payment",
+        "source": "kb-billing",
+        "locale": "en"
+      },
+      "chunks": [
+        {
+          "chunk_id": "doc-payments::c0",
+          "local_id": "c0",
+          "text": "The customer paid fifty dollars.",
+          "m28_id": "d-pay-fifty",
+          "metadata": {
+            "topic": "payment",
+            "source": "kb-billing",
+            "locale": "en"
+          }
+        },
+        {
+          "chunk_id": "doc-payments::c1",
+          "local_id": "c1",
+          "text": "The customer paid five thousand dollars.",
+          "m28_id": "d-pay-thousand",
+          "metadata": {
+            "topic": "payment",
+            "source": "kb-billing",
+            "locale": "en"
+          }
+        },
+        {
+          "chunk_id": "doc-payments::c2",
+          "local_id": "c2",
+          "text": "Please process invoice 99281 now.",
+          "m28_id": "d-invoice",
+          "metadata": {
+            "topic": "payment",
+            "source": "kb-billing",
+            "locale": "en"
+          }
+        }
+      ]
+    },
+    {
+      "document_id": "doc-tickets",
+      "title": "Inspection tickets",
+      "metadata": {
+        "topic": "ticket",
+        "source": "ops-log",
+        "locale": "en"
+      },
+      "chunks": [
+        {
+          "chunk_id": "doc-tickets::c0",
+          "local_id": "c0",
+          "text": "Ticket 4412 is waiting for inspection.",
+          "m28_id": "d-ticket-4412",
+          "metadata": {
+            "topic": "ticket",
+            "source": "ops-log",
+            "locale": "en"
+          }
+        },
+        {
+          "chunk_id": "doc-tickets::c1",
+          "local_id": "c1",
+          "text": "Ticket 4413 is waiting for inspection.",
+          "m28_id": "d-ticket-4413",
+          "metadata": {
+            "topic": "ticket",
+            "source": "ops-log",
+            "locale": "en"
+          }
+        }
+      ]
+    },
+    {
+      "document_id": "doc-weather",
+      "title": "Valley weather",
+      "metadata": {
+        "topic": "weather",
+        "source": "kb-misc",
+        "locale": "en"
+      },
+      "chunks": [
+        {
+          "chunk_id": "doc-weather::c0",
+          "local_id": "c0",
+          "text": "Rain is expected tomorrow in the valley.",
+          "m28_id": "d-rain",
+          "metadata": {
+            "topic": "weather",
+            "source": "kb-misc",
+            "locale": "en"
+          }
+        }
+      ]
+    },
+    {
+      "document_id": "doc-legal",
+      "title": "Service agreement",
+      "metadata": {
+        "topic": "legal",
+        "source": "kb-policy",
+        "locale": "en"
+      },
+      "chunks": [
+        {
+          "chunk_id": "doc-legal::c0",
+          "local_id": "c0",
+          "text": "The service agreement forbids assignment.",
+          "m28_id": "d-legal",
+          "metadata": {
+            "topic": "legal",
+            "source": "kb-policy",
+            "locale": "en"
+          }
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "authored_for": "M33",
+    "copied_from": "datasets/M28/catalog.json",
+    "kind": "synthetic-teaching-fixture",
+    "downloaded": false,
+    "network_required": false,
+    "personal_data": false
+  }
+}

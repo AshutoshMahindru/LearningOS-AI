@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "authored_for": "M33",
+  "source_mission": "M28",
+  "downloaded": false,
+  "network_required": false,
+  "note": "Labels are relevance judgments, not cosine ranks. Do not relabel after seeing scores.",
+  "queries": [
+    {
+      "id": "q-password",
+      "text": "I forgot my password and cannot sign in.",
+      "experiment": "useful-whole",
+      "relevant": [
+        "doc-account-access::c0",
+        "doc-account-access::c1",
+        "doc-account-access::c2"
+      ],
+      "traps": [
+        "doc-device-printer::c0",
+        "doc-device-printer::c1"
+      ]
+    },
+    {
+      "id": "q-paraphrase",
+      "text": "Please reset my login password.",
+      "experiment": "paraphrase",
+      "relevant": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "traps": [
+        "doc-device-printer::c0",
+        "doc-device-printer::c1"
+      ]
+    },
+    {
+      "id": "q-printer",
+      "text": "Please reset the printer.",
+      "experiment": "lexical-semantic",
+      "relevant": [
+        "doc-device-printer::c0",
+        "doc-device-printer::c1"
+      ],
+      "traps": [
+        "doc-account-access::c1"
+      ]
+    },
+    {
+      "id": "q-low-overlap",
+      "text": "I cannot access my account.",
+      "experiment": "lexical-semantic",
+      "relevant": [
+        "doc-account-access::c2",
+        "doc-account-access::c0",
+        "doc-account-access::c1"
+      ],
+      "traps": [
+        "doc-device-printer::c0"
+      ]
+    },
+    {
+      "id": "q-negation",
+      "text": "Do not approve the customer refund.",
+      "experiment": "negation",
+      "relevant": [
+        "doc-refund-policy::c1"
+      ],
+      "traps": [],
+      "hard_neighbor": "doc-refund-policy::c0"
+    },
+    {
+      "id": "q-numeric",
+      "text": "The customer paid fifty dollars.",
+      "experiment": "numeric",
+      "relevant": [
+        "doc-payments::c0"
+      ],
+      "traps": [],
+      "hard_neighbor": "doc-payments::c1"
+    },
+    {
+      "id": "q-entity",
+      "text": "ticket 4412",
+      "experiment": "entity",
+      "relevant": [
+        "doc-tickets::c0"
+      ],
+      "traps": [],
+      "hard_neighbor": "doc-tickets::c1"
+    },
+    {
+      "id": "q-domain",
+      "text": "weather forecast for tomorrow",
+      "experiment": "domain",
+      "relevant": [
+        "doc-weather::c0"
+      ],
+      "traps": [
+        "doc-legal::c0",
+        "doc-payments::c2"
+      ]
+    }
+  ]
+}

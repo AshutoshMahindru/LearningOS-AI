@@ -1,0 +1,22 @@
+mission: M33
+boundary:
+  inherited_from_m28: Embedding model/version, mean pooling, L2, cosine, provenance fingerprint, mix-or-refuse, and hard-case fixtures (negation, numeric, entity, domain). This mission does not re-teach token tables or why cosine is scale-invariant.
+  manipulated_here: Document/chunk identity, text spans, embedding load (not a hub download), exact in-memory similarity, top-k truncation after scoring, metadata filters as eligibility, query path, latency, labeled retrieval versus score, and index version/staleness.
+  deferred_to_m29: Attention, queries/keys/values, softmax weights. Similarity search is not attention.
+  deferred_to_m34: Generation, context packs, citations, abstention, and answer correctness.
+  deferred_to_m35: Reranking, chunk size/overlap tuning, hard-negative mining as an optimizer, and rank-sensitive metrics beyond hit/recall@k on this tiny set.
+  deferred_to_m36: ANN/HNSW, required Qdrant infrastructure, sparse-dense hybrid fusion, and unsafe filter-after-small-top-k patterns as a primary lesson.
+handoff_summary: M28 supplies the embedding contract and fixtures. M33 attaches a versioned exact retriever that returns ranked evidence. M34 may ground generation only after that interface is defended.
+concepts:
+  - a retriever is a service boundary, not a cosine call
+  - document and chunk IDs plus text spans are the evidence contract
+  - exact search scores every eligible row; top-k cuts after scoring
+  - metadata filters change who competes, not what the labels are
+  - retrieval score is not labeled relevance and not an answer
+  - index identity is embedding fingerprint plus corpus hash
+  - stale or mixed indexes fail closed (rebuild or reject)
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M33 may explain exact retrieval, filters, latency, labeled evaluation, and fail-closed index identity. It may not introduce RAG generation, rerankers, ANN, hybrid fusion, or Q/K/V attention as the search mechanism.
+canonical_sources:
+  - sentence-transformers
+  - qdrant-docs

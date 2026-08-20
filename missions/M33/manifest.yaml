@@ -1,0 +1,118 @@
+id: M33
+title: Build Semantic Search
+phase: P6
+flagship: V08
+objective: Build an end-to-end embedding search service.
+competencies:
+  - semantic search
+  - retrieval
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: true
+prerequisites:
+  blocking:
+    - M28
+  helpful: []
+handoff:
+  receives: M28 embedding model/version, normalization, metric, provenance, and hard-case fixtures; no generation, rerank, or ANN
+  provides: M34 receives a stable retriever returning ranked evidence with IDs, scores, text spans, and provenance
+learning_sequence:
+  - inspect a local corpus with stable document/chunk IDs and labeled queries
+  - index using the M28 embedding contract (load, do not download)
+  - implement exact cosine retrieval
+  - expose top-k and optional metadata filters
+  - run labeled queries and inspect misses without relabeling
+  - return provenance and text spans with every hit
+  - measure latency and deterministic tie behavior
+  - trigger index/version staleness
+  - repair by rebuild-or-reject and add a regression
+  - complete a no-AI service trace
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M33_semantic_search.ipynb
+instrumentation: missions/M33/semantic_search.py
+requirements: requirements/m33.txt
+mission_test: tests/missions/test_m33.py
+reference_fixture:
+  index_id: v08-exact-memory
+  backend: exact-in-memory
+  corpus_version: m33.corpus.v1
+  embedding_family: v06-teaching-embed
+  embedding_model: v06-teaching-meanpool
+  embedding_version: v06.1
+  dimensions: 12
+  metric: cosine
+  normalization: l2
+  pooling: mean
+  filter_schema:
+    - topic
+    - source
+    - locale
+  tie_break:
+    - "-score"
+    - chunk_id
+  stale_policy: fail-closed-rebuild-or-reject
+  mismatch_model: v06-teaching-meanpool-alt
+  mismatch_version: v06.2
+canonical_sources:
+  - sentence-transformers
+  - qdrant-docs
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_generation_or_citations: required
+  no_rerank_or_chunk_tuning: required
+  no_ann_or_required_qdrant: required
+  no_attention_as_search: required
+  no_network_encoder_download: required
+  exact_in_memory_baseline: required
+mission_artifacts:
+  - missions/M33/README.md
+  - missions/M33/manifest.yaml
+  - missions/M33/content.yaml
+  - missions/M33/experiments.yaml
+  - missions/M33/code_reading.md
+  - missions/M33/no_ai_gate.md
+  - missions/M33/controlled_failure.md
+  - missions/M33/assessment.yaml
+  - missions/M33/evidence_contract.yaml
+  - missions/M33/flagship_integration.md
+  - missions/M33/review_brief.md
+  - missions/M33/adr_prompt.md
+  - missions/M33/status.yaml
+  - missions/M33/semantic_search.py
+  - missions/M33/optional_qdrant.py
+  - labs/M33_semantic_search.ipynb
+  - datasets/M33/README.md
+  - datasets/M33/corpus.json
+  - datasets/M33/vectors.json
+  - datasets/M33/queries.json
+  - datasets/M33/expected.json
+  - datasets/M33/incompatible_vectors.json
+  - datasets/M33/transfer.json
+  - datasets/M33/generate_index.py
+  - requirements/m33.txt
+  - tests/missions/test_m33.py
+  - tests/test_m33.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  generation_deferred_to_m34: true
+  rerank_deferred_to_m35: true
+  ann_hybrid_deferred_to_m36: true
+  attention_deferred_to_m29: true
+  bundled_vectors_required: true
+  exact_baseline_required: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

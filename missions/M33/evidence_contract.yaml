@@ -1,0 +1,81 @@
+mission_id: M33
+version: 1
+purpose: Define acceptable learner-produced semantic-search evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_search_action
+      - falsifiable_id_or_hash_or_metric_claim
+      - observation_and_revision
+  - id: retriever_trace
+    artifact_type: ranked_evidence_trace
+    must_show:
+      - query_text
+      - document_and_chunk_ids
+      - scores
+      - text_spans
+      - embedding_and_index_provenance
+  - id: top_k
+    artifact_type: k_sweep
+    must_show:
+      - same_index_and_query
+      - recall_opportunity_versus_irrelevant_window
+      - scored_candidates_independent_of_k
+  - id: metadata_filter
+    artifact_type: eligibility_trace
+    must_show:
+      - filter_on_and_off
+      - only_eligible_chunks_scored
+      - labels_unchanged
+  - id: exact_baseline
+    artifact_type: ranking_parity
+    must_show:
+      - independent_brute_force
+      - matching_ids_and_scores
+      - tie_break
+  - id: labeled_versus_score
+    artifact_type: retrieval_eval
+    must_show:
+      - frozen_labels
+      - hit_or_recall_at_k
+      - high_score_not_treated_as_relevance
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_stale_index_defect
+      - mismatched_source_hash
+      - rebuild_or_reject_repair_from_broken_objects
+      - regression_that_silent_stale_serving_is_rejected
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - ingest_ids_spans
+      - index_hash_and_fingerprint
+      - filter_score_ties_freshness
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: v08_index_identity_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - embedding_model_version_metric
+      - corpus_version_and_hash
+      - filter_schema_and_ties
+      - stale_index_rebuild_or_reject
+      - alternatives_and_trade_offs
+      - owner_status_and_date
+quality_bar:
+  - Rankings match the exact baseline on bundled vectors, not a downloaded encoder.
+  - Index identity is treated as a data contract.
+  - High similarity is not reported as answer correctness.
+  - Future-mission mechanisms (generation, rerank, ANN, attention-as-search) stay closed.
+  - Failures are repaired by rebuild-or-reject rather than changing several knobs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited
