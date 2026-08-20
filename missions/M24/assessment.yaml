@@ -1,0 +1,40 @@
+mission: M24
+transfer_required: true
+formal_engineering_review: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped reverse-mode predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  m19_invariant:
+    evidence: Restated one-parameter analytic gradient, central difference, and descent update.
+    pass: Sign, formula, and update convention match M19.
+  named_graph:
+    evidence: Annotated M23 graph extended by a loss node.
+    pass: Nodes are x, hidden_preactivation, hidden_activation, logits, probabilities, loss.
+  chain_rule:
+    evidence: Hand reverse-accumulation on a scalar affine-ReLU-affine-MSE chain.
+    pass: Local derivatives multiply along the path; programmatic grads match.
+  branch_accumulation:
+    evidence: Shared-node gradient equals the sum of downstream contributions.
+    pass: Omitted-path analytic disagrees with the finite difference; the sum agrees.
+  activation_derivative:
+    evidence: Pre-activation moved across the ReLU hinge with the same downstream loss.
+    pass: Upstream parameter gradient is zero for z < 0 and nonzero for z > 0.
+  gradient_checks:
+    evidence: Central finite differences versus backprop on smooth parameters.
+    pass: Agreement within declared atol/rtol; ReLU z = 0 is treated as a hinge, not a silent pass.
+  one_step_update:
+    evidence: One declared parameter-minus-lr-times-gradient step.
+    pass: Local loss moves downhill; no convergence claim.
+  controlled_failure_diagnosis:
+    evidence: Named omitted-branch or wrong-ReLU defect, first mismatch, smallest repair, rerun.
+    pass: Diagnosis precedes the repair; only the named local rule is restored.
+  code_reading:
+    evidence: Annotated tape values, local rules, reverse order, accumulate, and reset.
+    pass: Learner predicts stale grads without reset and avoids framework autograd.
+  no_ai_gate:
+    evidence: Independent scalar reverse, tiny-network grads, one finite-difference check, branch explanation, update sign.
+    pass: Fresh numbers, not a copy of the teaching fixture.
+  adr:
+    evidence: Learner-authored V05 gradient-verification policy.
+    pass: Parameters/cases, tolerance, when checks run, and blocking failures are explicit without claiming global optimality.

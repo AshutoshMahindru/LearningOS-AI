@@ -1,0 +1,49 @@
+mission: M24
+controls:
+  forward_graph: missions.M23.forward_core
+  layout: row-batch X (batch, n_in); W (n_in, n_out); b (n_out,)
+  hidden_activation: relu
+  relu_at_zero: 0.0
+  loss: softmax_nll
+  reduction: mean
+  targets: [0, 0]
+  finite_difference: central
+  dtype: float64
+  epsilon: 1.0e-5
+  atol: 1.0e-6
+  rtol: 1.0e-5
+  update_convention: parameter - learning_rate * gradient
+  prediction_required_before_action: true
+  no_framework_autograd: true
+  one_declared_update_only: true
+experiments:
+  - id: gradient-sign-prediction
+    prediction_required: true
+    change: Perturb a selected parameter up and down before deriving the gradient.
+    observation: Use loss movement to predict gradient sign, then compare with backprop.
+    invariant: Same example and loss.
+  - id: finite-difference-check
+    prediction_required: true
+    change: Vary epsilon across a sensible range.
+    observation: Observe truncation/numerical effects and a stable check region.
+    invariant: Same parameter/forward function.
+  - id: branch-accumulation
+    prediction_required: true
+    change: Use a value feeding two downstream paths.
+    observation: Verify its gradient equals summed contributions.
+    invariant: Graph topology and local functions fixed.
+  - id: activation-derivative
+    prediction_required: true
+    change: Move a pre-activation across an activation boundary.
+    observation: Observe changed local derivative and upstream gradient.
+    invariant: Same downstream loss.
+  - id: one-step-update
+    prediction_required: true
+    change: Apply one small learning-rate update.
+    observation: Verify local loss direction without claiming global convergence.
+    invariant: Only the declared update changes.
+  - id: omitted-branch-or-wrong-relu
+    prediction_required: true
+    change: Omit one branch contribution, or treat relu' as identity.
+    observation: Isolate the first finite-difference mismatch and repair the local rule.
+    invariant: Forward graph, loss, and all other local derivatives stay fixed.

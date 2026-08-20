@@ -1,0 +1,23 @@
+mission: M24
+boundary:
+  inherited_from_m19: One-parameter gradient invariant, central finite differences, and the descent update parameter minus learning-rate times gradient.
+  inherited_from_m23: Named forward graph x → hidden_preactivation → hidden_activation → logits → probabilities, row-batch layout, class-axis softmax, and trusted forward-parity fixtures.
+  manipulated_here: Local derivatives, chain rule, reverse accumulation, branch addition, ReLU hinge, softmax-NLL logit gradient, gradient checks, and one declared parameter update.
+  deferred_to_m25: Framework autograd, nn.Module, optimizers, data loaders, gradient reset in a training loop, and train/eval mode.
+  deferred_to_m26: Multi-cause deep-learning debugging across data, architecture, optimization, and evaluation.
+handoff_summary: M19 opens downhill updates; M23 names the forward graph; M24 assigns blame with reverse-mode gradients that M25 may compare to autograd.
+concepts:
+  - backpropagation is reverse accumulation of local sensitivities through a stored graph
+  - chain rule multiplies local derivatives along a path
+  - downstream contributions add at a branch
+  - parameter, activation, and loss gradients are different objects
+  - relu'(z) is 1 if z > 0 else 0, including z = 0
+  - softmax plus mean NLL has dL/dlogits = (p - one_hot) / N
+  - central finite differences check a smooth parameter; ReLU at 0 is a hinge
+  - one correct step is local loss movement, not convergence
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M24 may explain reverse-mode credit assignment, gradient checks, and one update on the M23 graph. It may not introduce torch.autograd, a training loop, or multi-cause DL debugging.
+canonical_sources:
+  - 3b1b-neural-networks
+  - 3b1b-calculus
+  - karpathy-micrograd

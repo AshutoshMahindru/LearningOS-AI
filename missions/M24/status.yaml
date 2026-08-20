@@ -1,0 +1,23 @@
+mission_id: M24
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: required
+flagship_status:
+  flagship: V05
+  implementation_progress: reverse_mode_opened
+  learner_progress: pending_evidence
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+  exact_head_actions: required
+parallel_safety:
+  prohibited_shared_files_modified: false
+notes:
+  - Implementation status is not learner completion.
+  - Reference gradients are fixture properties, not learner evidence.
+  - M24 assigns blame with reverse mode; M25 owns framework autograd and a training loop.
+  - M25 learner progression remains blocked until M24 learner evidence and formal review are satisfied.
+  - This branch does not mark M24 repository-executable.
