@@ -1,0 +1,38 @@
+mission: M29
+controls:
+  d_model: 2
+  d_k: 2
+  d_v: 2
+  scale: inverse_sqrt_d_k
+  softmax_axis: keys
+  teaching_sequences:
+    cash: [river, bank, cash]
+    water: [river, bank, water]
+  prediction_required_before_action: true
+  no_multi_head_or_block: true
+experiments:
+  - id: context-change
+    prediction_required: true
+    change: Replace the third token representation (cash → water).
+    observation: Compare bank weights and bank output with projections and other tokens fixed.
+    invariant: W_Q, W_K, W_V, scale, mask, and the first two token vectors stay fixed.
+  - id: causal-mask
+    prediction_required: true
+    change: Toggle a causal mask on the cash sequence.
+    observation: Verify future key positions receive no mass; bank can no longer mix cash.
+    invariant: Pre-mask scores, Q, K, V, and scale stay fixed.
+  - id: scale-factor
+    prediction_required: true
+    change: Compare unscaled scores with scores divided by sqrt(d_k) on a d_k=8 fixture.
+    observation: Observe softmax concentration (max weight / entropy) with Q and K fixed.
+    invariant: Q, K, V, and mask stay fixed; only the scale multiplier changes.
+  - id: query-key-perturbation
+    prediction_required: true
+    change: Perturb the bank query toward the river axis; keys and values stay the cash sequence.
+    observation: Trace raw scores and weights for the bank row.
+    invariant: K, V, mask, and scale stay fixed.
+  - id: value-only-change
+    prediction_required: true
+    change: Replace only the cash value vector; Q, K, and mask stay put.
+    observation: Weights remain the cash-context weights; bank output moves.
+    invariant: Q, K, mask, and scale stay fixed.

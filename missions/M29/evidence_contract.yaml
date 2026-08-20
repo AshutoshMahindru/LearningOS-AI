@@ -1,0 +1,80 @@
+mission_id: M29
+version: 1
+purpose: Define acceptable learner-produced attention evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_attention_action
+      - falsifiable_weight_or_output_claim
+      - observation_and_revision
+  - id: context_change_trace
+    artifact_type: attention_trace
+    must_show:
+      - cash_versus_water_third_token
+      - bank_weights_and_output
+      - fixed_projections_and_first_two_tokens
+  - id: causal_mask_trace
+    artifact_type: masked_weight_matrix
+    must_show:
+      - pre_mask_scores_fixed
+      - zero_mass_on_future_keys
+      - renormalized_allowed_keys
+  - id: scale_concentration
+    artifact_type: softmax_concentration_comparison
+    must_show:
+      - unscaled_versus_dk_scaled
+      - max_weight_or_entropy
+      - q_and_k_fixed
+  - id: query_or_key_perturbation
+    artifact_type: score_weight_trace
+    must_show:
+      - one_named_perturbation
+      - values_fixed
+      - moved_scores_and_weights
+  - id: value_only_change
+    artifact_type: weight_output_split
+    must_show:
+      - unchanged_weights
+      - changed_output
+      - q_k_mask_fixed
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_softmax_axis_or_mask_order_defect
+      - row_sum_or_masked_mass_discriminator
+      - repair_from_broken_trace
+      - regression_that_the_broken_path_still_fails
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - qkv_projection_shapes
+      - scale_and_mask_before_softmax
+      - softmax_over_keys
+      - weighted_value_sum
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: v06_attention_observability_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - logged_shapes_and_checkpoints
+      - mask_and_row_sum_invariants
+      - score_summaries
+      - over_interpretation_limits
+      - alternatives_and_trade_offs
+      - owner_status_and_date
+quality_bar:
+  - Hand arithmetic matches the programmatic two-key trace.
+  - Softmax is defended as a key-axis operation, not a vibe.
+  - Attention weights are not reported as proof of intent.
+  - Future-mission mechanisms (multi-head, residual, norm, FFN, LLM training, search services) stay closed.
+  - Failures are repaired by restoring softmax axis or mask order from the broken trace.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited
