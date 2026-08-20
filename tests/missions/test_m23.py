@@ -452,21 +452,12 @@ class M23RuntimeTests(unittest.TestCase):
         self.assertTrue(still_aligned["all_match"])
 
     def test_smallest_repair_restores_class_axis_softmax(self):
-        correct = CORE.two_layer_forward_with_defect(
+        correct = CORE.two_layer_forward(
             CORE.REFERENCE_X,
             CORE.REFERENCE_W1,
             CORE.REFERENCE_B1,
             CORE.REFERENCE_W2,
             CORE.REFERENCE_B2,
-            defect="none",
-        )
-        repaired = CORE.two_layer_forward_with_defect(
-            CORE.REFERENCE_X,
-            CORE.REFERENCE_W1,
-            CORE.REFERENCE_B1,
-            CORE.REFERENCE_W2,
-            CORE.REFERENCE_B2,
-            defect="none",
         )
         broken = CORE.two_layer_forward_with_defect(
             CORE.REFERENCE_X,
@@ -476,8 +467,19 @@ class M23RuntimeTests(unittest.TestCase):
             CORE.REFERENCE_B2,
             defect="softmax_axis_batch",
         )
+        repaired = CORE.two_layer_forward_with_defect(
+            CORE.REFERENCE_X,
+            CORE.REFERENCE_W1,
+            CORE.REFERENCE_B1,
+            CORE.REFERENCE_W2,
+            CORE.REFERENCE_B2,
+            defect="none",
+        )
         self.assertFalse(CORE.arrays_close(broken.probabilities, correct.probabilities))
+        self.assertTrue(CORE.arrays_close(broken.logits, repaired.logits))
         self.assertTrue(CORE.arrays_close(repaired.probabilities, correct.probabilities))
+        self.assertTrue(all(CORE.intermediate_parity(repaired, correct).values()))
+        self.assertFalse(CORE.arrays_close((1.0, 2.0), ((1.0, 2.0),)))
 
     def test_shape_mismatch_is_rejected(self):
         with self.assertRaises(ValueError):

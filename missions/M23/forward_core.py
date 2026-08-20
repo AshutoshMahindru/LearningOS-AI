@@ -475,14 +475,11 @@ def reference_forward() -> ForwardTrace:
 
 def arrays_close(left, right, *, atol: float = DEFAULT_ATOL, rtol: float = DEFAULT_RTOL) -> bool:
     np = _require_numpy()
-    return bool(
-        np.allclose(
-            np.asarray(left, dtype=float),
-            np.asarray(right, dtype=float),
-            atol=atol,
-            rtol=rtol,
-        )
-    )
+    left_arr = np.asarray(left, dtype=float)
+    right_arr = np.asarray(right, dtype=float)
+    if left_arr.shape != right_arr.shape:
+        return False
+    return bool(np.allclose(left_arr, right_arr, atol=atol, rtol=rtol))
 
 
 def intermediate_parity(
