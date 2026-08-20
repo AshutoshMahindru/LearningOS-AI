@@ -1,0 +1,23 @@
+mission: M25
+boundary:
+  inherited_from_m24: Trusted reverse-mode gradients, softmax-NLL logit gradient, ReLU local derivative, branch addition, one declared descent update, and central finite-difference checks on the M23 graph.
+  inherited_from_m23: Named forward graph x → hidden_preactivation → hidden_activation → logits → probabilities and row-batch layout.
+  manipulated_here: PyTorch tensors, nn.Module parameter ownership, DataLoader batches, zero_grad → forward → loss → backward → step, gradient reset, train/eval mode, no-grad inference, checkpoints, reproducibility seeds, and train/val/held-out splits.
+  deferred_to_m26: Systematic multi-cause deep-learning debugging across data, architecture, optimization, and evaluation.
+handoff_summary: M24 opens reverse-mode numbers; M25 wraps them in an instrumented autograd training loop that M26 may break one control at a time.
+concepts:
+  - nn.Module owns registered parameters; nn.Linear stores W as (out, in)
+  - autograd fills .grad; it does not update parameters
+  - optimizer.step applies the update; optimizer state is not the gradient tensor
+  - gradients accumulate unless zero_grad runs each step
+  - model.train versus model.eval changes dropout and batch-norm behavior
+  - torch.no_grad is inference context, not a substitute for eval mode
+  - evaluation must not call optimizer.step
+  - held-out examples never enter train or validation
+  - a checkpoint is more than weights if a run must resume
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M25 may explain the training loop, autograd parity with M24, mode, checkpoints, and protected splits. It may not teach a multi-cause diagnosis catalogue.
+canonical_sources:
+  - pytorch-basics
+  - fastai-course
+  - karpathy-micrograd

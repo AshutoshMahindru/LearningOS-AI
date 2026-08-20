@@ -1,0 +1,102 @@
+id: M25
+title: Train Networks in PyTorch
+phase: P4
+flagship: V05
+objective: Implement a full modern training loop with autograd.
+competencies:
+  - PyTorch
+  - autograd
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M24
+  helpful: []
+handoff:
+  receives: M24 trusted reverse-mode gradients, update semantics, and finite-difference checks
+  provides: M26 a complete instrumented PyTorch training system whose data, optimization, architecture, and evaluation controls can be broken independently
+learning_sequence:
+  - translate the M24 tiny network into a PyTorch module with matching initial parameters
+  - verify forward parity before training
+  - verify selected autograd gradients against M24
+  - build one canonical training step and predict parameter movement
+  - train on a small deterministic fixture with protected splits
+  - add batched data loading
+  - use eval and no-grad for validation and held-out evaluation
+  - checkpoint and reload the accepted state
+  - trigger a stale-gradient or train-mode evaluation failure
+  - complete a fresh no-AI training-loop reconstruction
+  - author a V05 training-loop reproducibility/checkpoint policy ADR
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M25_pytorch_training.ipynb
+instrumentation: missions/M25/pytorch_training.py
+requirements: requirements/m25.txt
+mission_test: tests/missions/test_m25.py
+reference_fixture:
+  forward_graph: missions.M24.backprop_core
+  teaching_architecture: affine-ReLU-affine logits, n_in=3 n_hidden=2 n_out=3
+  training_architecture: affine-ReLU-affine logits, n_in=3 n_hidden=8 n_out=3
+  linear_layout: nn.Linear stores W as (out, in); M24 stores (in, out)
+  loss: softmax_nll via CrossEntropyLoss mean
+  device: cpu
+  dtype: float64
+  loop_order: zero_grad -> forward -> loss -> backward -> step
+  splits: train 24 / val 6 / held_out 6, disjoint
+  optimizer: SGD
+  teaching_momentum: 0.0
+  train_momentum: 0.9
+  seed: 2501
+  atol: 1.0e-6
+  rtol: 1.0e-5
+  parity_atol: 1.0e-10
+canonical_sources:
+  - pytorch-basics
+  - fastai-course
+  - karpathy-micrograd
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  cpu_canonical: required
+  no_weight_download: required
+  evaluation_does_not_update_parameters: required
+  held_out_excluded_from_train_and_val: required
+mission_artifacts:
+  - missions/M25/README.md
+  - missions/M25/manifest.yaml
+  - missions/M25/content.yaml
+  - missions/M25/experiments.yaml
+  - missions/M25/code_reading.md
+  - missions/M25/no_ai_gate.md
+  - missions/M25/controlled_failure.md
+  - missions/M25/assessment.yaml
+  - missions/M25/evidence_contract.yaml
+  - missions/M25/flagship_integration.md
+  - missions/M25/review_brief.md
+  - missions/M25/adr_prompt.md
+  - missions/M25/status.yaml
+  - missions/M25/pytorch_training.py
+  - labs/M25_pytorch_training.ipynb
+  - requirements/m25.txt
+  - tests/missions/test_m25.py
+  - tests/test_m25.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  multi_cause_debugging_deferred_to_m26: true
+  no_required_gpu: true
+  no_silent_weight_download: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

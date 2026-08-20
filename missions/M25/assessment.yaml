@@ -1,0 +1,40 @@
+mission: M25
+transfer_required: true
+formal_engineering_review: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped training-loop predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  module_ownership:
+    evidence: Named parameters, shapes, requires_grad, and the Linear layout transpose.
+    pass: Learner can state who owns W/b and how they map to M24.
+  autograd_parity:
+    evidence: Selected autograd grads versus M24 on the teaching micro-case.
+    pass: Agreement within declared atol on W1, b1, W2, b2 and mean softmax-NLL.
+  loop_order:
+    evidence: One canonical zero_grad -> forward -> loss -> backward -> step.
+    pass: Parameter movement matches SGD; backward without step does not update.
+  gradient_reset:
+    evidence: Two-step comparison with and without zero_grad on the same batch.
+    pass: Missing reset accumulates grads; repaired reset does not.
+  train_eval_boundary:
+    evidence: Correct eval/no-grad versus train-mode evaluation with Dropout.
+    pass: Outputs/metrics can differ; parameters do not update in either eval path.
+  protected_splits:
+    evidence: Disjoint train/val/held-out indices and held-out used only after freeze.
+    pass: Held-out examples never enter optimizer.step.
+  checkpoint_roundtrip:
+    evidence: Save, load, and held-out replay under the declared policy.
+    pass: Reloaded inference matches; optimizer state is distinct from .grad.
+  controlled_failure_diagnosis:
+    evidence: Named stale-grad or train-mode-eval defect, discriminator, smallest repair, rerun.
+    pass: Diagnosis precedes the repair; only the named loop control is restored.
+  code_reading:
+    evidence: Annotated registration, reset, optimizer state, mode, checkpoint keys, held-out boundary.
+    pass: Learner predicts stale grads and mode-state failures without opening M26.
+  no_ai_gate:
+    evidence: Independent skeleton fill, one M24 gradient check, checkpointed held-out inference, snippet identity.
+    pass: Fresh work, not a copy of the teaching notebook.
+  adr:
+    evidence: Learner-authored V05 training-loop reproducibility/checkpoint policy.
+    pass: Seeds, saved state, optimizer state, validation evidence, restart, and rollback are explicit without claiming global optimality.

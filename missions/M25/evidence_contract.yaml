@@ -1,0 +1,99 @@
+mission_id: M25
+version: 1
+purpose: Define acceptable learner-produced training-loop evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_training_action
+      - falsifiable_sign_value_or_mode_claim
+      - observation_and_revision
+  - id: module_ownership
+    artifact_type: named_parameter_table
+    must_show:
+      - registered_names_and_shapes
+      - requires_grad_and_leaf
+      - linear_transpose_versus_m24
+  - id: forward_parity
+    artifact_type: named_intermediate_comparison
+    must_show:
+      - hidden_preactivation
+      - hidden_activation
+      - logits
+      - probabilities
+  - id: autograd_parity
+    artifact_type: selected_gradient_table
+    must_show:
+      - W2_00_autograd_versus_m24
+      - mean_softmax_nll_agreement
+      - layout_note
+  - id: canonical_step
+    artifact_type: loop_trace
+    must_show:
+      - zero_grad_forward_loss_backward_step
+      - parameter_movement
+      - backward_does_not_update
+  - id: protected_splits
+    artifact_type: index_sets
+    must_show:
+      - disjoint_train_val_held_out
+      - held_out_excluded_from_optimizer
+  - id: batch_size_control
+    artifact_type: dynamics_comparison
+    must_show:
+      - named_batch_sizes
+      - steps_per_epoch
+      - no_universal_invariance_claim
+  - id: train_eval_boundary
+    artifact_type: mode_and_metric_trace
+    must_show:
+      - eval_flag
+      - no_grad_flag
+      - parameters_unchanged
+  - id: checkpoint_replay
+    artifact_type: roundtrip_record
+    must_show:
+      - saved_keys
+      - optimizer_state_present
+      - held_out_outputs_match
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_stale_grad_or_train_mode_eval_defect
+      - discriminating_trace
+      - smallest_repair
+      - preserved_invariants
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - parameter_registration
+      - gradient_reset
+      - optimizer_state_versus_grad
+      - model_mode
+      - checkpoint_contents
+      - held_out_boundary
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: reproducibility_checkpoint_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - seeds
+      - saved_state
+      - optimizer_state
+      - validation_evidence
+      - restart_and_rollback
+      - owner_status_and_date
+quality_bar:
+  - Autograd matches M24 on the teaching micro-case within tolerance.
+  - Claims cite named loop controls rather than "it trained."
+  - Future-mission mechanisms (multi-cause DL debugging) stay closed.
+  - Failures are repaired by restoring the named loop control rather than changing several knobs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited
