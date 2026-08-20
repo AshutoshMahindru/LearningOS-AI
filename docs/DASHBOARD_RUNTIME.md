@@ -39,4 +39,4 @@ State-changing operations remain in the CLI/runtime so a browser refresh cannot 
 
 ## Design constraint
 
-The dashboard must reflect repository lab availability rather than planned curriculum state. M01-M22 are now implemented and validated as repository-executable labs. M23-M42 remain non-executable until their mission packages are implemented and pass the same repository and notebook validation gates.
+The dashboard must reflect repository lab availability rather than planned curriculum state. M01-M26 are now implemented and validated as repository-executable labs. M27-M29 and M33 have implemented packages that are not yet repository-executable. M30-M32 and M34-M42 remain non-executable until their mission packages are implemented and pass the same repository and notebook validation gates.

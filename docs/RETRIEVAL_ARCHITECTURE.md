@@ -33,7 +33,7 @@ Tutor / CLI / future dashboard
 - The canonical 253-node knowledge graph is migrated and validated by `tools/validate_repo.py`.
 - The source/content registry is a curated canonical routing layer; mission-local content files extend it without requiring every mission detail to live in one global registry.
 - Local retrieval uses bag-of-words vectors with cosine similarity. It is a graceful-degradation fallback, not a replacement for embeddings.
-- M01-M22 now have repository-executable notebooks and validated mission packages. M23-M42 remain specification-only until implemented and validated.
+- M01-M26 now have repository-executable notebooks and validated mission packages. M27-M29 and M33 have implemented packages that are not yet repository-executable. M30-M32 and M34-M42 remain non-executable until implemented and validated.
 
 ## Contract for external retrieval
 
