@@ -1,0 +1,22 @@
+mission: M22
+boundary:
+  inherited_from_m21: Black-box training evidence, frozen hidden-unit count as a capacity knob, and the need to explain a layer without opening training.
+  manipulated_here: Affine neuron arithmetic, bias, ReLU/sigmoid/tanh, dense-layer shapes, row-batches, and two-layer affine composition with or without a nonlinearity.
+  deferred_to_m23: Multi-layer NumPy inference, logits, and stable probability normalization.
+  deferred_to_m24: Backpropagation and chain-rule credit assignment.
+  deferred_to_m25: Framework autograd and a hand-authored PyTorch training loop.
+handoff_summary: M21 trains the whole network; M22 opens the neuron and layer; M23 reconstructs a multi-layer forward pass from these equations.
+concepts:
+  - a neuron is an affine transform followed by an activation
+  - bias translates the pre-activation independently of the feature weights
+  - activation functions are observed maps, not biological stories
+  - stacked affine layers without a nonlinearity collapse to one affine map
+  - row-batch orientation is the same matrix contract as M16
+  - activation belongs after the affine map unless a named defect says otherwise
+  - M21 capacity results are observations, not causal proofs about ReLU
+  - shape and a hand-computed micro-case diagnose orientation/boundary defects
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M22 may explain one neuron and one dense layer from arithmetic. It may not introduce gradients, backpropagation, softmax stacks, or a framework training loop.
+canonical_sources:
+  - 3b1b-neural-networks
+  - fastai-course

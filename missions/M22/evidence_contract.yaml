@@ -1,0 +1,72 @@
+mission_id: M22
+version: 1
+purpose: Define acceptable learner-produced neuron/layer evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_layer_action
+      - falsifiable_value_or_shape_claim
+      - observation_and_revision
+  - id: neuron_hand_calculation
+    artifact_type: worked_arithmetic
+    must_show:
+      - weighted_sum
+      - bias_term
+      - preactivation
+      - activation_output
+  - id: activation_comparison
+    artifact_type: shared_input_sweep
+    must_show:
+      - relu_sigmoid_tanh_on_identical_preactivations
+      - range_sign_saturation_notes
+      - no_universal_activation_claim
+  - id: dense_layer_shapes
+    artifact_type: annotated_shape_trace
+    must_show:
+      - X_W_b_Y_dimensions
+      - singleton_versus_batch_parity
+      - activation_after_affine
+  - id: linearity_collapse
+    artifact_type: controlled_composition
+    must_show:
+      - identity_hidden_equals_collapsed_affine
+      - nonlinear_hidden_does_not_in_general
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_orientation_or_boundary_defect
+      - hand_computed_discriminator
+      - smallest_repair
+      - preserved_invariants
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - shape_validation
+      - affine_map
+      - activation_placement
+      - error_paths
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: teaching_activation_width_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - activation_and_width_choice
+      - alternatives_and_trade_offs
+      - evidence_from_this_mission
+      - revisit_triggers
+      - owner_status_and_date
+quality_bar:
+  - Hand calculations match the deterministic reference.
+  - Claims cite observed maps and shapes rather than neuron mythology or M21 capacity stories as causes.
+  - Future-mission mechanisms (full forward stack, gradients, autograd) stay closed.
+  - Failures are repaired by restoring the named boundary rather than changing several knobs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: false
+  prefilled_learner_evidence: prohibited

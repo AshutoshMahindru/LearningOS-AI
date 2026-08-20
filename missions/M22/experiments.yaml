@@ -1,0 +1,38 @@
+mission: M22
+controls:
+  layout: row-batch X (batch, n_in); W (n_in, n_out); b (n_out,)
+  activation_placement: after the affine map
+  arithmetic: transparent NumPy or equivalent
+  prediction_required_before_action: true
+  no_autograd: true
+experiments:
+  - id: single-neuron-trace
+    prediction_required: true
+    change: Change one input feature while weights, bias, and activation remain fixed.
+    observation: Trace the change through pre-activation and output.
+    invariant: All other inputs and parameters stay fixed.
+  - id: bias-ablation
+    prediction_required: true
+    change: Set only bias to zero.
+    observation: Observe the translation of the neuron response.
+    invariant: Input, weights, and activation stay fixed.
+  - id: activation-sweep
+    prediction_required: true
+    change: Apply ReLU, sigmoid, and tanh to the same pre-activation values.
+    observation: Compare range, sign behavior, saturation, and local sensitivity.
+    invariant: Identical pre-activation sequence.
+  - id: batch-shape-trace
+    prediction_required: true
+    change: Increase from one example to a small batch.
+    observation: Verify per-row equivalence and shape propagation.
+    invariant: Layer parameters and feature order stay fixed.
+  - id: linearity-collapse
+    prediction_required: true
+    change: Compose two affine layers once without a nonlinearity and once with one.
+    observation: Verify the purely affine composition equals one affine map.
+    invariant: Same deterministic dimensions and inputs.
+  - id: layer-boundary-failure
+    prediction_required: true
+    change: Use a transposed weight matrix or apply the activation before the affine map.
+    observation: Diagnose from expected shapes and a hand-computed micro-case.
+    invariant: Intended X, W, b, and activation name stay fixed; only the boundary is wrong.

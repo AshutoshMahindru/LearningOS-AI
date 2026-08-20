@@ -1,0 +1,30 @@
+mission: M22
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped neuron/layer predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  hand_calculation_parity:
+    evidence: Hand-computed pre-activation and activation match the deterministic reference.
+    pass: Arithmetic, not a running notebook, is the source of the claim.
+  shapes_and_batches:
+    evidence: Single-example and batch shapes annotated and checked.
+    pass: Row-batch orientation matches M16; per-row outputs match the singleton case.
+  activation_reasoning:
+    evidence: ReLU, sigmoid, and tanh on one shared pre-activation sequence.
+    pass: Claims stay with the observed maps; no universal-activation ranking.
+  linearity_collapse:
+    evidence: Two affine layers with and without a hidden nonlinearity.
+    pass: The identity-hidden composition equals one affine map; the nonlinear one does not, in general.
+  controlled_failure_diagnosis:
+    evidence: Named orientation or activation-boundary defect, diagnosis, smallest repair, rerun.
+    pass: Diagnosis precedes the repair; only the named boundary is restored.
+  code_reading:
+    evidence: Annotated dense_forward flow from shape checks through activation placement.
+    pass: Learner predicts malformed-shape behavior and avoids gradient inspection.
+  no_ai_gate:
+    evidence: Independent hand calculation and transfer defense.
+    pass: Fresh neuron, layer, collapse explanation, and shape repair are correct.
+  adr:
+    evidence: Learner-authored teaching activation/width policy.
+    pass: Alternatives, evidence, consequences, and revisit triggers are complete without global-optimality claims.
