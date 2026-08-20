@@ -1,0 +1,102 @@
+id: M24
+title: Assign Blame with Backpropagation
+phase: P4
+flagship: V05
+objective: Understand backpropagation as structured credit assignment.
+competencies:
+  - backpropagation
+  - chain rule
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M19
+    - M23
+  helpful: []
+handoff:
+  receives: M19 one-parameter gradient invariant and M23 named forward graph x → hidden_preactivation → hidden_activation → logits → probabilities
+  provides: M25 trusted manual/backprop gradients and central finite-difference check expectations for autograd
+learning_sequence:
+  - restate the M19 one-parameter gradient invariant
+  - draw the M23 forward pass as a named computation graph
+  - predict selected gradient signs before deriving them
+  - backpropagate through a scalar chain
+  - introduce a branch and demonstrate accumulation
+  - derive a tiny dense-layer/activation backward pass
+  - compare analytic/backprop gradients with central finite differences
+  - apply one small update and verify local loss movement
+  - diagnose the omitted-branch or wrong-activation-derivative failure
+  - complete a fresh no-AI gradient trace
+  - author a V05 gradient-verification policy ADR
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M24_backpropagation.ipynb
+instrumentation: missions/M24/backprop_core.py
+requirements: requirements/m24.txt
+mission_test: tests/missions/test_m24.py
+reference_fixture:
+  forward_graph: missions.M23.forward_core
+  x: [[1.0, 0.0, -1.0], [0.5, 0.5, 0.5]]
+  w1: [[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]]
+  b1: [0.0, 0.5]
+  w2: [[1.0, 0.0, -1.0], [0.0, 1.0, 0.5]]
+  b2: [0.0, 0.0, 0.0]
+  hidden_activation: relu
+  relu_at_zero: 0.0
+  targets: [0, 0]
+  loss: softmax_nll
+  reduction: mean
+  update_convention: parameter - learning_rate * gradient
+  finite_difference: central
+  epsilon: 1.0e-5
+  atol: 1.0e-6
+  rtol: 1.0e-5
+canonical_sources:
+  - 3b1b-neural-networks
+  - 3b1b-calculus
+  - karpathy-micrograd
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_framework_autograd: required
+  no_training_loop: required
+  one_declared_update_only: required
+mission_artifacts:
+  - missions/M24/README.md
+  - missions/M24/manifest.yaml
+  - missions/M24/content.yaml
+  - missions/M24/experiments.yaml
+  - missions/M24/code_reading.md
+  - missions/M24/no_ai_gate.md
+  - missions/M24/controlled_failure.md
+  - missions/M24/assessment.yaml
+  - missions/M24/evidence_contract.yaml
+  - missions/M24/flagship_integration.md
+  - missions/M24/review_brief.md
+  - missions/M24/adr_prompt.md
+  - missions/M24/status.yaml
+  - missions/M24/backprop_core.py
+  - labs/M24_backpropagation.ipynb
+  - requirements/m24.txt
+  - tests/missions/test_m24.py
+  - tests/test_m24.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  pytorch_autograd_deferred_to_m25: true
+  training_loop_deferred_to_m25: true
+  multi_cause_debugging_deferred_to_m26: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false
