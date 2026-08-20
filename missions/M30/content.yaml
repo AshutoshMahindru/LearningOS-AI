@@ -1,0 +1,20 @@
+mission: M30
+boundary:
+  inherited_from_m29: Single-head Q/K/V, scaled dots, additive masks, softmax over keys, weighted values, row-sum/mask invariants, and named attention checkpoints.
+  manipulated_here: Multi-head split and merge, output projection, residual adds, declared pre-norm versus labeled post-norm, position-wise feed-forward, and named tensor checkpoints through one block.
+  deferred_to_m31: Causal next-token objective, input/target shifting, training loops, loss curves, contamination, and the LLM training lifecycle.
+  deferred_to_m32: Decoding, temperature, candidate filters, stop budgets, and adaptation choice among prompt, retrieval, tools, and parameter change.
+handoff_summary: M29 supplies the trusted single-head call; M30 hands M31 a block dataflow map with convention label, shapes, residual identities, and observability points.
+concepts:
+  - a transformer block is attention plus residual, norm, and a position-wise FFN
+  - multi-head attention is parallel projections, not a cast of human roles
+  - residual connections are matching-shape adds of stream plus sublayer
+  - pre-norm versus post-norm is an architecture convention
+  - LayerNorm standardizes the feature axis at each position
+  - the feed-forward sublayer does not mix positions
+  - named checkpoints catch the first residual or norm divergence
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M30 may explain one teaching transformer block, head split/merge, residuals, labeled norm placement, and a position-wise FFN. It may not introduce LLM training, contamination, decoding, or adaptation policy. It may not assign unsupported semantic meanings to heads.
+canonical_sources:
+  - hf-llm-course
+  - karpathy-zero-to-hero

@@ -1,0 +1,97 @@
+id: M30
+title: Dissect a Transformer Block
+phase: P5
+flagship: V06
+objective: Trace data through a transformer block and reconstruct its roles.
+competencies:
+  - transformers
+  - tensor flow
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M29
+  helpful: []
+handoff:
+  receives: M29 single-head attention trace with Q/K/V, masks, softmax over keys, weighted values, and named checkpoints
+  provides: M31 receives a coherent transformer-block dataflow map, declared norm convention, and explicit observability points
+learning_sequence:
+  - inspect a complete pre-norm block diagram and a deterministic 4-D input tensor
+  - predict the whole-block output move when one context vector changes
+  - trace the M29 attention sublayer inside identity-split heads
+  - inspect per-head outputs before merge and output projection
+  - add the output projection and the attention residual
+  - ablate one residual add with parameters fixed
+  - compare labeled pre-norm and post-norm on the same weights
+  - run the position-wise feed-forward and the second residual
+  - compare named checkpoints with a trusted golden fixture
+  - diagnose a wrong residual branch or a misplaced norm boundary
+  - complete a no-AI block trace and V06 handoff
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M30_transformer_block.ipynb
+instrumentation: missions/M30/transformer_block.py
+requirements: requirements/m30.txt
+mission_test: tests/missions/test_m30.py
+reference_fixture:
+  tokens_cash: [river, bank, cash]
+  tokens_water: [river, bank, water]
+  d_model: 4
+  n_heads: 2
+  d_head: 2
+  d_ff: 8
+  activation: relu
+  convention: pre_norm
+  scale: inverse_sqrt_d_k
+  softmax_axis: keys
+  version: v06-teaching-block-1
+canonical_sources:
+  - hf-llm-course
+  - karpathy-zero-to-hero
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  declared_pre_norm: required
+  no_head_mythology: required
+  no_llm_training: required
+  no_inference_policy: required
+  no_pretrained_download: required
+mission_artifacts:
+  - missions/M30/README.md
+  - missions/M30/manifest.yaml
+  - missions/M30/content.yaml
+  - missions/M30/experiments.yaml
+  - missions/M30/code_reading.md
+  - missions/M30/no_ai_gate.md
+  - missions/M30/controlled_failure.md
+  - missions/M30/assessment.yaml
+  - missions/M30/evidence_contract.yaml
+  - missions/M30/flagship_integration.md
+  - missions/M30/review_brief.md
+  - missions/M30/adr_prompt.md
+  - missions/M30/status.yaml
+  - missions/M30/transformer_block.py
+  - labs/M30_transformer_block.ipynb
+  - requirements/m30.txt
+  - tests/missions/test_m30.py
+  - tests/test_m30.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  m29_attention_composed_not_rewritten: true
+  llm_training_deferred_to_m31: true
+  inference_adaptation_deferred_to_m32: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

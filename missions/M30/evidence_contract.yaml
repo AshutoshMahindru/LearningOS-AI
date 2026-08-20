@@ -1,0 +1,86 @@
+mission_id: M30
+version: 1
+purpose: Define acceptable learner-produced transformer-block evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_block_action
+      - falsifiable_shape_residual_or_checkpoint_claim
+      - observation_and_revision
+  - id: whole_block_trace
+    artifact_type: named_checkpoint_trace
+    must_show:
+      - cash_versus_water_context
+      - declared_pre_norm
+      - output_and_attn_residual
+  - id: head_decomposition
+    artifact_type: per_head_tensors
+    must_show:
+      - q_heads_and_head_outputs_shapes
+      - merge_equals_concat
+      - no_human_head_titles
+  - id: residual_ablation
+    artifact_type: residual_stream_comparison
+    must_show:
+      - one_named_skip
+      - parameters_fixed
+      - changed_output_or_norms
+  - id: norm_placement
+    artifact_type: convention_comparison
+    must_show:
+      - labeled_pre_norm_and_post_norm
+      - same_parameters_and_input
+      - architecture_dependence_statement
+  - id: feed_forward_change
+    artifact_type: activation_or_width_comparison
+    must_show:
+      - attention_residual_unchanged
+      - ffn_hidden_or_output_changed
+      - position_wise_claim
+  - id: reference_parity
+    artifact_type: checkpoint_tolerance_table
+    must_show:
+      - TRACE_CHECKPOINTS_order
+      - golden_pre_norm_fixture
+      - first_divergence_none_on_healthy_path
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_residual_or_norm_defect
+      - first_divergence_checkpoint
+      - repair_from_broken_trace
+      - regression_that_the_broken_path_still_diverges
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - split_m29_merge_projection
+      - residual_uses_original_stream_in_pre_norm
+      - position_wise_ffn
+      - declared_convention_label
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: v06_block_convention_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - pre_vs_post_norm_choice
+      - activation_and_head_dimensions
+      - checkpointed_intermediates
+      - version_identity
+      - alternatives_and_trade_offs
+      - owner_status_and_date
+quality_bar:
+  - Independent residual arithmetic matches the programmatic attn_add / ffn_add.
+  - Pre-norm is defended as a convention, not a vibe.
+  - Heads are not reported as proof of linguistic roles.
+  - Future-mission mechanisms (LLM training, contamination, decoding, adaptation) stay closed.
+  - Failures are repaired by restoring residual addend or first-norm boundary from the broken trace.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited
