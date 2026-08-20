@@ -1,0 +1,44 @@
+mission: M33
+controls:
+  embedding_family: v06-teaching-embed
+  embedding_model: v06-teaching-meanpool
+  embedding_version: v06.1
+  dimensions: 12
+  metric: cosine
+  normalization: l2
+  pooling: mean
+  index_backend: exact-in-memory
+  offline_fixture: datasets/M33/vectors.json
+  prediction_required_before_action: true
+  no_generation_rerank_or_ann: true
+experiments:
+  - id: top-k
+    prediction_required: true
+    change: Vary top-k on fixed labeled queries.
+    observation: Recall opportunity versus irrelevant candidates in the returned window.
+    invariant: Index and query vectors fixed. Exact search still scores every eligible chunk.
+  - id: metadata-filter
+    prediction_required: true
+    change: Apply or remove a declared topic filter.
+    observation: Only eligible documents compete; labels do not change.
+    invariant: Same query and index.
+  - id: exact-baseline
+    prediction_required: true
+    change: Compare service ranking with an independent brute-force cosine calculation.
+    observation: Require id and score parity, including (-score, chunk_id) ties.
+    invariant: Same vectors and metric.
+  - id: labeled-retrieval
+    prediction_required: true
+    change: Score hit@k / recall@k against frozen labels, not against cosine.
+    observation: A high-scoring hard neighbor can remain unlabeled-relevant.
+    invariant: Evaluation set fixed; do not relabel after seeing ranks.
+  - id: index-staleness
+    prediction_required: true
+    change: Change a source document without rebuilding the index.
+    observation: Unchecked search serves indexed text; the gate raises IndexStaleError.
+    invariant: Query text fixed. Repair rebuilds from the broken index object.
+  - id: hard-cases
+    prediction_required: true
+    change: Run negation, numeric, and entity queries inherited from M28.
+    observation: Record misses and high-scoring neighbors without relabeling.
+    invariant: Evaluation set and encoder fixed.

@@ -1,0 +1,33 @@
+mission: M33
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped search-service predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  retriever_interface:
+    evidence: Ranked hits with document/chunk ids, scores, text spans, metadata, and provenance.
+    pass: Interface is deterministic; spans recover chunk text; ties use (-score, chunk_id).
+  exact_baseline_parity:
+    evidence: Independent brute-force cosine ranking versus the service.
+    pass: Ids and scores match on the frozen vectors.
+  labeled_retrieval:
+    evidence: hit@k / recall@k on the frozen query labels, including hard cases.
+    pass: Scores are not used as labels; labels are not edited after seeing ranks.
+  metadata_filter:
+    evidence: Topic filter applied and removed on the same query/index.
+    pass: Only eligible chunks are scored; unlabeled traps can win a device-only filter.
+  version_mismatch_fail_closed:
+    evidence: Stale corpus hash and incompatible embedding fingerprint.
+    pass: Gates raise; unchecked paths are named defects, not defaults.
+  controlled_failure_diagnosis:
+    evidence: Stale-index symptom, hash diagnosis, rebuild-or-reject, regression.
+    pass: Diagnosis precedes the repair; repair uses the broken index object.
+  code_reading:
+    evidence: Annotated ingest → index → query → filter → score → ties → freshness flow.
+    pass: Learner predicts scored_candidates vs top-k and a refused stale search.
+  no_ai_gate:
+    evidence: Independent ranking on transfer.json and transfer defense.
+    pass: Hand cosine, query trace, labeled metrics, stale diagnosis, and non-proof statement are correct.
+  adr:
+    evidence: Learner-authored V08 index identity and rebuild policy.
+    pass: Embedding version, corpus hash, metric, filter schema, ties, and stale handling are complete without claiming a production vector database.

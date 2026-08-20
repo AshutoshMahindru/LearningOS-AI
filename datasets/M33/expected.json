@@ -1,0 +1,387 @@
+{
+  "schema_version": 1,
+  "note": "Fixture ranking properties, not learner evidence.",
+  "index_id": "v08-exact-memory",
+  "backend": "exact-in-memory",
+  "corpus_version": "m33.corpus.v1",
+  "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+  "vector_hash": "17d46ab16fbbddca21d84cc00569d70d9c8f5c51e9ad5826e69201221f9a666c",
+  "filter_schema": [
+    "topic",
+    "source",
+    "locale"
+  ],
+  "tie_break": [
+    "-score",
+    "chunk_id"
+  ],
+  "stale_policy": "fail-closed-rebuild-or-reject",
+  "m28_to_chunk": {
+    "d-password-forgot": "doc-account-access::c0",
+    "d-login-reset": "doc-account-access::c1",
+    "d-cannot-signin": "doc-account-access::c2",
+    "d-printer-reset": "doc-device-printer::c0",
+    "d-printer-queue": "doc-device-printer::c1",
+    "d-approve-refund": "doc-refund-policy::c0",
+    "d-deny-refund": "doc-refund-policy::c1",
+    "d-pay-fifty": "doc-payments::c0",
+    "d-pay-thousand": "doc-payments::c1",
+    "d-invoice": "doc-payments::c2",
+    "d-ticket-4412": "doc-tickets::c0",
+    "d-ticket-4413": "doc-tickets::c1",
+    "d-rain": "doc-weather::c0",
+    "d-legal": "doc-legal::c0"
+  },
+  "rankings": {
+    "q-password": [
+      "doc-account-access::c0",
+      "doc-account-access::c2",
+      "doc-account-access::c1",
+      "doc-device-printer::c0",
+      "doc-device-printer::c1",
+      "doc-refund-policy::c1",
+      "doc-legal::c0",
+      "doc-payments::c2"
+    ],
+    "q-paraphrase": [
+      "doc-account-access::c1",
+      "doc-account-access::c0",
+      "doc-account-access::c2",
+      "doc-device-printer::c0",
+      "doc-device-printer::c1",
+      "doc-payments::c2",
+      "doc-weather::c0",
+      "doc-tickets::c1"
+    ],
+    "q-printer": [
+      "doc-device-printer::c0",
+      "doc-device-printer::c1",
+      "doc-account-access::c1",
+      "doc-payments::c2",
+      "doc-account-access::c2",
+      "doc-account-access::c0",
+      "doc-weather::c0",
+      "doc-tickets::c1"
+    ],
+    "q-low-overlap": [
+      "doc-account-access::c2",
+      "doc-account-access::c0",
+      "doc-account-access::c1",
+      "doc-device-printer::c0",
+      "doc-device-printer::c1",
+      "doc-refund-policy::c1",
+      "doc-legal::c0",
+      "doc-payments::c2"
+    ],
+    "q-negation": [
+      "doc-refund-policy::c1",
+      "doc-refund-policy::c0",
+      "doc-payments::c0",
+      "doc-payments::c1",
+      "doc-payments::c2",
+      "doc-legal::c0",
+      "doc-account-access::c2",
+      "doc-account-access::c0"
+    ],
+    "q-numeric": [
+      "doc-payments::c0",
+      "doc-payments::c1",
+      "doc-payments::c2",
+      "doc-refund-policy::c0",
+      "doc-refund-policy::c1",
+      "doc-tickets::c0",
+      "doc-tickets::c1",
+      "doc-account-access::c0"
+    ],
+    "q-entity": [
+      "doc-tickets::c0",
+      "doc-tickets::c1",
+      "doc-payments::c2",
+      "doc-payments::c1",
+      "doc-payments::c0",
+      "doc-refund-policy::c1",
+      "doc-refund-policy::c0",
+      "doc-account-access::c0"
+    ],
+    "q-domain": [
+      "doc-weather::c0",
+      "doc-payments::c0",
+      "doc-tickets::c0",
+      "doc-payments::c1",
+      "doc-refund-policy::c1",
+      "doc-refund-policy::c0",
+      "doc-account-access::c0",
+      "doc-device-printer::c1"
+    ]
+  },
+  "q-password_top3": [
+    "doc-account-access::c0",
+    "doc-account-access::c2",
+    "doc-account-access::c1"
+  ],
+  "q-paraphrase_top3": [
+    "doc-account-access::c1",
+    "doc-account-access::c0",
+    "doc-account-access::c2"
+  ],
+  "q-printer_top2": [
+    "doc-device-printer::c0",
+    "doc-device-printer::c1"
+  ],
+  "q-negation_top2": [
+    "doc-refund-policy::c1",
+    "doc-refund-policy::c0"
+  ],
+  "q-numeric_top2": [
+    "doc-payments::c0",
+    "doc-payments::c1"
+  ],
+  "q-entity_top2": [
+    "doc-tickets::c0",
+    "doc-tickets::c1"
+  ],
+  "q-domain_top1": "doc-weather::c0",
+  "q-low-overlap_top3": [
+    "doc-account-access::c2",
+    "doc-account-access::c0",
+    "doc-account-access::c1"
+  ],
+  "filter_topic_device_top2": [
+    "doc-device-printer::c0",
+    "doc-device-printer::c1"
+  ],
+  "filter_topic_account_top3": [
+    "doc-account-access::c0",
+    "doc-account-access::c2",
+    "doc-account-access::c1"
+  ],
+  "mixed_password_top3": [
+    "doc-device-printer::c1",
+    "doc-device-printer::c0",
+    "doc-account-access::c1"
+  ],
+  "labeled": {
+    "q-password": {
+      "top3": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "eval_k3": {
+        "query_id": "q-password",
+        "k": 3,
+        "retrieved": [
+          "doc-account-access::c0",
+          "doc-account-access::c2",
+          "doc-account-access::c1"
+        ],
+        "relevant": [
+          "doc-account-access::c0",
+          "doc-account-access::c1",
+          "doc-account-access::c2"
+        ],
+        "hit_at_k": true,
+        "recall_at_k": 1.0,
+        "precision_at_k": 1.0,
+        "trap_hits": [],
+        "scores_are_not_labels": true,
+        "top_score": 1.0,
+        "top_id_labeled_relevant": true
+      }
+    },
+    "q-paraphrase": {
+      "top3": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "eval_k3": {
+        "query_id": "q-paraphrase",
+        "k": 3,
+        "retrieved": [
+          "doc-account-access::c1",
+          "doc-account-access::c0",
+          "doc-account-access::c2"
+        ],
+        "relevant": [
+          "doc-account-access::c1",
+          "doc-account-access::c0",
+          "doc-account-access::c2"
+        ],
+        "hit_at_k": true,
+        "recall_at_k": 1.0,
+        "precision_at_k": 1.0,
+        "trap_hits": [],
+        "scores_are_not_labels": true,
+        "top_score": 0.9963088642155992,
+        "top_id_labeled_relevant": true
+      }
+    },
+    "q-printer": {
+      "top3": [
+        "doc-device-printer::c0",
+        "doc-device-printer::c1",
+        "doc-account-access::c1"
+      ],
+      "eval_k3": {
+        "query_id": "q-printer",
+        "k": 3,
+        "retrieved": [
+          "doc-device-printer::c0",
+          "doc-device-printer::c1",
+          "doc-account-access::c1"
+        ],
+        "relevant": [
+          "doc-device-printer::c0",
+          "doc-device-printer::c1"
+        ],
+        "hit_at_k": true,
+        "recall_at_k": 1.0,
+        "precision_at_k": 0.6666666666666666,
+        "trap_hits": [
+          "doc-account-access::c1"
+        ],
+        "scores_are_not_labels": true,
+        "top_score": 0.9999999999999999,
+        "top_id_labeled_relevant": true
+      }
+    },
+    "q-low-overlap": {
+      "top3": [
+        "doc-account-access::c2",
+        "doc-account-access::c0",
+        "doc-account-access::c1"
+      ],
+      "eval_k3": {
+        "query_id": "q-low-overlap",
+        "k": 3,
+        "retrieved": [
+          "doc-account-access::c2",
+          "doc-account-access::c0",
+          "doc-account-access::c1"
+        ],
+        "relevant": [
+          "doc-account-access::c2",
+          "doc-account-access::c0",
+          "doc-account-access::c1"
+        ],
+        "hit_at_k": true,
+        "recall_at_k": 1.0,
+        "precision_at_k": 1.0,
+        "trap_hits": [],
+        "scores_are_not_labels": true,
+        "top_score": 0.9961658254911473,
+        "top_id_labeled_relevant": true
+      }
+    },
+    "q-negation": {
+      "top3": [
+        "doc-refund-policy::c1",
+        "doc-refund-policy::c0",
+        "doc-payments::c0"
+      ],
+      "eval_k3": {
+        "query_id": "q-negation",
+        "k": 3,
+        "retrieved": [
+          "doc-refund-policy::c1",
+          "doc-refund-policy::c0",
+          "doc-payments::c0"
+        ],
+        "relevant": [
+          "doc-refund-policy::c1"
+        ],
+        "hit_at_k": true,
+        "recall_at_k": 1.0,
+        "precision_at_k": 0.3333333333333333,
+        "trap_hits": [],
+        "scores_are_not_labels": true,
+        "top_score": 1.0,
+        "top_id_labeled_relevant": true
+      }
+    },
+    "q-numeric": {
+      "top3": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "doc-payments::c2"
+      ],
+      "eval_k3": {
+        "query_id": "q-numeric",
+        "k": 3,
+        "retrieved": [
+          "doc-payments::c0",
+          "doc-payments::c1",
+          "doc-payments::c2"
+        ],
+        "relevant": [
+          "doc-payments::c0"
+        ],
+        "hit_at_k": true,
+        "recall_at_k": 1.0,
+        "precision_at_k": 0.3333333333333333,
+        "trap_hits": [],
+        "scores_are_not_labels": true,
+        "top_score": 1.0,
+        "top_id_labeled_relevant": true
+      }
+    },
+    "q-entity": {
+      "top3": [
+        "doc-tickets::c0",
+        "doc-tickets::c1",
+        "doc-payments::c2"
+      ],
+      "eval_k3": {
+        "query_id": "q-entity",
+        "k": 3,
+        "retrieved": [
+          "doc-tickets::c0",
+          "doc-tickets::c1",
+          "doc-payments::c2"
+        ],
+        "relevant": [
+          "doc-tickets::c0"
+        ],
+        "hit_at_k": true,
+        "recall_at_k": 1.0,
+        "precision_at_k": 0.3333333333333333,
+        "trap_hits": [],
+        "scores_are_not_labels": true,
+        "top_score": 0.9993177437572609,
+        "top_id_labeled_relevant": true
+      }
+    },
+    "q-domain": {
+      "top3": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "eval_k3": {
+        "query_id": "q-domain",
+        "k": 3,
+        "retrieved": [
+          "doc-weather::c0",
+          "doc-payments::c0",
+          "doc-tickets::c0"
+        ],
+        "relevant": [
+          "doc-weather::c0"
+        ],
+        "hit_at_k": true,
+        "recall_at_k": 1.0,
+        "precision_at_k": 0.3333333333333333,
+        "trap_hits": [],
+        "scores_are_not_labels": true,
+        "top_score": 0.9974520800010089,
+        "top_id_labeled_relevant": true
+      }
+    }
+  },
+  "stale_mutation": {
+    "chunk_id": "doc-account-access::c0",
+    "indexed_text": "I forgot my password and cannot sign in.",
+    "live_text": "Please reset the printer firmware."
+  }
+}

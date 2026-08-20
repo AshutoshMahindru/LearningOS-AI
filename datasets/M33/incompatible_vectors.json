@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "provenance": {
+    "family": "v06-teaching-embed",
+    "model": "v06-teaching-meanpool-alt",
+    "version": "v06.2",
+    "dimensions": 12,
+    "dimension_names": [
+      "account_access",
+      "credentials",
+      "device_print",
+      "refund",
+      "negation",
+      "payment",
+      "magnitude",
+      "ticket_ops",
+      "weather",
+      "legal",
+      "glue",
+      "residual"
+    ],
+    "metric": "cosine",
+    "normalization": "none",
+    "pooling": "mean",
+    "downloaded": false,
+    "network_required": false,
+    "not_sentence_transformers": true,
+    "not_model_hub": true,
+    "authored_for": "M33",
+    "copied_from": "datasets/M28/mismatch.json",
+    "source_mission": "M28"
+  },
+  "items": [
+    {
+      "chunk_id": "doc-account-access::c0",
+      "m28_id": "d-password-forgot",
+      "vector": [
+        0.0,
+        0.5375,
+        0.8625,
+        0.0,
+        0.0375,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.0117384604
+      ]
+    },
+    {
+      "chunk_id": "doc-account-access::c1",
+      "m28_id": "d-login-reset",
+      "vector": [
+        0.055,
+        0.4875,
+        0.48,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2,
+        -0.025787747
+      ]
+    },
+    {
+      "chunk_id": "doc-account-access::c2",
+      "m28_id": "d-cannot-signin",
+      "vector": [
+        0.0,
+        0.4833333333,
+        0.8666666667,
+        0.0,
+        0.05,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.0427655451
+      ]
+    },
+    {
+      "chunk_id": "doc-device-printer::c0",
+      "m28_id": "d-printer-reset",
+      "vector": [
+        0.4066666667,
+        0.0,
+        0.0733333333,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2666666667,
+        -0.0211783017
+      ]
+    },
+    {
+      "chunk_id": "doc-device-printer::c1",
+      "m28_id": "d-printer-queue",
+      "vector": [
+        0.604,
+        0.0,
+        0.044,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.11,
+        -0.0074871748
+      ]
+    },
+    {
+      "chunk_id": "doc-refund-policy::c0",
+      "m28_id": "d-approve-refund",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.7166666667,
+        0.0,
+        0.1833333333,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.0045455609
+      ]
+    },
+    {
+      "chunk_id": "doc-refund-policy::c1",
+      "m28_id": "d-deny-refund",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.5375,
+        0.25,
+        0.1375,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.0001721218
+      ]
+    },
+    {
+      "chunk_id": "doc-payments::c0",
+      "m28_id": "d-pay-fifty",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.0625,
+        0.0,
+        0.6125,
+        0.075,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0081525902
+      ]
+    },
+    {
+      "chunk_id": "doc-payments::c1",
+      "m28_id": "d-pay-thousand",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.05,
+        0.0,
+        0.51,
+        0.25,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0062356909
+      ]
+    },
+    {
+      "chunk_id": "doc-payments::c2",
+      "m28_id": "d-invoice",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3375,
+        0.2482025,
+        0.1625,
+        0.0,
+        0.0,
+        0.1625,
+        -0.0378991379
+      ]
+    },
+    {
+      "chunk_id": "doc-tickets::c0",
+      "m28_id": "d-ticket-4412",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.016545,
+        0.75,
+        0.0,
+        0.0,
+        0.025,
+        0.0090675212
+      ]
+    },
+    {
+      "chunk_id": "doc-tickets::c1",
+      "m28_id": "d-ticket-4413",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.01654875,
+        0.75,
+        0.0,
+        0.0,
+        0.025,
+        -0.0153456931
+      ]
+    },
+    {
+      "chunk_id": "doc-weather::c0",
+      "m28_id": "d-rain",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0.0,
+        0.025,
+        -0.013600061
+      ]
+    },
+    {
+      "chunk_id": "doc-legal::c0",
+      "m28_id": "d-legal",
+      "vector": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.05,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7625,
+        0.0,
+        -0.0232840467
+      ]
+    }
+  ]
+}
