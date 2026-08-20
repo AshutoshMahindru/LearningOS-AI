@@ -1,0 +1,100 @@
+id: M27
+title: Turn Text into Tokens
+phase: P5
+flagship: V06
+objective: Understand tokenization by inspecting how text becomes model input.
+competencies:
+  - tokenization
+  - text representation
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: false
+starts_flagship: true
+prerequisites:
+  blocking:
+    - M03
+  helpful:
+    - M15
+handoff:
+  receives: Python fluency and optional vector intuition; no transformer knowledge
+  provides: M28 and M29 receive stable token/text fixtures and accurate token-budget reasoning
+learning_sequence:
+  - inspect the bundled teaching tokenizer identity and vocabulary
+  - predict tokenization before revealing IDs
+  - vary whitespace, punctuation, or casing one at a time
+  - map token pieces to integer IDs and back
+  - add special tokens and sequence boundaries
+  - batch variable-length examples with padding and masks
+  - apply a fixed context limit and inspect truncation
+  - compare word and BPE schemes on the same corpus
+  - diagnose the character/word-budget truncation failure
+  - complete the no-AI token trace
+  - author a V06 tokenizer/version/context-budget ADR
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M27_text_to_tokens.ipynb
+instrumentation: missions/M27/tokenization_core.py
+requirements: requirements/m27.txt
+mission_test: tests/missions/test_m27.py
+reference_fixture:
+  tokenizer_family: v06-teaching-tokenizer
+  tokenizer_version: v06.1
+  schemes:
+    - word
+    - bpe
+  special_tokens: ["[PAD]", "[UNK]", "[BOS]", "[EOS]"]
+  truncation_side: right
+  padding_side: right
+  canonical_sentence: the cat sat on the mat
+canonical_sources:
+  - hf-llm-course
+  - karpathy-zero-to-hero
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_embeddings: required
+  no_attention: required
+  no_transformer_block: required
+  no_network_tokenizer_download: required
+mission_artifacts:
+  - missions/M27/README.md
+  - missions/M27/manifest.yaml
+  - missions/M27/content.yaml
+  - missions/M27/experiments.yaml
+  - missions/M27/code_reading.md
+  - missions/M27/no_ai_gate.md
+  - missions/M27/controlled_failure.md
+  - missions/M27/assessment.yaml
+  - missions/M27/evidence_contract.yaml
+  - missions/M27/flagship_integration.md
+  - missions/M27/review_brief.md
+  - missions/M27/adr_prompt.md
+  - missions/M27/status.yaml
+  - missions/M27/tokenization_core.py
+  - labs/M27_text_to_tokens.ipynb
+  - datasets/M27/README.md
+  - datasets/M27/teaching_tokenizer.json
+  - datasets/M27/texts.json
+  - datasets/M27/generate_tokenizer.py
+  - requirements/m27.txt
+  - tests/missions/test_m27.py
+  - tests/test_m27.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  embeddings_deferred_to_m28: true
+  attention_deferred_to_m29: true
+  transformer_block_deferred_to_m30: true
+  bundled_tokenizer_required: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

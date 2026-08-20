@@ -1,0 +1,52 @@
+mission: M27
+controls:
+  tokenizer_family: v06-teaching-tokenizer
+  tokenizer_version: v06.1
+  schemes: [word, bpe]
+  special_tokens: ["[PAD]", "[UNK]", "[BOS]", "[EOS]"]
+  truncation_side: right
+  padding_side: right
+  offline_fixture: datasets/M27/teaching_tokenizer.json
+  prediction_required_before_action: true
+  no_embedding_or_attention: true
+experiments:
+  - id: surface-variation
+    prediction_required: true
+    change: Change whitespace, punctuation, or casing one at a time.
+    observation: Observe token count and pieces after the same normalization policy.
+    invariant: Underlying sentence intent kept roughly constant.
+  - id: rare-string
+    prediction_required: true
+    change: Introduce a rare identifier, number, or URL-like string.
+    observation: Observe word UNK versus BPE decomposition.
+    invariant: Tokenizer and vocabulary stay fixed.
+  - id: ids-roundtrip
+    prediction_required: true
+    change: Map pieces to integer IDs and decode back.
+    observation: Confirm in-vocab text round-trips on the normalized string.
+    invariant: Tokenizer identity and special-token policy stay fixed.
+  - id: special-tokens
+    prediction_required: true
+    change: Add or omit [BOS]/[EOS] and count effective length.
+    observation: Specials consume context budget without being sentence words.
+    invariant: Content pieces stay in the same order.
+  - id: padding-batch
+    prediction_required: true
+    change: Batch different-length sequences.
+    observation: Trace pad IDs and padding-mask semantics.
+    invariant: Original token order preserved in the non-pad prefix.
+  - id: truncation
+    prediction_required: true
+    change: Set a maximum token length.
+    observation: Observe exactly which suffix is removed.
+    invariant: Tokenizer and source text stay fixed.
+  - id: tokenizer-comparison
+    prediction_required: true
+    change: Apply word and BPE schemes to the same corpus.
+    observation: Compare segmentation and sequence length.
+    invariant: Same text, same special-token and counting policy.
+  - id: token-budget-failure
+    prediction_required: true
+    change: Budget context with words or characters, then tokenize with a token limit.
+    observation: A critical suffix disappears after tokenization even though the heuristic said the text fit.
+    invariant: Tokenizer, text, and max_tokens stay fixed; only the budget unit is wrong.

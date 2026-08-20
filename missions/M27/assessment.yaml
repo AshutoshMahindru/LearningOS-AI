@@ -1,0 +1,30 @@
+mission: M27
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped tokenization predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  encoded_decoded_interpretation:
+    evidence: Pieces, IDs, and decoded normalized text for in-vocab and rare strings.
+    pass: The learner maps IDs to pieces and does not treat IDs as meanings.
+  token_not_word_budget:
+    evidence: Context counts use tokenizer lengths, including specials.
+    pass: Character and word heuristics are rejected as budget units.
+  segmentation_vs_semantics:
+    evidence: Word vs BPE comparison on the same corpus.
+    pass: Length and piece differences are not claimed as understanding.
+  padding_and_truncation:
+    evidence: Batched pad IDs/masks and a truncation suffix inspection.
+    pass: Order of real tokens is preserved; the dropped suffix is named.
+  controlled_failure_diagnosis:
+    evidence: Word/character-budget defect, diagnosis, smallest token-budget repair, rerun.
+    pass: Diagnosis precedes the repair; only the budget unit is restored.
+  code_reading:
+    evidence: Annotated encode flow from normalize through mask and identity.
+    pass: Learner predicts truncation-with-specials and avoids embedding/attention inspection.
+  no_ai_gate:
+    evidence: Independent token trace and transfer defense.
+    pass: Fresh example, effective length, and truncation diagnosis are correct.
+  adr:
+    evidence: Learner-authored V06 tokenizer/version/context-budget policy.
+    pass: Identity, specials, truncation, logging, and migration triggers are complete without global-optimality claims.
