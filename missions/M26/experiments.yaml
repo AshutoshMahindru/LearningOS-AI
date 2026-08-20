@@ -1,0 +1,57 @@
+mission: M26
+controls:
+  device: cpu
+  dtype: float64
+  loss: CrossEntropyLoss mean (softmax NLL)
+  training_loop: missions.M25.pytorch_training.train_model
+  split_policy: disjoint train/val/held_out from seed 2501
+  optimizer_family: SGD
+  prediction_required_before_action: true
+  evaluation_updates_parameters: false
+  repair_from_broken_objects: true
+experiments:
+  - id: known-good-m25-trace
+    prediction_required: true
+    change: Run the unmodified M25 loop on the canonical fixture.
+    observation: Record train/val curves, held-out eval mode, and layer movement as the reference whole.
+    invariant: No M26 injection.
+  - id: data-corruption
+    prediction_required: true
+    change: Corrupt a bounded portion of training labels only.
+    observation: Compare training/validation behavior and fixture-block label agreement.
+    invariant: Architecture and optimizer fixed.
+  - id: feature-scale
+    prediction_required: true
+    change: Multiply one feature column by a large constant on the shared feature tensor.
+    observation: Compare per-column scales and whether training remains stable.
+    invariant: Architecture and optimizer fixed.
+  - id: learning-rate-failure
+    prediction_required: true
+    change: Set an intentionally poor learning rate (too high, then too low) as the only named change per run.
+    observation: Observe oscillation/divergence versus a flat loss.
+    invariant: Data, seed, architecture, and budget fixed.
+  - id: gradient-flow-failure
+    prediction_required: true
+    change: Block gradients into fc1 while leaving the forward contract in place.
+    observation: Use parameter/gradient evidence to localize the frozen component.
+    invariant: Data and forward contract fixed.
+  - id: capacity-mismatch
+    prediction_required: true
+    change: Train with an intentionally too-small hidden width.
+    observation: Compare train/validation fit against the known-good width.
+    invariant: Evaluation policy fixed.
+  - id: regularization-mismatch
+    prediction_required: true
+    change: Raise Dropout to a crushing value during training.
+    observation: Compare train-loss progress with Dropout later disabled.
+    invariant: Width, data, and optimizer family fixed.
+  - id: evaluation-defect
+    prediction_required: true
+    change: Score a frozen checkpoint in train mode, or report train rows as validation.
+    observation: Show how convincing metrics become invalid while parameters stay put.
+    invariant: Model checkpoint fixed.
+  - id: chaos-day
+    prediction_required: true
+    change: Inject one hidden catalogue defect selected by seed.
+    observation: Symptoms only; category is not revealed before the diagnostic step.
+    invariant: Single hidden defect; original evidence rerun after the smallest repair.

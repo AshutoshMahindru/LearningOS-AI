@@ -1,0 +1,107 @@
+id: M26
+title: Diagnose Deep Learning Failure
+phase: P4
+flagship: V05
+phase_end: true
+objective: Debug optimization, data and architecture failures systematically.
+competencies:
+  - deep learning debugging
+  - diagnostics
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M25
+  helpful: []
+handoff:
+  receives: M25 instrumented PyTorch training loop plus M21-M25 evidence about data boundaries, curves, layers, forward passes, gradients, and autograd
+  provides: P5 a disciplined symptom -> hypothesis -> discriminating experiment -> root cause -> smallest repair -> regression protocol
+learning_sequence:
+  - capture the known-good M25 reference trace
+  - inject one hidden fault and show only symptoms
+  - write competing hypotheses before inspection
+  - choose a discriminating experiment and update ranking
+  - use a tiny-subset sanity check when justified
+  - inspect gradients or activations only after symptoms justify the descent
+  - repair the fault on the broken objects and rerun original evidence
+  - calibrate named failures across data, learning rate, gradient flow, capacity, regularization, and evaluation
+  - run a phase-end hidden-fault Chaos Day
+  - defend the debugging protocol in a no-AI engineering review
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M26_deep_learning_failure.ipynb
+instrumentation: missions/M26/dl_failure_lab.py
+requirements: requirements/m26.txt
+mission_test: tests/missions/test_m26.py
+reference_fixture:
+  training_loop: missions.M25.pytorch_training
+  teaching_architecture: affine-ReLU-affine logits, n_in=3 n_hidden=8 n_out=3
+  loss: softmax_nll via CrossEntropyLoss mean
+  device: cpu
+  dtype: float64
+  loop_order: zero_grad -> forward -> loss -> backward -> step
+  splits: train 24 / val 6 / held_out 6, disjoint
+  optimizer: SGD
+  train_momentum: 0.9
+  seed: 2501
+  hidden_practice_seed: 2602
+  chaos_seed: 2625
+  label_corrupt_fraction: 0.5
+  feature_scale_factor: 20.0
+  high_learning_rate: 8.0
+  low_learning_rate: 1.0e-6
+  tiny_hidden: 1
+  crushing_dropout: 0.8
+canonical_sources:
+  - pytorch-basics
+  - fastai-course
+  - karpathy-micrograd
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  cpu_canonical: required
+  no_weight_download: required
+  evaluation_does_not_update_parameters: required
+  held_out_excluded_from_train_and_val: required
+  repair_from_broken_objects: required
+  chaos_hides_category: required
+mission_artifacts:
+  - missions/M26/README.md
+  - missions/M26/manifest.yaml
+  - missions/M26/content.yaml
+  - missions/M26/experiments.yaml
+  - missions/M26/code_reading.md
+  - missions/M26/no_ai_gate.md
+  - missions/M26/controlled_failure.md
+  - missions/M26/assessment.yaml
+  - missions/M26/evidence_contract.yaml
+  - missions/M26/flagship_integration.md
+  - missions/M26/review_brief.md
+  - missions/M26/adr_prompt.md
+  - missions/M26/status.yaml
+  - missions/M26/dl_failure_lab.py
+  - labs/M26_deep_learning_failure.ipynb
+  - requirements/m26.txt
+  - tests/missions/test_m26.py
+  - tests/test_m26.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  language_model_mechanisms_deferred_to_p5: true
+  no_required_gpu: true
+  no_silent_weight_download: true
+  m25_loop_not_rewritten: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false
