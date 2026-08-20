@@ -2,9 +2,9 @@
 
 ## Failure: the loop appears to run, one named control is wrong
 
-Before running, predict whether a second reverse pass **without**
-`zero_grad` adds into leftover `.grad`, and predict whether Dropout in
-`model.train()` can change evaluation outputs without an optimizer step.
+Before running, predict what leftover `.grad` does if the loop skips
+`zero_grad`, and whether Dropout in `model.train()` can change
+evaluation outputs without an optimizer step.
 
 The defective path uses one named change:
 

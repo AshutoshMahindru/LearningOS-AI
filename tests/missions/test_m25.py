@@ -176,6 +176,7 @@ class M25StaticContractTests(unittest.TestCase):
             ("predict-train-loop", "run-train-loop"),
             ("predict-eval", "run-eval"),
             ("predict-checkpoint", "run-checkpoint"),
+            ("predict-code-reading", "run-code-reading"),
             ("predict-failure", "run-failure"),
             ("predict-mode-failure", "run-mode-failure"),
             ("predict-failure-repair", "run-failure-repair"),
@@ -189,7 +190,7 @@ class M25StaticContractTests(unittest.TestCase):
         markdown = "\n".join(
             cell_source(cell) for cell in cells if cell.get("cell_type") == "markdown"
         )
-        self.assertGreaterEqual(markdown.count("Predict before running"), 12)
+        self.assertGreaterEqual(markdown.count("Predict before running"), 13)
         for phrase in (
             "predict → act → observe → explain",
             "timestamp",
@@ -437,17 +438,33 @@ class M25TorchRuntimeTests(unittest.TestCase):
 
     def test_smallest_repair_restores_reset_and_eval_mode(self):
         broken = CORE.gradient_reset_experiment()
+        self.assertTrue(broken["stale_second_is_sum"])
         self.assertTrue(broken["updates_diverge"])
-        repaired_step = CORE.canonical_training_step(defect="none")
-        self.assertTrue(repaired_step["trace"].zero_grad_called)
-        repaired_mode = CORE.evaluate(
-            CORE.teaching_module(),
-            *CORE.teaching_batch(),
-            split="held_out",
-            defect="none",
-        )
+        stale_g1, stale_g2 = broken["stale_step_grads"]
+        self.assertNotAlmostEqual(stale_g1, stale_g2)
+
+        x, targets = CORE.teaching_batch()
+        model = CORE.teaching_module()
+        model.train()
+        criterion = CORE.mean_softmax_nll()
+        model.zero_grad(set_to_none=True)
+        criterion(model(x), targets).backward()
+        first = float(model.fc2.weight.grad.detach()[0, 0])
+        criterion(model(x), targets).backward()
+        stale = float(model.fc2.weight.grad.detach()[0, 0])
+        self.assertAlmostEqual(stale, 2 * first, places=10)
+        model.zero_grad(set_to_none=False)
+        criterion(model(x), targets).backward()
+        repaired = float(model.fc2.weight.grad.detach()[0, 0])
+        self.assertAlmostEqual(repaired, first, places=10)
+
+        drop = CORE.teaching_module(dropout_p=CORE.MODE_DROPOUT_P)
+        wrong = CORE.evaluate(drop, x, targets, split="held_out", defect="train_mode_eval")
+        repaired_mode = CORE.evaluate(drop, x, targets, split="held_out", defect="none")
+        self.assertTrue(wrong.model_training)
         self.assertFalse(repaired_mode.model_training)
         self.assertFalse(repaired_mode.parameters_updated)
+        self.assertFalse(CORE.arrays_close(wrong.logits, repaired_mode.logits, atol=1e-12, rtol=0.0))
 
     def test_invalid_loop_inputs_fail_loudly(self):
         with self.assertRaises(ValueError):

@@ -967,6 +967,29 @@ def save_checkpoint(path, run: TrainRun, *, epoch: int | None = None, policy: st
     return {key: payload[key] if key not in {"model_state_dict", "optimizer_state_dict", "torch_rng_state"} else key for key in CHECKPOINT_KEYS}
 
 
+def optimizer_state_agrees(left, right) -> bool:
+    """Compare optimizer ``state`` tensors, not merely that the dict exists."""
+
+    torch = _require_torch()
+    left_state = left.state_dict()["state"]
+    right_state = right.state_dict()["state"]
+    if not left_state or set(left_state) != set(right_state):
+        return False
+    for pid in left_state:
+        left_buf = left_state[pid]
+        right_buf = right_state[pid]
+        if set(left_buf) != set(right_buf):
+            return False
+        for name, left_value in left_buf.items():
+            right_value = right_buf[name]
+            if torch.is_tensor(left_value):
+                if not torch.equal(left_value.detach().cpu(), right_value.detach().cpu()):
+                    return False
+            elif left_value != right_value:
+                return False
+    return True
+
+
 def load_checkpoint(path, *, model=None, optimizer=None):
     torch = _require_torch()
     payload = torch.load(path, map_location=CANONICAL_DEVICE, weights_only=False)
@@ -1005,7 +1028,7 @@ def checkpoint_roundtrip(run: TrainRun, path) -> dict[str, object]:
         "held_out_loss": first.loss,
         "parameters_updated": first.parameters_updated,
         "model_training": first.model_training,
-        "optimizer_state_loaded": loaded_opt.state_dict()["state"] is not None,
+        "optimizer_state_loaded": optimizer_state_agrees(loaded_opt, run.optimizer),
         "epoch": payload["epoch"],
     }
 
