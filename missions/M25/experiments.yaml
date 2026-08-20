@@ -1,0 +1,38 @@
+mission: M25
+controls:
+  device: cpu
+  dtype: float64
+  loss: CrossEntropyLoss mean (softmax NLL)
+  teaching_graph: missions.M24.backprop_core REFERENCE_*
+  linear_layout: nn.Linear W is (out, in); compare W.T with M24
+  loop_order: zero_grad -> forward -> loss -> backward -> step
+  split_policy: disjoint train/val/held_out from seed 2501
+  optimizer_family: SGD
+  prediction_required_before_action: true
+  evaluation_updates_parameters: false
+experiments:
+  - id: autograd-parity
+    prediction_required: true
+    change: Use identical micro-case parameters and input as M24, with autograd instead of manual reverse mode.
+    observation: Compare selected parameter gradients and the mean softmax-NLL loss.
+    invariant: Same forward function and loss.
+  - id: gradient-reset
+    prediction_required: true
+    change: Run two steps with and without correct gradient reset.
+    observation: Observe accumulated gradients and the resulting updates.
+    invariant: Same batches, seed, optimizer, and learning rate.
+  - id: train-eval-boundary
+    prediction_required: true
+    change: Compare correct eval/no-grad with train-mode evaluation on a dropout module.
+    observation: Observe output and metric consequences while parameters stay frozen.
+    invariant: No parameter update during evaluation.
+  - id: checkpoint-replay
+    prediction_required: true
+    change: Save and reload before held-out inference.
+    observation: Verify outputs and metrics under the declared determinism policy.
+    invariant: Same data, code, and preprocessing.
+  - id: batch-size-control
+    prediction_required: true
+    change: Change batch size while holding data, epoch budget, optimizer family, and seed policy.
+    observation: Observe training dynamics without asserting universal invariance.
+    invariant: All other controls recorded.
