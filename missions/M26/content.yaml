@@ -1,0 +1,22 @@
+mission: M26
+boundary:
+  inherited_from_m25: Instrumented CPU training loop, nn.Module parameter ownership, autograd parity with M24, zero_grad -> forward -> loss -> backward -> step, train/eval mode, no-grad inference, protected splits, checkpoints, and stale-grad / train-mode-eval loop defects.
+  inherited_from_m21_m24: Data boundaries, learning curves, layers, named forward graph, reverse-mode blame, and finite-difference checks.
+  manipulated_here: Failure injection across labels, feature scaling, learning rate, blocked gradient paths, capacity, dropout regularization, model mode, and evaluation leakage; hypothesis ranking; cheapest discriminators; smallest repairs driven from broken objects; phase-end Chaos Day.
+  deferred_to_p5: Language-model-specific mechanisms. Tokenization, embeddings, attention, and transformer internals stay closed.
+handoff_summary: M25 opens a breakable instrumented loop. M26 teaches diagnosis on that loop. P5 inherits the protocol, not a catalogue of language-model parts.
+concepts:
+  - a symptom is not a cause
+  - competing hypotheses must span data, optimization, gradient flow, architecture, and evaluation
+  - the cheapest discriminating experiment beats a broad rewrite
+  - tiny-subset overfit checks ask whether the pipeline can learn at all
+  - gradient and activation stats are a descent, not a first move
+  - underfitting, overfitting, optimization failure, data corruption, and evaluation defects have different signatures
+  - the smallest verified repair edits the broken object
+  - a regression check must catch the same defect if it returns
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M26 may explain multi-cause deep-learning debugging on the M25 loop. It may not teach language-model mechanisms.
+canonical_sources:
+  - pytorch-basics
+  - fastai-course
+  - karpathy-micrograd

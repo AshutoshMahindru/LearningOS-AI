@@ -1,0 +1,37 @@
+mission: M26
+transfer_required: true
+formal_engineering_review: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped diagnosis predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  known_good_reference:
+    evidence: Unmodified M25 trace with falling train loss and eval-mode held-out.
+    pass: The useful whole exists before any injection.
+  hypothesis_ranking:
+    evidence: Competing hypotheses spanning data, optimization, gradient flow, architecture, and evaluation.
+    pass: Symptom, hypothesis, and cause are not conflated.
+  discriminating_experiment:
+    evidence: One cheap experiment whose outcomes update the ranking.
+    pass: The experiment is named before it runs; it can rule a family in or out.
+  named_catalogue:
+    evidence: Label corruption, scaling, learning-rate, frozen-layer, capacity, regularization, and evaluation traces.
+    pass: Each run changes one named control; invariants are recorded.
+  smallest_repair:
+    evidence: Repair driven from the prepared objects, then original evidence rerun.
+    pass: Evaluation repairs keep the checkpoint; training repairs reuse the same splits/config object.
+  chaos_day:
+    evidence: Hidden-fault diagnosis record with regression coverage.
+    pass: Category was not given in advance; root cause is supported by a discriminator.
+  code_reading:
+    evidence: Annotated injection harness versus the M25 loop.
+    pass: Learner can state which object each family mutates.
+  no_ai_gate:
+    evidence: Independent diagnosis of a fresh hidden-fault seed.
+    pass: Fresh work, not a copy of the teaching notebook.
+  adr:
+    evidence: Learner-authored V05 failure-triage/release policy.
+    pass: Sanity checks, escalation order, rollback, and evidence-before-architecture-change are explicit without claiming global optimality.
+  phase_review:
+    evidence: Oral or written map of M21-M26 as one neural-system model.
+    pass: Debugging protocol is the handoff; language-model internals stay closed.

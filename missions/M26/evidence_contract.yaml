@@ -1,0 +1,98 @@
+mission_id: M26
+version: 1
+purpose: Define acceptable learner-produced diagnosis evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_diagnosis_action
+      - falsifiable_symptom_or_family_claim
+      - observation_and_revision
+  - id: known_good_m25_trace
+    artifact_type: reference_run_report
+    must_show:
+      - unmodified_loop
+      - train_loss_drop
+      - held_out_eval_mode
+  - id: hypothesis_ranking
+    artifact_type: ranked_hypothesis_list
+    must_show:
+      - data_family
+      - optimization_family
+      - gradient_flow_family
+      - architecture_or_regularization_family
+      - evaluation_family
+  - id: data_corruption
+    artifact_type: label_and_curve_trace
+    must_show:
+      - bounded_train_label_change
+      - val_labels_honest
+      - architecture_optimizer_fixed
+  - id: feature_scale
+    artifact_type: column_scale_table
+    must_show:
+      - named_feature_index
+      - scale_ratio
+      - architecture_optimizer_fixed
+  - id: learning_rate_failure
+    artifact_type: loss_trace
+    must_show:
+      - high_rate_oscillation_or_divergence
+      - low_rate_flat_loss
+      - other_controls_fixed
+  - id: gradient_flow_failure
+    artifact_type: per_parameter_grad_table
+    must_show:
+      - frozen_component
+      - moving_component
+      - forward_contract_fixed
+  - id: capacity_and_regularization
+    artifact_type: underfit_comparison
+    must_show:
+      - tiny_width_underfit
+      - crushing_dropout_underfit
+      - evaluation_policy_fixed
+  - id: evaluation_defect
+    artifact_type: checkpoint_metric_trace
+    must_show:
+      - train_mode_or_leaked_split
+      - parameters_unchanged
+      - honest_val_contrast
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - hidden_category_not_preannounced
+      - discriminating_experiment
+      - smallest_repair_on_broken_objects
+      - regression_evidence
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - m25_loop_unchanged
+      - injected_object_per_family
+      - hidden_symptom_redaction
+      - repair_identity
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: failure_triage_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - required_sanity_checks
+      - escalation_order
+      - rollback_triggers
+      - evidence_before_architecture_change
+      - owner_status_and_date
+quality_bar:
+  - Root cause is supported by a discriminator, not by a vibe.
+  - Claims cite named controls rather than "it failed to learn."
+  - Language-model mechanisms stay closed.
+  - Failures are repaired by editing the broken object rather than changing several knobs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited
