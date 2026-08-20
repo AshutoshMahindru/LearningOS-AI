@@ -37,6 +37,11 @@ experiments:
     change: Change a source document without rebuilding the index.
     observation: Unchecked search serves indexed text; the gate raises IndexStaleError.
     invariant: Query text fixed. Repair rebuilds from the broken index object.
+  - id: mixed-provenance
+    prediction_required: true
+    change: Query the canonical encoder against the v06.2 incompatible index with the gate off, then on.
+    observation: Unchecked ranking is plausible; IndexIncompatibleError lists version/model mismatches.
+    invariant: Query text fixed. Named change is enforce_provenance=False then the gate.
   - id: hard-cases
     prediction_required: true
     change: Run negation, numeric, and entity queries inherited from M28.

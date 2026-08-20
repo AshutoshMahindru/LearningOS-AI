@@ -274,6 +274,13 @@ class RankedHit:
     metadata: tuple[tuple[str, str], ...]
     m28_id: str
     vector: tuple[float, ...]
+    index_id: str = ""
+    source_hash: str = ""
+    corpus_version: str = ""
+    model: str = ""
+    version: str = ""
+    metric: str = ""
+    normalization: str = ""
 
     def metadata_dict(self) -> dict[str, str]:
         return metadata_map(self.metadata)
@@ -290,6 +297,13 @@ class RankedHit:
             "span": {"start": self.span_start, "end": self.span_end},
             "metadata": self.metadata_dict(),
             "m28_id": self.m28_id,
+            "index_id": self.index_id,
+            "source_hash": self.source_hash,
+            "corpus_version": self.corpus_version,
+            "model": self.model,
+            "version": self.version,
+            "metric": self.metric,
+            "normalization": self.normalization,
         }
 
 
@@ -697,6 +711,13 @@ def search(
             metadata=record.chunk.metadata,
             m28_id=record.chunk.m28_id,
             vector=record.vector,
+            index_id=index.metadata.index_id,
+            source_hash=index.metadata.source_hash,
+            corpus_version=index.metadata.corpus_version,
+            model=index.metadata.embedding.model,
+            version=index.metadata.embedding.version,
+            metric=index.metadata.embedding.metric,
+            normalization=index.metadata.embedding.normalization,
         )
         for offset, (record, score) in enumerate(ranked)
     )

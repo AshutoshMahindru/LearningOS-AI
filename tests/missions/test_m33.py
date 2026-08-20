@@ -229,6 +229,7 @@ class M33StaticContractTests(unittest.TestCase):
             ("predict-latency", "run-latency"),
             ("predict-failure", "run-failure"),
             ("predict-failure-repair", "run-failure-repair"),
+            ("predict-incompatible", "run-incompatible"),
         )
         for prediction, action in pairs:
             with self.subTest(prediction=prediction, action=action):
@@ -242,7 +243,7 @@ class M33StaticContractTests(unittest.TestCase):
         markdown = "\n".join(
             cell_source(cell) for cell in cells if cell.get("cell_type") == "markdown"
         )
-        self.assertGreaterEqual(markdown.count("Predict before running"), 9)
+        self.assertGreaterEqual(markdown.count("Predict before running"), 10)
         for phrase in (
             "predict → act → observe → explain",
             "timestamp",
@@ -444,6 +445,12 @@ class M33RuntimeTests(unittest.TestCase):
         self.assertEqual(evidence["document_id"], "doc-account-access")
         self.assertEqual(evidence["span"]["start"], 0)
         self.assertIn("I forgot my password", evidence["text"])
+        self.assertEqual(evidence["index_id"], password.index_id)
+        self.assertEqual(evidence["source_hash"], password.source_hash)
+        self.assertEqual(evidence["model"], password.embedding.model)
+        self.assertEqual(evidence["version"], password.embedding.version)
+        self.assertEqual(evidence["metric"], password.metric)
+        self.assertEqual(evidence["normalization"], password.normalization)
         query = CORE.encode_query(self.queries["q-paraphrase"].text, query_id="q-paraphrase")
         for record in self.index.records:
             self.assertLess(CORE.cosine_similarity(query.vector, record.vector), 0.999, record.chunk.chunk_id)
