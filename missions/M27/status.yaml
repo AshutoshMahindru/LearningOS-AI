@@ -1,0 +1,23 @@
+mission_id: M27
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: not_required_at_m27
+flagship_status:
+  flagship: V06
+  implementation_progress: tokenization_opened
+  learner_progress: pending_evidence
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+  exact_head_actions: required
+parallel_safety:
+  prohibited_shared_files_modified: false
+notes:
+  - Implementation status is not learner completion.
+  - Bundled tokenizer encodings are fixture properties, not learner evidence.
+  - M27 opens tokenization; M28 attaches embeddings to these IDs.
+  - M28 learner progression remains blocked until M27 learner evidence and mission gate are satisfied.
+  - This branch does not mark M27 repository-executable.

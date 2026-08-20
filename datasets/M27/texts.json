@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "provenance": {
+    "authored_for": "M27",
+    "kind": "synthetic-teaching-fixture",
+    "downloaded": false,
+    "network_required": false,
+    "personal_data": false
+  },
+  "canonical_sentence": "the cat sat on the mat",
+  "surface_variants": {
+    "base": "The cat sat on the mat.",
+    "whitespace": "The  cat sat on the mat.",
+    "casing": "THE CAT SAT ON THE MAT.",
+    "punctuation": "The cat sat on the mat!"
+  },
+  "rare_strings": {
+    "identifier": "ticket xgztq9 is open",
+    "url": "see https://learn.os/t/42 now",
+    "number": "invoice 99281 is due"
+  },
+  "padding_batch": [
+    "the cat sat",
+    "the cat sat on the mat",
+    "please inspect ticket 4412 then stop"
+  ],
+  "truncation_text": "please inspect ticket 4412 then process the invoice now",
+  "comparison_corpus": [
+    "the cat sat on the mat",
+    "please inspect ticket 4412 then stop",
+    "ticket xgztq9 is open",
+    "invoice 99281 is due",
+    "see https://learn.os/t/42 now"
+  ],
+  "controlled_failure": {
+    "text": "please inspect ticket 4412 then approve_refund",
+    "critical_suffix": "approve_refund",
+    "max_tokens": 12,
+    "defective_unit": "words",
+    "notes": "Six whitespace words look like they fit a 12-token window if one word equals one token. BPE fragments the suffix."
+  },
+  "bpe_train": [
+    "the cat sat on the mat",
+    "the cat sat",
+    "the cat sat on the mat then stop",
+    "please inspect ticket 4412",
+    "please inspect the invoice",
+    "please process the invoice now",
+    "please process ticket 4412 now",
+    "pay the invoice",
+    "customer 88 paid the invoice",
+    "renew the token budget",
+    "the token budget is sixteen tokens",
+    "inspect ticket then stop",
+    "see the cat on the mat",
+    "process ticket 4412 then stop",
+    "please inspect ticket then process the invoice",
+    "please inspect ticket 4412 then process the invoice now",
+    "stop",
+    "the cat sat.",
+    "pay now",
+    "renew now"
+  ],
+  "expected": {
+    "canonical_word_tokens": [
+      "[BOS]",
+      "the",
+      "cat",
+      "sat",
+      "on",
+      "the",
+      "mat",
+      "[EOS]"
+    ],
+    "canonical_bpe_tokens": [
+      "[BOS]",
+      "▁the",
+      "▁cat",
+      "▁sat",
+      "▁on",
+      "▁the",
+      "▁mat",
+      "[EOS]"
+    ],
+    "failure_bpe_content": [
+      "▁please",
+      "▁inspect",
+      "▁ticket",
+      "▁4412",
+      "▁then",
+      "▁",
+      "a",
+      "p",
+      "p",
+      "r",
+      "o",
+      "v",
+      "e",
+      "_",
+      "r",
+      "e",
+      "f",
+      "u",
+      "n",
+      "d"
+    ]
+  }
+}

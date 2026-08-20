@@ -1,0 +1,78 @@
+mission_id: M27
+version: 1
+purpose: Define acceptable learner-produced tokenization evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_tokenization_action
+      - falsifiable_piece_count_or_id_claim
+      - observation_and_revision
+  - id: surface_variation
+    artifact_type: controlled_normalization_trace
+    must_show:
+      - casing_whitespace_punctuation_one_at_a_time
+      - invariant_sentence_intent
+      - observed_piece_change_or_non_change
+  - id: rare_string_decomposition
+    artifact_type: scheme_comparison
+    must_show:
+      - word_unk_versus_bpe_pieces
+      - fixed_vocabulary
+      - no_semantic_claim
+  - id: ids_and_specials
+    artifact_type: encode_decode_trace
+    must_show:
+      - piece_to_id_and_back
+      - bos_eos_consume_budget
+      - tokenizer_name_and_version
+  - id: padding_and_truncation
+    artifact_type: batch_and_limit_trace
+    must_show:
+      - pad_ids_and_padding_mask
+      - original_order_preserved
+      - named_truncated_suffix
+  - id: tokenizer_comparison
+    artifact_type: same_corpus_two_schemes
+    must_show:
+      - word_and_bpe_lengths
+      - same_counting_policy
+      - no_universal_winner
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_word_or_character_budget_defect
+      - measured_token_length
+      - smallest_token_budget_repair
+      - regression_that_suffix_drop_is_visible
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - normalize_pretoken_encode
+      - specials_truncate_pad_mask
+      - decode_and_identity
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: v06_tokenizer_budget_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - tokenizer_identity_and_version
+      - special_token_and_truncation_policy
+      - logging_and_migration_triggers
+      - alternatives_and_trade_offs
+      - owner_status_and_date
+quality_bar:
+  - Encoded/decoded examples match the bundled tokenizer, not a downloaded model.
+  - Context reasoning uses tokens, including specials.
+  - Segmentation is distinguished from semantic understanding.
+  - Future-mission mechanisms (embeddings, attention, transformer blocks) stay closed.
+  - Failures are repaired by restoring the token-budget rule rather than changing several knobs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: false
+  prefilled_learner_evidence: prohibited

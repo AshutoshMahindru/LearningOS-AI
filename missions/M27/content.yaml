@@ -1,0 +1,23 @@
+mission: M27
+boundary:
+  inherited_from_m03: Python manipulation of strings, lists, dictionaries, and functions; no tokenizer assumed.
+  inherited_from_m15_optional: Vector length and similarity intuition, unused here except as a reminder that IDs are not yet vectors.
+  manipulated_here: Normalization, token pieces and IDs, word vs tiny BPE segmentation, special tokens, padding, truncation, sequence length, padding masks, and token-budget reasoning.
+  deferred_to_m28: Semantic embeddings, cosine retrieval, and treating token IDs as meaning-bearing vectors.
+  deferred_to_m29: Attention, queries/keys/values, and using a padding mask inside a score matrix.
+  deferred_to_m30: Transformer block composition.
+handoff_summary: M03 supplies Python fluency; M27 turns text into stable token IDs and an honest token budget; M28 may attach vectors to those IDs.
+concepts:
+  - model input units are tokens, not human words
+  - a token ID is an index into a frozen vocabulary, not a meaning
+  - normalization can hide casing and extra whitespace
+  - punctuation and rare strings change piece counts
+  - special tokens mark boundaries and padding
+  - padding preserves order and records a mask; truncation drops a suffix
+  - context budgets must be counted in tokens
+  - two local schemes can disagree without either being universally correct
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M27 may explain tokenization, IDs, specials, pad/truncate, and token budgets. It may not introduce embeddings, attention, or transformer blocks.
+canonical_sources:
+  - hf-llm-course
+  - karpathy-zero-to-hero
