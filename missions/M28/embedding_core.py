@@ -282,15 +282,18 @@ def operational_score(
 ) -> float:
     """Score a pair using the declared metric/normalization contract.
 
-    Cosine is always the cosine formula (scale-invariant). Inner product
-    (`dot` / `ip`) does not divide by norms, so it is only a cosine
-    equivalent when both vectors are already L2 unit vectors.
+    Cosine is always the cosine formula (scale-invariant); ``normalization``
+    does not change that path. Inner product (``dot`` / ``ip``) uses raw
+    vectors unless ``normalization=="l2"``, in which case both sides are
+    L2-normalized first so the inner product equals cosine.
     """
 
     key = str(metric).lower()
     if key == "cosine":
         return cosine_similarity(left, right)
     if key in {"dot", "ip", "inner"}:
+        if str(normalization).lower() == "l2":
+            return inner_product(l2_normalize(left), l2_normalize(right))
         return inner_product(left, right)
     raise ValueError("metric must be 'cosine' or 'dot'")
 
@@ -489,12 +492,13 @@ def retrieve_unchecked(
     query_id: str = "query",
     query_provenance: Provenance | None = None,
     top_k: int | None = None,
-    score_fn: str = "dot",
+    score_fn: str = "declared",
 ) -> Retrieval:
     """Controlled defect: score without the provenance gate.
 
-    The default score is inner product, the operational mistake of treating
-    a cosine index as raw dot product across stores.
+    The named change is ``enforce_provenance=False``. Scoring stays on the
+    declared metric so a wrong neighbor is attributable to the store, not
+    to a second scoring-knob change.
     """
 
     return rank_neighbors(

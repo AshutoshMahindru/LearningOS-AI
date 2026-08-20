@@ -140,7 +140,7 @@
     },
     {
       "id": "q-paraphrase",
-      "text": "Please reset the login credentials.",
+      "text": "Please reset my login password.",
       "experiment": "paraphrase",
       "relevant": [
         "d-login-reset",

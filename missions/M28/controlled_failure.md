@@ -17,9 +17,10 @@ Predict, before running:
 
 The defective path uses one named change:
 
-- `enforce_provenance=False` and inner-product scoring
+- `enforce_provenance=False`, with the declared cosine metric
 
-The texts stay the same. Only the store identity is wrong. Diagnosis
+The texts stay the same. Only the store identity is wrong (model,
+version, normalization, and swapped account/print axes). Diagnosis
 comes from metadata and from a password query retrieving a printer
 document.
 

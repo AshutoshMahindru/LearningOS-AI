@@ -319,6 +319,9 @@ class M28StaticContractTests(unittest.TestCase):
         self.assertEqual(TRANSFER["provenance"]["dimensions"], 4)
         self.assertIn("d-password-forgot", {row["id"] for row in CATALOG["corpus"]})
         self.assertIn("q-paraphrase", {row["id"] for row in CATALOG["queries"]})
+        paraphrase_text = next(row["text"] for row in CATALOG["queries"] if row["id"] == "q-paraphrase")
+        corpus_texts = {row["text"] for row in CATALOG["corpus"]}
+        self.assertNotIn(paraphrase_text, corpus_texts)
         self.assertEqual(len(TOKEN_TABLE["token_semantics"]), len(set(TOKEN_TABLE["token_semantics"])))
 
 
@@ -359,6 +362,9 @@ class M28RuntimeTests(unittest.TestCase):
         self.assertNotIn("d-printer-reset", password.ids()[:3])
         self.assertNotIn("d-printer-reset", paraphrase.ids()[:3])
         self.assertGreater(password.results[0].score, password.results[3].score)
+        query = self.canonical.get("q-paraphrase")
+        for doc in self.canonical.documents():
+            self.assertLess(CORE.cosine_similarity(query.vector, doc.vector), 0.999, doc.id)
 
     def test_lexical_and_semantic_rankings_disagree_on_printer_login(self):
         query = self.canonical.get("q-printer")
@@ -436,6 +442,12 @@ class M28RuntimeTests(unittest.TestCase):
         self.assertAlmostEqual(CORE.cosine_similarity(left, right), CORE.inner_product(left, right), places=9)
         declared = CORE.operational_score(left, right, metric="cosine", normalization="l2")
         self.assertAlmostEqual(declared, CORE.cosine_similarity(left, right), places=9)
+        raw_left = self.encoder.encode("reset my password", pooling="mean", normalization="none")
+        raw_right = self.encoder.encode("Please reset the printer.", pooling="mean", normalization="none")
+        l2_dot = CORE.operational_score(raw_left, raw_right, metric="dot", normalization="l2")
+        raw_dot = CORE.operational_score(raw_left, raw_right, metric="dot", normalization="none")
+        self.assertAlmostEqual(l2_dot, CORE.cosine_similarity(raw_left, raw_right), places=9)
+        self.assertNotAlmostEqual(raw_dot, l2_dot, places=6)
 
     def test_silent_mix_is_plausible_and_wrong_then_rejected(self):
         query = self.canonical.get("q-password")
@@ -446,7 +458,6 @@ class M28RuntimeTests(unittest.TestCase):
             query_id=query.id,
             query_provenance=self.canonical.provenance,
             top_k=5,
-            score_fn="dot",
         )
         self.assertFalse(mixed.enforced)
         self.assertEqual(list(mixed.ids()[:3]), self.catalog["expected"]["mixed_password_top3"])

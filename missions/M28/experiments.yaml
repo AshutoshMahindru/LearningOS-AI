@@ -33,6 +33,6 @@ experiments:
     invariant: Same texts and token table.
   - id: version-compatibility
     prediction_required: true
-    change: Score a v06.1 query against v06.2 swapped-axis unnormalized corpus vectors.
-    observation: Unchecked ranking looks like retrieval; the gate rejects the mix.
+    change: Score a v06.1 query against v06.2 swapped-axis unnormalized corpus vectors with the provenance gate off.
+    observation: Unchecked cosine ranking looks like retrieval; the gate rejects the mix.
     invariant: No silent mixing after repair.

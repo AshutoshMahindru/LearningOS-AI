@@ -229,7 +229,7 @@ QUERIES = [
     },
     {
         "id": "q-paraphrase",
-        "text": "Please reset the login credentials.",
+        "text": "Please reset my login password.",
         "experiment": "paraphrase",
         "relevant": ["d-login-reset", "d-password-forgot", "d-cannot-signin"],
         "traps": ["d-printer-reset", "d-printer-queue"],
@@ -375,6 +375,10 @@ def main() -> None:
             top_k=top_k,
         )
 
+    paraphrase_text = next(row["text"] for row in QUERIES if row["id"] == "q-paraphrase")
+    corpus_texts = {row["text"] for row in CORPUS}
+    require(paraphrase_text not in corpus_texts, "paraphrase query must not copy a corpus row")
+
     password = retrieve("q-password")
     paraphrase = retrieve("q-paraphrase")
     printer = retrieve("q-printer")
@@ -391,6 +395,10 @@ def main() -> None:
     require(not set(password.ids()[:3]) & printer_ids, f"password mixed printers {password.ids()[:3]}")
     require(set(paraphrase.ids()[:3]) <= account_ids, f"paraphrase top3={paraphrase.ids()[:3]}")
     require(paraphrase.top_id in account_ids, f"paraphrase top={paraphrase.top_id}")
+    require(
+        abs(cosine_similarity(catalog_vectors["q-paraphrase"], catalog_vectors["d-login-reset"]) - 1.0) > 1e-6,
+        "paraphrase must not be an exact vector copy of d-login-reset",
+    )
     require(printer.top_id in printer_ids, f"printer top={printer.top_id}")
     require(printer.ids()[1] in printer_ids, f"printer second={printer.ids()[1]}")
     require("d-login-reset" not in printer.ids()[:2], f"printer ranked login {printer.ids()[:3]}")
@@ -433,7 +441,6 @@ def main() -> None:
         query_id="q-password",
         query_provenance=canon_prov,
         top_k=5,
-        score_fn="dot",
     )
     require(
         mixed.ids()[0] in printer_ids or mixed.ids()[1] in printer_ids,

@@ -9,7 +9,8 @@ code-reading target is the **text-to-neighbor contract**:
 3. mean pool, then L2
 4. stored width, model, version, metric, normalization
 5. query vector of the same provenance
-6. cosine (or declared inner product)
+6. cosine (always the cosine formula) or inner product (L2 applied only
+   when `normalization=="l2"`)
 7. sort by `(-score, id)`
 8. refuse mixed model/version/normalization
 
