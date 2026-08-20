@@ -88,7 +88,7 @@ ADVANCE / TARGETED REPAIR
 
 The architecture, 42-mission route, canonical 253-node graph, content routing and apprenticeship overlays are instantiated.
 
-**M01-M21 are implemented and repository-executable.** Their mission packages, tests and 21 source notebooks have passed combined minimal-runtime and full-dependency validation, including clean notebook execution. **M22-M42 remain specification-only** and must not be advertised as executable until they pass the same implementation and validation gates.
+**M01-M22 are implemented and repository-executable.** Their mission packages, tests and 22 source notebooks have passed combined minimal-runtime and full-dependency validation, including clean notebook execution. **M23-M42 remain specification-only** and must not be advertised as executable until they pass the same implementation and validation gates.
 
 Learner progress is intentionally separate from repository implementation progress: merging a mission does not mark a learner as having completed it.
 
@@ -114,7 +114,7 @@ ai-learning-os/
 
 ## Validation
 
-The default CI keeps a dependency-light runtime job and a full M01-M21 mission-validation job. The full job installs the union of mission requirements, runs repository and mission tests, validates source notebook invariants, and executes all repository-executable notebooks in fresh kernels.
+The default CI keeps a dependency-light runtime job and a full M01-M22 mission-validation job. The full job installs the union of mission requirements, runs repository and mission tests, validates source notebook invariants, and executes all repository-executable notebooks in fresh kernels.
 
 ## Source policy
 
@@ -122,4 +122,4 @@ Prefer primary/official sources. The AI tutor supplements rather than replaces c
 
 ## Status
 
-**M01-M21 integrated and verified; M22-M42 pending implementation.**
+**M01-M22 integrated and verified; M23-M42 pending implementation.**
