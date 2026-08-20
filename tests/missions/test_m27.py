@@ -179,6 +179,7 @@ class M27StaticContractTests(unittest.TestCase):
             "trace_bpe_word",
             "encoding_report",
             'budget_unit="words"',
+            'budget_unit="characters"',
             'budget_unit="tokens"',
             'scheme="word"',
             'scheme="bpe"',

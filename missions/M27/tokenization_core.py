@@ -361,8 +361,13 @@ class TeachingTokenizer:
                 continue
             kept.append(token)
         if self.scheme == "bpe":
-            raw = "".join(token for token in kept if token != UNK_TOKEN)
-            raw = raw.replace(self.word_prefix, " ")
+            parts: list[str] = []
+            for token in kept:
+                if token == UNK_TOKEN:
+                    parts.append(f" {UNK_TOKEN} ")
+                else:
+                    parts.append(token)
+            raw = "".join(parts).replace(self.word_prefix, " ")
             return re.sub(r"\s+", " ", raw).strip()
         words: list[str] = []
         for token in kept:
@@ -407,9 +412,11 @@ def _scheme_key(scheme: str) -> str:
         "whitespace/word": "word",
         "bpe": "bpe",
         "subword": "bpe",
-        "byte": "bpe",
-        "byte-like": "bpe",
     }
+    if key in {"byte", "byte-like"}:
+        raise ValueError(
+            f"{scheme!r} is not a third scheme; this fixture is character-prefix BPE. Use 'word' or 'bpe'."
+        )
     if key not in aliases:
         raise ValueError(f"unknown scheme {scheme!r}; use 'word' or 'bpe'")
     return aliases[key]

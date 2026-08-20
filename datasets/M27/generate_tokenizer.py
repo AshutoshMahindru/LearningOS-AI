@@ -188,9 +188,9 @@ def main() -> None:
             "punctuation": "The cat sat on the mat!",
         },
         "rare_strings": {
-            "identifier": "ticket xgztq9 is open",
+            "identifier": "the ticket xgztq9 sat",
             "url": "see https://learn.os/t/42 now",
-            "number": "invoice 99281 is due",
+            "number": "pay invoice 99281 now",
         },
         "padding_batch": [
             "the cat sat",
@@ -201,8 +201,8 @@ def main() -> None:
         "comparison_corpus": [
             "the cat sat on the mat",
             "please inspect ticket 4412 then stop",
-            "ticket xgztq9 is open",
-            "invoice 99281 is due",
+            "the ticket xgztq9 sat",
+            "pay invoice 99281 now",
             "see https://learn.os/t/42 now",
         ],
         "controlled_failure": {
