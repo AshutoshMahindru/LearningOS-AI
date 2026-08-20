@@ -1,0 +1,23 @@
+mission_id: M29
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: required
+flagship_status:
+  flagship: V06
+  implementation_progress: single_head_attention_opened
+  learner_progress: pending_evidence
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+  exact_head_actions: required
+parallel_safety:
+  prohibited_shared_files_modified: false
+notes:
+  - Implementation status is not learner completion.
+  - Teaching attention traces are fixture facts, not learner evidence.
+  - M29 opens single-head Q/K/V attention; M30 owns the transformer block; M31 owns LLM training; M33 owns a search service.
+  - M30 learner progression remains blocked until M29 learner evidence and formal review are satisfied.
+  - This branch does not mark M29 repository-executable.

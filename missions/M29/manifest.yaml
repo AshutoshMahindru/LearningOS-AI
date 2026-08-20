@@ -1,0 +1,97 @@
+id: M29
+title: Understand Attention Through Context
+phase: P5
+flagship: V06
+objective: Experience attention as context-dependent relevance weighting.
+competencies:
+  - attention
+  - QKV reasoning
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M16
+    - M28
+  helpful: []
+handoff:
+  receives: M16 matrix-transform reasoning and M28 vector/embedding similarity intuition
+  provides: M30 receives a tested single-head attention trace with explicit Q/K/V shapes, masks, weights, and output
+learning_sequence:
+  - inspect two tiny sequences that differ by one context vector
+  - predict whether the bank output stays fixed when the third token changes
+  - run single-head attention and compare weights plus outputs
+  - project Q, K, and V and annotate shapes
+  - compute raw and scaled dot products for one query
+  - apply a causal mask and check forbidden positions carry no mass
+  - compare unscaled scores with dimension-scaled scores
+  - perturb one query or key and trace score/weight movement
+  - change one value with Q/K/mask fixed and confirm weights stay put
+  - diagnose wrong-axis softmax or post-softmax masking
+  - complete no-AI single-head arithmetic
+  - author a V06 attention-trace observability ADR
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M29_attention_context.ipynb
+instrumentation: missions/M29/attention_core.py
+requirements: requirements/m29.txt
+mission_test: tests/missions/test_m29.py
+reference_fixture:
+  tokens_cash: [river, bank, cash]
+  tokens_water: [river, bank, water]
+  d_model: 2
+  d_k: 2
+  d_v: 2
+  scale: inverse_sqrt_d_k
+  softmax_axis: keys
+  hand_query: [1.0, 0.0]
+  hand_unscaled_scores: [1.0, 0.0]
+canonical_sources:
+  - hf-llm-course
+  - karpathy-zero-to-hero
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  softmax_over_keys: required
+  no_multi_head: required
+  no_transformer_block: required
+  no_pretrained_download: required
+mission_artifacts:
+  - missions/M29/README.md
+  - missions/M29/manifest.yaml
+  - missions/M29/content.yaml
+  - missions/M29/experiments.yaml
+  - missions/M29/code_reading.md
+  - missions/M29/no_ai_gate.md
+  - missions/M29/controlled_failure.md
+  - missions/M29/assessment.yaml
+  - missions/M29/evidence_contract.yaml
+  - missions/M29/flagship_integration.md
+  - missions/M29/review_brief.md
+  - missions/M29/adr_prompt.md
+  - missions/M29/status.yaml
+  - missions/M29/attention_core.py
+  - labs/M29_attention_context.ipynb
+  - requirements/m29.txt
+  - tests/missions/test_m29.py
+  - tests/test_m29.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  multi_head_deferred_to_m30: true
+  residual_norm_ffn_deferred_to_m30: true
+  llm_training_deferred_to_m31: true
+  search_service_deferred_to_m33: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

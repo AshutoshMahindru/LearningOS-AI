@@ -1,0 +1,33 @@
+mission: M29
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped attention predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  hand_programmatic_match:
+    evidence: Two-key scores (1, 0) with independent softmax arithmetic and the NumPy trace.
+    pass: Weights and output match e/(e+1) and 1/(e+1) within tolerance.
+  mask_and_softmax_invariants:
+    evidence: Causal future mass is 0; each unmasked query row sums to 1.
+    pass: Invariants hold on the correct path and fail on the named defect.
+  shape_reasoning:
+    evidence: Annotated Q/K/V/score/weight/output shapes on the teaching sequence.
+    pass: Shapes follow (batch, queries, d_k), (batch, keys, d_k/d_v), (batch, queries, keys), (batch, queries, d_v).
+  score_weight_output_split:
+    evidence: Value-only change keeps weights; query perturbation moves scores and weights.
+    pass: The learner distinguishes scores, weights, and outputs.
+  context_dependence:
+    evidence: Bank output in cash versus water context with one named change.
+    pass: The same token identity yields a different context vector.
+  controlled_failure_diagnosis:
+    evidence: Symptom, axis/order hypothesis, discriminator, repair_attention from the broken trace, regression.
+    pass: Diagnosis precedes repair; only softmax axis or mask timing is restored.
+  code_reading:
+    evidence: Annotated project → score → scale → mask → softmax(keys) → aggregate flow.
+    pass: Learner predicts shapes and zero future mass; no M30 block inspection.
+  no_ai_gate:
+    evidence: Independent scores, scaled softmax, causal mask, wrong-axis invariant, non-intent statement.
+    pass: Arithmetic and invariants are correct without generated help.
+  adr:
+    evidence: Learner-authored V06 attention-trace observability policy.
+    pass: Shapes, masks, score summaries, invariants, and over-interpretation limits are complete without transformer-block claims.

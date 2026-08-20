@@ -1,0 +1,22 @@
+mission: M29
+boundary:
+  inherited_from_m16: Matrix-vector maps, row-batch `X @ W`, shape-before-multiply, and transpose as a convention fix rather than decoration.
+  inherited_from_m28: Vectors as operational similarity objects; cosine/ranking is not attention; a score is not proof of meaning.
+  manipulated_here: Queries, keys, values, scaled dot-product scores, causal and padding masks, softmax over keys, weighted value aggregation, context-dependent outputs, and shape/row-sum/mask invariants.
+  deferred_to_m30: Multi-head split and merge, output projection, residual paths, normalization placement, and the feed-forward sublayer.
+  deferred_to_m31: LLM training objectives and optimization loops.
+  deferred_to_m33: A retrieval service, index, or HTTP search surface.
+handoff_summary: M16 supplies the matrix convention; M28 supplies static vector intuition; M29 hands M30 a single-head trace with named Q/K/V/score/mask/weight/output checkpoints.
+concepts:
+  - Q, K, and V are matrix projections of the same sequence, not metaphors
+  - attention scores are scaled dots between queries and keys
+  - softmax runs over keys so each query distributes mass
+  - a mask is applied before softmax and then renormalizes
+  - the output is a weighted sum of values, so values can move the output without moving weights
+  - attention weights are not causal explanations of intent
+  - shape and row-sum invariants catch axis and mask-order bugs
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M29 may explain single-head scaled dot-product attention, masks, and context-dependent outputs. It may not introduce multi-head attention, residuals, LayerNorm, FFN blocks, LLM training, or a search service.
+canonical_sources:
+  - hf-llm-course
+  - karpathy-zero-to-hero
