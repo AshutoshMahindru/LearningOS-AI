@@ -1,0 +1,21 @@
+mission: M31
+boundary:
+  inherited_from_m27_m30: Token pieces and integer IDs from the bundled word tokenizer; a declared pre-norm transformer block with named checkpoints. Those mechanisms are composed, not rewritten.
+  manipulated_here: Causal next-token objective, input/target shifting, context windows, a tiny NumPy teaching simulation, train/eval lineage, contamination, and a system-level lifecycle map.
+  deferred_to_m32: Logits-to-token selection, greedy decoding, temperature, top-k/top-p, stop budgets, prompt-versus-retrieval-versus-tools-versus-weights.
+  deferred_to_m34: Retrieval-augmented generation.
+handoff_summary: M30 supplies the block dataflow; M31 hands M32 a stage-aware checkpoint and an explicit training-time versus inference-time boundary.
+concepts:
+  - causal next-token prediction scores token t+1 from prefix tokens through t
+  - correct pairs are inputs = tokens[:-1] and targets = tokens[1:]
+  - a one-position shift error can still drive training loss down
+  - context length changes the number of prediction targets
+  - train loss is not downstream task quality
+  - evaluation is invalid when held-out ids appear in train
+  - pretraining, adaptation/post-training, evaluation, and inference are different stages
+  - the teaching model is a (V, V) bigram table, not a production trainer
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M31 may explain causal LM loss, pair construction, tiny-corpus teaching dynamics, contamination, and a lifecycle map. It may not introduce decoding policy, temperature, candidate filters, RAG, or proprietary production recipes. It may not claim the teaching table is a foundation model.
+canonical_sources:
+  - hf-llm-course
+  - karpathy-zero-to-hero

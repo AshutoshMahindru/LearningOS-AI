@@ -1,0 +1,32 @@
+{
+  "dataset_version": "v07-teaching-corpus-1",
+  "schema_version": 1,
+  "provenance": {
+    "authored_for": "M31",
+    "kind": "synthetic-teaching-fixture",
+    "downloaded": false,
+    "network_required": false,
+    "personal_data": false,
+    "not_a_production_pretrain_corpus": true,
+    "not_a_quality_benchmark": true,
+    "description": "Tiny closed-vocab word corpus for causal next-token teaching. Train documents repeat a cat/mat pattern plus support phrases. Eval e01 shares a prefix and changes the last content token. Eval e02 is a unique held-out document used as the contamination leak target."
+  },
+  "tokenizer": {
+    "family": "v06-teaching-tokenizer",
+    "scheme": "word",
+    "version": "v06.1",
+    "add_special_tokens": true,
+    "source_mission": "M27"
+  },
+  "leak_doc_id": "e02",
+  "documents": [
+    {"id": "d01", "split": "train", "text": "the cat sat on the mat"},
+    {"id": "d02", "split": "train", "text": "the cat sat"},
+    {"id": "d03", "split": "train", "text": "please inspect ticket"},
+    {"id": "d04", "split": "train", "text": "please process invoice"},
+    {"id": "d05", "split": "train", "text": "inspect ticket then stop"},
+    {"id": "d06", "split": "train", "text": "process invoice then stop"},
+    {"id": "e01", "split": "eval", "text": "the cat sat on the ticket"},
+    {"id": "e02", "split": "eval", "text": "customer 88 paid the invoice"}
+  ]
+}

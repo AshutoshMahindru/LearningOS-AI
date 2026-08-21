@@ -1,0 +1,98 @@
+id: M31
+title: Understand LLM Training
+phase: P5
+flagship: V07
+objective: Map the stages and objectives that produce a language model.
+competencies:
+  - LLM training
+  - training objectives
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: true
+prerequisites:
+  blocking:
+    - M30
+  helpful: []
+handoff:
+  receives: M30 transformer-block dataflow map, declared pre-norm convention, and named checkpoints
+  provides: M32 receives a stage-aware checkpoint/fixture and a clear training-time versus inference-time boundary
+learning_sequence:
+  - zoom from the transformer block to the full training system
+  - build next-token pairs from a short token sequence
+  - predict loss behavior for a tiny causal fixture
+  - run bounded local NumPy teaching simulation
+  - inspect train/validation loss and a held-out sequence
+  - introduce a one-position target-shift bug
+  - introduce controlled evaluation contamination
+  - map pretraining -> adaptation/post-training -> evaluation
+  - read a small data/training artifact with emphasis on objective construction
+  - complete a no-AI lifecycle map and target trace
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M31_llm_training.ipynb
+instrumentation: missions/M31/llm_training_core.py
+requirements: requirements/m31.txt
+mission_test: tests/missions/test_m31.py
+reference_fixture:
+  corpus: datasets/M31/corpus.json
+  dataset_version: v07-teaching-corpus-1
+  tokenizer_family: v06-teaching-tokenizer
+  tokenizer_scheme: word
+  tokenizer_version: v06.1
+  leak_doc_id: e02
+  seed: 3101
+  steps: 60
+  teaching_model: bigram_score_table
+  version: v07-teaching-lm-1
+canonical_sources:
+  - hf-llm-course
+  - karpathy-zero-to-hero
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  eval_uses_correct_shift: required
+  authored_splits_protected: required
+  no_production_recipe: required
+  no_inference_policy: required
+  no_pretrained_download: required
+mission_artifacts:
+  - missions/M31/README.md
+  - missions/M31/manifest.yaml
+  - missions/M31/content.yaml
+  - missions/M31/experiments.yaml
+  - missions/M31/code_reading.md
+  - missions/M31/no_ai_gate.md
+  - missions/M31/controlled_failure.md
+  - missions/M31/assessment.yaml
+  - missions/M31/evidence_contract.yaml
+  - missions/M31/flagship_integration.md
+  - missions/M31/review_brief.md
+  - missions/M31/adr_prompt.md
+  - missions/M31/status.yaml
+  - missions/M31/llm_training_core.py
+  - labs/M31_llm_training.ipynb
+  - datasets/M31/corpus.json
+  - datasets/M31/README.md
+  - requirements/m31.txt
+  - tests/missions/test_m31.py
+  - tests/test_m31.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  m27_tokenizer_composed_not_rewritten: true
+  m30_block_not_retrained: true
+  inference_adaptation_deferred_to_m32: true
+  rag_deferred_to_m34: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false
