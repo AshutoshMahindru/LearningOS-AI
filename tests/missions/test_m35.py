@@ -226,6 +226,7 @@ class M35StaticContractTests(unittest.TestCase):
             ("predict-candidate-k", "run-candidate-k"),
             ("predict-rerank", "run-rerank"),
             ("predict-hard-negatives", "run-hard-negatives"),
+            ("predict-hard-neg-rerank", "run-hard-neg-rerank"),
             ("predict-slices", "run-slices"),
             ("predict-failure", "run-failure"),
             ("predict-failure-repair", "run-failure-repair"),
@@ -240,6 +241,22 @@ class M35StaticContractTests(unittest.TestCase):
         self.assertLess(positions["code-reading"], positions["run-code-reading"])
         self.assertIn("Predict before running", cell_source(cells[positions["code-reading"]]))
         self.assertLess(positions["run-failure-repair"], positions["predict-relabel"])
+        self.assertLess(positions["run-hard-negatives"], positions["predict-hard-neg-rerank"])
+
+        inspect_hits = cell_source(cells[positions["inspect-baseline-hits"]])
+        self.assertIn("as_evidence keys", inspect_hits)
+        self.assertIn("scored_candidates", inspect_hits)
+        self.assertNotIn("doc-tickets::c0", inspect_hits)
+        self.assertNotIn("doc-tickets::c1", inspect_hits)
+        self.assertNotIn('row["chunk_id"]', inspect_hits)
+
+        hard_src = cell_source(cells[positions["run-hard-negatives"]])
+        hard_rerank_src = cell_source(cells[positions["run-hard-neg-rerank"]])
+        self.assertNotIn("rerank_candidates", hard_src)
+        self.assertNotIn("RERANKER_LEX", hard_src)
+        self.assertIn("rerank_candidates", hard_rerank_src)
+        self.assertIn("RERANKER_LEX", hard_rerank_src)
+        self.assertIn("hard_candidates", hard_rerank_src)
 
         repair_src = cell_source(cells[positions["run-failure-repair"]])
         relabel_src = cell_source(cells[positions["run-relabel"]])
@@ -262,7 +279,7 @@ class M35StaticContractTests(unittest.TestCase):
         markdown = "\n".join(
             cell_source(cell) for cell in cells if cell.get("cell_type") == "markdown"
         )
-        self.assertGreaterEqual(markdown.count("Predict before running"), 11)
+        self.assertGreaterEqual(markdown.count("Predict before running"), 12)
         for phrase in (
             "WHOLE",
             "MAP",

@@ -43,8 +43,13 @@ experiments:
   - id: hard-negatives
     prediction_required: true
     change: Inject high-similarity irrelevant extras without adding them to frozen relevant lists.
-    observation: Degradation, trap_at_1, and whether digit-match reranking still ties.
-    invariant: Queries and M34 labels frozen.
+    observation: Degradation and trap_at_1 under identity ranking. Labels stay frozen.
+    invariant: Queries and M34 labels frozen. No rerank in this step.
+  - id: hard-negatives-rerank
+    prediction_required: true
+    change: Apply lex-overlap-v1 to the same injected hard-neg candidate members.
+    observation: Member sets stay equal. Digit-match may tie and keep the trap at rank 1.
+    invariant: Identical hard-neg members. Frozen labels. Not a second simultaneous injection.
   - id: slice-metrics
     prediction_required: true
     change: Compare aggregate nDCG/MRR with the critical query slice.
