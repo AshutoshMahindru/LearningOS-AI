@@ -1,0 +1,25 @@
+mission: M38
+boundary:
+  inherited_from_m37: Validated tool registry and executor, strict schemas, typed schema-versus-tool errors, approval and idempotency on side-effecting tools, bounded tool-call retries, and staged traces (selection, validation, execution, result). InferenceConfig remains recorded with training_time=False and weights_updated=False. Live adapters fail closed.
+  manipulated_here: Explicit serializable agent state, nodes, allowed transitions, terminal states, loop bounds, checkpoints, resume without replaying completed side effects, human approval as a workflow node, tool-result incorporation into state, and deterministic orchestration versus model fixtures.
+  deferred_to_m39: Persistent memory stores, cross-strategy routing, and fallback ladders.
+  deferred_to_m40: Systematic evaluation harnesses.
+  closed_here: M34 RAG packs, M35 rerank/chunk tuning, M36 ANN/Qdrant, retrieve_and_generate, and a decoding/sampling lab.
+handoff_summary: M37 supplies run_tool_call, ToolTrace, the teaching registry, and keyed ledger idempotency. M38 hands M39 a stateful workflow with an explicit serializable state schema and failure/termination semantics. It does not hand M39 a memory store, a router, or a LangGraph SDK graph.
+concepts:
+  - workflow state is an explicit serializable schema, not hidden chat history
+  - design the state fields before drawing transitions
+  - nodes and allowed edges are inspectable control flow
+  - terminals are complete, denied, failed, and loop_exhausted
+  - loop bounds are orchestration policy, not a prompt suggestion
+  - checkpoints capture last_tool_result, completed effect keys, and the ledger snapshot
+  - resume must not replay a completed side effect
+  - human approval is a node that gates execution
+  - the model fixture proposes; the state machine decides
+  - invalid transitions raise and leave state unchanged
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M38 may explain explicit state, nodes, transitions, terminals, loop bounds, checkpoints, resume, approval, and deterministic orchestration. It may not implement a memory store, a router, a fallback ladder, a systematic eval harness, RAG, or a sampling lab. It may not import LangGraph or Anthropic SDKs. It may not claim the teaching graph is a production agent runtime.
+canonical_sources:
+  - langgraph-docs
+  - anthropic-agents
+content_bundle: tool-using-agents

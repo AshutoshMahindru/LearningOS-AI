@@ -1,0 +1,90 @@
+mission_id: M38
+version: 1
+purpose: Define acceptable learner-produced workflow evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_workflow_action
+      - falsifiable_node_or_terminal_or_effect_claim
+      - observation_and_revision
+  - id: useful_whole
+    artifact_type: end_to_end_workflow_trace
+    must_show:
+      - state_schema_fields
+      - recorded_transitions
+      - last_tool_result
+      - terminal
+  - id: resume_checkpoint
+    artifact_type: checkpoint_resume_pair
+    must_show:
+      - last_tool_result_restored
+      - effect_count_unchanged_for_completed_work
+      - lookup_not_reexecuted
+  - id: loop_bound
+    artifact_type: termination_trace
+    must_show:
+      - unresolved_action_fixture
+      - max_steps
+      - loop_exhausted_terminal
+  - id: approval_gate
+    artifact_type: approve_deny_pair
+    must_show:
+      - denied_effect_count
+      - granted_effect_count
+      - approve_node
+  - id: invalid_transition
+    artifact_type: rejected_edge
+    must_show:
+      - source_node
+      - illegal_destination
+      - unchanged_state
+  - id: replayed_trace
+    artifact_type: deterministic_replay
+    must_show:
+      - recorded_proposals
+      - matching_terminal
+      - matching_effect_count
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_infinite_loop_or_replayed_effect_defect
+      - model_turn_or_effect_count
+      - repair_from_broken_trace
+      - regression_that_the_broken_path_still_fails
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - state_schema_before_transitions
+      - apply_transition_rejects_illegal_edges
+      - checkpoint_includes_last_tool_result
+      - fail_closed_langgraph_adapter
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: v10_workflow_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - state_schema
+      - persistence_boundary
+      - resume_semantics
+      - loop_limits
+      - approval_points
+      - trace_retention
+      - alternatives_and_trade_offs
+      - owner_status_and_date
+quality_bar:
+  - Independent SKU-7 catalog price matches the posted amount.
+  - Resume does not duplicate completed side effects.
+  - Loop bounds produce an explicit terminal.
+  - Invalid transitions do not mutate state.
+  - Future-mission mechanisms (memory/routing, eval harness, RAG, sampling lab) stay closed.
+  - Failures are repaired from the broken trace, not two unrelated happy-path runs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited

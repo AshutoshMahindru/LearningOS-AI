@@ -1,0 +1,62 @@
+mission: M38
+controls:
+  runtime: local_model_call_fixtures_and_reference_state_machine
+  graph_id: v10-teaching-graph-1
+  workflow_version: v10-teaching-workflow-1
+  seed: 3801
+  catalog_sku: SKU-7
+  catalog_price: 42.0
+  max_steps: 8
+  prediction_required_before_action: true
+  no_paid_api: true
+  no_langgraph_or_anthropic_sdk: true
+  no_rag_or_qdrant: true
+  no_sampling_lab: true
+  no_memory_store: true
+  no_router_or_fallback: true
+experiments:
+  - id: happy-path
+    prediction_required: true
+    change: Run the fixed SKU-7 lookup-then-post task through the state machine.
+    observation: Record nodes, transitions, last_tool_result, effect_count, and the terminal.
+    invariant: Tool/model fixtures fixed.
+  - id: resume
+    prediction_required: true
+    change: Interrupt after the lookup checkpoint and resume.
+    observation: last_tool_result is restored; the ledger effect is applied once; lookup is not re-executed.
+    invariant: Same checkpoint.
+  - id: loop-bound
+    prediction_required: true
+    change: Use a fixture that repeatedly requests an unresolved lookup.
+    observation: Terminal is loop_exhausted at the configured max_steps.
+    invariant: Workflow policy fixed.
+  - id: approval
+    prediction_required: true
+    change: Route the ledger post through approve versus deny.
+    observation: Deny leaves effect_count at 0; grant posts once.
+    invariant: Requested action fixed.
+  - id: invalid-transition
+    prediction_required: true
+    change: Attempt start -> execute, which the graph does not allow.
+    observation: InvalidTransition is raised; node and fields do not mutate.
+    invariant: State schema fixed.
+  - id: replay
+    prediction_required: true
+    change: Replay a recorded proposal list through the deterministic machine.
+    observation: Terminal and effect_count match the original run.
+    invariant: Recorded proposals fixed; no live model.
+  - id: infinite-loop-or-replayed-effect
+    prediction_required: true
+    change: Diagnose a missing loop bound, or an execute node re-entered without idempotency.
+    observation: Each named defect has its own predict/act step. Regression still fails on the broken path.
+    invariant: Named defect only; no second unrelated happy-path run.
+  - id: infinite-loop-repair
+    prediction_required: true
+    change: Call repair_run on the infinite-loop broken object only.
+    observation: Terminal is loop_exhausted. Original object still exceeds max_steps without that terminal.
+    invariant: Replayed-side-effect repair is a later named change.
+  - id: replayed-effect-repair
+    prediction_required: true
+    change: Call repair_run on the replayed-side-effect broken object only.
+    observation: One keyed post. Original object still shows two posts.
+    invariant: Same initial checkpoint. Not a second simultaneous loop-bound repair.
