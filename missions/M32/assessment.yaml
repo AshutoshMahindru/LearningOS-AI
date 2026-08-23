@@ -1,0 +1,33 @@
+mission: M32
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped inference-control predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  greedy_and_sampling:
+    evidence: Argmax on fixed logits compared with a seeded sample on the same logits.
+    pass: Greedy index matches independent argmax; sampling claims match the recorded seed.
+  temperature_and_filters:
+    evidence: Softmax tables at more than one temperature and after top-k or top-p.
+    pass: Concentration/entropy and truncation match arithmetic; knobs are not reported as quality.
+  inference_config_evidence:
+    evidence: Checkpoint id, prompt, temperature, top-k/p, seed, stop, and max-tokens on each run.
+    pass: Configuration is treated as reproducibility evidence.
+  prompt_versus_weights:
+    evidence: Two prompts, same sampling config, different continuations.
+    pass: The continuation change is attributed to context, not a new checkpoint.
+  adaptation_hierarchy:
+    evidence: Rubric choices for freshness, private knowledge, computation, style, and weight change.
+    pass: Freshness is not sent to fine-tuning first; routes are distinguished.
+  controlled_failure_diagnosis:
+    evidence: Symptom, config-or-signal hypothesis, first_divergence or wrong route, repair_run from the broken trace, regression.
+    pass: Diagnosis precedes repair; swapping models is not the first lever.
+  code_reading:
+    evidence: Annotated prompt → scores → filters → sample/greedy → stop → metadata → fail-closed live adapter.
+    pass: Learner predicts greedy/temperature independence and required log fields; no M33 index inspection.
+  no_ai_gate:
+    evidence: Independent greedy/filter arithmetic, uncontrolled-record call, adaptation choice, metadata list.
+    pass: Arithmetic and boundary reasoning are correct without generated help.
+  adr:
+    evidence: Learner-authored V07 adaptation hierarchy and inference-configuration policy.
+    pass: Prompt, retrieval, tools, parameters, required logs, and revisit triggers are complete without implementing search, RAG, or tools.

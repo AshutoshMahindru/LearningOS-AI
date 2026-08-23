@@ -1,0 +1,103 @@
+mission_id: M32
+version: 1
+purpose: Define acceptable learner-produced inference and adaptation evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_inference_action
+      - falsifiable_token_distribution_or_route_claim
+      - observation_and_revision
+  - id: greedy_selection
+    artifact_type: argmax_table
+    must_show:
+      - fixed_logits
+      - greedy_index
+      - tie_break_rule
+  - id: temperature_table
+    artifact_type: softmax_and_entropy_table
+    must_show:
+      - same_logits
+      - at_least_two_temperatures
+      - greedy_index_unchanged
+  - id: filter_table
+    artifact_type: candidate_truncation_table
+    must_show:
+      - top_k_or_top_p_bound
+      - surviving_mass
+      - renormalized_probs
+  - id: seed_replay
+    artifact_type: sampled_token_pair
+    must_show:
+      - same_seed_replays
+      - different_seed_recorded
+      - other_settings_fixed
+  - id: stop_budget
+    artifact_type: termination_trace
+    must_show:
+      - max_tokens_or_stop_change
+      - stop_reason
+      - prompt_and_sampling_fixed
+  - id: prompt_context
+    artifact_type: two_prompt_continuations
+    must_show:
+      - sampling_config_held
+      - checkpoint_id_held
+      - continuation_changed
+  - id: adaptation_choices
+    artifact_type: rubric_classification
+    must_show:
+      - prompt_route
+      - retrieval_route
+      - tools_route
+      - parameters_route
+      - freshness_not_fine_tuned_first
+  - id: inference_config_log
+    artifact_type: provider_metadata_record
+    must_show:
+      - checkpoint_id
+      - prompt_ids
+      - temperature
+      - seed
+      - stop_and_max_tokens
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_uncontrolled_or_wrong_adaptation_defect
+      - first_divergence_or_wrong_route
+      - repair_from_broken_trace
+      - regression_that_the_broken_path_still_diverges
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - prompt_selects_local_scores
+      - filter_order
+      - fail_closed_live_adapter
+      - config_fingerprint
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: v07_adaptation_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - adaptation_hierarchy
+      - inference_configuration_policy
+      - required_logs
+      - revisit_triggers
+      - alternatives_and_trade_offs
+      - owner_status_and_date
+quality_bar:
+  - Independent greedy and temperature arithmetic match programmatic output.
+  - Sampling claims are backed by seed replay evidence.
+  - Adaptation decisions distinguish freshness from behavior change.
+  - Configuration metadata is treated as evidence.
+  - Future-mission mechanisms (search service, RAG, tool execution) stay closed.
+  - Failures are repaired from the broken trace, not two unrelated happy-path runs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited
