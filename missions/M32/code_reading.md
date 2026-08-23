@@ -16,10 +16,11 @@ Read `run_inference`, `prepare_distribution`, `apply_top_k`, `apply_top_p`,
 
 Before running the code-reading cell, predict:
 
-- whether greedy selection depends on temperature for `T > 0`
-- which metadata field would have to match before two outputs can be
-  compared as a model change
-- what `optional_live_complete` does on the canonical path
+- the teaching filter order inside `prepare_distribution`
+- whether greedy `run_inference` applies `config.temperature` to the
+  selected token
+- what `repair_run` reuses from the broken object (reference config /
+  signals vs module defaults)
 
 Do **not** look for a vector index, a context pack, citations, or a
 tool executor. Those are later missions. If a failure can be diagnosed

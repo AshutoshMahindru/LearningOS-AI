@@ -210,9 +210,21 @@ def _load_sibling(mission_id: str, filename: str, module_name: str):
 
 
 def _load_m31():
-    """Load the trusted M31 training boundary; do not rewrite the objective."""
+    """Load the trusted M31 training boundary; do not rewrite the objective.
 
-    return _load_sibling("M31", "llm_training_core.py", "_learningos_m31_llm_training_core")
+    Prefer the package module so a notebook that already imported
+    ``missions.M31.llm_training_core`` sees the same ``StageAwareCheckpoint``
+    class as ``attach_m31_checkpoint``. File-load is only a fallback.
+    """
+
+    packaged_name = "missions.M31.llm_training_core"
+    existing = sys.modules.get(packaged_name)
+    if existing is not None:
+        return existing
+    try:
+        return __import__(packaged_name, fromlist=["StageAwareCheckpoint"])
+    except ImportError:
+        return _load_sibling("M31", "llm_training_core.py", "_learningos_m31_llm_training_core")
 
 
 def _normalize_defect(defect: str | None) -> str:

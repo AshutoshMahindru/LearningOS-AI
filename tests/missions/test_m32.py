@@ -9,6 +9,8 @@ import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 MISSION = ROOT / "missions" / "M32"
 NOTEBOOK = ROOT / "labs" / "M32_inference_adaptation.ipynb"
 REQUIREMENTS = ROOT / "requirements" / "m32.txt"
@@ -237,6 +239,14 @@ class M32StaticContractTests(unittest.TestCase):
         self.assertNotIn('defect="wrong_adaptation"', predict_adapt)
         self.assertNotIn("retrieval", predict_adapt.lower())
 
+        predict_code = cell_source(cells[positions["predict-code-reading"]])
+        predict_bullets = predict_code.split("Predict:", 1)[-1]
+        self.assertIn("prepare_distribution", predict_bullets)
+        self.assertIn("repair_run", predict_bullets)
+        self.assertIn("run_inference", predict_bullets)
+        self.assertNotIn("optional_live_complete", predict_bullets)
+        self.assertNotIn("compared as a model change", predict_code)
+
     def test_notebook_prints_required_inference_evidence(self):
         code = "\n".join(
             cell_source(cell) for cell in notebook_cells() if cell.get("cell_type") == "code"
@@ -434,7 +444,11 @@ class M32StaticContractTests(unittest.TestCase):
             CORE.decide_adaptation({"freshness": True, "unknown_flag": True})
 
     def test_m31_checkpoint_is_consumed_not_retrained(self):
+        from missions.M31.llm_training_core import StageAwareCheckpoint
+
         checkpoint = CORE.attach_m31_checkpoint()
+        self.assertIsInstance(checkpoint, StageAwareCheckpoint)
+        self.assertEqual(type(checkpoint).__module__, "missions.M31.llm_training_core")
         self.assertFalse(checkpoint.training_time)
         self.assertTrue(checkpoint.inference_ready)
         self.assertEqual(checkpoint.version, "v07-teaching-lm-1")
