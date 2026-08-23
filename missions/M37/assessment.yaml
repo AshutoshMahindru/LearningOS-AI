@@ -1,0 +1,33 @@
+mission: M37
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped tool-call predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  schema_fail_closed:
+    evidence: Valid, missing-field, wrong-type, extra-field, and unsafe proposals on a fixed schema.
+    pass: Invalid calls do not increment the execution counter; issues are typed.
+  selection:
+    evidence: Fixed case set with two tools and a no-tool intent.
+    pass: Selected tool matches the fixture expected tool on every case.
+  structured_results:
+    evidence: Success payload and typed error payloads.
+    pass: Schema failure is labeled schema; tool failure is labeled tool; JSON is serializable.
+  idempotency_and_permission:
+    evidence: Approved ledger post, unapproved post, and same-key replay.
+    pass: Unapproved posts do not execute; replay applies the effect at most once.
+  retry_bound:
+    evidence: Sticky repairable validation errors up to max_attempts.
+    pass: Final status is retry_exhausted; execution_reached stays false.
+  controlled_failure_diagnosis:
+    evidence: Symptom, gate hypothesis, effect_count, repair_run from the broken trace, regression.
+    pass: Diagnosis precedes repair; swapping models is not the first lever.
+  code_reading:
+    evidence: Annotated parse → validate → permission → idempotency → execute → result, plus fail-closed live adapter.
+    pass: Learner predicts that invalid calls never reach execute_tool and names schema vs tool error types.
+  no_ai_gate:
+    evidence: Independent duty arithmetic, four-way classification, idempotency count, error locus, JSON-is-not-enough.
+    pass: Arithmetic and boundary reasoning are correct without generated help.
+  adr:
+    evidence: Learner-authored V10 tool-execution trust boundary.
+    pass: Schema strictness, permissions, idempotency, retry limits, and trace fields are complete without implementing a state machine.

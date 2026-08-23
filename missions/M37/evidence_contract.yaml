@@ -1,0 +1,91 @@
+mission_id: M37
+version: 1
+purpose: Define acceptable learner-produced tool-use evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_tool_action
+      - falsifiable_status_or_effect_or_route_claim
+      - observation_and_revision
+  - id: useful_whole
+    artifact_type: end_to_end_tool_trace
+    must_show:
+      - declared_intent
+      - model_call_fixture
+      - validation_ok
+      - structured_result
+      - staged_trace
+  - id: schema_table
+    artifact_type: valid_invalid_proposal_table
+    must_show:
+      - missing_field
+      - wrong_type
+      - extra_field
+      - constraint_violation
+      - execution_counter_unchanged_on_invalid
+  - id: selection_cases
+    artifact_type: fixed_route_table
+    must_show:
+      - compute_vat_intent
+      - lookup_catalog_intent
+      - no_tool_intent
+  - id: structured_errors
+    artifact_type: typed_result_pair
+    must_show:
+      - schema_error_before_execution
+      - tool_error_after_validation
+  - id: idempotency_replay
+    artifact_type: side_effect_count_pair
+    must_show:
+      - first_post_effect_count
+      - same_key_replay_effect_count
+      - approval_gate
+  - id: retry_bound
+    artifact_type: attempt_trace
+    must_show:
+      - repeated_repairable_errors
+      - max_attempts
+      - retry_exhausted_status
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_malformed_or_duplicate_defect
+      - effect_count
+      - repair_from_broken_trace
+      - regression_that_the_broken_path_still_posts
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - validate_before_execute
+      - idempotency_in_execute_tool
+      - fail_closed_live_adapter
+      - inference_config_recorded
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: v10_tool_execution_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - schema_strictness
+      - permissions_or_confirmation
+      - idempotency
+      - retry_limits
+      - trace_fields
+      - alternatives_and_trade_offs
+      - owner_status_and_date
+quality_bar:
+  - Independent VAT arithmetic matches programmatic output.
+  - Invalid proposals never reach tool handlers.
+  - Schema failure is not reported as tool failure.
+  - Side-effect replay is controlled by an explicit key.
+  - Future-mission mechanisms (state machines, memory/routing, eval harness, RAG, sampling lab) stay closed.
+  - Failures are repaired from the broken trace, not two unrelated happy-path runs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited

@@ -1,0 +1,110 @@
+id: M37
+title: Make an LLM Call Tools Reliably
+phase: P7
+flagship: V10
+phase_end: false
+objective: Design tool interfaces and validate reliable tool use.
+competencies:
+  - tool use
+  - structured outputs
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: true
+prerequisites:
+  blocking:
+    - M32
+  helpful: []
+handoff:
+  receives: M32 inference-provider / InferenceConfig discipline and adaptation boundary (weights_updated=False, fail-closed live adapter)
+  provides: M38 receives a validated tool registry/executor and structured call/result/error trace
+learning_sequence:
+  - start with one deterministic useful tool and declared intent
+  - define a strict schema with valid and invalid examples
+  - inject valid and invalid model-call fixtures
+  - validate before execution
+  - return structured success and error results
+  - add a second tool so selection is non-trivial, plus a no-tool case
+  - add a side-effecting mock with idempotency and approval
+  - add bounded repair retry
+  - diagnose malformed-argument or duplicate-side-effect failure
+  - author the V10 tool-execution ADR
+  - complete no-AI tool-contract design
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M37_tool_calling.ipynb
+instrumentation: missions/M37/tool_runtime.py
+requirements: requirements/m37.txt
+mission_test: tests/missions/test_m37.py
+reference_fixture:
+  runtime_version: v10-teaching-tools-1
+  registry_id: v10-teaching-registry-1
+  seed: 3701
+  vat_amount: 80.0
+  vat_rate: 0.25
+  vat_tax: 20.0
+  vat_total: 100.0
+  catalog_sku: SKU-7
+  catalog_price: 42.0
+  max_attempts: 3
+  weights_updated: false
+  live_adapter: optional-not-required
+canonical_sources:
+  - anthropic-agents
+  - langgraph-docs
+content_bundle: tool-using-agents
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_paid_api: required
+  no_required_live_model: required
+  no_langgraph_sdk: required
+  no_anthropic_sdk: required
+  no_rag_or_qdrant: required
+  no_sampling_lab: required
+  no_state_machine: required
+  invalid_never_reaches_execution: required
+  schema_failure_distinct_from_tool_failure: required
+  idempotent_side_effects: required
+mission_artifacts:
+  - missions/M37/README.md
+  - missions/M37/manifest.yaml
+  - missions/M37/content.yaml
+  - missions/M37/experiments.yaml
+  - missions/M37/code_reading.md
+  - missions/M37/no_ai_gate.md
+  - missions/M37/controlled_failure.md
+  - missions/M37/assessment.yaml
+  - missions/M37/evidence_contract.yaml
+  - missions/M37/flagship_integration.md
+  - missions/M37/review_brief.md
+  - missions/M37/adr_prompt.md
+  - missions/M37/status.yaml
+  - missions/M37/tool_runtime.py
+  - missions/M37/optional_live_llm.py
+  - labs/M37_tool_calling.ipynb
+  - requirements/m37.txt
+  - tests/missions/test_m37.py
+  - tests/test_m37.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  state_machine_deferred_to_m38: true
+  memory_routing_deferred_to_m39: true
+  eval_harness_deferred_to_m40: true
+  rag_deferred_to_m34: true
+  sampling_deferred_to_m32: true
+  uses_m32_inference_config: true
+  local_fixtures_required: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

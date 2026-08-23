@@ -1,0 +1,26 @@
+mission: M37
+boundary:
+  inherited_from_m32: Inference-provider configuration and an explicit adaptation boundary. InferenceConfig is reproducibility evidence. Weights stay frozen (training_time=False, weights_updated=False). Live adapters fail closed. Sampling/temperature remains a recorded config, not a lab opened here.
+  manipulated_here: Tool schemas, typed arguments, validation before execution, selection among two or more tools plus a no-tool case, the execution boundary, side effects, idempotency keys, bounded retries, typed errors (schema vs tool), permissions/approval, and traces that separate selection, validation, execution, and result.
+  deferred_to_m38: Persistent multi-step state machines, serializable long-lived workflow state, checkpoint/resume of an agent graph.
+  deferred_to_m39: Memory, routing, and fallback ladders.
+  deferred_to_m40: Systematic evaluation harnesses.
+  closed_here: M34 RAG packs, M35 rerank/chunk tuning, M36 ANN/Qdrant, retrieve_and_generate, and a decoding/sampling lab.
+handoff_summary: M32 supplies InferenceConfig and the adaptation boundary. M37 hands M38 a validated tool registry/executor and a structured call/result/error trace. It does not hand M38 a LangGraph graph, a memory store, or an eval harness.
+concepts:
+  - a tool interface is a schema plus an execution boundary, not a prompt suggestion
+  - model-proposed calls are untrusted input and must be validated before side effects
+  - parseable JSON is not sufficient reliability
+  - extra fields, missing fields, wrong types, and bool-as-number fail closed
+  - schema failure is distinct from tool failure
+  - selection among tools (and no-tool) is a measured routing decision
+  - side-effecting tools require approval and an idempotency key
+  - replay with the same key applies the effect at most once
+  - retries are bounded; repair must not coerce unsafely
+  - traces separate selection, validation, execution, and result
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M37 may explain schemas, validation, selection, idempotency, permissions, typed errors, bounded retry, and staged traces. It may not implement a persistent agent state machine, memory/routing, a systematic eval harness, RAG, or a sampling lab. It may not import LangGraph or Anthropic SDKs. It may not claim the three-tool fixture is a production gateway.
+canonical_sources:
+  - anthropic-agents
+  - langgraph-docs
+content_bundle: tool-using-agents
