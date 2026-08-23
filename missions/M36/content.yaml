@@ -1,0 +1,26 @@
+mission: M36
+boundary:
+  inherited_from_m35: Frozen M34 labels, measured exact ranking baseline, candidate/rerank contract, chunk/index schema, and known failure slices. This mission does not relabel after seeing ranks and does not retune the M35 lexical reranker as the skill being taught.
+  inherited_from_m33: Provenance-preserving exact search returning ranked evidence with document/chunk IDs, scores, text spans, and index/embedding identity via search / RankedHit.as_evidence.
+  manipulated_here: Exact versus approximate search at teaching scale, a local graph adapter with an ef/effort knob, vector-store metadata/filtering and filter placement, dense versus sparse channels, declared rank fusion (RRF), hybrid candidates, recall/latency/memory proxies, and insert/update/delete/rebuild lifecycle.
+  deferred_to_m37: Tool interfaces, structured model calls, and agent orchestration.
+  deferred_to_m38: Stateful agent workflows.
+  deferred_to_m32: Logits-to-token selection, temperature, top-p, and other sampling controls.
+  deferred_to_m34: Extractive generation and citation policy.
+handoff_summary: M35 supplies the exact oracle and frozen eval. M36 chooses infrastructure against that oracle. V09 may close only after a defended store architecture and a measurable retrieval component for M40. Implementation of this package is not phase completion.
+concepts:
+  - exact search is the correctness reference
+  - approximate search trades recall for fewer comparisons
+  - search effort (ef) is one named knob
+  - metadata filters must run before a small top-k
+  - dense and sparse scores are incomparable
+  - fuse ranks with a declared method such as RRF
+  - a store owns insert/update/delete/rebuild
+  - optional live vector databases fail closed
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M36 may explain vector-store metadata, approximate search effort, sparse lexical candidates, declared fusion, and index lifecycle. It may not introduce required Qdrant/FAISS clients, a production hierarchical index implementation in notebook code, tool calling, a decoding lab, or M34 generation retuning as the skill being taught.
+canonical_sources:
+  - qdrant-docs
+  - hnsw-paper
+  - sentence-transformers
+content_bundle: retrieval-quality

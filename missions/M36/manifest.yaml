@@ -1,0 +1,118 @@
+id: M36
+title: Understand Vector Databases and Hybrid Retrieval
+phase: P6
+flagship: V09
+phase_end: true
+objective: Choose retrieval infrastructure based on query and system needs
+competencies:
+  - vector databases
+  - hybrid retrieval
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M35
+  helpful:
+    - M33
+handoff:
+  receives: M35 frozen eval, exact candidate/rerank contract, chunk/index schema, and quality/latency baseline; M33 search / RankedHit.as_evidence
+  provides: V09 closes with a defended retrieval-infrastructure architecture and a measurable retrieval component for M40
+learning_sequence:
+  - use M35 exact retrieval as the correctness reference
+  - introduce a local approximate-index teaching adapter
+  - compare recall and a latency proxy at one search-effort setting
+  - vary that effort setting
+  - compare proper metadata pre-filter with unsafe after-small-top-k
+  - run a sparse lexical candidate signal
+  - fuse dense and sparse with declared RRF
+  - evaluate dense, sparse, and hybrid query slices
+  - inspect insert/update/delete/rebuild lifecycle
+  - trigger raw-score mix or late-filter failure and repair from the broken objects
+  - write the unfilled V09 infrastructure ADR and phase-end review
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M36_vector_db_hybrid.ipynb
+instrumentation: missions/M36/hybrid_retrieval.py
+requirements: requirements/m36.txt
+mission_test: tests/missions/test_m36.py
+reference_fixture:
+  pipeline_id: v09-hybrid-retrieval
+  store_id: v09-teaching-store
+  exact_index_id: v08-exact-memory
+  backend_exact: exact-in-memory
+  backend_approx: teaching-graph
+  fusion_id: rrf
+  rrf_k: 60
+  graph_m: 2
+  graph_long_range: 1
+  default_ef: 8
+  low_ef: 1
+  default_top_k: 3
+  default_candidate_k: 5
+  corpus_version: m33.corpus.v1
+  embedding_model: v06-teaching-meanpool
+  embedding_version: v06.1
+  eval_version: m34.eval.v1
+  seed: 3601
+  stale_policy: fail-closed-rebuild-or-reject
+canonical_sources:
+  - qdrant-docs
+  - hnsw-paper
+  - sentence-transformers
+content_bundle: retrieval-quality
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_paid_api: required
+  no_required_live_store: required
+  no_faiss_or_required_qdrant: required
+  no_agent_orchestration: required
+  exact_oracle_is_m35: required
+  declared_fusion_only: required
+mission_artifacts:
+  - missions/M36/README.md
+  - missions/M36/manifest.yaml
+  - missions/M36/content.yaml
+  - missions/M36/experiments.yaml
+  - missions/M36/code_reading.md
+  - missions/M36/no_ai_gate.md
+  - missions/M36/controlled_failure.md
+  - missions/M36/assessment.yaml
+  - missions/M36/evidence_contract.yaml
+  - missions/M36/flagship_integration.md
+  - missions/M36/review_brief.md
+  - missions/M36/adr_prompt.md
+  - missions/M36/status.yaml
+  - missions/M36/hybrid_retrieval.py
+  - missions/M36/optional_qdrant.py
+  - labs/M36_vector_db_hybrid.ipynb
+  - datasets/M36/README.md
+  - datasets/M36/expected.json
+  - datasets/M36/transfer.json
+  - datasets/M36/freeze_expected.py
+  - requirements/m36.txt
+  - tests/missions/test_m36.py
+  - tests/test_m36.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  agents_deferred_to_m37: true
+  decoding_deferred_to_m32: true
+  generation_left_to_m34: true
+  uses_m35_oracle: true
+  uses_m33_search: true
+  local_teaching_adapter_required: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

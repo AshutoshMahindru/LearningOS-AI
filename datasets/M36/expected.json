@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "note": "Fixture infrastructure properties, not learner evidence.",
+  "eval_version": "m34.eval.v1",
+  "pipeline_id": "v09-hybrid-retrieval",
+  "store_id": "v09-teaching-store",
+  "exact_index_id": "v08-exact-memory",
+  "corpus_version": "m33.corpus.v1",
+  "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+  "model": "v06-teaching-meanpool",
+  "version": "v06.1",
+  "entry_id": "doc-weather::c0",
+  "graph_m": 2,
+  "graph_long_range": 1,
+  "chunk_count": 14,
+  "questions_sha256": "43e418cc23bf5040cbd2a63912540de96034e9e9e08f8bca3541649d2f42ab3a",
+  "label_hash": "719c2c7ec8a662f24427d2f63f13e137e139d1c6c41df7b02fcb9deb810422ad",
+  "query_ids": [
+    "rag-reset-login",
+    "rag-password-procedure",
+    "rag-ticket-4412",
+    "rag-legal-forbid",
+    "rag-ceo",
+    "rag-order-7",
+    "rag-fifty",
+    "rag-refund-deny",
+    "rag-h-weather",
+    "rag-h-assignment",
+    "rag-h-printer-queue",
+    "rag-h-invoice",
+    "rag-h-email",
+    "rag-h-printer-year"
+  ],
+  "baseline": {
+    "mean_recall_at_k": 1.0,
+    "mean_mrr": 0.9,
+    "mean_ndcg_at_k": 0.9102162536,
+    "scored_candidates": 14,
+    "index_id": "v08-exact-memory",
+    "ticket_ranked_ids": [
+      "doc-tickets::c1",
+      "doc-tickets::c0",
+      "doc-payments::c2"
+    ]
+  },
+  "configs": {
+    "m35-oracle": "cf1627a9c307dab3b67584e182b1cd81bef99ac0a24cba593ec4c38aea9cc385",
+    "search-effort": "c040f76ef090ab538b353026e7020c650542c4cf43173b5a64a5e8fd48cf3774",
+    "hybrid-rrf": "ee54841241df73a0fa780e2d1dc7d5f34921472fdf88a49391c252db68d35792"
+  },
+  "ann": {
+    "rag-ceo": {
+      "ef_1": {
+        "query_id": "rag-ceo",
+        "top_k": 3,
+        "ef": 1,
+        "exact_ids": [
+          "doc-weather::c0",
+          "doc-payments::c0",
+          "doc-tickets::c0"
+        ],
+        "approx_ids": [
+          "doc-weather::c0"
+        ],
+        "neighbor_recall": 0.3333333333333333,
+        "exact_comparisons": 14,
+        "approx_comparisons": 4,
+        "top1_match": true,
+        "exact_index_id": "v08-exact-memory",
+        "approx_backend": "teaching-graph"
+      },
+      "ef_4": {
+        "query_id": "rag-ceo",
+        "top_k": 3,
+        "ef": 4,
+        "exact_ids": [
+          "doc-weather::c0",
+          "doc-payments::c0",
+          "doc-tickets::c0"
+        ],
+        "approx_ids": [
+          "doc-weather::c0",
+          "doc-payments::c0",
+          "doc-tickets::c0"
+        ],
+        "neighbor_recall": 1.0,
+        "exact_comparisons": 14,
+        "approx_comparisons": 14,
+        "top1_match": true,
+        "exact_index_id": "v08-exact-memory",
+        "approx_backend": "teaching-graph"
+      }
+    },
+    "rag-legal-forbid": {
+      "ef_1": {
+        "query_id": "rag-legal-forbid",
+        "top_k": 3,
+        "ef": 1,
+        "exact_ids": [
+          "doc-legal::c0",
+          "doc-payments::c2",
+          "doc-device-printer::c0"
+        ],
+        "approx_ids": [
+          "doc-payments::c2"
+        ],
+        "neighbor_recall": 0.3333333333333333,
+        "exact_comparisons": 14,
+        "approx_comparisons": 8,
+        "top1_match": false,
+        "exact_index_id": "v08-exact-memory",
+        "approx_backend": "teaching-graph"
+      }
+    }
+  },
+  "filter_demo": {
+    "query_id": "filter-reset",
+    "query_text": "Please reset",
+    "filters": {
+      "topic": "account"
+    },
+    "top_k": 1,
+    "relevant_ids": [
+      "doc-account-access::c1"
+    ],
+    "eligible_ids": [
+      "doc-account-access::c0",
+      "doc-account-access::c1",
+      "doc-account-access::c2"
+    ],
+    "unfiltered_ids": [
+      "doc-device-printer::c0"
+    ],
+    "prefilter_ids": [
+      "doc-account-access::c1"
+    ],
+    "late_ids": [],
+    "late_missed_relevant": [
+      "doc-account-access::c1"
+    ],
+    "prefilter_missed_relevant": []
+  },
+  "channels": {
+    "rag-ticket-4412": {
+      "dense_ids": [
+        "doc-tickets::c1",
+        "doc-tickets::c0",
+        "doc-payments::c2"
+      ],
+      "sparse_ids": [
+        "doc-tickets::c0",
+        "doc-tickets::c1",
+        "doc-weather::c0"
+      ],
+      "hybrid_ids": [
+        "doc-tickets::c0",
+        "doc-tickets::c1",
+        "doc-payments::c2"
+      ]
+    },
+    "rag-h-invoice": {
+      "dense_ids": [
+        "doc-payments::c1",
+        "doc-payments::c2",
+        "doc-payments::c0"
+      ],
+      "sparse_ids": [
+        "doc-payments::c2",
+        "doc-tickets::c0",
+        "doc-tickets::c1"
+      ],
+      "hybrid_ids": [
+        "doc-payments::c2",
+        "doc-tickets::c0",
+        "doc-tickets::c1"
+      ]
+    },
+    "rag-password-procedure": {
+      "dense_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1",
+        "doc-device-printer::c0",
+        "doc-device-printer::c1"
+      ],
+      "sparse_ids": [
+        "doc-account-access::c0",
+        "doc-refund-policy::c1",
+        "doc-device-printer::c1",
+        "doc-account-access::c1",
+        "doc-account-access::c2"
+      ],
+      "mix_ids": [
+        "doc-account-access::c0",
+        "doc-refund-policy::c1",
+        "doc-device-printer::c1",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "repaired_rrf_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1",
+        "doc-device-printer::c1",
+        "doc-refund-policy::c1"
+      ]
+    }
+  },
+  "memory_proxy": {
+    "n_vectors": 14,
+    "dimensions": 12,
+    "graph_edges": 64,
+    "sparse_terms": 50,
+    "sparse_postings": 83,
+    "vector_bytes": 1344,
+    "graph_bytes": 512,
+    "sparse_bytes": 664,
+    "total_bytes": 2520,
+    "backend": "teaching-graph"
+  },
+  "slices": [
+    {
+      "query_id": "rag-reset-login",
+      "support_id": "doc-account-access::c1",
+      "dense_top": "doc-account-access::c1",
+      "sparse_top": "doc-account-access::c1",
+      "hybrid_top": "doc-account-access::c1",
+      "dense_support_rank": 1,
+      "sparse_support_rank": 1,
+      "hybrid_support_rank": 1
+    },
+    {
+      "query_id": "rag-password-procedure",
+      "support_id": "doc-account-access::c1",
+      "dense_top": "doc-account-access::c0",
+      "sparse_top": "doc-account-access::c0",
+      "hybrid_top": "doc-account-access::c0",
+      "dense_support_rank": 3,
+      "sparse_support_rank": null,
+      "hybrid_support_rank": 3
+    },
+    {
+      "query_id": "rag-ticket-4412",
+      "support_id": "doc-tickets::c0",
+      "dense_top": "doc-tickets::c1",
+      "sparse_top": "doc-tickets::c0",
+      "hybrid_top": "doc-tickets::c0",
+      "dense_support_rank": 2,
+      "sparse_support_rank": 1,
+      "hybrid_support_rank": 1
+    },
+    {
+      "query_id": "rag-legal-forbid",
+      "support_id": "doc-legal::c0",
+      "dense_top": "doc-legal::c0",
+      "sparse_top": "doc-legal::c0",
+      "hybrid_top": "doc-legal::c0",
+      "dense_support_rank": 1,
+      "sparse_support_rank": 1,
+      "hybrid_support_rank": 1
+    },
+    {
+      "query_id": "rag-fifty",
+      "support_id": "doc-payments::c0",
+      "dense_top": "doc-payments::c0",
+      "sparse_top": "doc-payments::c0",
+      "hybrid_top": "doc-payments::c0",
+      "dense_support_rank": 1,
+      "sparse_support_rank": 1,
+      "hybrid_support_rank": 1
+    },
+    {
+      "query_id": "rag-refund-deny",
+      "support_id": "doc-refund-policy::c1",
+      "dense_top": "doc-refund-policy::c1",
+      "sparse_top": "doc-refund-policy::c1",
+      "hybrid_top": "doc-refund-policy::c1",
+      "dense_support_rank": 1,
+      "sparse_support_rank": 1,
+      "hybrid_support_rank": 1
+    },
+    {
+      "query_id": "rag-h-weather",
+      "support_id": "doc-weather::c0",
+      "dense_top": "doc-weather::c0",
+      "sparse_top": "doc-weather::c0",
+      "hybrid_top": "doc-weather::c0",
+      "dense_support_rank": 1,
+      "sparse_support_rank": 1,
+      "hybrid_support_rank": 1
+    },
+    {
+      "query_id": "rag-h-assignment",
+      "support_id": "doc-legal::c0",
+      "dense_top": "doc-legal::c0",
+      "sparse_top": "doc-legal::c0",
+      "hybrid_top": "doc-legal::c0",
+      "dense_support_rank": 1,
+      "sparse_support_rank": 1,
+      "hybrid_support_rank": 1
+    },
+    {
+      "query_id": "rag-h-printer-queue",
+      "support_id": "doc-device-printer::c1",
+      "dense_top": "doc-device-printer::c1",
+      "sparse_top": "doc-device-printer::c1",
+      "hybrid_top": "doc-device-printer::c1",
+      "dense_support_rank": 1,
+      "sparse_support_rank": 1,
+      "hybrid_support_rank": 1
+    },
+    {
+      "query_id": "rag-h-invoice",
+      "support_id": "doc-payments::c2",
+      "dense_top": "doc-payments::c1",
+      "sparse_top": "doc-payments::c2",
+      "hybrid_top": "doc-payments::c2",
+      "dense_support_rank": 2,
+      "sparse_support_rank": 1,
+      "hybrid_support_rank": 1
+    }
+  ],
+  "transfer_rrf_order": [
+    "lib::c0",
+    "cafe::c0",
+    "lib::c1",
+    "mus::c0"
+  ],
+  "default_top_k": 3,
+  "default_candidate_k": 5,
+  "default_ef": 8,
+  "downloaded": false,
+  "network_required": false
+}
