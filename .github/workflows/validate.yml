@@ -63,15 +63,16 @@ jobs:
           learning-os lab-status M32
           learning-os lab-status M33
           learning-os lab-status M34
+          learning-os lab-status M35
 
-  validate-missions-m01-m34:
+  validate-missions-m01-m35:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install repository and M01-M34 requirements
+      - name: Install repository and M01-M35 requirements
         run: |
           python -m pip install -e . \
             -r requirements/m01.txt -r requirements/m02.txt -r requirements/m03.txt \
@@ -86,7 +87,8 @@ jobs:
           python -m pip install -r requirements/m25.txt -r requirements/m26.txt \
             -r requirements/m27.txt -r requirements/m28.txt -r requirements/m29.txt \
             -r requirements/m30.txt -r requirements/m31.txt \
-            -r requirements/m32.txt -r requirements/m33.txt -r requirements/m34.txt
+            -r requirements/m32.txt -r requirements/m33.txt -r requirements/m34.txt \
+            -r requirements/m35.txt
           python -m pip check
       - name: Validate repository
         run: python tools/validate_repo.py
@@ -94,5 +96,5 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Run full pytest suite
         run: python -m pytest -q tests
-      - name: Validate and execute M01-M34 notebooks
+      - name: Validate and execute M01-M35 notebooks
         run: python tools/validate_mission_notebooks.py --execute
