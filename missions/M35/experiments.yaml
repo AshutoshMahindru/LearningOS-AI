@@ -1,0 +1,67 @@
+mission: M35
+controls:
+  retriever: M33 search / RankedHit.as_evidence
+  index_id: v08-exact-memory
+  embedding_model: v06-teaching-meanpool
+  embedding_version: v06.1
+  reranker_id: lex-overlap-v1
+  offline_fixture: datasets/M34/questions.json
+  eval_version: m34.eval.v1
+  prediction_required_before_action: true
+  no_ann_decoding_or_generation_lab: true
+experiments:
+  - id: freeze-eval
+    prediction_required: true
+    change: Load datasets/M34 questions and hash labels before any ranking run.
+    observation: eval_version, query ids, support/relevant ids, and questions_sha256 stay fixed.
+    invariant: Do not edit M34 files. Do not relabel after seeing scores.
+  - id: baseline-metrics
+    prediction_required: true
+    change: Score frozen labels against cosine candidates at k=3 with identity rerank.
+    observation: recall@k, MRR, nDCG@k, per-query ranks, and trap_at_1.
+    invariant: Canonical corpus, index, and labels frozen.
+  - id: worst-queries
+    prediction_required: true
+    change: Sort answerable queries by nDCG/MRR and name failure modes.
+    observation: Distinguish candidate_miss, trap_at_1, and ranking_miss.
+    invariant: Same baseline ranking. No label edits.
+  - id: chunking
+    prediction_required: true
+    change: Compare declared chunk versions (canonical, merged, windows) on the same source documents.
+    observation: Retrieval metrics, mixed-span chunks, and version ids.
+    invariant: Same source corpus and frozen M34 labels. Project labels by span overlap.
+  - id: candidate-k
+    prediction_required: true
+    change: Vary pre-rerank candidate count (k=1 vs k=5).
+    observation: Candidate recall, final ranking ceiling, scored_candidates versus proxy_cost.
+    invariant: Embedding/index fixed. Identity rerank.
+  - id: reranking
+    prediction_required: true
+    change: Apply lex-overlap-v1 to identical cosine candidate sets.
+    observation: Changed rank metrics and top ids. Member sets stay equal.
+    invariant: Candidate generation frozen. Labels frozen.
+  - id: hard-negatives
+    prediction_required: true
+    change: Inject high-similarity irrelevant extras without adding them to frozen relevant lists.
+    observation: Degradation, trap_at_1, and whether digit-match reranking still ties.
+    invariant: Queries and M34 labels frozen.
+  - id: slice-metrics
+    prediction_required: true
+    change: Compare aggregate nDCG/MRR with the critical query slice.
+    observation: Failures hidden by averages.
+    invariant: No post-hoc label changes.
+  - id: leakage-failure
+    prediction_required: true
+    change: Copy eval query phrasing into gold support chunks.
+    observation: Aggregate metrics improve while the eval boundary is dirty.
+    invariant: Ranking code unchanged. Original corpus object stays clean until a new leaked corpus is returned.
+  - id: leakage-repair
+    prediction_required: true
+    change: Restore the clean corpus and frozen labels from the broken objects.
+    observation: Metrics return to baseline. Leaked corpus still contains query phrasing.
+    invariant: One repair. Do not relabel in the same step.
+  - id: relabel-gaming
+    prediction_required: true
+    change: After seeing ranks, mark top-1 as relevant on misses.
+    observation: Metrics inflate while ranked ids stay identical.
+    invariant: Ranking frozen. Repair is restoring frozen labels, not a second leak fix.

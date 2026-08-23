@@ -1,0 +1,24 @@
+mission_id: M35
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: required
+flagship_status:
+  flagship: V09
+  implementation_progress: retrieval_quality_opened
+  learner_progress: pending_evidence
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+  exact_head_actions: required
+parallel_safety:
+  prohibited_shared_files_modified: false
+notes:
+  - Implementation status is not learner completion.
+  - Bundled metric properties are fixture facts, not learner evidence.
+  - M35 opens ranking/chunking; M36 owns ANN/hybrid infra; M32 owns decoding; M34 owns generation.
+  - M36 learner progression remains blocked until M35 learner evidence and formal review are satisfied.
+  - This branch does not mark M35 repository-executable.
+  - After merge, global reconciliation must not jump executable inventory from this package.

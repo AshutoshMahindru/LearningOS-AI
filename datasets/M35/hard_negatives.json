@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "authored_for": "M35",
+  "eval_version": "m34.eval.v1",
+  "corpus_version": "m35.corpus.hardneg.v1",
+  "downloaded": false,
+  "network_required": false,
+  "personal_data": false,
+  "kind": "synthetic-teaching-fixture",
+  "note": "High-similarity irrelevant extras. Frozen M34 labels do not mark these ids relevant.",
+  "items": [
+    {
+      "chunk_id": "hn::ticket-4412-approval",
+      "document_id": "doc-hardneg-ticket",
+      "title": "Hard negative ticket",
+      "text": "Ticket 4412 is waiting for approval.",
+      "target_queries": ["rag-ticket-4412"],
+      "reason": "Shares ticket id and waiting-for template; wrong wait-state."
+    },
+    {
+      "chunk_id": "hn::password-printer",
+      "document_id": "doc-hardneg-password",
+      "title": "Hard negative password",
+      "text": "Please reset the printer credentials.",
+      "target_queries": ["rag-reset-login", "rag-password-procedure"],
+      "reason": "Action-like reset sentence aimed at the printer, not login."
+    },
+    {
+      "chunk_id": "hn::invoice-99280",
+      "document_id": "doc-hardneg-invoice",
+      "title": "Hard negative invoice",
+      "text": "Please process invoice 99280 now.",
+      "target_queries": ["rag-h-invoice"],
+      "reason": "Near-duplicate invoice number."
+    }
+  ]
+}

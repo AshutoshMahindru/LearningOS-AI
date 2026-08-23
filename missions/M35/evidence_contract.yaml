@@ -1,0 +1,87 @@
+mission_id: M35
+version: 1
+purpose: Define acceptable learner-produced retrieval-eval evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_retrieval_action
+      - falsifiable_id_or_metric_or_version_claim
+      - observation_and_revision
+  - id: frozen_eval
+    artifact_type: label_freeze_record
+    must_show:
+      - eval_version
+      - questions_sha256_or_label_hash
+      - holdout_ids_untouched
+  - id: baseline_ranking
+    artifact_type: per_query_metric_table
+    must_show:
+      - candidate_ids
+      - ranked_ids
+      - recall_at_k
+      - mrr
+      - ndcg_at_k
+      - index_and_corpus_identity
+  - id: worst_queries
+    artifact_type: failure_mode_list
+    must_show:
+      - lowest_ndcg_or_mrr_ids
+      - named_failure_modes
+  - id: one_named_change
+    artifact_type: controlled_comparison
+    must_show:
+      - chunking_or_k_or_rerank
+      - stated_invariant
+      - before_after_metrics
+  - id: candidate_vs_rerank
+    artifact_type: paired_id_lists
+    must_show:
+      - identical_member_sets
+      - changed_order_when_reranker_fires
+  - id: slice_metrics
+    artifact_type: aggregate_versus_critical
+    must_show:
+      - aggregate_ndcg_or_mrr
+      - critical_slice_ndcg_or_mrr
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_leakage_defect
+      - metric_jump_on_dirty_eval
+      - restore_clean_boundary_from_broken_objects
+      - leaked_object_still_leaked
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - chunk_version_ids
+      - candidate_ids_versus_reranked_ids
+      - metric_values
+      - config_identity
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: v09_retrieval_policy_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - chunking_policy
+      - candidate_k_policy
+      - rerank_policy
+      - metric_set
+      - latency_budget
+      - rollback_and_revisit
+      - owner_status_and_date
+quality_bar:
+  - Metrics are computed in-mission, not imported from a metrics library.
+  - M34 labels remain frozen.
+  - Exact search is not reported as ANN.
+  - Future-mission mechanisms (Qdrant/HNSW/hybrid, decoding lab, tools) stay closed.
+  - Failures are repaired by restoring the eval boundary rather than changing several knobs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited
