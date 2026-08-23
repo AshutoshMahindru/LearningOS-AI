@@ -1,0 +1,93 @@
+mission_id: M39
+version: 1
+purpose: Define acceptable learner-produced robustness evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_robustness_action
+      - falsifiable_route_or_id_or_attempt_or_degraded_claim
+      - observation_and_revision
+  - id: useful_whole
+    artifact_type: end_to_end_robust_trace
+    must_show:
+      - field_classification
+      - retrieved_ids
+      - route
+      - attempts
+      - degraded
+      - terminal
+  - id: memory_relevance
+    artifact_type: retrieval_exclusion_trace
+    must_show:
+      - relevant_id
+      - irrelevant_ids
+      - exclusion_reasons
+  - id: stale_memory
+    artifact_type: expiry_or_supersede_trace
+    must_show:
+      - now
+      - expires_at_or_superseded_by
+      - flagged_or_excluded_id
+  - id: route_selection
+    artifact_type: frozen_case_set
+    must_show:
+      - two_task_classes
+      - no_match_behavior
+      - policy_frozen
+  - id: primary_failure
+    artifact_type: fallback_degraded_run
+    must_show:
+      - primary_failed
+      - fallback_used
+      - degraded_true
+      - not_silent_complete
+  - id: fallback_loop
+    artifact_type: circuit_or_attempt_bound
+    must_show:
+      - primary_and_fallback_failed
+      - attempts_bounded
+      - circuit_open_or_attempt_stop
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_stale_trust_or_oscillation_defect
+      - posted_amount_or_attempts
+      - repair_from_broken_trace
+      - regression_that_the_broken_path_still_fails
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - retrieve_excludes_expired
+      - select_route_no_match
+      - ladder_and_circuit
+      - fail_closed_live_adapter
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: v10_memory_routing_fallback_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - persistence
+      - provenance_retention
+      - retrieval_scope
+      - route_precedence
+      - retry_fallback_bounds
+      - degraded_outputs
+      - circuit_breaking
+      - owner_status_and_date
+quality_bar:
+  - Independent SKU-7 catalog price matches a healthy posted amount.
+  - Irrelevant and expired memory is excluded under policy.
+  - No-match does not execute the M38 wrap.
+  - Degraded success is labeled and is not complete.
+  - Future-mission mechanisms (eval harness, RAG, sampling lab) stay closed.
+  - Failures are repaired from the broken trace, not two unrelated happy-path runs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited

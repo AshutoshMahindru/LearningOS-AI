@@ -1,0 +1,67 @@
+mission: M39
+controls:
+  runtime: local_memory_router_and_m38_wrapper
+  robust_version: v10-teaching-robust-1
+  seed: 3901
+  catalog_sku: SKU-7
+  catalog_price: 42.0
+  stale_price: 99.0
+  max_attempts: 3
+  circuit_threshold: 2
+  prediction_required_before_action: true
+  no_paid_api: true
+  no_langgraph_or_anthropic_sdk: true
+  no_rag_or_qdrant: true
+  no_sampling_lab: true
+  no_eval_harness: true
+experiments:
+  - id: useful-whole
+    prediction_required: true
+    change: Run one robust SKU-7 purchase through retrieve, route, and the M38 wrap.
+    observation: Record retrieved ids, route, attempts, degraded flag, posted amount, and terminal.
+    invariant: Task and catalog fixtures fixed.
+  - id: memory-relevance
+    prediction_required: true
+    change: Add relevant and irrelevant entries.
+    observation: Irrelevant entries are excluded under the frozen retrieval policy.
+    invariant: Task fixed.
+  - id: stale-memory
+    prediction_required: true
+    change: Age or supersede one entry.
+    observation: Stale or superseded information is flagged or excluded.
+    invariant: Query fixed.
+  - id: route-selection
+    prediction_required: true
+    change: Run a fixed case set across route conditions.
+    observation: Measure route correctness and no-match behavior.
+    invariant: Router policy frozen.
+  - id: primary-failure
+    prediction_required: true
+    change: Force the primary route to fail.
+    observation: Bounded fallback and the degraded contract.
+    invariant: Task fixed.
+  - id: fallback-loop
+    prediction_required: true
+    change: Make primary and fallback repeatedly fail.
+    observation: Hard attempt and circuit bounds.
+    invariant: Policies fixed.
+  - id: stale-memory-trusted
+    prediction_required: true
+    change: Diagnose a path that posts expired memory as complete.
+    observation: Named defect has its own predict/act step. Regression still fails on the broken object.
+    invariant: Named defect only; no second unrelated happy-path run.
+  - id: stale-memory-repair
+    prediction_required: true
+    change: Call repair_run on the stale-memory broken object only.
+    observation: Catalog price is posted from the M38 lookup. Original object still posts the stale amount as complete.
+    invariant: Oscillation repair is a later named change.
+  - id: fallback-oscillation
+    prediction_required: true
+    change: Diagnose a path that ignores circuit and attempt bounds.
+    observation: Named defect has its own predict/act step.
+    invariant: Not a simultaneous stale-memory repair.
+  - id: fallback-oscillation-repair
+    prediction_required: true
+    change: Call repair_run on the oscillation broken object only.
+    observation: Circuit opens at the configured bound. Original object still exceeds max_attempts.
+    invariant: Same initial store and task.

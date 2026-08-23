@@ -1,0 +1,25 @@
+mission_id: M39
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: required
+flagship_status:
+  flagship: V10
+  implementation_progress: memory_routing_fallbacks_opened
+  learner_progress: pending_evidence
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+  exact_head_actions: required
+parallel_safety:
+  prohibited_shared_files_modified: false
+notes:
+  - Implementation status is not learner completion.
+  - Local memory fixtures and SKU-7 catalog arithmetic are fixture facts, not learner evidence.
+  - M39 opens persistent memory, routing, and bounded fallbacks around M38; M40 owns systematic evaluation.
+  - M40 learner progression remains blocked until M39 learner evidence and formal review are satisfied.
+  - This branch does not mark M39 repository-executable.
+  - After merge, global reconciliation must not jump executable inventory from this package; M37 is still missing from executable inventory.
+  - This branch's validate_repo.py still reports M01-M35 (correct; do not "fix").
