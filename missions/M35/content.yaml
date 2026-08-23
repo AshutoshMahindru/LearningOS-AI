@@ -1,0 +1,23 @@
+mission: M35
+boundary:
+  inherited_from_m34: Frozen evaluation queries, relevance/support judgments, RAG traces, and retrieval/context/generation/citation failure layers in datasets/M34. This mission does not relabel those files after seeing ranks and does not retune extractive synthesis.
+  inherited_from_m33: Provenance-preserving exact search returning ranked evidence with document/chunk IDs, scores, text spans, and index/embedding identity via search / RankedHit.as_evidence.
+  manipulated_here: Chunk size/overlap on a versioned corpus, candidate k, hard negatives, candidate recall, a deterministic local reranker, rank-sensitive metrics (recall@k, MRR, nDCG), query slices, and latency/quality proxies.
+  deferred_to_m36: Vector-database internals, required ANN/Qdrant/HNSW, and hybrid/sparse fusion as infrastructure skill. Canonical sources qdrant-docs and hnsw-paper are named, not implemented.
+  deferred_to_m32: Logits-to-token selection, temperature, top-p, and other sampling controls.
+  deferred_to_m37: Tools and agent orchestration.
+handoff_summary: M34 supplies a frozen eval set and grounded traces. M35 measures ranking and chunking without breaking that freeze. M36 may choose exact versus approximate infrastructure only after the baseline, candidate/rerank interface, and failure slices exist.
+concepts:
+  - freeze labels before tuning
+  - candidate recall is not final ranking
+  - cosine is not a relevance label
+  - one named change per experiment
+  - aggregate metrics hide critical slices
+  - leaking eval phrasing is metric gaming
+  - hard negatives can survive a weak reranker
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M35 may explain ranking, chunking, candidate generation, rerankers, and retrieval metrics. It may not introduce required ANN/Qdrant/HNSW, hybrid fusion as infrastructure, a decoding lab, or M34 generation retuning as the skill being taught.
+canonical_sources:
+  - sentence-transformers
+  - qdrant-docs
+  - hnsw-paper

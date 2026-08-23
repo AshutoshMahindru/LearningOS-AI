@@ -1,0 +1,1946 @@
+{
+  "schema_version": 1,
+  "note": "Fixture ranking properties, not learner evidence.",
+  "eval_version": "m34.eval.v1",
+  "pipeline_id": "v09-retrieval-eval",
+  "index_id": "v08-exact-memory",
+  "corpus_version": "m33.corpus.v1",
+  "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+  "model": "v06-teaching-meanpool",
+  "version": "v06.1",
+  "metric": "cosine",
+  "normalization": "l2",
+  "default_candidate_k": 3,
+  "questions_sha256": "43e418cc23bf5040cbd2a63912540de96034e9e9e08f8bca3541649d2f42ab3a",
+  "label_hash": "719c2c7ec8a662f24427d2f63f13e137e139d1c6c41df7b02fcb9deb810422ad",
+  "query_ids": [
+    "rag-reset-login",
+    "rag-password-procedure",
+    "rag-ticket-4412",
+    "rag-legal-forbid",
+    "rag-ceo",
+    "rag-order-7",
+    "rag-fifty",
+    "rag-refund-deny",
+    "rag-h-weather",
+    "rag-h-assignment",
+    "rag-h-printer-queue",
+    "rag-h-invoice",
+    "rag-h-email",
+    "rag-h-printer-year"
+  ],
+  "holdout_ids": [
+    "rag-h-weather",
+    "rag-h-assignment",
+    "rag-h-printer-queue",
+    "rag-h-invoice",
+    "rag-h-email",
+    "rag-h-printer-year"
+  ],
+  "dev_ids": [
+    "rag-reset-login",
+    "rag-password-procedure",
+    "rag-ticket-4412",
+    "rag-legal-forbid",
+    "rag-ceo",
+    "rag-order-7",
+    "rag-fifty",
+    "rag-refund-deny"
+  ],
+  "baseline": {
+    "experiment_id": "baseline",
+    "config_identity": "2c94dd7c5a187f070852f6906b7b1a8e37667024ad54094de41546c77e245fd4",
+    "corpus_version": "m33.corpus.v1",
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "n": 14,
+    "n_answerable": 10,
+    "mean_recall_at_k": 1.0,
+    "mean_mrr": 0.9,
+    "mean_ndcg_at_k": 0.9102162536,
+    "mean_candidate_recall": 1.0,
+    "trap_at_1_rate": 0.3571428571,
+    "scored_candidates": 14,
+    "mean_proxy_cost": 14.0,
+    "leaked": false,
+    "relabeled": false,
+    "label_hash": "719c2c7ec8a662f24427d2f63f13e137e139d1c6c41df7b02fcb9deb810422ad",
+    "slices": {
+      "all": {
+        "n": 14,
+        "n_answerable": 10,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.9,
+        "mean_ndcg_at_k": 0.9102162536,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3571428571
+      },
+      "dev_answerable": {
+        "n": 6,
+        "n_answerable": 6,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.9166666667,
+        "mean_ndcg_at_k": 0.9118721303,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.1666666667
+      },
+      "holdout_answerable": {
+        "n": 4,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.875,
+        "mean_ndcg_at_k": 0.9077324384,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.25
+      },
+      "unanswerable": {
+        "n": 4,
+        "n_answerable": 0,
+        "mean_recall_at_k": null,
+        "mean_mrr": null,
+        "mean_ndcg_at_k": null,
+        "mean_candidate_recall": null,
+        "trap_at_1_rate": 0.75
+      },
+      "critical": {
+        "n": 5,
+        "n_answerable": 5,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.8,
+        "mean_ndcg_at_k": 0.8204325071,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.4
+      },
+      "holdout": {
+        "n": 6,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.875,
+        "mean_ndcg_at_k": 0.9077324384,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3333333333
+      }
+    }
+  },
+  "baseline_rows": {
+    "rag-reset-login": {
+      "query_id": "rag-reset-login",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "ranked_ids": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "cosine_ids": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "relevant_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c1",
+        "doc-account-access::c2"
+      ],
+      "support_ids": [
+        "doc-account-access::c1"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 1.0,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 1,
+      "trap_at_1": false,
+      "failure_mode": "ok",
+      "scored_candidates": 14,
+      "rerank_cost": 0,
+      "proxy_cost": 14,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-password-procedure": {
+      "query_id": "rag-password-procedure",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "ranked_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "cosine_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "relevant_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c1",
+        "doc-account-access::c2"
+      ],
+      "support_ids": [
+        "doc-account-access::c1"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 0.8403030284,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 3,
+      "trap_at_1": false,
+      "failure_mode": "suboptimal_ranking",
+      "scored_candidates": 14,
+      "rerank_cost": 0,
+      "proxy_cost": 14,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-ticket-4412": {
+      "query_id": "rag-ticket-4412",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-tickets::c1",
+        "doc-tickets::c0",
+        "doc-payments::c2"
+      ],
+      "ranked_ids": [
+        "doc-tickets::c1",
+        "doc-tickets::c0",
+        "doc-payments::c2"
+      ],
+      "cosine_ids": [
+        "doc-tickets::c1",
+        "doc-tickets::c0",
+        "doc-payments::c2"
+      ],
+      "relevant_ids": [
+        "doc-tickets::c0"
+      ],
+      "support_ids": [
+        "doc-tickets::c0"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 0.5,
+      "ndcg_at_k": 0.6309297536,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 2,
+      "first_support_rank": 2,
+      "trap_at_1": true,
+      "failure_mode": "trap_at_1",
+      "scored_candidates": 14,
+      "rerank_cost": 0,
+      "proxy_cost": 14,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-ceo": {
+      "query_id": "rag-ceo",
+      "split": "dev",
+      "answerable": false,
+      "candidate_ids": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "ranked_ids": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "cosine_ids": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "relevant_ids": [],
+      "support_ids": [],
+      "recall_at_k": null,
+      "mrr": null,
+      "ndcg_at_k": null,
+      "candidate_recall": null,
+      "candidate_support_hit": null,
+      "first_relevant_rank": null,
+      "first_support_rank": null,
+      "trap_at_1": true,
+      "failure_mode": "unanswerable",
+      "scored_candidates": 14,
+      "rerank_cost": 0,
+      "proxy_cost": 14,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-fifty": {
+      "query_id": "rag-fifty",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "doc-payments::c2"
+      ],
+      "ranked_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "doc-payments::c2"
+      ],
+      "cosine_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "doc-payments::c2"
+      ],
+      "relevant_ids": [
+        "doc-payments::c0"
+      ],
+      "support_ids": [
+        "doc-payments::c0"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 1.0,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 1,
+      "trap_at_1": false,
+      "failure_mode": "ok",
+      "scored_candidates": 14,
+      "rerank_cost": 0,
+      "proxy_cost": 14,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-refund-deny": {
+      "query_id": "rag-refund-deny",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-refund-policy::c1",
+        "doc-refund-policy::c0",
+        "doc-payments::c0"
+      ],
+      "ranked_ids": [
+        "doc-refund-policy::c1",
+        "doc-refund-policy::c0",
+        "doc-payments::c0"
+      ],
+      "cosine_ids": [
+        "doc-refund-policy::c1",
+        "doc-refund-policy::c0",
+        "doc-payments::c0"
+      ],
+      "relevant_ids": [
+        "doc-refund-policy::c1"
+      ],
+      "support_ids": [
+        "doc-refund-policy::c1"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 1.0,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 1,
+      "trap_at_1": false,
+      "failure_mode": "ok",
+      "scored_candidates": 14,
+      "rerank_cost": 0,
+      "proxy_cost": 14,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-h-invoice": {
+      "query_id": "rag-h-invoice",
+      "split": "holdout",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-payments::c1",
+        "doc-payments::c2",
+        "doc-payments::c0"
+      ],
+      "ranked_ids": [
+        "doc-payments::c1",
+        "doc-payments::c2",
+        "doc-payments::c0"
+      ],
+      "cosine_ids": [
+        "doc-payments::c1",
+        "doc-payments::c2",
+        "doc-payments::c0"
+      ],
+      "relevant_ids": [
+        "doc-payments::c2"
+      ],
+      "support_ids": [
+        "doc-payments::c2"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 0.5,
+      "ndcg_at_k": 0.6309297536,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 2,
+      "first_support_rank": 2,
+      "trap_at_1": true,
+      "failure_mode": "trap_at_1",
+      "scored_candidates": 14,
+      "rerank_cost": 0,
+      "proxy_cost": 14,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    }
+  },
+  "rerank_lex": {
+    "experiment_id": "rerank-lex",
+    "config_identity": "7931cf36175a8f85f0e4622da981546fd1155f4ed8c09416aa8923f098fe4127",
+    "corpus_version": "m33.corpus.v1",
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "n": 14,
+    "n_answerable": 10,
+    "mean_recall_at_k": 1.0,
+    "mean_mrr": 1.0,
+    "mean_ndcg_at_k": 0.9642308732,
+    "mean_candidate_recall": 1.0,
+    "trap_at_1_rate": 0.2142857143,
+    "scored_candidates": 14,
+    "mean_proxy_cost": 17.0,
+    "leaked": false,
+    "relabeled": false,
+    "label_hash": "719c2c7ec8a662f24427d2f63f13e137e139d1c6c41df7b02fcb9deb810422ad",
+    "slices": {
+      "all": {
+        "n": 14,
+        "n_answerable": 10,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.9642308732,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.2142857143
+      },
+      "dev_answerable": {
+        "n": 6,
+        "n_answerable": 6,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.9803535331,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.0
+      },
+      "holdout_answerable": {
+        "n": 4,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.9400468834,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.0
+      },
+      "unanswerable": {
+        "n": 4,
+        "n_answerable": 0,
+        "mean_recall_at_k": null,
+        "mean_mrr": null,
+        "mean_ndcg_at_k": null,
+        "mean_candidate_recall": null,
+        "trap_at_1_rate": 0.75
+      },
+      "critical": {
+        "n": 5,
+        "n_answerable": 5,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.9764242397,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.0
+      },
+      "holdout": {
+        "n": 6,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.9400468834,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.1666666667
+      }
+    }
+  },
+  "rerank_rows": {
+    "rag-reset-login": {
+      "query_id": "rag-reset-login",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "ranked_ids": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "cosine_ids": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "relevant_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c1",
+        "doc-account-access::c2"
+      ],
+      "support_ids": [
+        "doc-account-access::c1"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 1.0,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 1,
+      "trap_at_1": false,
+      "failure_mode": "ok",
+      "scored_candidates": 14,
+      "rerank_cost": 3,
+      "proxy_cost": 17,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "lex-overlap-v1",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-password-procedure": {
+      "query_id": "rag-password-procedure",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "ranked_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c1",
+        "doc-account-access::c2"
+      ],
+      "cosine_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "relevant_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c1",
+        "doc-account-access::c2"
+      ],
+      "support_ids": [
+        "doc-account-access::c1"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 0.8821211987,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 2,
+      "trap_at_1": false,
+      "failure_mode": "suboptimal_ranking",
+      "scored_candidates": 14,
+      "rerank_cost": 3,
+      "proxy_cost": 17,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "lex-overlap-v1",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-ticket-4412": {
+      "query_id": "rag-ticket-4412",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-tickets::c1",
+        "doc-tickets::c0",
+        "doc-payments::c2"
+      ],
+      "ranked_ids": [
+        "doc-tickets::c0",
+        "doc-tickets::c1",
+        "doc-payments::c2"
+      ],
+      "cosine_ids": [
+        "doc-tickets::c1",
+        "doc-tickets::c0",
+        "doc-payments::c2"
+      ],
+      "relevant_ids": [
+        "doc-tickets::c0"
+      ],
+      "support_ids": [
+        "doc-tickets::c0"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 1.0,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 1,
+      "trap_at_1": false,
+      "failure_mode": "ok",
+      "scored_candidates": 14,
+      "rerank_cost": 3,
+      "proxy_cost": 17,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "lex-overlap-v1",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-ceo": {
+      "query_id": "rag-ceo",
+      "split": "dev",
+      "answerable": false,
+      "candidate_ids": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "ranked_ids": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "cosine_ids": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "relevant_ids": [],
+      "support_ids": [],
+      "recall_at_k": null,
+      "mrr": null,
+      "ndcg_at_k": null,
+      "candidate_recall": null,
+      "candidate_support_hit": null,
+      "first_relevant_rank": null,
+      "first_support_rank": null,
+      "trap_at_1": true,
+      "failure_mode": "unanswerable",
+      "scored_candidates": 14,
+      "rerank_cost": 3,
+      "proxy_cost": 17,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "lex-overlap-v1",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-fifty": {
+      "query_id": "rag-fifty",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "doc-payments::c2"
+      ],
+      "ranked_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "doc-payments::c2"
+      ],
+      "cosine_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "doc-payments::c2"
+      ],
+      "relevant_ids": [
+        "doc-payments::c0"
+      ],
+      "support_ids": [
+        "doc-payments::c0"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 1.0,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 1,
+      "trap_at_1": false,
+      "failure_mode": "ok",
+      "scored_candidates": 14,
+      "rerank_cost": 3,
+      "proxy_cost": 17,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "lex-overlap-v1",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-refund-deny": {
+      "query_id": "rag-refund-deny",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-refund-policy::c1",
+        "doc-refund-policy::c0",
+        "doc-payments::c0"
+      ],
+      "ranked_ids": [
+        "doc-refund-policy::c1",
+        "doc-refund-policy::c0",
+        "doc-payments::c0"
+      ],
+      "cosine_ids": [
+        "doc-refund-policy::c1",
+        "doc-refund-policy::c0",
+        "doc-payments::c0"
+      ],
+      "relevant_ids": [
+        "doc-refund-policy::c1"
+      ],
+      "support_ids": [
+        "doc-refund-policy::c1"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 1.0,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 1,
+      "trap_at_1": false,
+      "failure_mode": "ok",
+      "scored_candidates": 14,
+      "rerank_cost": 3,
+      "proxy_cost": 17,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "lex-overlap-v1",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-h-invoice": {
+      "query_id": "rag-h-invoice",
+      "split": "holdout",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-payments::c1",
+        "doc-payments::c2",
+        "doc-payments::c0"
+      ],
+      "ranked_ids": [
+        "doc-payments::c2",
+        "doc-payments::c1",
+        "doc-payments::c0"
+      ],
+      "cosine_ids": [
+        "doc-payments::c1",
+        "doc-payments::c2",
+        "doc-payments::c0"
+      ],
+      "relevant_ids": [
+        "doc-payments::c2"
+      ],
+      "support_ids": [
+        "doc-payments::c2"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 1.0,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 1,
+      "trap_at_1": false,
+      "failure_mode": "ok",
+      "scored_candidates": 14,
+      "rerank_cost": 3,
+      "proxy_cost": 17,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "lex-overlap-v1",
+      "eval_version": "m34.eval.v1"
+    }
+  },
+  "candidate_k1": {
+    "experiment_id": "candidate-k1",
+    "config_identity": "3db37a78578d393278f55b718f22de3f24c5748fd720692d2fe64fdf7ebc1c5f",
+    "corpus_version": "m33.corpus.v1",
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "n": 14,
+    "n_answerable": 10,
+    "mean_recall_at_k": 0.6166666667,
+    "mean_mrr": 0.8,
+    "mean_ndcg_at_k": 0.75,
+    "mean_candidate_recall": 0.6166666667,
+    "trap_at_1_rate": 0.3571428571,
+    "scored_candidates": 14,
+    "mean_proxy_cost": 14.0,
+    "leaked": false,
+    "relabeled": false,
+    "label_hash": "719c2c7ec8a662f24427d2f63f13e137e139d1c6c41df7b02fcb9deb810422ad",
+    "slices": {
+      "all": {
+        "n": 14,
+        "n_answerable": 10,
+        "mean_recall_at_k": 0.6166666667,
+        "mean_mrr": 0.8,
+        "mean_ndcg_at_k": 0.75,
+        "mean_candidate_recall": 0.6166666667,
+        "trap_at_1_rate": 0.3571428571
+      },
+      "dev_answerable": {
+        "n": 6,
+        "n_answerable": 6,
+        "mean_recall_at_k": 0.6111111111,
+        "mean_mrr": 0.8333333333,
+        "mean_ndcg_at_k": 0.75,
+        "mean_candidate_recall": 0.6111111111,
+        "trap_at_1_rate": 0.1666666667
+      },
+      "holdout_answerable": {
+        "n": 4,
+        "n_answerable": 4,
+        "mean_recall_at_k": 0.625,
+        "mean_mrr": 0.75,
+        "mean_ndcg_at_k": 0.75,
+        "mean_candidate_recall": 0.625,
+        "trap_at_1_rate": 0.25
+      },
+      "unanswerable": {
+        "n": 4,
+        "n_answerable": 0,
+        "mean_recall_at_k": null,
+        "mean_mrr": null,
+        "mean_ndcg_at_k": null,
+        "mean_candidate_recall": null,
+        "trap_at_1_rate": 0.75
+      },
+      "critical": {
+        "n": 5,
+        "n_answerable": 5,
+        "mean_recall_at_k": 0.4666666667,
+        "mean_mrr": 0.6,
+        "mean_ndcg_at_k": 0.5,
+        "mean_candidate_recall": 0.4666666667,
+        "trap_at_1_rate": 0.4
+      },
+      "holdout": {
+        "n": 6,
+        "n_answerable": 4,
+        "mean_recall_at_k": 0.625,
+        "mean_mrr": 0.75,
+        "mean_ndcg_at_k": 0.75,
+        "mean_candidate_recall": 0.625,
+        "trap_at_1_rate": 0.3333333333
+      }
+    }
+  },
+  "candidate_k5": {
+    "experiment_id": "candidate-k5",
+    "config_identity": "d4fce247c3fdc3df3c349412ee1b74dbc3da54c1bd16f0699aa25e28d2d79849",
+    "corpus_version": "m33.corpus.v1",
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "n": 14,
+    "n_answerable": 10,
+    "mean_recall_at_k": 1.0,
+    "mean_mrr": 0.9,
+    "mean_ndcg_at_k": 0.9102162536,
+    "mean_candidate_recall": 1.0,
+    "trap_at_1_rate": 0.3571428571,
+    "scored_candidates": 14,
+    "mean_proxy_cost": 14.0,
+    "leaked": false,
+    "relabeled": false,
+    "label_hash": "719c2c7ec8a662f24427d2f63f13e137e139d1c6c41df7b02fcb9deb810422ad",
+    "slices": {
+      "all": {
+        "n": 14,
+        "n_answerable": 10,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.9,
+        "mean_ndcg_at_k": 0.9102162536,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3571428571
+      },
+      "dev_answerable": {
+        "n": 6,
+        "n_answerable": 6,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.9166666667,
+        "mean_ndcg_at_k": 0.9118721303,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.1666666667
+      },
+      "holdout_answerable": {
+        "n": 4,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.875,
+        "mean_ndcg_at_k": 0.9077324384,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.25
+      },
+      "unanswerable": {
+        "n": 4,
+        "n_answerable": 0,
+        "mean_recall_at_k": null,
+        "mean_mrr": null,
+        "mean_ndcg_at_k": null,
+        "mean_candidate_recall": null,
+        "trap_at_1_rate": 0.75
+      },
+      "critical": {
+        "n": 5,
+        "n_answerable": 5,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.8,
+        "mean_ndcg_at_k": 0.8204325071,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.4
+      },
+      "holdout": {
+        "n": 6,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.875,
+        "mean_ndcg_at_k": 0.9077324384,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3333333333
+      }
+    }
+  },
+  "chunk_merged": {
+    "experiment_id": "chunk-merged",
+    "config_identity": "9f7dda8e51eef574e6178b67d6075739eca75d6e8274374b1c8931d2168a6680",
+    "corpus_version": "m35.corpus.merged.v1",
+    "index_id": "v09-exact-m35.corpus.merged.v1",
+    "source_hash": "75a2d214d498df2aecbe5408cd420b31d160a198e9b4d2e3ab9002fb71350837",
+    "n": 14,
+    "n_answerable": 10,
+    "mean_recall_at_k": 1.0,
+    "mean_mrr": 1.0,
+    "mean_ndcg_at_k": 1.0,
+    "mean_candidate_recall": 1.0,
+    "trap_at_1_rate": 0.5,
+    "scored_candidates": 7,
+    "mean_proxy_cost": 7.0,
+    "leaked": false,
+    "relabeled": false,
+    "label_hash": "719c2c7ec8a662f24427d2f63f13e137e139d1c6c41df7b02fcb9deb810422ad",
+    "slices": {
+      "all": {
+        "n": 14,
+        "n_answerable": 10,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 1.0,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.5
+      },
+      "dev_answerable": {
+        "n": 6,
+        "n_answerable": 6,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 1.0,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.5
+      },
+      "holdout_answerable": {
+        "n": 4,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 1.0,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.25
+      },
+      "unanswerable": {
+        "n": 4,
+        "n_answerable": 0,
+        "mean_recall_at_k": null,
+        "mean_mrr": null,
+        "mean_ndcg_at_k": null,
+        "mean_candidate_recall": null,
+        "trap_at_1_rate": 0.75
+      },
+      "critical": {
+        "n": 5,
+        "n_answerable": 5,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 1.0,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.8
+      },
+      "holdout": {
+        "n": 6,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 1.0,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3333333333
+      }
+    }
+  },
+  "chunk_win32": {
+    "experiment_id": "chunk-win32",
+    "config_identity": "9737fd5149ee7c49ba0b3cda6ff7f80efec0625f693fb81a7872b28d1cbd5c8e",
+    "corpus_version": "m35.corpus.win32.v1",
+    "index_id": "v09-exact-m35.corpus.win32.v1",
+    "source_hash": "03f25aa479eaac03f288c2c2177389440c430126eee2a665d2560768cef67693",
+    "n": 14,
+    "n_answerable": 10,
+    "mean_recall_at_k": 0.85,
+    "mean_mrr": 1.0,
+    "mean_ndcg_at_k": 0.8925663873,
+    "mean_candidate_recall": 0.85,
+    "trap_at_1_rate": 0.2857142857,
+    "scored_candidates": 20,
+    "mean_proxy_cost": 20.0,
+    "leaked": false,
+    "relabeled": false,
+    "label_hash": "719c2c7ec8a662f24427d2f63f13e137e139d1c6c41df7b02fcb9deb810422ad",
+    "slices": {
+      "all": {
+        "n": 14,
+        "n_answerable": 10,
+        "mean_recall_at_k": 0.85,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.8925663873,
+        "mean_candidate_recall": 0.85,
+        "trap_at_1_rate": 0.2857142857
+      },
+      "dev_answerable": {
+        "n": 6,
+        "n_answerable": 6,
+        "mean_recall_at_k": 0.9166666667,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.9498949145,
+        "mean_candidate_recall": 0.9166666667,
+        "trap_at_1_rate": 0.1666666667
+      },
+      "holdout_answerable": {
+        "n": 4,
+        "n_answerable": 4,
+        "mean_recall_at_k": 0.75,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.8065735964,
+        "mean_candidate_recall": 0.75,
+        "trap_at_1_rate": 0.0
+      },
+      "unanswerable": {
+        "n": 4,
+        "n_answerable": 0,
+        "mean_recall_at_k": null,
+        "mean_mrr": null,
+        "mean_ndcg_at_k": null,
+        "mean_candidate_recall": null,
+        "trap_at_1_rate": 0.75
+      },
+      "critical": {
+        "n": 5,
+        "n_answerable": 5,
+        "mean_recall_at_k": 0.85,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.8625033359,
+        "mean_candidate_recall": 0.85,
+        "trap_at_1_rate": 0.2
+      },
+      "holdout": {
+        "n": 6,
+        "n_answerable": 4,
+        "mean_recall_at_k": 0.75,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.8065735964,
+        "mean_candidate_recall": 0.75,
+        "trap_at_1_rate": 0.1666666667
+      }
+    }
+  },
+  "chunk_win48o16": {
+    "experiment_id": "chunk-win48o16",
+    "config_identity": "578932f9b6f0e6888bab1fa77ba04692755af2c9da9d96c8083b672186f5f65f",
+    "corpus_version": "m35.corpus.win48o16.v1",
+    "index_id": "v09-exact-m35.corpus.win48o16.v1",
+    "source_hash": "d996e6e9c6496e7446b856f1ccd756da333db127921450c0b230172f962c9097",
+    "n": 14,
+    "n_answerable": 10,
+    "mean_recall_at_k": 1.0,
+    "mean_mrr": 1.0,
+    "mean_ndcg_at_k": 1.0,
+    "mean_candidate_recall": 1.0,
+    "trap_at_1_rate": 0.4285714286,
+    "scored_candidates": 14,
+    "mean_proxy_cost": 14.0,
+    "leaked": false,
+    "relabeled": false,
+    "label_hash": "719c2c7ec8a662f24427d2f63f13e137e139d1c6c41df7b02fcb9deb810422ad",
+    "slices": {
+      "all": {
+        "n": 14,
+        "n_answerable": 10,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 1.0,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.4285714286
+      },
+      "dev_answerable": {
+        "n": 6,
+        "n_answerable": 6,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 1.0,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3333333333
+      },
+      "holdout_answerable": {
+        "n": 4,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 1.0,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.25
+      },
+      "unanswerable": {
+        "n": 4,
+        "n_answerable": 0,
+        "mean_recall_at_k": null,
+        "mean_mrr": null,
+        "mean_ndcg_at_k": null,
+        "mean_candidate_recall": null,
+        "trap_at_1_rate": 0.75
+      },
+      "critical": {
+        "n": 5,
+        "n_answerable": 5,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 1.0,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.6
+      },
+      "holdout": {
+        "n": 6,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 1.0,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3333333333
+      }
+    }
+  },
+  "hard_negatives": {
+    "experiment_id": "hard-negatives",
+    "config_identity": "6308ceaedc405e53764ca626a8410357749c4b01d05ad400e6c04ffb1e19d1a3",
+    "corpus_version": "m35.corpus.hardneg.v1",
+    "index_id": "v09-exact-m35.corpus.hardneg.v1",
+    "source_hash": "1d7fb010aca00ffcf0df13eb1154da76b5aa4e19be0f6641326b102c277ec5c4",
+    "n": 14,
+    "n_answerable": 10,
+    "mean_recall_at_k": 1.0,
+    "mean_mrr": 0.8666666667,
+    "mean_ndcg_at_k": 0.8840303028,
+    "mean_candidate_recall": 1.0,
+    "trap_at_1_rate": 0.3571428571,
+    "scored_candidates": 17,
+    "mean_proxy_cost": 17.0,
+    "leaked": false,
+    "relabeled": false,
+    "label_hash": "719c2c7ec8a662f24427d2f63f13e137e139d1c6c41df7b02fcb9deb810422ad",
+    "slices": {
+      "all": {
+        "n": 14,
+        "n_answerable": 10,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.8666666667,
+        "mean_ndcg_at_k": 0.8840303028,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3571428571
+      },
+      "dev_answerable": {
+        "n": 6,
+        "n_answerable": 6,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.8888888889,
+        "mean_ndcg_at_k": 0.8900505047,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.1666666667
+      },
+      "holdout_answerable": {
+        "n": 4,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.8333333333,
+        "mean_ndcg_at_k": 0.875,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.25
+      },
+      "unanswerable": {
+        "n": 4,
+        "n_answerable": 0,
+        "mean_recall_at_k": null,
+        "mean_mrr": null,
+        "mean_ndcg_at_k": null,
+        "mean_candidate_recall": null,
+        "trap_at_1_rate": 0.75
+      },
+      "critical": {
+        "n": 5,
+        "n_answerable": 5,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.7333333333,
+        "mean_ndcg_at_k": 0.7680606057,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.4
+      },
+      "holdout": {
+        "n": 6,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.8333333333,
+        "mean_ndcg_at_k": 0.875,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3333333333
+      }
+    }
+  },
+  "hard_rows": {
+    "rag-reset-login": {
+      "query_id": "rag-reset-login",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "ranked_ids": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "cosine_ids": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "relevant_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c1",
+        "doc-account-access::c2"
+      ],
+      "support_ids": [
+        "doc-account-access::c1"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 1.0,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 1,
+      "trap_at_1": false,
+      "failure_mode": "ok",
+      "scored_candidates": 17,
+      "rerank_cost": 0,
+      "proxy_cost": 17,
+      "corpus_version": "m35.corpus.hardneg.v1",
+      "index_id": "v09-exact-m35.corpus.hardneg.v1",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-password-procedure": {
+      "query_id": "rag-password-procedure",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "ranked_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "cosine_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "relevant_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c1",
+        "doc-account-access::c2"
+      ],
+      "support_ids": [
+        "doc-account-access::c1"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 0.8403030284,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 3,
+      "trap_at_1": false,
+      "failure_mode": "suboptimal_ranking",
+      "scored_candidates": 17,
+      "rerank_cost": 0,
+      "proxy_cost": 17,
+      "corpus_version": "m35.corpus.hardneg.v1",
+      "index_id": "v09-exact-m35.corpus.hardneg.v1",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-ticket-4412": {
+      "query_id": "rag-ticket-4412",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "hn::ticket-4412-approval",
+        "doc-tickets::c1",
+        "doc-tickets::c0"
+      ],
+      "ranked_ids": [
+        "hn::ticket-4412-approval",
+        "doc-tickets::c1",
+        "doc-tickets::c0"
+      ],
+      "cosine_ids": [
+        "hn::ticket-4412-approval",
+        "doc-tickets::c1",
+        "doc-tickets::c0"
+      ],
+      "relevant_ids": [
+        "doc-tickets::c0"
+      ],
+      "support_ids": [
+        "doc-tickets::c0"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 0.3333333333,
+      "ndcg_at_k": 0.5,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 3,
+      "first_support_rank": 3,
+      "trap_at_1": true,
+      "failure_mode": "trap_at_1",
+      "scored_candidates": 17,
+      "rerank_cost": 0,
+      "proxy_cost": 17,
+      "corpus_version": "m35.corpus.hardneg.v1",
+      "index_id": "v09-exact-m35.corpus.hardneg.v1",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-ceo": {
+      "query_id": "rag-ceo",
+      "split": "dev",
+      "answerable": false,
+      "candidate_ids": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "ranked_ids": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "cosine_ids": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "relevant_ids": [],
+      "support_ids": [],
+      "recall_at_k": null,
+      "mrr": null,
+      "ndcg_at_k": null,
+      "candidate_recall": null,
+      "candidate_support_hit": null,
+      "first_relevant_rank": null,
+      "first_support_rank": null,
+      "trap_at_1": true,
+      "failure_mode": "unanswerable",
+      "scored_candidates": 17,
+      "rerank_cost": 0,
+      "proxy_cost": 17,
+      "corpus_version": "m35.corpus.hardneg.v1",
+      "index_id": "v09-exact-m35.corpus.hardneg.v1",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-fifty": {
+      "query_id": "rag-fifty",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "hn::invoice-99280"
+      ],
+      "ranked_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "hn::invoice-99280"
+      ],
+      "cosine_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "hn::invoice-99280"
+      ],
+      "relevant_ids": [
+        "doc-payments::c0"
+      ],
+      "support_ids": [
+        "doc-payments::c0"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 1.0,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 1,
+      "trap_at_1": false,
+      "failure_mode": "ok",
+      "scored_candidates": 17,
+      "rerank_cost": 0,
+      "proxy_cost": 17,
+      "corpus_version": "m35.corpus.hardneg.v1",
+      "index_id": "v09-exact-m35.corpus.hardneg.v1",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-refund-deny": {
+      "query_id": "rag-refund-deny",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-refund-policy::c1",
+        "doc-refund-policy::c0",
+        "doc-payments::c0"
+      ],
+      "ranked_ids": [
+        "doc-refund-policy::c1",
+        "doc-refund-policy::c0",
+        "doc-payments::c0"
+      ],
+      "cosine_ids": [
+        "doc-refund-policy::c1",
+        "doc-refund-policy::c0",
+        "doc-payments::c0"
+      ],
+      "relevant_ids": [
+        "doc-refund-policy::c1"
+      ],
+      "support_ids": [
+        "doc-refund-policy::c1"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 1.0,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 1,
+      "trap_at_1": false,
+      "failure_mode": "ok",
+      "scored_candidates": 17,
+      "rerank_cost": 0,
+      "proxy_cost": 17,
+      "corpus_version": "m35.corpus.hardneg.v1",
+      "index_id": "v09-exact-m35.corpus.hardneg.v1",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    "rag-h-invoice": {
+      "query_id": "rag-h-invoice",
+      "split": "holdout",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-payments::c1",
+        "hn::invoice-99280",
+        "doc-payments::c2"
+      ],
+      "ranked_ids": [
+        "doc-payments::c1",
+        "hn::invoice-99280",
+        "doc-payments::c2"
+      ],
+      "cosine_ids": [
+        "doc-payments::c1",
+        "hn::invoice-99280",
+        "doc-payments::c2"
+      ],
+      "relevant_ids": [
+        "doc-payments::c2"
+      ],
+      "support_ids": [
+        "doc-payments::c2"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 0.3333333333,
+      "ndcg_at_k": 0.5,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 3,
+      "first_support_rank": 3,
+      "trap_at_1": true,
+      "failure_mode": "trap_at_1",
+      "scored_candidates": 17,
+      "rerank_cost": 0,
+      "proxy_cost": 17,
+      "corpus_version": "m35.corpus.hardneg.v1",
+      "index_id": "v09-exact-m35.corpus.hardneg.v1",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    }
+  },
+  "leaked": {
+    "experiment_id": "leak-eval-phrasing",
+    "config_identity": "4a36e48f9f76335058b308043d8198587784e1d8e538729b36c820dbe94ce4a7",
+    "corpus_version": "m35.corpus.leaked.v1",
+    "index_id": "v09-exact-m35.corpus.leaked.v1",
+    "source_hash": "79fdc6c8590766ac23f263e91aadb37402ea0cac217798b05dcd42e0ed05734c",
+    "n": 14,
+    "n_answerable": 10,
+    "mean_recall_at_k": 1.0,
+    "mean_mrr": 0.95,
+    "mean_ndcg_at_k": 0.9471232782,
+    "mean_candidate_recall": 1.0,
+    "trap_at_1_rate": 0.2857142857,
+    "scored_candidates": 14,
+    "mean_proxy_cost": 14.0,
+    "leaked": true,
+    "relabeled": false,
+    "label_hash": "719c2c7ec8a662f24427d2f63f13e137e139d1c6c41df7b02fcb9deb810422ad",
+    "slices": {
+      "all": {
+        "n": 14,
+        "n_answerable": 10,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.95,
+        "mean_ndcg_at_k": 0.9471232782,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.2857142857
+      },
+      "dev_answerable": {
+        "n": 6,
+        "n_answerable": 6,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.9166666667,
+        "mean_ndcg_at_k": 0.9118721303,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.1666666667
+      },
+      "holdout_answerable": {
+        "n": 4,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 1.0,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.0
+      },
+      "unanswerable": {
+        "n": 4,
+        "n_answerable": 0,
+        "mean_recall_at_k": null,
+        "mean_mrr": null,
+        "mean_ndcg_at_k": null,
+        "mean_candidate_recall": null,
+        "trap_at_1_rate": 0.75
+      },
+      "critical": {
+        "n": 5,
+        "n_answerable": 5,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.9,
+        "mean_ndcg_at_k": 0.8942465564,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.2
+      },
+      "holdout": {
+        "n": 6,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 1.0,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.1666666667
+      }
+    }
+  },
+  "repaired": {
+    "experiment_id": "baseline",
+    "config_identity": "2c94dd7c5a187f070852f6906b7b1a8e37667024ad54094de41546c77e245fd4",
+    "corpus_version": "m33.corpus.v1",
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "n": 14,
+    "n_answerable": 10,
+    "mean_recall_at_k": 1.0,
+    "mean_mrr": 0.9,
+    "mean_ndcg_at_k": 0.9102162536,
+    "mean_candidate_recall": 1.0,
+    "trap_at_1_rate": 0.3571428571,
+    "scored_candidates": 14,
+    "mean_proxy_cost": 14.0,
+    "leaked": false,
+    "relabeled": false,
+    "label_hash": "719c2c7ec8a662f24427d2f63f13e137e139d1c6c41df7b02fcb9deb810422ad",
+    "slices": {
+      "all": {
+        "n": 14,
+        "n_answerable": 10,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.9,
+        "mean_ndcg_at_k": 0.9102162536,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3571428571
+      },
+      "dev_answerable": {
+        "n": 6,
+        "n_answerable": 6,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.9166666667,
+        "mean_ndcg_at_k": 0.9118721303,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.1666666667
+      },
+      "holdout_answerable": {
+        "n": 4,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.875,
+        "mean_ndcg_at_k": 0.9077324384,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.25
+      },
+      "unanswerable": {
+        "n": 4,
+        "n_answerable": 0,
+        "mean_recall_at_k": null,
+        "mean_mrr": null,
+        "mean_ndcg_at_k": null,
+        "mean_candidate_recall": null,
+        "trap_at_1_rate": 0.75
+      },
+      "critical": {
+        "n": 5,
+        "n_answerable": 5,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.8,
+        "mean_ndcg_at_k": 0.8204325071,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.4
+      },
+      "holdout": {
+        "n": 6,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 0.875,
+        "mean_ndcg_at_k": 0.9077324384,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3333333333
+      }
+    }
+  },
+  "relabeled": {
+    "experiment_id": "baseline-relabeled",
+    "config_identity": "cd80f532e1592a9708a5dda23dd588bceaeac9721f48f68261b78b37b306382a",
+    "corpus_version": "m33.corpus.v1",
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "n": 14,
+    "n_answerable": 10,
+    "mean_recall_at_k": 1.0,
+    "mean_mrr": 1.0,
+    "mean_ndcg_at_k": 0.9559740428,
+    "mean_candidate_recall": 1.0,
+    "trap_at_1_rate": 0.3571428571,
+    "scored_candidates": 14,
+    "mean_proxy_cost": 14.0,
+    "leaked": false,
+    "relabeled": true,
+    "label_hash": "79a0fcbc79fd6c9c9d55912c6172f6c3838c62559d3ae85972b12d26adb1e950",
+    "slices": {
+      "all": {
+        "n": 14,
+        "n_answerable": 10,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.9559740428,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3571428571
+      },
+      "dev_answerable": {
+        "n": 6,
+        "n_answerable": 6,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.9500036214,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.1666666667
+      },
+      "holdout_answerable": {
+        "n": 4,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.964929675,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.25
+      },
+      "unanswerable": {
+        "n": 4,
+        "n_answerable": 0,
+        "mean_recall_at_k": null,
+        "mean_mrr": null,
+        "mean_ndcg_at_k": null,
+        "mean_candidate_recall": null,
+        "trap_at_1_rate": 0.75
+      },
+      "critical": {
+        "n": 5,
+        "n_answerable": 5,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.9119480856,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.4
+      },
+      "holdout": {
+        "n": 6,
+        "n_answerable": 4,
+        "mean_recall_at_k": 1.0,
+        "mean_mrr": 1.0,
+        "mean_ndcg_at_k": 0.964929675,
+        "mean_candidate_recall": 1.0,
+        "trap_at_1_rate": 0.3333333333
+      }
+    }
+  },
+  "worst": [
+    {
+      "query_id": "rag-h-invoice",
+      "split": "holdout",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-payments::c1",
+        "doc-payments::c2",
+        "doc-payments::c0"
+      ],
+      "ranked_ids": [
+        "doc-payments::c1",
+        "doc-payments::c2",
+        "doc-payments::c0"
+      ],
+      "cosine_ids": [
+        "doc-payments::c1",
+        "doc-payments::c2",
+        "doc-payments::c0"
+      ],
+      "relevant_ids": [
+        "doc-payments::c2"
+      ],
+      "support_ids": [
+        "doc-payments::c2"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 0.5,
+      "ndcg_at_k": 0.6309297536,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 2,
+      "first_support_rank": 2,
+      "trap_at_1": true,
+      "failure_mode": "trap_at_1",
+      "scored_candidates": 14,
+      "rerank_cost": 0,
+      "proxy_cost": 14,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    {
+      "query_id": "rag-ticket-4412",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-tickets::c1",
+        "doc-tickets::c0",
+        "doc-payments::c2"
+      ],
+      "ranked_ids": [
+        "doc-tickets::c1",
+        "doc-tickets::c0",
+        "doc-payments::c2"
+      ],
+      "cosine_ids": [
+        "doc-tickets::c1",
+        "doc-tickets::c0",
+        "doc-payments::c2"
+      ],
+      "relevant_ids": [
+        "doc-tickets::c0"
+      ],
+      "support_ids": [
+        "doc-tickets::c0"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 0.5,
+      "ndcg_at_k": 0.6309297536,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 2,
+      "first_support_rank": 2,
+      "trap_at_1": true,
+      "failure_mode": "trap_at_1",
+      "scored_candidates": 14,
+      "rerank_cost": 0,
+      "proxy_cost": 14,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    {
+      "query_id": "rag-password-procedure",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "ranked_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "cosine_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "relevant_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c1",
+        "doc-account-access::c2"
+      ],
+      "support_ids": [
+        "doc-account-access::c1"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 0.8403030284,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 3,
+      "trap_at_1": false,
+      "failure_mode": "suboptimal_ranking",
+      "scored_candidates": 14,
+      "rerank_cost": 0,
+      "proxy_cost": 14,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    },
+    {
+      "query_id": "rag-fifty",
+      "split": "dev",
+      "answerable": true,
+      "candidate_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "doc-payments::c2"
+      ],
+      "ranked_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "doc-payments::c2"
+      ],
+      "cosine_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "doc-payments::c2"
+      ],
+      "relevant_ids": [
+        "doc-payments::c0"
+      ],
+      "support_ids": [
+        "doc-payments::c0"
+      ],
+      "recall_at_k": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_k": 1.0,
+      "candidate_recall": 1.0,
+      "candidate_support_hit": true,
+      "first_relevant_rank": 1,
+      "first_support_rank": 1,
+      "trap_at_1": false,
+      "failure_mode": "ok",
+      "scored_candidates": 14,
+      "rerank_cost": 0,
+      "proxy_cost": 14,
+      "corpus_version": "m33.corpus.v1",
+      "index_id": "v08-exact-memory",
+      "reranker_id": "identity",
+      "eval_version": "m34.eval.v1"
+    }
+  ],
+  "ticket_k3_cosine_ids": [
+    "doc-tickets::c1",
+    "doc-tickets::c0",
+    "doc-payments::c2"
+  ],
+  "leaked_source_hash": "79fdc6c8590766ac23f263e91aadb37402ea0cac217798b05dcd42e0ed05734c",
+  "repaired_source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+  "gamed_label_hash": "79a0fcbc79fd6c9c9d55912c6172f6c3838c62559d3ae85972b12d26adb1e950",
+  "transfer_k": 3,
+  "downloaded": false,
+  "network_required": false
+}

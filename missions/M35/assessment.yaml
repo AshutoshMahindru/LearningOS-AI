@@ -1,0 +1,36 @@
+mission: M35
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped retrieval-eval predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  frozen_eval:
+    evidence: M34 questions loaded with eval_version and a stable questions_sha256 / label_hash.
+    pass: Labels are not edited after seeing ranks; M34 files are not rewritten.
+  ranking_metrics:
+    evidence: Per-query recall@k, MRR, nDCG@k computed in-mission (no metrics library).
+    pass: Candidate generation and rerank effects are separated; member sets match on rerank.
+  worst_queries:
+    evidence: Lowest nDCG/MRR queries with named failure modes.
+    pass: trap_at_1, ranking_miss, and candidate_miss are not collapsed into one average.
+  chunking:
+    evidence: Versioned corpora over the same source documents with projected labels.
+    pass: corpus_version / source_hash change with chunk spec; labels remain M34 originals.
+  candidate_k:
+    evidence: k=1 versus k=5 candidate recall and proxy_cost.
+    pass: Exact search scored_candidates stays corpus-sized; k changes the truncated list and rerank cost.
+  slices:
+    evidence: Aggregate versus critical-slice nDCG/MRR.
+    pass: Critical-slice failures are reported even when the average looks acceptable.
+  controlled_failure_diagnosis:
+    evidence: Leakage symptom, diagnosis, restore-boundary repair, regression.
+    pass: Diagnosis precedes the repair; leaked object stays leaked; relabel gaming is a separate named change.
+  code_reading:
+    evidence: Annotated chunk → candidate → label project → rerank → metric → config identity flow.
+    pass: Learner predicts id-set equality, metric objects, and version/hash identity.
+  no_ai_gate:
+    evidence: Independent transfer.json work and transfer defense.
+    pass: Hand metrics, two diagnoses, one lever, leakage rejection, and candidate-vs-rank explanation are correct.
+  adr:
+    evidence: Learner-authored V09 chunking/candidate/rerank policy.
+    pass: Evaluation governance, metric set, latency budget, rollback, and revisit conditions are complete without claiming a production vector database.

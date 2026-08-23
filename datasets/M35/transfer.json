@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "purpose": "Fresh no-AI ranking traces. Learner answers are not stored.",
+  "authored_for": "M35",
+  "downloaded": false,
+  "network_required": false,
+  "kind": "synthetic-teaching-fixture",
+  "k": 3,
+  "query": {
+    "id": "t-hours",
+    "text": "When does the library close?"
+  },
+  "candidates": [
+    {
+      "chunk_id": "cafe::c0",
+      "rank": 1,
+      "score": 0.92,
+      "text": "The library cafe closes at noon.",
+      "relevant": false,
+      "grade": 0
+    },
+    {
+      "chunk_id": "lib::c0",
+      "rank": 2,
+      "score": 0.88,
+      "text": "The library closes at 18:00 on weekdays.",
+      "relevant": true,
+      "grade": 2
+    },
+    {
+      "chunk_id": "lib::c1",
+      "rank": 3,
+      "score": 0.80,
+      "text": "The library opens at 09:00.",
+      "relevant": true,
+      "grade": 1
+    }
+  ],
+  "gold_relevant": ["lib::c0", "lib::c1"],
+  "note": "All gold items are in the candidate set. The cosine top-1 is a cafe neighbor. Compute Recall@3 and nDCG@3 by hand. Diagnose cafe::c0 as a ranking miss, not a candidate miss.",
+  "low_recall": {
+    "query_id": "t-low-recall",
+    "retrieved": ["mus::c0"],
+    "relevant": ["lib::c0", "lib::c1"],
+    "note": "Gold never entered the candidate set. Raising rerank quality cannot recover it."
+  },
+  "poor_ranking": {
+    "query_id": "t-hours",
+    "note": "Candidate recall is 1.0 at k=3 while MRR is 0.5 because the first relevant item is rank 2."
+  },
+  "leakage_example": {
+    "chunk_id": "cafe::leaked",
+    "text": "When does the library close? The library cafe closes at noon.",
+    "note": "Eval query phrasing was copied into an irrelevant chunk."
+  },
+  "metric_oracle": {
+    "note": "Fixture properties for tests, not learner evidence.",
+    "recall_at_3": 1.0,
+    "mrr": 0.5,
+    "first_relevant_rank": 2,
+    "dcg_at_3": 1.761859507142915,
+    "idcg_at_3": 2.6309297535714578,
+    "ndcg_at_3": 0.66967181649423
+  }
+}

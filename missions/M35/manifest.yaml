@@ -1,0 +1,108 @@
+id: M35
+title: Improve Retrieval
+phase: P6
+flagship: V09
+objective: Diagnose retrieval quality and improve ranking and chunking
+competencies:
+  - reranking
+  - retrieval evaluation
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M34
+  helpful: []
+handoff:
+  receives: M34 frozen questions/support/relevance in datasets/M34, RAG traces, and retrieval/context/citation/generation failure layers; M33 search / RankedHit.as_evidence
+  provides: M36 receives a measured retrieval baseline, candidate/rerank interface, frozen eval set, and known failure slices
+learning_sequence:
+  - freeze M34 evaluation queries and relevance labels
+  - compute baseline candidate and ranking metrics
+  - inspect worst queries and classify failure modes
+  - vary chunk size/overlap on a versioned corpus
+  - vary candidate k and measure recall versus a latency proxy
+  - apply a deterministic reranker to identical candidate sets
+  - add hard-negative cases
+  - compare aggregate and critical-slice metrics
+  - trigger an evaluation-leakage failure and restore the clean boundary
+  - complete a no-AI ranking transfer
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M35_improve_retrieval.ipynb
+instrumentation: missions/M35/retrieval_eval.py
+requirements: requirements/m35.txt
+mission_test: tests/missions/test_m35.py
+reference_fixture:
+  pipeline_id: v09-retrieval-eval
+  reranker_id: lex-overlap-v1
+  reranker_family: local-lexical
+  index_id: v08-exact-memory
+  backend: exact-in-memory
+  corpus_version: m33.corpus.v1
+  embedding_model: v06-teaching-meanpool
+  embedding_version: v06.1
+  eval_version: m34.eval.v1
+  default_candidate_k: 3
+  seed: 3501
+  stale_policy: inherited-from-m33
+canonical_sources:
+  - sentence-transformers
+  - qdrant-docs
+  - hnsw-paper
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_paid_api: required
+  no_required_live_model: required
+  no_ann_or_required_qdrant: required
+  no_decoding_lab: required
+  held_out_eval_frozen: required
+  labels_not_edited_after_scores: required
+mission_artifacts:
+  - missions/M35/README.md
+  - missions/M35/manifest.yaml
+  - missions/M35/content.yaml
+  - missions/M35/experiments.yaml
+  - missions/M35/code_reading.md
+  - missions/M35/no_ai_gate.md
+  - missions/M35/controlled_failure.md
+  - missions/M35/assessment.yaml
+  - missions/M35/evidence_contract.yaml
+  - missions/M35/flagship_integration.md
+  - missions/M35/review_brief.md
+  - missions/M35/adr_prompt.md
+  - missions/M35/status.yaml
+  - missions/M35/retrieval_eval.py
+  - missions/M35/optional_model_reranker.py
+  - labs/M35_improve_retrieval.ipynb
+  - datasets/M35/README.md
+  - datasets/M35/chunk_versions.json
+  - datasets/M35/hard_negatives.json
+  - datasets/M35/expected.json
+  - datasets/M35/transfer.json
+  - datasets/M35/freeze_expected.py
+  - requirements/m35.txt
+  - tests/missions/test_m35.py
+  - tests/test_m35.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  ann_hybrid_deferred_to_m36: true
+  decoding_deferred_to_m32: true
+  generation_left_to_m34: true
+  uses_m33_retriever: true
+  local_reranker_required: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

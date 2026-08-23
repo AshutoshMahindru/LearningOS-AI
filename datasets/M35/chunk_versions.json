@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "authored_for": "M35",
+  "source_mission": "M33",
+  "source_corpus": "m33.corpus.v1",
+  "eval_version": "m34.eval.v1",
+  "downloaded": false,
+  "network_required": false,
+  "personal_data": false,
+  "kind": "synthetic-teaching-fixture",
+  "note": "Same source documents as M33. Frozen M34 labels stay on original chunk ids; new chunks are projected by span overlap. Do not relabel after seeing ranks.",
+  "versions": [
+    {
+      "corpus_version": "m33.corpus.v1",
+      "mode": "canonical",
+      "size": null,
+      "overlap": 0,
+      "description": "Frozen M33 sentence chunks. Ranking baseline."
+    },
+    {
+      "corpus_version": "m35.corpus.merged.v1",
+      "mode": "merged",
+      "size": null,
+      "overlap": 0,
+      "description": "One chunk per source document. Raises mixed-span risk."
+    },
+    {
+      "corpus_version": "m35.corpus.win32.v1",
+      "mode": "windows",
+      "size": 32,
+      "overlap": 0,
+      "description": "32-character windows, no overlap."
+    },
+    {
+      "corpus_version": "m35.corpus.win48o16.v1",
+      "mode": "windows",
+      "size": 48,
+      "overlap": 16,
+      "description": "48-character windows with overlap 16."
+    }
+  ]
+}
