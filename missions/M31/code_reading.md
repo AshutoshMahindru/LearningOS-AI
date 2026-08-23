@@ -16,9 +16,8 @@ Read `shift_tokens`, `pair_windows`, `run_causal_pipeline`,
 
 Before running the code-reading cell, predict:
 
-- the `(input, target)` pairs for a four-token window
 - whether evaluation uses the defective alignment or the correct one
-- which lineage field moves first if `e02` is leaked into train
+- which lineage field moves first if a protected eval id is leaked
 - what M32 is allowed to do with `inference_ready=True`
 
 Do **not** look for temperature, top-k, a generate loop, or a RAG
