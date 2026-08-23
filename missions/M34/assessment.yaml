@@ -1,0 +1,33 @@
+mission: M34
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped RAG-pipeline predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  provenance_trace:
+    evidence: Answer traces with document/chunk ids, spans, index identity, and embedding identity.
+    pass: Every answered trace preserves source IDs from M33 as_evidence through the pack and citations.
+  abstention:
+    evidence: Unanswerable queries including a high-scoring distractor.
+    pass: Canonical policy abstains; answering from a distractor is classified as generation misuse.
+  separable_failures:
+    evidence: Retrieval miss, context-budget drop, generation misuse, and unsupported citation.
+    pass: Primary layer matches the named change; retrieval is not blamed for a citation defect and vice versa.
+  unsupported_citations_fail:
+    evidence: Fluent gold-like answer with a neighbor citation.
+    pass: verify_support is false and eval_pass is false.
+  held_out_eval:
+    evidence: Frozen holdout questions run after the policy is fixed.
+    pass: Baseline is stable enough for M35; holdout ids are not edited after seeing ranks.
+  controlled_failure_diagnosis:
+    evidence: Unsupported-citation symptom, support-check diagnosis, rebind-or-abstain, regression.
+    pass: Diagnosis precedes the repair; repair uses the broken answer and pack objects.
+  code_reading:
+    evidence: Annotated retrieve → pack → synthesize → cite → abstain → evaluate flow.
+    pass: Learner predicts provenance retention, tail-drop packing, and support failure on a wrong citation.
+  no_ai_gate:
+    evidence: Independent transfer.json work and transfer defense.
+    pass: Layer classification, pack assembly, supported claim, rejected fluent error, and non-guarantee statement are correct.
+  adr:
+    evidence: Learner-authored V09 grounding contract.
+    pass: Evidence inclusion, citation mapping, abstention, trace retention, and release-blocking unsupported claims are complete without claiming a production LLM.

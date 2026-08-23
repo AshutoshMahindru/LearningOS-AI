@@ -1,0 +1,85 @@
+mission_id: M34
+version: 1
+purpose: Define acceptable learner-produced RAG evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_rag_action
+      - falsifiable_id_or_status_or_layer_claim
+      - observation_and_revision
+  - id: rag_trace
+    artifact_type: grounded_answer_trace
+    must_show:
+      - query_text
+      - retrieved_chunk_ids_and_scores
+      - packed_and_dropped_ids
+      - answer_or_abstention
+      - citations_with_source_ids
+      - index_and_embedding_identity
+      - inference_config
+  - id: with_without_retrieval
+    artifact_type: paired_run
+    must_show:
+      - same_questions_and_policy
+      - closed_book_abstention
+      - retrieval_on_support_or_correctness
+  - id: top_k_and_budget
+    artifact_type: k_and_budget_sweep
+    must_show:
+      - same_index_and_synthesizer
+      - support_versus_distraction
+      - context_drop_distinct_from_retrieval_miss
+  - id: unanswerable
+    artifact_type: abstention_trace
+    must_show:
+      - high_retrieval_score_present
+      - canonical_abstention
+      - score_not_treated_as_correctness
+  - id: failure_layers
+    artifact_type: separable_diagnosis
+    must_show:
+      - retrieval_miss
+      - context_budget_drop
+      - generation_misuse
+      - unsupported_citation
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_unsupported_citation_defect
+      - verify_support_false
+      - rebind_or_abstain_from_broken_objects
+      - regression_that_unsupported_citations_fail
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - retrieve_as_evidence
+      - pack_budget_no_reorder
+      - synthesize_verify_classify
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: v09_grounding_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - evidence_inclusion_policy
+      - citation_mapping
+      - abstention_policy
+      - trace_retention
+      - release_blocking_unsupported_claims
+      - alternatives_and_trade_offs
+      - owner_status_and_date
+quality_bar:
+  - Answers are extractive from packed context, not a paid API.
+  - Source IDs survive from M33 evidence through citations.
+  - High similarity is not reported as answer correctness.
+  - Future-mission mechanisms (rerank, ANN, decoding lab) stay closed.
+  - Failures are repaired by rebind-or-abstain rather than changing several knobs.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited

@@ -1,0 +1,112 @@
+id: M34
+title: Build RAG
+phase: P6
+flagship: V09
+objective: Ground generation in retrieved evidence.
+competencies:
+  - RAG
+  - grounding
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: true
+prerequisites:
+  blocking:
+    - M31
+    - M33
+  helpful: []
+handoff:
+  receives: M33 provenance-preserving retriever (search / RankedHit.as_evidence with index and embedding identity) and M31 training-versus-inference boundary
+  provides: M35 receives an evaluated RAG baseline with fixed queries, relevance/support expectations, and traceable retrieval/answer failures
+learning_sequence:
+  - start from a query answerable by the local corpus
+  - inspect retrieved evidence before synthesis
+  - build a provenance-bearing context pack with an explicit budget
+  - synthesize an extractive answer from packed context
+  - return citations and verify support
+  - add an unanswerable query and require abstention
+  - create one retrieval miss and one generation misuse
+  - run a fixed small evaluation set
+  - trigger an unsupported-citation failure
+  - complete a no-AI trace from query to evidence to answer
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M34_rag.ipynb
+instrumentation: missions/M34/rag_pipeline.py
+requirements: requirements/m34.txt
+mission_test: tests/missions/test_m34.py
+reference_fixture:
+  pipeline_id: v09-rag-extractive
+  synthesizer_id: extractive-span-v1
+  synthesizer_family: local-extractive
+  policy: support_gated
+  index_id: v08-exact-memory
+  backend: exact-in-memory
+  corpus_version: m33.corpus.v1
+  embedding_model: v06-teaching-meanpool
+  embedding_version: v06.1
+  eval_version: m34.eval.v1
+  default_top_k: 3
+  default_budget_chars: 400
+  seed: 3401
+  decoding: extractive-copy
+  weights_updated: false
+  stale_policy: inherited-from-m33
+canonical_sources:
+  - rag-paper
+  - sentence-transformers
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_paid_api: required
+  no_required_live_model: required
+  no_rerank_or_chunk_tuning: required
+  no_ann_or_required_qdrant: required
+  no_decoding_lab: required
+  held_out_eval_frozen: required
+  unsupported_citations_fail: required
+mission_artifacts:
+  - missions/M34/README.md
+  - missions/M34/manifest.yaml
+  - missions/M34/content.yaml
+  - missions/M34/experiments.yaml
+  - missions/M34/code_reading.md
+  - missions/M34/no_ai_gate.md
+  - missions/M34/controlled_failure.md
+  - missions/M34/assessment.yaml
+  - missions/M34/evidence_contract.yaml
+  - missions/M34/flagship_integration.md
+  - missions/M34/review_brief.md
+  - missions/M34/adr_prompt.md
+  - missions/M34/status.yaml
+  - missions/M34/rag_pipeline.py
+  - missions/M34/optional_live_llm.py
+  - labs/M34_rag.ipynb
+  - datasets/M34/README.md
+  - datasets/M34/questions.json
+  - datasets/M34/expected.json
+  - datasets/M34/transfer.json
+  - datasets/M34/freeze_expected.py
+  - requirements/m34.txt
+  - tests/missions/test_m34.py
+  - tests/test_m34.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  rerank_deferred_to_m35: true
+  ann_hybrid_deferred_to_m36: true
+  decoding_deferred_to_m32: true
+  uses_m33_retriever: true
+  local_extractive_required: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

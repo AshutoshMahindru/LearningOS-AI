@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "authored_for": "M34",
+  "source_mission": "M33",
+  "eval_version": "m34.eval.v1",
+  "corpus_version": "m33.corpus.v1",
+  "index_id": "v08-exact-memory",
+  "downloaded": false,
+  "network_required": false,
+  "personal_data": false,
+  "kind": "synthetic-teaching-fixture",
+  "note": "Support and relevance labels are independent of cosine. Do not retune the synthesizer on holdout ids. High retrieval score is not answer correctness.",
+  "questions": [
+    {
+      "id": "rag-reset-login",
+      "text": "How do I reset my login credentials?",
+      "experiment": "useful-whole",
+      "split": "dev",
+      "answerable": true,
+      "gold_answer": "Please reset the login credentials.",
+      "aliases": [
+        "Reset the login credentials."
+      ],
+      "support": [
+        "doc-account-access::c1"
+      ],
+      "relevant": [
+        "doc-account-access::c0",
+        "doc-account-access::c1",
+        "doc-account-access::c2"
+      ],
+      "traps": [
+        "doc-device-printer::c0"
+      ],
+      "notes": "Top-1 retrieval is the supporting procedure span."
+    },
+    {
+      "id": "rag-password-procedure",
+      "text": "What should a user do if they forgot their password?",
+      "experiment": "top-k-context",
+      "split": "dev",
+      "answerable": true,
+      "gold_answer": "Please reset the login credentials.",
+      "aliases": [
+        "Reset the login credentials."
+      ],
+      "support": [
+        "doc-account-access::c1"
+      ],
+      "relevant": [
+        "doc-account-access::c0",
+        "doc-account-access::c1",
+        "doc-account-access::c2"
+      ],
+      "traps": [
+        "doc-device-printer::c0"
+      ],
+      "notes": "Highest cosine is the problem statement, not the procedure. k=1 misses support; a tight char budget can drop c1 after retrieval."
+    },
+    {
+      "id": "rag-ticket-4412",
+      "text": "What is ticket 4412 waiting for?",
+      "experiment": "retrieval-miss",
+      "split": "dev",
+      "answerable": true,
+      "gold_answer": "Ticket 4412 is waiting for inspection.",
+      "aliases": [],
+      "support": [
+        "doc-tickets::c0"
+      ],
+      "relevant": [
+        "doc-tickets::c0"
+      ],
+      "traps": [
+        "doc-tickets::c1"
+      ],
+      "notes": "At k=1 the neighbor ticket 4413 is retrieved first. Digit matching in the pack is not a reranker."
+    },
+    {
+      "id": "rag-legal-forbid",
+      "text": "What does the service agreement forbid?",
+      "experiment": "with-without-retrieval",
+      "split": "dev",
+      "answerable": true,
+      "gold_answer": "The service agreement forbids assignment.",
+      "aliases": [],
+      "support": [
+        "doc-legal::c0"
+      ],
+      "relevant": [
+        "doc-legal::c0"
+      ],
+      "traps": [],
+      "notes": "Answerable lookup used for with/without retrieval."
+    },
+    {
+      "id": "rag-ceo",
+      "text": "Who is the CEO of Valley Services?",
+      "experiment": "unanswerable",
+      "split": "dev",
+      "answerable": false,
+      "gold_answer": null,
+      "aliases": [],
+      "support": [],
+      "relevant": [],
+      "traps": [
+        "doc-weather::c0"
+      ],
+      "notes": "Weather is a high-scoring distractor. Abstain."
+    },
+    {
+      "id": "rag-order-7",
+      "text": "What is the refund amount for order 7?",
+      "experiment": "unanswerable",
+      "split": "dev",
+      "answerable": false,
+      "gold_answer": null,
+      "aliases": [],
+      "support": [],
+      "relevant": [],
+      "traps": [
+        "doc-refund-policy::c0",
+        "doc-refund-policy::c1"
+      ],
+      "notes": "Digit 7 never appears in the corpus. Refund policy hits are not amounts."
+    },
+    {
+      "id": "rag-fifty",
+      "text": "Who paid fifty dollars?",
+      "experiment": "with-without-retrieval",
+      "split": "dev",
+      "answerable": true,
+      "gold_answer": "The customer paid fifty dollars.",
+      "aliases": [],
+      "support": [
+        "doc-payments::c0"
+      ],
+      "relevant": [
+        "doc-payments::c0"
+      ],
+      "traps": [
+        "doc-payments::c1"
+      ],
+      "notes": "Numeric neighbor five thousand is a distractor, not a gold support."
+    },
+    {
+      "id": "rag-refund-deny",
+      "text": "Which policy says not to approve the customer refund?",
+      "experiment": "citation-support",
+      "split": "dev",
+      "answerable": true,
+      "gold_answer": "Do not approve the customer refund.",
+      "aliases": [],
+      "support": [
+        "doc-refund-policy::c1"
+      ],
+      "relevant": [
+        "doc-refund-policy::c1"
+      ],
+      "traps": [
+        "doc-refund-policy::c0"
+      ],
+      "notes": "Negation neighbor is high-scoring and must not be cited for a not-approve claim."
+    },
+    {
+      "id": "rag-h-weather",
+      "text": "What weather is expected tomorrow in the valley?",
+      "experiment": "holdout",
+      "split": "holdout",
+      "answerable": true,
+      "gold_answer": "Rain is expected tomorrow in the valley.",
+      "aliases": [],
+      "support": [
+        "doc-weather::c0"
+      ],
+      "relevant": [
+        "doc-weather::c0"
+      ],
+      "traps": [],
+      "notes": "Held-out lookup. Do not retune policy on this id."
+    },
+    {
+      "id": "rag-h-assignment",
+      "text": "May a customer assign the service agreement?",
+      "experiment": "holdout",
+      "split": "holdout",
+      "answerable": true,
+      "gold_answer": "The service agreement forbids assignment.",
+      "aliases": [],
+      "support": [
+        "doc-legal::c0"
+      ],
+      "relevant": [
+        "doc-legal::c0"
+      ],
+      "traps": [],
+      "notes": "Held-out. Stem assign/assignment is a support fact, not a rank metric."
+    },
+    {
+      "id": "rag-h-printer-queue",
+      "text": "Why does the printer need a reset?",
+      "experiment": "holdout",
+      "split": "holdout",
+      "answerable": true,
+      "gold_answer": "The printer needs a reset because the queue is stuck.",
+      "aliases": [],
+      "support": [
+        "doc-device-printer::c1"
+      ],
+      "relevant": [
+        "doc-device-printer::c0",
+        "doc-device-printer::c1"
+      ],
+      "traps": [
+        "doc-account-access::c1"
+      ],
+      "notes": "Held-out procedure over packed printer chunks."
+    },
+    {
+      "id": "rag-h-invoice",
+      "text": "What should be processed for invoice 99281?",
+      "experiment": "holdout",
+      "split": "holdout",
+      "answerable": true,
+      "gold_answer": "Please process invoice 99281 now.",
+      "aliases": [],
+      "support": [
+        "doc-payments::c2"
+      ],
+      "relevant": [
+        "doc-payments::c2"
+      ],
+      "traps": [
+        "doc-payments::c1"
+      ],
+      "notes": "At k=1 the five-thousand neighbor can win. Digit 99281 is in the gold span."
+    },
+    {
+      "id": "rag-h-email",
+      "text": "What is the email address of the support CEO?",
+      "experiment": "holdout",
+      "split": "holdout",
+      "answerable": false,
+      "gold_answer": null,
+      "aliases": [],
+      "support": [],
+      "relevant": [],
+      "traps": [],
+      "notes": "Held-out unanswerable. Corpus has no email field."
+    },
+    {
+      "id": "rag-h-printer-year",
+      "text": "When was the printer manufactured?",
+      "experiment": "holdout",
+      "split": "holdout",
+      "answerable": false,
+      "gold_answer": null,
+      "aliases": [],
+      "support": [],
+      "relevant": [],
+      "traps": [
+        "doc-device-printer::c0",
+        "doc-device-printer::c1"
+      ],
+      "notes": "Held-out unanswerable. Printer reset hits are not a manufacture date."
+    }
+  ]
+}

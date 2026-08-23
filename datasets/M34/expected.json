@@ -1,0 +1,717 @@
+{
+  "schema_version": 1,
+  "note": "Fixture pipeline properties, not learner evidence.",
+  "eval_version": "m34.eval.v1",
+  "pipeline_id": "v09-rag-extractive",
+  "synthesizer_id": "extractive-span-v1",
+  "index_id": "v08-exact-memory",
+  "corpus_version": "m33.corpus.v1",
+  "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+  "model": "v06-teaching-meanpool",
+  "version": "v06.1",
+  "metric": "cosine",
+  "normalization": "l2",
+  "default_top_k": 3,
+  "default_budget_chars": 400,
+  "policy": "support_gated",
+  "question_ids": [
+    "rag-reset-login",
+    "rag-password-procedure",
+    "rag-ticket-4412",
+    "rag-legal-forbid",
+    "rag-ceo",
+    "rag-order-7",
+    "rag-fifty",
+    "rag-refund-deny",
+    "rag-h-weather",
+    "rag-h-assignment",
+    "rag-h-printer-queue",
+    "rag-h-invoice",
+    "rag-h-email",
+    "rag-h-printer-year"
+  ],
+  "holdout_ids": [
+    "rag-h-weather",
+    "rag-h-assignment",
+    "rag-h-printer-queue",
+    "rag-h-invoice",
+    "rag-h-email",
+    "rag-h-printer-year"
+  ],
+  "dev_ids": [
+    "rag-reset-login",
+    "rag-password-procedure",
+    "rag-ticket-4412",
+    "rag-legal-forbid",
+    "rag-ceo",
+    "rag-order-7",
+    "rag-fifty",
+    "rag-refund-deny"
+  ],
+  "default": {
+    "rag-reset-login": {
+      "query_id": "rag-reset-login",
+      "retrieval_ids": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "packed_ids": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "dropped_ids": [],
+      "status": "answered",
+      "answer": "Please reset the login credentials.",
+      "citations": [
+        "doc-account-access::c1"
+      ],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": true,
+      "packed_hit": true,
+      "top_score": 0.9872741164479122,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-password-procedure": {
+      "query_id": "rag-password-procedure",
+      "retrieval_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "packed_ids": [
+        "doc-account-access::c0",
+        "doc-account-access::c2",
+        "doc-account-access::c1"
+      ],
+      "dropped_ids": [],
+      "status": "answered",
+      "answer": "Please reset the login credentials.",
+      "citations": [
+        "doc-account-access::c1"
+      ],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": true,
+      "packed_hit": true,
+      "top_score": 0.9976240676556981,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-ticket-4412": {
+      "query_id": "rag-ticket-4412",
+      "retrieval_ids": [
+        "doc-tickets::c1",
+        "doc-tickets::c0",
+        "doc-payments::c2"
+      ],
+      "packed_ids": [
+        "doc-tickets::c1",
+        "doc-tickets::c0",
+        "doc-payments::c2"
+      ],
+      "dropped_ids": [],
+      "status": "answered",
+      "answer": "Ticket 4412 is waiting for inspection.",
+      "citations": [
+        "doc-tickets::c0"
+      ],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": true,
+      "packed_hit": true,
+      "top_score": 0.9999140649275932,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-legal-forbid": {
+      "query_id": "rag-legal-forbid",
+      "retrieval_ids": [
+        "doc-legal::c0",
+        "doc-payments::c2",
+        "doc-device-printer::c0"
+      ],
+      "packed_ids": [
+        "doc-legal::c0",
+        "doc-payments::c2",
+        "doc-device-printer::c0"
+      ],
+      "dropped_ids": [],
+      "status": "answered",
+      "answer": "The service agreement forbids assignment.",
+      "citations": [
+        "doc-legal::c0"
+      ],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": true,
+      "packed_hit": true,
+      "top_score": 0.9901106223097945,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-ceo": {
+      "query_id": "rag-ceo",
+      "retrieval_ids": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "packed_ids": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "dropped_ids": [],
+      "status": "abstained",
+      "answer": "Insufficient evidence in the packed context to support an answer.",
+      "citations": [],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": null,
+      "packed_hit": null,
+      "top_score": 0.9930378135417337,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-order-7": {
+      "query_id": "rag-order-7",
+      "retrieval_ids": [
+        "doc-refund-policy::c0",
+        "doc-refund-policy::c1",
+        "doc-payments::c0"
+      ],
+      "packed_ids": [
+        "doc-refund-policy::c0",
+        "doc-refund-policy::c1",
+        "doc-payments::c0"
+      ],
+      "dropped_ids": [],
+      "status": "abstained",
+      "answer": "Insufficient evidence in the packed context to support an answer.",
+      "citations": [],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": null,
+      "packed_hit": null,
+      "top_score": 0.9540360213258505,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-fifty": {
+      "query_id": "rag-fifty",
+      "retrieval_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "doc-payments::c2"
+      ],
+      "packed_ids": [
+        "doc-payments::c0",
+        "doc-payments::c1",
+        "doc-payments::c2"
+      ],
+      "dropped_ids": [],
+      "status": "answered",
+      "answer": "The customer paid fifty dollars.",
+      "citations": [
+        "doc-payments::c0"
+      ],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": true,
+      "packed_hit": true,
+      "top_score": 0.9946691298230854,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-refund-deny": {
+      "query_id": "rag-refund-deny",
+      "retrieval_ids": [
+        "doc-refund-policy::c1",
+        "doc-refund-policy::c0",
+        "doc-payments::c0"
+      ],
+      "packed_ids": [
+        "doc-refund-policy::c1",
+        "doc-refund-policy::c0",
+        "doc-payments::c0"
+      ],
+      "dropped_ids": [],
+      "status": "answered",
+      "answer": "Do not approve the customer refund.",
+      "citations": [
+        "doc-refund-policy::c1"
+      ],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": true,
+      "packed_hit": true,
+      "top_score": 0.9999997044715874,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-h-weather": {
+      "query_id": "rag-h-weather",
+      "retrieval_ids": [
+        "doc-weather::c0",
+        "doc-device-printer::c0",
+        "doc-payments::c2"
+      ],
+      "packed_ids": [
+        "doc-weather::c0",
+        "doc-device-printer::c0",
+        "doc-payments::c2"
+      ],
+      "dropped_ids": [],
+      "status": "answered",
+      "answer": "Rain is expected tomorrow in the valley.",
+      "citations": [
+        "doc-weather::c0"
+      ],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": true,
+      "packed_hit": true,
+      "top_score": 0.9996656488520115,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-h-assignment": {
+      "query_id": "rag-h-assignment",
+      "retrieval_ids": [
+        "doc-legal::c0",
+        "doc-payments::c0",
+        "doc-payments::c1"
+      ],
+      "packed_ids": [
+        "doc-legal::c0",
+        "doc-payments::c0",
+        "doc-payments::c1"
+      ],
+      "dropped_ids": [],
+      "status": "answered",
+      "answer": "The service agreement forbids assignment.",
+      "citations": [
+        "doc-legal::c0"
+      ],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": true,
+      "packed_hit": true,
+      "top_score": 0.9549068672650866,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-h-printer-queue": {
+      "query_id": "rag-h-printer-queue",
+      "retrieval_ids": [
+        "doc-device-printer::c1",
+        "doc-device-printer::c0",
+        "doc-account-access::c1"
+      ],
+      "packed_ids": [
+        "doc-device-printer::c1",
+        "doc-device-printer::c0",
+        "doc-account-access::c1"
+      ],
+      "dropped_ids": [],
+      "status": "answered",
+      "answer": "The printer needs a reset because the queue is stuck.",
+      "citations": [
+        "doc-device-printer::c1"
+      ],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": true,
+      "packed_hit": true,
+      "top_score": 0.9891949347667573,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-h-invoice": {
+      "query_id": "rag-h-invoice",
+      "retrieval_ids": [
+        "doc-payments::c1",
+        "doc-payments::c2",
+        "doc-payments::c0"
+      ],
+      "packed_ids": [
+        "doc-payments::c1",
+        "doc-payments::c2",
+        "doc-payments::c0"
+      ],
+      "dropped_ids": [],
+      "status": "answered",
+      "answer": "Please process invoice 99281 now.",
+      "citations": [
+        "doc-payments::c2"
+      ],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": true,
+      "packed_hit": true,
+      "top_score": 0.9313518948126897,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-h-email": {
+      "query_id": "rag-h-email",
+      "retrieval_ids": [
+        "doc-payments::c0",
+        "doc-tickets::c0",
+        "doc-payments::c1"
+      ],
+      "packed_ids": [
+        "doc-payments::c0",
+        "doc-tickets::c0",
+        "doc-payments::c1"
+      ],
+      "dropped_ids": [],
+      "status": "abstained",
+      "answer": "Insufficient evidence in the packed context to support an answer.",
+      "citations": [],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": null,
+      "packed_hit": null,
+      "top_score": 0.013143289100169568,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    },
+    "rag-h-printer-year": {
+      "query_id": "rag-h-printer-year",
+      "retrieval_ids": [
+        "doc-device-printer::c1",
+        "doc-device-printer::c0",
+        "doc-account-access::c1"
+      ],
+      "packed_ids": [
+        "doc-device-printer::c1",
+        "doc-device-printer::c0",
+        "doc-account-access::c1"
+      ],
+      "dropped_ids": [],
+      "status": "abstained",
+      "answer": "Insufficient evidence in the packed context to support an answer.",
+      "citations": [],
+      "support_ok": true,
+      "eval_pass": true,
+      "primary": null,
+      "retrieval_hit": null,
+      "packed_hit": null,
+      "top_score": 0.9808854002829686,
+      "index_id": "v08-exact-memory",
+      "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+      "model": "v06-teaching-meanpool",
+      "version": "v06.1"
+    }
+  },
+  "password_k1": {
+    "query_id": "rag-password-procedure",
+    "retrieval_ids": [
+      "doc-account-access::c0"
+    ],
+    "packed_ids": [
+      "doc-account-access::c0"
+    ],
+    "dropped_ids": [],
+    "status": "abstained",
+    "answer": "Insufficient evidence in the packed context to support an answer.",
+    "citations": [],
+    "support_ok": true,
+    "eval_pass": false,
+    "primary": "retrieval",
+    "retrieval_hit": false,
+    "packed_hit": false,
+    "top_score": 0.9976240676556981,
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "model": "v06-teaching-meanpool",
+    "version": "v06.1"
+  },
+  "password_k3": {
+    "query_id": "rag-password-procedure",
+    "retrieval_ids": [
+      "doc-account-access::c0",
+      "doc-account-access::c2",
+      "doc-account-access::c1"
+    ],
+    "packed_ids": [
+      "doc-account-access::c0",
+      "doc-account-access::c2",
+      "doc-account-access::c1"
+    ],
+    "dropped_ids": [],
+    "status": "answered",
+    "answer": "Please reset the login credentials.",
+    "citations": [
+      "doc-account-access::c1"
+    ],
+    "support_ok": true,
+    "eval_pass": true,
+    "primary": null,
+    "retrieval_hit": true,
+    "packed_hit": true,
+    "top_score": 0.9976240676556981,
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "model": "v06-teaching-meanpool",
+    "version": "v06.1"
+  },
+  "password_budget80": {
+    "query_id": "rag-password-procedure",
+    "retrieval_ids": [
+      "doc-account-access::c0",
+      "doc-account-access::c2",
+      "doc-account-access::c1"
+    ],
+    "packed_ids": [
+      "doc-account-access::c0",
+      "doc-account-access::c2"
+    ],
+    "dropped_ids": [
+      "doc-account-access::c1"
+    ],
+    "status": "abstained",
+    "answer": "Insufficient evidence in the packed context to support an answer.",
+    "citations": [],
+    "support_ok": true,
+    "eval_pass": false,
+    "primary": "context",
+    "retrieval_hit": true,
+    "packed_hit": false,
+    "top_score": 0.9976240676556981,
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "model": "v06-teaching-meanpool",
+    "version": "v06.1"
+  },
+  "ticket_k1": {
+    "query_id": "rag-ticket-4412",
+    "retrieval_ids": [
+      "doc-tickets::c1"
+    ],
+    "packed_ids": [
+      "doc-tickets::c1"
+    ],
+    "dropped_ids": [],
+    "status": "abstained",
+    "answer": "Insufficient evidence in the packed context to support an answer.",
+    "citations": [],
+    "support_ok": true,
+    "eval_pass": false,
+    "primary": "retrieval",
+    "retrieval_hit": false,
+    "packed_hit": false,
+    "top_score": 0.9999140649275932,
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "model": "v06-teaching-meanpool",
+    "version": "v06.1"
+  },
+  "ticket_naive_k1": {
+    "query_id": "rag-ticket-4412",
+    "retrieval_ids": [
+      "doc-tickets::c1"
+    ],
+    "packed_ids": [
+      "doc-tickets::c1"
+    ],
+    "dropped_ids": [],
+    "status": "answered",
+    "answer": "Ticket 4413 is waiting for inspection.",
+    "citations": [
+      "doc-tickets::c1"
+    ],
+    "support_ok": true,
+    "eval_pass": false,
+    "primary": "retrieval",
+    "retrieval_hit": false,
+    "packed_hit": false,
+    "top_score": 0.9999140649275932,
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "model": "v06-teaching-meanpool",
+    "version": "v06.1"
+  },
+  "ceo": {
+    "query_id": "rag-ceo",
+    "retrieval_ids": [
+      "doc-weather::c0",
+      "doc-payments::c0",
+      "doc-tickets::c0"
+    ],
+    "packed_ids": [
+      "doc-weather::c0",
+      "doc-payments::c0",
+      "doc-tickets::c0"
+    ],
+    "dropped_ids": [],
+    "status": "abstained",
+    "answer": "Insufficient evidence in the packed context to support an answer.",
+    "citations": [],
+    "support_ok": true,
+    "eval_pass": true,
+    "primary": null,
+    "retrieval_hit": null,
+    "packed_hit": null,
+    "top_score": 0.9930378135417337,
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "model": "v06-teaching-meanpool",
+    "version": "v06.1"
+  },
+  "ceo_naive": {
+    "query_id": "rag-ceo",
+    "retrieval_ids": [
+      "doc-weather::c0",
+      "doc-payments::c0",
+      "doc-tickets::c0"
+    ],
+    "packed_ids": [
+      "doc-weather::c0",
+      "doc-payments::c0",
+      "doc-tickets::c0"
+    ],
+    "dropped_ids": [],
+    "status": "answered",
+    "answer": "Rain is expected tomorrow in the valley.",
+    "citations": [
+      "doc-weather::c0"
+    ],
+    "support_ok": true,
+    "eval_pass": false,
+    "primary": "generation",
+    "retrieval_hit": null,
+    "packed_hit": null,
+    "top_score": 0.9930378135417337,
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "model": "v06-teaching-meanpool",
+    "version": "v06.1"
+  },
+  "legal_closed_book": {
+    "query_id": "rag-legal-forbid",
+    "retrieval_ids": [],
+    "packed_ids": [],
+    "dropped_ids": [],
+    "status": "abstained",
+    "answer": "Insufficient evidence in the packed context to support an answer.",
+    "citations": [],
+    "support_ok": true,
+    "eval_pass": false,
+    "primary": "retrieval",
+    "retrieval_hit": false,
+    "packed_hit": false,
+    "top_score": null,
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "model": "v06-teaching-meanpool",
+    "version": "v06.1"
+  },
+  "unsupported_reset": {
+    "query_id": "rag-reset-login",
+    "retrieval_ids": [
+      "doc-account-access::c1",
+      "doc-account-access::c0",
+      "doc-account-access::c2"
+    ],
+    "packed_ids": [
+      "doc-account-access::c1",
+      "doc-account-access::c0",
+      "doc-account-access::c2"
+    ],
+    "dropped_ids": [],
+    "status": "answered",
+    "answer": "Please reset the login credentials.",
+    "citations": [
+      "doc-account-access::c0"
+    ],
+    "support_ok": false,
+    "eval_pass": false,
+    "primary": "citation",
+    "retrieval_hit": true,
+    "packed_hit": true,
+    "top_score": 0.9872741164479122,
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "model": "v06-teaching-meanpool",
+    "version": "v06.1"
+  },
+  "invented_ticket": {
+    "query_id": "rag-ticket-4412",
+    "retrieval_ids": [
+      "doc-tickets::c1"
+    ],
+    "packed_ids": [
+      "doc-tickets::c1"
+    ],
+    "dropped_ids": [],
+    "status": "answered",
+    "answer": "Ticket 4412 is waiting for inspection.",
+    "citations": [
+      "doc-tickets::c1"
+    ],
+    "support_ok": false,
+    "eval_pass": false,
+    "primary": "retrieval",
+    "retrieval_hit": false,
+    "packed_hit": false,
+    "top_score": 0.9999140649275932,
+    "index_id": "v08-exact-memory",
+    "source_hash": "f3ac71c4e290010611c786da3227af664b2f29923b6775e6a8b1b053e3aa75df",
+    "model": "v06-teaching-meanpool",
+    "version": "v06.1"
+  },
+  "holdout": {
+    "n": 6,
+    "n_pass": 6,
+    "pass_rate": 1.0,
+    "n_abstain": 2,
+    "n_unsupported_citation": 0
+  },
+  "downloaded": false,
+  "network_required": false
+}

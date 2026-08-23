@@ -1,0 +1,22 @@
+mission: M34
+boundary:
+  inherited_from_m33: Provenance-preserving retriever returning ranked evidence with document/chunk IDs, scores, text spans, and index/embedding identity via search / RankedHit.as_evidence. This mission does not re-teach cosine, filters, or stale-index rebuild.
+  inherited_from_m31: Training-time weight updates versus inference-time consumption of a frozen system. Retrieval here is an inference-time context change, not a training run.
+  manipulated_here: Query to retrieval to context pack to extractive synthesis, citations, abstention, context budget, and separation of retrieval, context, generation, and citation/support failures.
+  deferred_to_m32: Logits-to-token selection, temperature, top-p, and other sampling controls. Inference configuration may be recorded; a sampling lab is not opened.
+  deferred_to_m35: Reranking, chunk size/overlap tuning, hard-negative mining as an optimizer, and rank-sensitive metrics (nDCG/MRR) as the skill.
+  deferred_to_m36: ANN/HNSW, required Qdrant, sparse-dense hybrid fusion, and unsafe filter-after-small-top-k as a primary lesson.
+handoff_summary: M33 supplies ranked evidence with identity. M34 attaches a grounding contract and a frozen eval set. M35 may optimize retrieval only after that baseline is defended.
+concepts:
+  - RAG is a pipeline boundary, not a prompt trick
+  - packed context carries source IDs, spans, and index identity
+  - high retrieval score is not answer correctness
+  - unsupported citations must fail
+  - unanswerable queries abstain
+  - retrieval, context budget, generation, and citation fail separately
+  - held-out questions are not for synthesizer tuning
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M34 may explain grounding, citations, abstention, context budgets, and separable failure layers. It may not introduce rerankers, chunk retuning, ANN/hybrid infrastructure, or a decoding lab as the skill being taught.
+canonical_sources:
+  - rag-paper
+  - sentence-transformers
