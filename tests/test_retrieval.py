@@ -31,11 +31,11 @@ class RetrievalTests(unittest.TestCase):
 
     def test_repository_lab_status_matches_implemented_wave(self):
         labs = LabRegistry(ROOT)
-        for number in range(1, 27):
+        for number in range(1, 32):
             mission = f"M{number:02d}"
             self.assertTrue(labs.status(mission)["repository_executable"], mission)
 
-        for number in range(27, 43):
+        for number in range(32, 43):
             mission = f"M{number:02d}"
             self.assertFalse(labs.status(mission)["repository_executable"], mission)
 
