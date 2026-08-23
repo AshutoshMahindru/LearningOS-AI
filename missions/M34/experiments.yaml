@@ -40,3 +40,8 @@ experiments:
     change: Alter one claim/citation mapping on a fixed packed context.
     observation: Require support validation to fail even if the answer text looks fluent.
     invariant: Retrieved context fixed.
+  - id: invented-support
+    prediction_required: true
+    change: On ticket 4412 at top_k=1, apply defect invented_support.
+    observation: Support fails; retrieval and citation layers both fire; repair abstains.
+    invariant: Query, index, and retriever top-k fixed. Not a second simultaneous citation repair.

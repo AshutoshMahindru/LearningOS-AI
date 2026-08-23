@@ -245,6 +245,7 @@ class M34StaticContractTests(unittest.TestCase):
             ("predict-eval", "run-eval"),
             ("predict-failure", "run-failure"),
             ("predict-failure-repair", "run-failure-repair"),
+            ("predict-invented", "run-invented"),
         )
         for prediction, action in pairs:
             with self.subTest(prediction=prediction, action=action):
@@ -254,11 +255,27 @@ class M34StaticContractTests(unittest.TestCase):
 
         self.assertLess(positions["code-reading"], positions["run-code-reading"])
         self.assertIn("Predict before running", cell_source(cells[positions["code-reading"]]))
+        self.assertLess(positions["run-failure-repair"], positions["predict-invented"])
+
+        repair_src = cell_source(cells[positions["run-failure-repair"]])
+        invented_src = cell_source(cells[positions["run-invented"]])
+        self.assertNotIn("invented_support", repair_src)
+        self.assertNotIn("invented =", repair_src)
+        self.assertIn('defect="invented_support"', invented_src)
+        self.assertIn("repair_grounding", invented_src)
+        self.assertNotIn('defect="invented_support"', cell_source(cells[positions["predict-failure-repair"]]))
+
+        code_reading = cell_source(cells[positions["run-code-reading"]])
+        self.assertNotIn("retrieve uses as_evidence", code_reading)
+        self.assertNotIn("answer_query records weights_updated", code_reading)
+        self.assertIn("weights_updated on live trace", code_reading)
+        self.assertIn("pack ids equal retrieval prefix", code_reading)
+        self.assertIn("packed index_id matches as_evidence", code_reading)
 
         markdown = "\n".join(
             cell_source(cell) for cell in cells if cell.get("cell_type") == "markdown"
         )
-        self.assertGreaterEqual(markdown.count("Predict before running"), 10)
+        self.assertGreaterEqual(markdown.count("Predict before running"), 11)
         for phrase in (
             "predict → act → observe → explain",
             "timestamp",

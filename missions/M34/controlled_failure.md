@@ -22,8 +22,9 @@ Predict, before running:
 
 A related invented-support case (ticket `4412` at `top_k=1`, claim
 about 4412 citing 4413) must also fail support. Diagnose retrieval
-and citation as separate layers. Do not treat that as a second
-simultaneous repair.
+and citation as separate layers. Give that case its own predict/act
+step. Do not treat it as a second simultaneous repair of the
+login-reset citation.
 
 ## Repair rule
 
