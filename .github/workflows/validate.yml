@@ -55,15 +55,20 @@ jobs:
           learning-os lab-status M24
           learning-os lab-status M25
           learning-os lab-status M26
+          learning-os lab-status M27
+          learning-os lab-status M28
+          learning-os lab-status M29
+          learning-os lab-status M30
+          learning-os lab-status M31
 
-  validate-missions-m01-m26:
+  validate-missions-m01-m31:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install repository and M01-M26 requirements
+      - name: Install repository and M01-M31 requirements
         run: |
           python -m pip install -e . \
             -r requirements/m01.txt -r requirements/m02.txt -r requirements/m03.txt \
@@ -75,7 +80,9 @@ jobs:
             -r requirements/m19.txt -r requirements/m20.txt -r requirements/m21.txt \
             -r requirements/m22.txt -r requirements/m23.txt -r requirements/m24.txt
           python -m pip install --index-url https://download.pytorch.org/whl/cpu "torch>=2.2,<3"
-          python -m pip install -r requirements/m25.txt -r requirements/m26.txt
+          python -m pip install -r requirements/m25.txt -r requirements/m26.txt \
+            -r requirements/m27.txt -r requirements/m28.txt -r requirements/m29.txt \
+            -r requirements/m30.txt -r requirements/m31.txt
           python -m pip check
       - name: Validate repository
         run: python tools/validate_repo.py
@@ -83,5 +90,5 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Run full pytest suite
         run: python -m pytest -q tests
-      - name: Validate and execute M01-M26 notebooks
+      - name: Validate and execute M01-M31 notebooks
         run: python tools/validate_mission_notebooks.py --execute
