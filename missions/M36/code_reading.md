@@ -17,11 +17,11 @@ Read `open_teaching_store`, `build_adjacency`, `approximate_search`,
 
 Before running the code-reading cell, predict:
 
-- whether `rag-ceo` at `ef=1` returns the same 3 ids as exact search
-- whether late-filter of `Please reset` at k=1 still contains
-  `doc-account-access::c1`
-- whether ticket `4412` sparse top-1 equals dense top-1
-- whether a dirty insert can be searched without rebuild
+- whether `HybridHit.as_evidence` includes a `fusion` key
+- the store graph `entry_id` and `degree_m`
+- how many neighbors `build_adjacency` stores for that entry
+- whether `build_adjacency`'s docstring calls the graph a production
+  hierarchical index
 
 Do **not** look for a production hierarchical index implementation,
 a live Qdrant client, a tool executor, or a temperature sampler.

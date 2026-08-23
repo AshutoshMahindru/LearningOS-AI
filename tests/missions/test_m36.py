@@ -233,8 +233,20 @@ class M36StaticContractTests(unittest.TestCase):
 
         fusion_src = cell_source(cells[positions["run-fusion"]])
         self.assertIn("fuse_channels", fusion_src)
+        self.assertIn("dense_invoice", fusion_src)
+        self.assertIn("sparse_invoice", fusion_src)
+        self.assertNotIn("hybrid_search", fusion_src)
+        self.assertNotIn("candidate_k=5", fusion_src)
         self.assertNotIn("mix_raw_scores", fusion_src)
         self.assertNotIn("insert_chunk", fusion_src)
+
+        inspect_src = cell_source(cells[positions["inspect-store"]])
+        self.assertIn("as_evidence keys", inspect_src)
+        self.assertIn("memory_proxy", inspect_src)
+        self.assertNotIn("doc-tickets::c0", inspect_src)
+        self.assertNotIn("doc-tickets::c1", inspect_src)
+        self.assertNotIn("scored_candidates", inspect_src)
+        self.assertNotIn("response.ids()", inspect_src)
 
         failure_src = cell_source(cells[positions["run-failure"]])
         repair_src = cell_source(cells[positions["run-failure-repair"]])
@@ -254,10 +266,18 @@ class M36StaticContractTests(unittest.TestCase):
 
         code_reading = cell_source(cells[positions["run-code-reading"]])
         self.assertIn("inspect.getsource", code_reading)
-        self.assertIn("candidate ids", code_reading)
-        self.assertIn("fusion ranks", code_reading)
-        self.assertIn("late missed", code_reading)
-        self.assertIn("dirty", code_reading)
+        self.assertIn("build_adjacency", code_reading)
+        self.assertIn("as_evidence keys", code_reading)
+        self.assertIn("entry neighbors", code_reading)
+        self.assertIn("degree_m", code_reading)
+        self.assertNotIn("ceo_low", code_reading)
+        self.assertNotIn("late missed", code_reading)
+
+        predict_code = cell_source(cells[positions["code-reading"]])
+        self.assertIn("fusion", predict_code)
+        self.assertIn("entry_id", predict_code)
+        self.assertNotIn("ef=1", predict_code)
+        self.assertNotIn("Please reset", predict_code)
 
         markdown = "\n".join(
             cell_source(cell) for cell in cells if cell.get("cell_type") == "markdown"
