@@ -1,0 +1,57 @@
+mission: M32
+controls:
+  decoder: local_logits_table
+  vocab: [alpha, beta, gamma, stop]
+  seed: 3201
+  seed_other: 3203
+  greedy_logits: [1.0, 3.0, 2.0, 0.0]
+  temp_logits: [log3, 0.0]
+  filter_counts: [10, 6, 3, 1]
+  filter_order: temperature-then-top_k-then-top_p-then-softmax
+  checkpoint_version: v07-teaching-lm-1
+  inference_version: v07-teaching-inference-1
+  prediction_required_before_action: true
+  no_search_service: true
+  no_rag_pack: true
+  no_tool_executor: true
+experiments:
+  - id: greedy
+    prediction_required: true
+    change: Select the greedy token from fixed logits.
+    observation: Record argmax index and the lowest-index tie-break.
+    invariant: Logits fixed; no sampling.
+  - id: temperature
+    prediction_required: true
+    change: Vary temperature on the same logits.
+    observation: Observe concentration/entropy and that greedy index is unchanged.
+    invariant: Logits fixed.
+  - id: candidate-filtering
+    prediction_required: true
+    change: Apply top-k or top-p bounds.
+    observation: Observe candidate truncation and renormalization.
+    invariant: Logits and temperature fixed; one filter bound named per comparison.
+  - id: seed-replay
+    prediction_required: true
+    change: Repeat sampling with the same seed and with a different seed.
+    observation: Verify declared replay behavior.
+    invariant: Logits, temperature, and filters fixed.
+  - id: stop-budget
+    prediction_required: true
+    change: Change max-token or stop conditions.
+    observation: Observe termination versus truncation.
+    invariant: Prompt, checkpoint, and sampling fixed.
+  - id: prompt-context
+    prediction_required: true
+    change: Change prompt/context fixture while holding sampling fixed.
+    observation: Observe a different greedy continuation from the same decoder.
+    invariant: Temperature, seed, filters, stop, and checkpoint fixed.
+  - id: adaptation-choice
+    prediction_required: true
+    change: Evaluate freshness, private knowledge, deterministic computation, and style/behavior scenarios.
+    observation: Choose prompt, retrieval, tools, or parameter adaptation with explicit reasoning.
+    invariant: Decision rubric fixed.
+  - id: uncontrolled-or-wrong-adaptation
+    prediction_required: true
+    change: Diagnose two outputs compared as if the model changed, or a fine-tune proposal for a freshness problem.
+    observation: Repair experiment control or adaptation choice from the broken object.
+    invariant: Named defect only; no second unrelated happy-path run.

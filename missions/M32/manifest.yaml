@@ -1,0 +1,104 @@
+id: M32
+title: Control Inference and Adaptation
+phase: P5
+flagship: V07
+phase_end: true
+objective: Manipulate inference behavior and understand adaptation options.
+competencies:
+  - LLM inference
+  - adaptation
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M31
+  helpful: []
+handoff:
+  receives: M31 stage-aware checkpoint/fixture and an explicit training-time versus inference-time boundary
+  provides: M33/M34/M37 receive explicit inference-provider configuration and an adaptation decision hierarchy
+learning_sequence:
+  - predict greedy output from fixed logits
+  - apply temperature and inspect distribution change
+  - apply bounded top-k/top-p filters
+  - generate short deterministic seeded samples from a local score fixture
+  - change stop/max-token controls
+  - change prompt/context fixture while holding sampling fixed
+  - compare adaptation choices using a fixed decision rubric
+  - diagnose an uncontrolled-settings or wrong-adaptation failure
+  - author the V07 adaptation ADR
+  - complete no-AI inference control and decision exercises
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M32_inference_adaptation.ipynb
+instrumentation: missions/M32/inference_adaptation.py
+requirements: requirements/m32.txt
+mission_test: tests/missions/test_m32.py
+reference_fixture:
+  decoder: local_logits_table
+  vocab: alpha-beta-gamma-stop
+  vocab_size: 4
+  seed: 3201
+  seed_other: 3203
+  greedy_index: 1
+  temp_logits: log3-and-zero
+  filter_counts:
+    - 10
+    - 6
+    - 3
+    - 1
+  checkpoint_version: v07-teaching-lm-1
+  inference_version: v07-teaching-inference-1
+  live_adapter: optional-not-required
+canonical_sources:
+  - hf-llm-course
+  - karpathy-zero-to-hero
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  temperature_not_a_quality_knob: required
+  inference_config_is_evidence: required
+  no_search_service: required
+  no_rag_pack: required
+  no_tool_executor: required
+  no_paid_api: required
+  no_pretrained_download: required
+mission_artifacts:
+  - missions/M32/README.md
+  - missions/M32/manifest.yaml
+  - missions/M32/content.yaml
+  - missions/M32/experiments.yaml
+  - missions/M32/code_reading.md
+  - missions/M32/no_ai_gate.md
+  - missions/M32/controlled_failure.md
+  - missions/M32/assessment.yaml
+  - missions/M32/evidence_contract.yaml
+  - missions/M32/flagship_integration.md
+  - missions/M32/review_brief.md
+  - missions/M32/adr_prompt.md
+  - missions/M32/status.yaml
+  - missions/M32/inference_adaptation.py
+  - labs/M32_inference_adaptation.ipynb
+  - requirements/m32.txt
+  - tests/missions/test_m32.py
+  - tests/test_m32.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  m31_checkpoint_consumed_not_retrained: true
+  search_deferred_to_m33: true
+  rag_deferred_to_m34: true
+  tools_deferred_to_m37: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false
