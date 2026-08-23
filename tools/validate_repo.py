@@ -86,11 +86,11 @@ if (ROOT / "data" / "knowledge_graph.bootstrap.json").exists():
 lab_path = ROOT / "data" / "lab_status.json"
 if lab_path.exists():
     labs = json.loads(lab_path.read_text(encoding="utf-8"))
-    expected_executable = [f"M{i:02d}" for i in range(1, 32)]
+    expected_executable = [f"M{i:02d}" for i in range(1, 35)]
     source_executable = ["M01", "M02", "M03", "M08"]
     expected_source_spec_only = [mid for mid in mission_ids if mid not in source_executable]
     if labs.get("repository_executable") != expected_executable:
-        errors.append("repository executable lab inventory must be exactly M01..M31")
+        errors.append("repository executable lab inventory must be exactly M01..M34")
     if labs.get("source_package_executable") != source_executable:
         errors.append("source package executable provenance must remain exactly M01, M02, M03, M08")
     if labs.get("source_package_specification_only") != expected_source_spec_only:
@@ -116,4 +116,4 @@ if errors:
     print("Repository validation FAILED")
     for error in errors: print(f"- {error}")
     sys.exit(1)
-print("Repository validation PASSED: 42 missions, M01-M31 executable labs, and canonical 253-node knowledge graph")
+print("Repository validation PASSED: 42 missions, M01-M34 executable labs, and canonical 253-node knowledge graph")

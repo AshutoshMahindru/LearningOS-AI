@@ -36,7 +36,7 @@ class DashboardTests(unittest.TestCase):
         self.assertEqual(snapshot["runtime"]["next_action"]["target"], "M01")
         self.assertEqual(snapshot["progress"]["total_missions"], 42)
         self.assertEqual(snapshot["progress"]["passed_count"], 0)
-        self.assertEqual(snapshot["labs"]["repository_executable_count"], 31)
+        self.assertEqual(snapshot["labs"]["repository_executable_count"], 34)
 
     def test_dashboard_reflects_passed_mission_and_evidence(self):
         self.loop.start("M01")
