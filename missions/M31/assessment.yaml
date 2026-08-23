@@ -1,0 +1,33 @@
+mission: M31
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped training-system predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  input_target_construction:
+    evidence: Annotated tokens, inputs, and targets for a teaching sequence.
+    pass: inputs equal tokens[:-1] and targets equal tokens[1:] on the healthy path.
+  lifecycle_stages:
+    evidence: Labeled pretraining, adaptation/post-training, evaluation, and inference.
+    pass: Stages are distinguished; inference is not treated as a training update.
+  data_evaluation_boundary:
+    evidence: Authored split ids, overlap check, and contamination diagnosis.
+    pass: Eval evidence is rejected when train ∩ eval is non-empty.
+  teaching_scale_limits:
+    evidence: Explicit (V, V) bigram-table / tiny-corpus statement on the checkpoint.
+    pass: No claim that the teaching run is a production pretrain.
+  objective_versus_task_quality:
+    evidence: Train objective loss compared with held-out true next-token NLL.
+    pass: Low train loss is not reported as downstream quality.
+  controlled_failure_diagnosis:
+    evidence: Symptom, pair-or-lineage hypothesis, first_divergence, repair_run from the broken trace, regression.
+    pass: Diagnosis precedes repair; hyperparameters are not the first lever.
+  code_reading:
+    evidence: Annotated tokenize → window → shift → batch → loss → split → checkpoint → eval flow.
+    pass: Learner predicts pairs and eval alignment; no M32 decoder inspection.
+  no_ai_gate:
+    evidence: Independent pairs, NLL, lifecycle map, shift or leak call, weak-loss explanation.
+    pass: Arithmetic and boundary reasoning are correct without generated help.
+  adr:
+    evidence: Learner-authored V07 training-data/evaluation provenance record.
+    pass: Dataset version, split lineage, checkpoint identity, adaptation stage, and audit metadata are complete without decoding claims.

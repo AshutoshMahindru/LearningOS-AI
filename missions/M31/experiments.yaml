@@ -1,0 +1,39 @@
+mission: M31
+controls:
+  tokenizer_scheme: word
+  tokenizer_version: v06.1
+  dataset_version: v07-teaching-corpus-1
+  seed: 3101
+  steps: 60
+  learning_rate: 0.75
+  teaching_model: bigram_score_table
+  eval_alignment: correct
+  leak_doc_id: e02
+  prediction_required_before_action: true
+  no_inference_policy: true
+experiments:
+  - id: target-shift
+    prediction_required: true
+    change: Compare correct next-token targets with a one-position-wrong alignment on the same tokens.
+    observation: Inspect constructed (input, target) pairs and whether they equal tokens[1:].
+    invariant: Same corpus, tokenizer, and window.
+  - id: memorization-vs-generalization
+    prediction_required: true
+    change: Train the teaching table on the tiny train split and score a held-out pattern.
+    observation: Compare falling training objective loss with held-out true next-token NLL.
+    invariant: Same model class, seed, steps, and learning rate.
+  - id: contamination
+    prediction_required: true
+    change: Leak authored eval document e02 into the train id list.
+    observation: Show overlap and why held-out NLL is no longer protected evidence.
+    invariant: Evaluation calculation (correct shift on authored eval ids) stays unchanged.
+  - id: context-length
+    prediction_required: true
+    change: Change training sequence length / context window.
+    observation: Count prediction targets and which suffix tokens drop out of the window.
+    invariant: Tokenizer and corpus texts stay fixed.
+  - id: stage-classification
+    prediction_required: true
+    change: Classify frozen interventions as pretraining, adaptation/post-training, inference, or evaluation.
+    observation: Verify against explicit stage definitions.
+    invariant: No implementation or weight change.
