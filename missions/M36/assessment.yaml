@@ -1,0 +1,40 @@
+mission: M36
+transfer_required: true
+phase_end: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped infrastructure predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  exact_oracle:
+    evidence: M35 baseline on frozen m34.eval.v1 with ticket ranked ids and scored_candidates.
+    pass: Exact search remains the correctness reference; ANN is not reported as exact.
+  approx_vs_exact:
+    evidence: Neighbor-recall and comparison counts on the same embeddings/queries.
+    pass: Low ef can miss exact neighbors; comparisons are the latency proxy.
+  search_effort:
+    evidence: One ef change on a fixed graph.
+    pass: Recall/comparisons move; corpus and embeddings stay fixed.
+  filter_placement:
+    evidence: FilterTrace with unfiltered, prefilter, late ids and late_missed_relevant.
+    pass: Eligible relevant can be missing from late-filter of a small top-k and present after pre-filter.
+  dense_sparse_hybrid:
+    evidence: Per-query ids for cosine, BM25, and RRF.
+    pass: Sparse can promote a lexical gold that cosine ranks second; fusion field is rrf.
+  lifecycle:
+    evidence: insert/update/delete dirty flag, StoreStaleError, rebuild identities.
+    pass: Dirty search fails closed; rebuilt store reflects the mutation.
+  controlled_failure_diagnosis:
+    evidence: Raw-sum mix ids, RRF repair ids, broken object still mixed.
+    pass: Diagnosis precedes repair; mix object stays mixed; late-filter miss remains a regression.
+  code_reading:
+    evidence: Annotated store schema → graph/ef → filter → sparse → RRF → lifecycle flow.
+    pass: Learner predicts ids, misses, fusion ranks, and dirty/generation flags.
+  no_ai_gate:
+    evidence: Independent transfer.json work and transfer defense.
+    pass: Hand RRF, late-filter diagnosis, effort explanation, two channel choices, exact-when-preferable.
+  adr:
+    evidence: Learner-authored V09 retrieval-infrastructure decision.
+    pass: Exact/ANN, local vs remote store, dense/sparse/hybrid, filters, fusion, lifecycle, latency/recall targets, and migration triggers are complete without claiming a production cluster.
+  phase_end:
+    evidence: Honest V09 close — architecture plus measurable retrieval for M40, not repository implementation.
+    pass: Status remains learner-unpopulated; package implementation is not phase completion.

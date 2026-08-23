@@ -1,0 +1,65 @@
+mission: M36
+controls:
+  oracle: M35 evaluate_set / generate_candidates on frozen m34.eval.v1
+  retriever: M33 search / RankedHit.as_evidence
+  exact_index_id: v08-exact-memory
+  store_id: v09-teaching-store
+  embedding_model: v06-teaching-meanpool
+  embedding_version: v06.1
+  fusion_id: rrf
+  rrf_k: 60
+  offline_fixture: datasets/M34/questions.json
+  eval_version: m34.eval.v1
+  prediction_required_before_action: true
+  no_required_qdrant_faiss_or_agents: true
+experiments:
+  - id: m35-oracle
+    prediction_required: true
+    change: Score the frozen M35 exact baseline and treat it as the correctness reference.
+    observation: eval_version, ticket ranked ids, scored_candidates, mean nDCG/MRR.
+    invariant: Canonical corpus, index, and M34 labels frozen. No approximate search yet.
+  - id: exact-vs-approx
+    prediction_required: true
+    change: Run the teaching graph adapter on the same embeddings and queries as exact search.
+    observation: Neighbor-recall of approx ids versus exact ids, plus comparison counts.
+    invariant: Same store vectors and queries. One backend change.
+  - id: search-effort
+    prediction_required: true
+    change: Vary only the ef/effort setting on the teaching graph.
+    observation: Neighbor-recall and comparison counts at low versus higher ef.
+    invariant: Graph, corpus, and queries frozen.
+  - id: filter-placement
+    prediction_required: true
+    change: Compare metadata pre-filter with unsafe filter-after-small-top-k.
+    observation: Eligible relevant ids present or missing from returned candidate ids.
+    invariant: Query, corpus, and filter key/value frozen.
+  - id: dense-vs-sparse
+    prediction_required: true
+    change: Run exact dense cosine and BM25 sparse separately.
+    observation: Query slices where lexical ids beat cosine, and the reverse.
+    invariant: Same evaluation queries and corpus.
+  - id: hybrid-fusion
+    prediction_required: true
+    change: Fuse dense and sparse ranks with declared RRF. Do not add raw scores.
+    observation: Fused ids versus each channel; fusion field equals rrf.
+    invariant: Candidate pools from the two channels stay fixed.
+  - id: query-slices
+    prediction_required: true
+    change: Compare dense, sparse, and hybrid on lexical and semantic query slices.
+    observation: Support-id ranks per channel; averages do not hide a slice miss.
+    invariant: Same fusion method and candidate_k.
+  - id: lifecycle
+    prediction_required: true
+    change: Insert, then update, then delete, then rebuild. Search a dirty store.
+    observation: StoreStaleError while dirty; new/updated/deleted ids after rebuild.
+    invariant: One lifecycle op per step. Exact oracle embeddings stay the teaching encoder.
+  - id: raw-mix-failure
+    prediction_required: true
+    change: Add cosine and BM25 as if they shared a scale.
+    observation: A high BM25 trap can outrank a high-cosine gold. Ranked ids, not substring checks.
+    invariant: Same dense and sparse ChannelResult objects.
+  - id: failure-repair
+    prediction_required: true
+    change: Repair by declared RRF (or pre-filter) from the broken objects.
+    observation: Repaired ids recover gold; the broken mix/late-filter object still fails.
+    invariant: One repair. Do not retune labels or open a live store.

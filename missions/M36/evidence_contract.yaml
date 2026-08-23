@@ -1,0 +1,95 @@
+mission_id: M36
+version: 1
+purpose: Define acceptable learner-produced hybrid-retrieval evidence without pre-populating learner results.
+required_evidence:
+  - id: prediction_log
+    artifact_type: timestamped_experiment_notes
+    must_show:
+      - prediction_before_each_infrastructure_action
+      - falsifiable_id_or_recall_or_generation_claim
+      - observation_and_revision
+  - id: exact_oracle
+    artifact_type: m35_baseline_table
+    must_show:
+      - eval_version
+      - ticket_ranked_ids
+      - scored_candidates
+      - index_and_corpus_identity
+  - id: approx_vs_exact
+    artifact_type: neighbor_compare
+    must_show:
+      - exact_ids
+      - approx_ids
+      - neighbor_recall
+      - comparison_counts
+  - id: search_effort
+    artifact_type: ef_sweep
+    must_show:
+      - low_ef_ids
+      - higher_ef_ids
+      - same_graph_identity
+  - id: filter_placement
+    artifact_type: filter_trace
+    must_show:
+      - unfiltered_ids
+      - prefilter_ids
+      - late_ids
+      - late_missed_relevant
+  - id: channel_compare
+    artifact_type: dense_sparse_hybrid_ids
+    must_show:
+      - dense_ids
+      - sparse_ids
+      - hybrid_ids
+      - declared_fusion_method
+  - id: lifecycle
+    artifact_type: mutation_rebuild_trace
+    must_show:
+      - dirty_generation
+      - stale_error_before_rebuild
+      - ids_after_rebuild
+  - id: controlled_failure_diagnosis
+    artifact_type: prediction_root_cause_repair_verification
+    must_show:
+      - named_fusion_or_filter_defect
+      - mixed_or_late_ids
+      - repaired_ids_from_broken_objects
+      - broken_object_still_broken
+  - id: code_reading_trace
+    artifact_type: annotated_system_flow
+    must_show:
+      - store_identity
+      - candidate_ids
+      - filter_eligible_misses
+      - fusion_ranks
+      - generation_or_dirty_flag
+  - id: no_ai_transfer
+    artifact_type: independent_analysis_and_oral_defense
+    conditions:
+      - completed_without_ai_generated_code_calculations_or_prose
+      - produced_from_blank_page
+  - id: v09_infrastructure_adr
+    artifact_type: learner_authored_architecture_decision_record
+    must_show:
+      - exact_versus_approx
+      - local_versus_remote_store
+      - dense_sparse_hybrid
+      - filter_policy
+      - fusion_policy
+      - lifecycle_and_staleness
+      - latency_and_recall_targets
+      - migration_triggers
+      - owner_status_and_date
+quality_bar:
+  - Exact M35 retrieval remains the correctness reference.
+  - Fusion is declared RRF, not raw-score addition.
+  - Filters are judged by candidate ids and eligible misses.
+  - Optional live stores fail closed and are not required.
+  - Future-mission mechanisms (tools, decoding lab, generation retune) stay closed.
+  - V09 does not close from package implementation alone.
+evidence_rules:
+  require_observation_not_claim: true
+  require_prediction_before_action: true
+  require_transfer: true
+  reviewer_signoff_required: true
+  prefilled_learner_evidence: prohibited
