@@ -1,0 +1,36 @@
+mission: M38
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped workflow predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  useful_whole:
+    evidence: SKU-7 lookup-then-post run with recorded nodes and a terminal.
+    pass: Terminal is complete; last_tool_result and effect_count match the catalog post.
+  resume_idempotency:
+    evidence: Interrupt after lookup checkpoint; resume; ledger and executions.
+    pass: last_tool_result is restored; effect_count is 1; lookup is not duplicated.
+  loop_bound:
+    evidence: Unresolved lookup fixture at a fixed max_steps.
+    pass: Terminal is loop_exhausted; model_turn equals the bound; ledger is untouched.
+  approval_gate:
+    evidence: Approve versus deny of the same ledger post.
+    pass: Deny does not increment effect_count; grant posts once.
+  invalid_transition:
+    evidence: start -> execute attempt on a frozen state object.
+    pass: InvalidTransition is raised; node is still start.
+  replay:
+    evidence: Recorded proposal list replayed through the deterministic machine.
+    pass: Terminal and effect_count match the original run.
+  controlled_failure_diagnosis:
+    evidence: Symptom, node/checkpoint hypothesis, model_turn or effect_count, repair_run from the broken trace, regression.
+    pass: Diagnosis precedes repair; swapping models is not the first lever.
+  code_reading:
+    evidence: Annotated state schema, apply_transition, checkpoint/resume, approval node, loop counter.
+    pass: Learner predicts illegal edges do not mutate and names last_tool_result as resume state.
+  no_ai_gate:
+    evidence: Independent machine drawing, resume-field list, missing terminal, approval placement, replay diagnosis.
+    pass: Boundary reasoning is correct without generated help.
+  adr:
+    evidence: Learner-authored V10 workflow state/checkpoint policy.
+    pass: State schema, persistence boundary, resume, loop limits, approval points, and trace retention are complete without implementing memory routing.

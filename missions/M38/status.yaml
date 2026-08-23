@@ -1,0 +1,24 @@
+mission_id: M38
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: required
+flagship_status:
+  flagship: V10
+  implementation_progress: stateful_workflow_opened
+  learner_progress: pending_evidence
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+  exact_head_actions: required
+parallel_safety:
+  prohibited_shared_files_modified: false
+notes:
+  - Implementation status is not learner completion.
+  - Local model-call fixtures and SKU-7 catalog arithmetic are fixture facts, not learner evidence.
+  - M38 opens explicit state, nodes, transitions, checkpoints, resume, approval, and loop bounds; M39 owns memory, routing, and fallbacks.
+  - M39 learner progression remains blocked until M38 learner evidence and formal review are satisfied.
+  - This branch does not mark M38 repository-executable.
+  - After merge, global reconciliation must not jump executable inventory to M38; validate_repo currently freezes M01-M34.

@@ -1,0 +1,112 @@
+id: M38
+title: Build a Stateful Agent Workflow
+phase: P7
+flagship: V10
+phase_end: false
+objective: Build an explicit stateful workflow around model calls and tools.
+competencies:
+  - agents
+  - state machines
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M37
+  helpful: []
+handoff:
+  receives: M37 validated tool registry/executor and structured call/result/error trace (schema vs tool errors, idempotency keys, staged traces)
+  provides: M39 receives a stateful workflow with an explicit serializable state schema and failure/termination semantics
+learning_sequence:
+  - start with the smallest useful multi-step tool task
+  - design the serializable state schema before transitions
+  - implement decide, validate, execute, assimilate, and complete nodes
+  - add terminal states and a maximum-step bound
+  - checkpoint at safe node boundaries
+  - resume and verify completed side effects are not duplicated
+  - add a human approval branch
+  - replay a recorded trace through deterministic components
+  - diagnose an infinite loop or a replayed side effect from traces
+  - author the V10 workflow ADR
+  - complete no-AI state-machine reconstruction
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M38_stateful_agent.ipynb
+instrumentation: missions/M38/agent_workflow.py
+requirements: requirements/m38.txt
+mission_test: tests/missions/test_m38.py
+reference_fixture:
+  workflow_version: v10-teaching-workflow-1
+  graph_id: v10-teaching-graph-1
+  seed: 3801
+  catalog_sku: SKU-7
+  catalog_price: 42.0
+  max_steps: 8
+  ledger_key: sku7-price-post
+  weights_updated: false
+  live_adapter: optional-not-required
+  langgraph_adapter: optional-fail-closed
+canonical_sources:
+  - langgraph-docs
+  - anthropic-agents
+content_bundle: tool-using-agents
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_paid_api: required
+  no_required_live_model: required
+  no_langgraph_sdk: required
+  no_anthropic_sdk: required
+  no_rag_or_qdrant: required
+  no_sampling_lab: required
+  no_memory_store: required
+  no_router_or_fallback: required
+  state_schema_before_transitions: required
+  resume_preserves_idempotency: required
+  loop_bound_enforced: required
+  invalid_transition_rejected: required
+  approval_gates_side_effects: required
+mission_artifacts:
+  - missions/M38/README.md
+  - missions/M38/manifest.yaml
+  - missions/M38/content.yaml
+  - missions/M38/experiments.yaml
+  - missions/M38/code_reading.md
+  - missions/M38/no_ai_gate.md
+  - missions/M38/controlled_failure.md
+  - missions/M38/assessment.yaml
+  - missions/M38/evidence_contract.yaml
+  - missions/M38/flagship_integration.md
+  - missions/M38/review_brief.md
+  - missions/M38/adr_prompt.md
+  - missions/M38/status.yaml
+  - missions/M38/agent_workflow.py
+  - missions/M38/optional_langgraph.py
+  - labs/M38_stateful_agent.ipynb
+  - requirements/m38.txt
+  - tests/missions/test_m38.py
+  - tests/test_m38.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  memory_routing_deferred_to_m39: true
+  eval_harness_deferred_to_m40: true
+  rag_deferred_to_m34: true
+  sampling_deferred_to_m32: true
+  ann_deferred_to_m36: true
+  uses_m37_tool_runtime: true
+  local_fixtures_required: true
+  langgraph_sdk: not_imported
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false
