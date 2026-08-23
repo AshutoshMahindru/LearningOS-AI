@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "purpose": "Fresh no-AI traces for failure classification, pack assembly, supported answers, and unsupported rejection. Learner answers are not stored.",
+  "authored_for": "M34",
+  "downloaded": false,
+  "network_required": false,
+  "kind": "synthetic-teaching-fixture",
+  "budget": {
+    "max_chars": 70,
+    "max_chunks": 2
+  },
+  "chunks": [
+    {
+      "chunk_id": "lib::c0",
+      "document_id": "doc-library",
+      "rank": 1,
+      "score": 0.91,
+      "text": "The library closes at 18:00 on weekdays.",
+      "span": {"start": 0, "end": 40}
+    },
+    {
+      "chunk_id": "lib::c1",
+      "document_id": "doc-library",
+      "rank": 2,
+      "score": 0.88,
+      "text": "The library cafe serves tea.",
+      "span": {"start": 0, "end": 28}
+    },
+    {
+      "chunk_id": "mus::c0",
+      "document_id": "doc-museum",
+      "rank": 3,
+      "score": 0.86,
+      "text": "The museum opens at 09:00.",
+      "span": {"start": 0, "end": 26}
+    }
+  ],
+  "query": {
+    "id": "t-library-close",
+    "text": "What time does the library close on weekdays?"
+  },
+  "gold": {
+    "answer": "The library closes at 18:00 on weekdays.",
+    "support": ["lib::c0"]
+  },
+  "pack_probe": {
+    "order": ["lib::c0", "lib::c1", "mus::c0"],
+    "note": "Pack in listed order with max_chars=70 and max_chunks=2. Do not reorder. Do not split a chunk."
+  },
+  "traces": [
+    {
+      "id": "t-retrieval",
+      "query": "What time does the library close on weekdays?",
+      "retrieved": ["mus::c0"],
+      "packed": ["mus::c0"],
+      "status": "answered",
+      "answer": "The museum opens at 09:00.",
+      "citations": ["mus::c0"],
+      "gold_support": ["lib::c0"],
+      "answerable": true,
+      "note": "Relevant library hours never entered the retrieved window."
+    },
+    {
+      "id": "t-context",
+      "query": "What time does the library close on weekdays?",
+      "retrieved": ["lib::c0", "lib::c1", "mus::c0"],
+      "packed": ["lib::c1"],
+      "dropped": ["lib::c0", "mus::c0"],
+      "status": "abstained",
+      "answer": "Insufficient evidence in the packed context to support an answer.",
+      "citations": [],
+      "gold_support": ["lib::c0"],
+      "answerable": true,
+      "note": "Hours were retrieved then dropped by the character budget."
+    },
+    {
+      "id": "t-generation",
+      "query": "What time does the library close on weekdays?",
+      "retrieved": ["lib::c0", "lib::c1"],
+      "packed": ["lib::c0", "lib::c1"],
+      "status": "answered",
+      "answer": "The library cafe serves tea.",
+      "citations": ["lib::c1"],
+      "gold_support": ["lib::c0"],
+      "answerable": true,
+      "note": "The cited cafe span is in the pack and supports the emitted cafe claim, but that claim does not answer the hours question."
+    },
+    {
+      "id": "t-citation",
+      "query": "What time does the library close on weekdays?",
+      "retrieved": ["lib::c0", "mus::c0"],
+      "packed": ["lib::c0", "mus::c0"],
+      "status": "answered",
+      "answer": "The library closes at 18:00 on weekdays.",
+      "citations": ["mus::c0"],
+      "gold_support": ["lib::c0"],
+      "answerable": true,
+      "note": "The answer text is the gold hours claim; the museum citation does not contain 18:00."
+    }
+  ],
+  "unsupported_fluent": {
+    "answer": "The library closes at 22:00 on weekdays.",
+    "citations": ["lib::c0"],
+    "note": "Plausible hours, but 22:00 is not in lib::c0. Reject."
+  },
+  "supported_claim": {
+    "answer": "The library closes at 18:00 on weekdays.",
+    "citations": ["lib::c0"]
+  }
+}

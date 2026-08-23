@@ -1,0 +1,47 @@
+mission: M34
+controls:
+  retriever: M33 search / RankedHit.as_evidence
+  index_id: v08-exact-memory
+  embedding_model: v06-teaching-meanpool
+  embedding_version: v06.1
+  synthesizer_id: extractive-span-v1
+  policy: support_gated
+  offline_fixture: datasets/M34/questions.json
+  prediction_required_before_action: true
+  no_rerank_ann_or_decoding_lab: true
+experiments:
+  - id: with-vs-without-retrieval
+    prediction_required: true
+    change: Answer fixed knowledge questions with retrieval disabled and enabled.
+    observation: Compare support and correctness. Closed-book canonical path abstains.
+    invariant: Generator policy and questions fixed.
+  - id: top-k-context
+    prediction_required: true
+    change: Vary retrieved context count on the password-procedure query.
+    observation: Support versus distraction and whether gold support enters the window.
+    invariant: Retriever, index, and synthesizer policy fixed.
+  - id: context-budget
+    prediction_required: true
+    change: Lower max_chars so a retrieved support span is dropped.
+    observation: Classify a context-layer miss while retrieval_hit stays true.
+    invariant: top-k, index, and query fixed. Packing stays rank-ordered.
+  - id: unanswerable
+    prediction_required: true
+    change: Ask corpus-unsupported questions, including a high-scoring distractor.
+    observation: Measure abstention versus unsupported-claim behavior.
+    invariant: Corpus fixed.
+  - id: retrieval-miss
+    prediction_required: true
+    change: Use ticket 4412 at top_k=1 so the gold span is not retrieved.
+    observation: Classify the failure retrieval-side before blaming generation.
+    invariant: Support expectation fixed.
+  - id: citation-support
+    prediction_required: true
+    change: Alter one claim/citation mapping on a fixed packed context.
+    observation: Require support validation to fail even if the answer text looks fluent.
+    invariant: Retrieved context fixed.
+  - id: invented-support
+    prediction_required: true
+    change: On ticket 4412 at top_k=1, apply defect invented_support.
+    observation: Support fails; retrieval and citation layers both fire; repair abstains.
+    invariant: Query, index, and retriever top-k fixed. Not a second simultaneous citation repair.
