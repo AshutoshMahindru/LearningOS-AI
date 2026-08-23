@@ -43,5 +43,15 @@ experiments:
   - id: malformed-or-duplicate
     prediction_required: true
     change: Diagnose malformed arguments reaching a side-effecting tool, or a timeout-retry that posts twice.
-    observation: Repair from the broken objects. Regression still fails on the broken path.
+    observation: Each named defect has its own predict/act step. Regression still fails on the broken path.
     invariant: Named defect only; no second unrelated happy-path run.
+  - id: malformed-repair
+    prediction_required: true
+    change: Call repair_run on the malformed broken object only.
+    observation: Validation is restored. Effect count is 0. Original object still posted.
+    invariant: Duplicate-post repair is a later named change.
+  - id: duplicate-repair
+    prediction_required: true
+    change: Call repair_run on the duplicate-post broken object only.
+    observation: One keyed post. Second call is a replay. Original object still shows two posts.
+    invariant: Same proposal and initial ledger snapshot. Not a second simultaneous malformed repair.

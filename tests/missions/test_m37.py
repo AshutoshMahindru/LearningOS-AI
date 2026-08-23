@@ -213,6 +213,7 @@ class M37StaticContractTests(unittest.TestCase):
             ("predict-failure", "run-failure"),
             ("predict-failure-duplicate", "run-failure-duplicate"),
             ("predict-failure-repair", "run-failure-repair"),
+            ("predict-dup-repair", "run-dup-repair"),
         )
         for prediction, action in pairs:
             with self.subTest(prediction=prediction, action=action):
@@ -223,7 +224,7 @@ class M37StaticContractTests(unittest.TestCase):
         markdown = "\n".join(
             cell_source(cell) for cell in cells if cell.get("cell_type") == "markdown"
         )
-        self.assertGreaterEqual(markdown.count("Predict before running"), 13)
+        self.assertGreaterEqual(markdown.count("Predict before running"), 14)
         for phrase in (
             "predict → act → observe → explain",
             "timestamp",
@@ -256,9 +257,16 @@ class M37StaticContractTests(unittest.TestCase):
         self.assertNotIn("execution_reached is False", predict_code)
 
         repair_src = cell_source(cells[positions["run-failure-repair"]])
+        dup_repair_src = cell_source(cells[positions["run-dup-repair"]])
         self.assertIn("repair_run", repair_src)
         self.assertIn("broken_malformed", repair_src)
+        self.assertNotIn("broken_dup", repair_src)
+        self.assertNotIn("repaired_dup", repair_src)
         self.assertNotIn('defect="none"', repair_src)
+        self.assertLess(positions["run-failure-repair"], positions["predict-dup-repair"])
+        self.assertIn("repair_run", dup_repair_src)
+        self.assertIn("broken_dup", dup_repair_src)
+        self.assertNotIn("broken_malformed", dup_repair_src)
 
         code_reading = cell_source(cells[positions["run-code-reading"]])
         self.assertIn("inspect.getsource(run_tool_call)", code_reading)

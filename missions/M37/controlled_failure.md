@@ -8,7 +8,9 @@ Predict, before running, whether a side-effecting ledger post with a
 non-numeric amount should increment `effect_count`, and whether a
 timeout retry of the same approved post should increment it again.
 
-Then run one named defect.
+Then run one named defect. Repair each named defect in its own
+predict/act step. Do not treat duplicate-post as a second simultaneous
+repair of the malformed reach.
 
 The defective path uses one named change:
 
