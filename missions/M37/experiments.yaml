@@ -1,0 +1,57 @@
+mission: M37
+controls:
+  runtime: local_model_call_fixtures
+  registry_id: v10-teaching-registry-1
+  runtime_version: v10-teaching-tools-1
+  seed: 3701
+  vat_amount: 80.0
+  vat_rate: 0.25
+  catalog_sku: SKU-7
+  max_attempts: 3
+  prediction_required_before_action: true
+  no_paid_api: true
+  no_langgraph_or_anthropic_sdk: true
+  no_rag_or_qdrant: true
+  no_sampling_lab: true
+  no_state_machine: true
+experiments:
+  - id: schema-validation
+    prediction_required: true
+    change: Feed valid, missing-field, wrong-type, extra-field, and unsafe proposals.
+    observation: Verify fail-closed validation. Invalid proposals never increment the execution counter.
+    invariant: Tool implementation fixed.
+  - id: tool-selection
+    prediction_required: true
+    change: Use intents mapping to two tools and a no-tool case.
+    observation: Measure correct route on a fixed case set.
+    invariant: Schemas fixed.
+  - id: idempotency
+    prediction_required: true
+    change: Replay a side-effecting call with the same key.
+    observation: Verify the effect occurs at most once.
+    invariant: Tool state initialized identically.
+  - id: retry-bound
+    prediction_required: true
+    change: Return repeated repairable validation errors.
+    observation: Verify bounded retries and explicit final failure.
+    invariant: Call fixture fixed.
+  - id: tool-error
+    prediction_required: true
+    change: Make the tool fail after valid validation.
+    observation: Verify structured tool failure is distinct from schema failure.
+    invariant: Arguments fixed.
+  - id: malformed-or-duplicate
+    prediction_required: true
+    change: Diagnose malformed arguments reaching a side-effecting tool, or a timeout-retry that posts twice.
+    observation: Each named defect has its own predict/act step. Regression still fails on the broken path.
+    invariant: Named defect only; no second unrelated happy-path run.
+  - id: malformed-repair
+    prediction_required: true
+    change: Call repair_run on the malformed broken object only.
+    observation: Validation is restored. Effect count is 0. Original object still posted.
+    invariant: Duplicate-post repair is a later named change.
+  - id: duplicate-repair
+    prediction_required: true
+    change: Call repair_run on the duplicate-post broken object only.
+    observation: One keyed post. Second call is a replay. Original object still shows two posts.
+    invariant: Same proposal and initial ledger snapshot. Not a second simultaneous malformed repair.
