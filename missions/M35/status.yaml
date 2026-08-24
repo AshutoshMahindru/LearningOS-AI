@@ -20,5 +20,3 @@ notes:
   - Bundled metric properties are fixture facts, not learner evidence.
   - M35 opens ranking/chunking; M36 owns ANN/hybrid infra; M32 owns decoding; M34 owns generation.
   - M36 learner progression remains blocked until M35 learner evidence and formal review are satisfied.
-  - This branch does not mark M35 repository-executable.
-  - After merge, global reconciliation must not jump executable inventory from this package.

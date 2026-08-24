@@ -20,6 +20,3 @@ notes:
   - Local memory fixtures and SKU-7 catalog arithmetic are fixture facts, not learner evidence.
   - M39 opens persistent memory, routing, and bounded fallbacks around M38; M40 owns systematic evaluation.
   - M40 learner progression remains blocked until M39 learner evidence and formal review are satisfied.
-  - This branch does not mark M39 repository-executable.
-  - After merge, global reconciliation must not jump executable inventory from this package; M37 is still missing from executable inventory.
-  - This branch's validate_repo.py still reports M01-M35 (correct; do not "fix").

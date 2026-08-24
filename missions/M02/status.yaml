@@ -1,6 +1,6 @@
-mission: M02
-package_status: implementation_complete
-learner_status: not_evaluated
+mission_id: M02
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
 formal_engineering_review: learner_review_required
 runtime:
   cpu_only: true

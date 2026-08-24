@@ -20,4 +20,3 @@ notes:
   - Bundled tokenizer encodings are fixture properties, not learner evidence.
   - M27 opens tokenization; M28 attaches embeddings to these IDs.
   - M28 learner progression remains blocked until M27 learner evidence and mission gate are satisfied.
-  - This branch does not mark M27 repository-executable.

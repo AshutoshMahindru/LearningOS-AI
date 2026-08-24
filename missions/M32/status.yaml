@@ -20,4 +20,3 @@ notes:
   - Local logits tables and seeded samples are fixture facts, not learner evidence.
   - M32 opens decoding and an adaptation rubric; M33 owns search implementation.
   - M34/M37 learner progression remains blocked until M32 learner evidence and formal review are satisfied.
-  - This branch does not mark M32 repository-executable.

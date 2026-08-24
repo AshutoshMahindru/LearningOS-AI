@@ -20,5 +20,3 @@ notes:
   - Bundled ranking properties are fixture facts, not learner evidence.
   - M33 opens an exact retriever; M34 owns generation grounding; M35 owns rerank; M36 owns ANN/hybrid infra; M29 owns attention.
   - M34 learner progression remains blocked until M33 learner evidence and formal review are satisfied.
-  - This branch does not mark M33 repository-executable.
-  - After merge, global reconciliation must not jump executable inventory to M33 while M26 and M29-M32 gaps exist.
