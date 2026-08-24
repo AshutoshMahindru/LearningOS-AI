@@ -250,11 +250,12 @@ class M02MissionPackageTests(unittest.TestCase):
 
     def test_status_does_not_overclaim_learner_completion(self) -> None:
         status = (MISSION / "status.yaml").read_text(encoding="utf-8")
-        self.assertIn("package_status: implementation_complete", status)
-        self.assertIn("learner_status: not_evaluated", status)
+        self.assertIn("mission_id: M02", status)
+        self.assertIn("implementation_status: implemented", status)
+        self.assertIn("learner_evidence_status: intentionally_unpopulated", status)
         self.assertIn("formal_engineering_review: learner_review_required", status)
         self.assertIn("status: passed", status)
-        self.assertNotIn("learner_status: complete", status)
+        self.assertNotIn("learner_evidence_status: complete", status)
 
     def test_requirements_are_bounded_and_cover_notebook_runtime(self) -> None:
         requirements = (

@@ -15,6 +15,10 @@ validation_contract:
   exact_head_actions: required
 parallel_safety:
   prohibited_shared_files_modified: false
+test_contract_history:
+  branch_era_repository_assertion: "does not mark M35 repository-executable"
+  branch_era_reconciliation_note: "must not jump executable inventory from this package"
+  current_repository_state: repository_executable
 notes:
   - Implementation status is not learner completion.
   - Bundled metric properties are fixture facts, not learner evidence.

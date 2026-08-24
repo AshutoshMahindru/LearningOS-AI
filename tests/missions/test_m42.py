@@ -41,18 +41,19 @@ class M42StaticContractTests(unittest.TestCase):
         for path in artifacts:
             self.assertTrue(path.exists(), f"Missing required M42 artifact: {path}")
 
-    def test_status_does_not_claim_repository_executable(self):
+    def test_status_separates_implementation_from_learner_completion(self):
         status_path = ROOT / "missions" / "M42" / "status.yaml"
         content = status_path.read_text(encoding="utf-8")
         self.assertIn("implementation_status: implemented", content)
         self.assertIn("learner_evidence_status: intentionally_unpopulated", content)
-        self.assertIn("This branch does not mark M42 repository-executable", content)
+        self.assertNotIn("learner_evidence_status: complete", content)
 
-    def test_validate_repo_reports_m01_m40(self):
+    def test_validate_repo_reports_m01_m42(self):
         cmd = [sys.executable, str(ROOT / "tools" / "validate_repo.py")]
         res = subprocess.run(cmd, capture_output=True, text=True, cwd=str(ROOT))
         self.assertEqual(res.returncode, 0, f"validate_repo failed: {res.stderr}")
         self.assertIn("Repository validation PASSED:", res.stdout)
+        self.assertIn("M01-M42 executable labs", res.stdout)
 
     def test_first_code_cell_bootstraps_repository_root(self):
         nb_path = ROOT / "labs" / "M42_integrated_capstone.ipynb"

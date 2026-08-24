@@ -407,10 +407,11 @@ class M31StaticContractTests(unittest.TestCase):
         self.assertNotIn("1.098612", no_ai)
         self.assertNotIn(str(math.log(3.0))[:8], no_ai)
 
-    def test_status_does_not_claim_repository_executable(self):
+    def test_status_separates_implementation_from_learner_completion(self):
         status = (MISSION / "status.yaml").read_text(encoding="utf-8")
-        self.assertIn("does not mark M31 repository-executable", status)
-        self.assertIn("intentionally_unpopulated", status)
+        self.assertIn("implementation_status: implemented", status)
+        self.assertIn("learner_evidence_status: intentionally_unpopulated", status)
+        self.assertNotIn("learner_evidence_status: complete", status)
 
     def test_corpus_fixture_matches_python_constants(self):
         payload = json.loads((DATASETS / "corpus.json").read_text(encoding="utf-8"))
