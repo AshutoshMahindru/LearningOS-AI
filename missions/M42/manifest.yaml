@@ -1,0 +1,79 @@
+id: M42
+title: Build, Evaluate, and Explain the Capstone
+phase: P8
+flagship: V12
+phase_end: true
+objective: Build and defend the complete flagship AI system with evidence.
+competencies:
+  - integration
+  - technical leadership
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M41
+  helpful: []
+handoff:
+  receives: M01-M41 components, m40.eval.v1 test suite, and M41 architecture contracts
+  provides: Complete production-ready Flagship V12 AI system release and capstone defense artifacts
+learning_sequence:
+  - assemble end-to-end capstone system orchestrator
+  - execute full multi-component pipeline across retrieval, memory, tools, and inference
+  - run comprehensive M40 evaluation suite across capstone execution traces
+  - test failure modes, degradation hierarchy, and safety guardrails
+  - author final Capstone ADR and technical leadership defense report
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M42_integrated_capstone.ipynb
+instrumentation: missions/M42/capstone_system.py
+requirements: requirements/m42.txt
+mission_test: tests/missions/test_m42.py
+canonical_sources:
+  - anthropic-agents
+  - anthropic-evals
+  - langgraph-docs
+  - qdrant-docs
+content_bundle: integrated-architecture
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_paid_api: required
+  no_required_live_model: required
+  consumes_m01_m41_packages: required
+mission_artifacts:
+  - missions/M42/README.md
+  - missions/M42/manifest.yaml
+  - missions/M42/content.yaml
+  - missions/M42/experiments.yaml
+  - missions/M42/code_reading.md
+  - missions/M42/no_ai_gate.md
+  - missions/M42/controlled_failure.md
+  - missions/M42/assessment.yaml
+  - missions/M42/evidence_contract.yaml
+  - missions/M42/flagship_integration.md
+  - missions/M42/review_brief.md
+  - missions/M42/adr_prompt.md
+  - missions/M42/status.yaml
+  - missions/M42/capstone_system.py
+  - labs/M42_integrated_capstone.ipynb
+  - requirements/m42.txt
+  - tests/missions/test_m42.py
+  - tests/test_m42.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  local_fixtures_required: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

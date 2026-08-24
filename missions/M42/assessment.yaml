@@ -1,0 +1,13 @@
+competencies:
+  - id: integration
+    name: End-to-End System Integration
+    rubric:
+      A1: Integrates individual components.
+      A2: Handles multi-component data flows and SLAs.
+      A3: Delivers a resilient production orchestrator.
+  - id: technical-leadership
+    name: Architectural Defense & Technical Leadership
+    rubric:
+      A1: Documents system design.
+      A2: Defends trade-offs with empirical data.
+      A3: Delivers complete production-ready Capstone defense.
