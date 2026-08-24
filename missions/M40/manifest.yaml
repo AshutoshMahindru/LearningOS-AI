@@ -1,0 +1,113 @@
+id: M40
+title: Evaluate AI Systems Systematically
+phase: P7
+flagship: V11
+phase_end: true
+objective: Define and run evaluations across model and system behavior
+competencies:
+  - evaluation
+  - observability
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: true
+prerequisites:
+  blocking:
+    - M34
+    - M39
+  helpful: []
+handoff:
+  receives: M34 grounded-answer traces (answer_labeled, evaluate_set, verify_support, failure layers) and M39 agent traces (run_robust_task, memory/route/fallback/degraded)
+  provides: M41 receives a versioned eval suite, failure taxonomy, release gates, and observability expectations; M42 may reuse the suite
+learning_sequence:
+  - freeze a scenario taxonomy spanning RAG and agent behavior
+  - create deterministic graders for schema, citation support, termination, and idempotency
+  - add rubric cases only where deterministic checks are insufficient
+  - run the current fixtures and store a baseline
+  - slice by failure type and severity
+  - add latency, steps, and cost proxies
+  - inject a known M34 or M37-M39 regression and require the release gate to fail
+  - ablate one observability field
+  - repair hidden-critical governance and a contaminated pack from broken objects
+  - author the V11 evaluation-governance ADR
+  - complete no-AI eval design and phase-end honesty
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M40_ai_system_evals.ipynb
+instrumentation: missions/M40/evaluation_harness.py
+requirements: requirements/m40.txt
+mission_test: tests/missions/test_m40.py
+reference_fixture:
+  harness_version: v11-eval-harness-1
+  eval_version: m40.eval.v1
+  seed: 4001
+  n_cases: 12
+  hidden_critical_case: rag-grounded-reset
+  weights_updated: false
+  live_adapter: optional-not-required
+  llm_judge: optional-fail-closed-not-sole-grader
+canonical_sources:
+  - anthropic-evals
+  - anthropic-agents
+content_bundle: ai-system-evals
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_paid_api: required
+  no_required_live_model: required
+  no_paid_eval_sdk: required
+  no_openai_anthropic_langgraph: required
+  llm_judge_not_sole_grader: required
+  consumes_m34_and_m39_packages: required
+  does_not_edit_m34_m39: required
+  versioned_eval_pack: required
+  slice_gates_not_averages_only: required
+  architecture_deferred_to_m41: required
+mission_artifacts:
+  - missions/M40/README.md
+  - missions/M40/manifest.yaml
+  - missions/M40/content.yaml
+  - missions/M40/experiments.yaml
+  - missions/M40/code_reading.md
+  - missions/M40/no_ai_gate.md
+  - missions/M40/controlled_failure.md
+  - missions/M40/assessment.yaml
+  - missions/M40/evidence_contract.yaml
+  - missions/M40/flagship_integration.md
+  - missions/M40/review_brief.md
+  - missions/M40/adr_prompt.md
+  - missions/M40/status.yaml
+  - missions/M40/evaluation_harness.py
+  - missions/M40/optional_llm_judge.py
+  - labs/M40_ai_system_evals.ipynb
+  - datasets/M40/README.md
+  - datasets/M40/eval_pack.json
+  - datasets/M40/contaminated_pack.json
+  - datasets/M40/expected.json
+  - datasets/M40/rubric_labels.json
+  - datasets/M40/transfer.json
+  - datasets/M40/freeze_expected.py
+  - requirements/m40.txt
+  - tests/missions/test_m40.py
+  - tests/test_m40.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  architecture_deferred_to_m41: true
+  does_not_retune_m34_or_m39: true
+  uses_m34_rag_pipeline: true
+  uses_m39_robust_agent: true
+  local_fixtures_required: true
+  paid_eval_sdk: not_imported
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

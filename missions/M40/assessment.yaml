@@ -1,0 +1,42 @@
+mission: M40
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped eval predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  useful_whole:
+    evidence: Frozen pack run with case ids, outcome success, invariant pass, and a canonical gate.
+    pass: Baseline case ids match m40.eval.v1; canonical gate passes on the healthy fixtures.
+  deterministic_graders:
+    evidence: Schema, citation, termination, and idempotency grades with localized failures.
+    pass: Injected unsupported citation localizes to an issue kind and chunk id; schema extra field does not execute.
+  rubric_calibration:
+    evidence: Frozen hand-labeled set with disagreement rate.
+    pass: Disagreement is recorded; deterministic graders remain required for invariants.
+  critical_slices:
+    evidence: Aggregate success beside citation/schema/idempotency slice rates.
+    pass: A high average does not hide a critical slice in the release rule.
+  cost_proxies:
+    evidence: step_count and cost_proxy on traces.
+    pass: Proxies are deterministic; wall-clock is not the freeze.
+  regression_injection:
+    evidence: Same pack, named M34 or M37-M39 defect, canonical gate.
+    pass: Gate fails; eval_version and case ids are unchanged.
+  trace_ablation:
+    evidence: One removed observability field and blocked diagnoses.
+    pass: The named diagnosis is impossible without that field.
+  controlled_failure_diagnosis:
+    evidence: Symptom, slice/version hypothesis, repair_run from the broken trace, regression.
+    pass: Diagnosis precedes repair; swapping judges is not the first lever.
+  code_reading:
+    evidence: Annotated load_eval_pack, graders, decide_release_gate, ablate_trace.
+    pass: Learner predicts version refusal and names case ids, fail reasons, and slice rates as live probes.
+  no_ai_gate:
+    evidence: Independent five-case design, grader choice, slice report, contamination, blocker.
+    pass: Boundary reasoning is correct without generated help.
+  adr:
+    evidence: Learner-authored V11 evaluation-governance policy.
+    pass: Versioning, grader hierarchy, slices, baseline, thresholds, review, and retention are complete without implementing M41 architecture.
+  phase_end:
+    evidence: Explicit statement that V11 and learner completion remain open.
+    pass: Package existence is not treated as V11 closed or as learner completion.

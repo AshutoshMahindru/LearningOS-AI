@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "authored_for": "M40",
+  "eval_version": "m40.eval.v1",
+  "harness_version": "v11-eval-harness-1",
+  "downloaded": false,
+  "network_required": false,
+  "personal_data": false,
+  "contaminated": false,
+  "tuned_against": false,
+  "held_out_untuned": true,
+  "kind": "synthetic-teaching-fixture",
+  "sources": ["anthropic-evals", "anthropic-agents"],
+  "content_bundle": "ai-system-evals",
+  "note": "Frozen scenario pack spanning M34 RAG and M39 agent behavior. Do not retune M34 or M39 to raise averages. Do not promote dev ids to holdout after seeing failures. Labels are independent of live model scores.",
+  "cases": [
+    {
+      "id": "rag-grounded-reset",
+      "family": "rag",
+      "scenario": "citation_support",
+      "severity": "critical",
+      "split": "dev",
+      "graders": ["citation_support"],
+      "invoke": {"query_id": "rag-reset-login", "top_k": 3},
+      "gold": {
+        "status": "answered",
+        "citations": ["doc-account-access::c1"],
+        "support_ok": true
+      },
+      "notes": "Grounded procedure span. Citation support is an invariant."
+    },
+    {
+      "id": "rag-abstain-ceo",
+      "family": "rag",
+      "scenario": "abstention",
+      "severity": "critical",
+      "split": "dev",
+      "graders": ["citation_support"],
+      "invoke": {"query_id": "rag-ceo", "top_k": 3},
+      "gold": {
+        "status": "abstained",
+        "citations": [],
+        "support_ok": true
+      },
+      "notes": "Unanswerable CEO question. Abstention must still pass support."
+    },
+    {
+      "id": "rag-holdout-email",
+      "family": "rag",
+      "scenario": "abstention",
+      "severity": "major",
+      "split": "holdout",
+      "graders": ["citation_support"],
+      "invoke": {"query_id": "rag-h-email", "top_k": 3},
+      "gold": {
+        "status": "abstained",
+        "citations": [],
+        "support_ok": true
+      },
+      "notes": "Held-out unanswerable. Do not retune the synthesizer on this id."
+    },
+    {
+      "id": "rag-ticket-recovered",
+      "family": "rag",
+      "scenario": "grounded_answer",
+      "severity": "major",
+      "split": "dev",
+      "graders": ["citation_support"],
+      "invoke": {"query_id": "rag-ticket-4412", "top_k": 3},
+      "gold": {
+        "status": "answered",
+        "citations": ["doc-tickets::c0"],
+        "support_ok": true
+      },
+      "notes": "k=3 recovers ticket 4412. k=1 is a retrieval miss, not this case."
+    },
+    {
+      "id": "agent-purchase-complete",
+      "family": "agent",
+      "scenario": "state_termination",
+      "severity": "major",
+      "split": "dev",
+      "graders": ["state_termination", "tool_schema"],
+      "invoke": {
+        "task": "Purchase SKU-7 and post the catalog price to the cash ledger.",
+        "store": "catalog",
+        "inject": null
+      },
+      "gold": {
+        "terminal": "complete",
+        "degraded": false,
+        "circuit_open": false,
+        "posted_amount": 42.0
+      },
+      "notes": "Healthy purchase wraps M38. Terminal complete is not a citation check."
+    },
+    {
+      "id": "agent-lookup-complete",
+      "family": "agent",
+      "scenario": "state_termination",
+      "severity": "major",
+      "split": "dev",
+      "graders": ["state_termination"],
+      "invoke": {
+        "task": "Look up the catalog price of SKU-7.",
+        "store": "catalog",
+        "inject": null
+      },
+      "gold": {
+        "terminal": "complete",
+        "degraded": false,
+        "circuit_open": false
+      },
+      "notes": "Lookup route completes without posting."
+    },
+    {
+      "id": "agent-no-match",
+      "family": "agent",
+      "scenario": "state_termination",
+      "severity": "major",
+      "split": "dev",
+      "graders": ["state_termination"],
+      "invoke": {
+        "task": "Compose a haiku about warehouse bins.",
+        "store": "catalog",
+        "inject": null
+      },
+      "gold": {
+        "terminal": "no_match",
+        "degraded": false,
+        "circuit_open": false
+      },
+      "notes": "No-match is a first-class terminal."
+    },
+    {
+      "id": "agent-degraded-fallback",
+      "family": "agent",
+      "scenario": "degraded_path",
+      "severity": "critical",
+      "split": "dev",
+      "graders": ["state_termination"],
+      "invoke": {
+        "task": "Purchase SKU-7 and post the catalog price to the cash ledger.",
+        "store": "catalog",
+        "inject": "primary_failure"
+      },
+      "gold": {
+        "terminal": "degraded",
+        "degraded": true,
+        "circuit_open": false,
+        "forbid_complete_when_degraded": true
+      },
+      "notes": "Primary failure must not be labeled complete."
+    },
+    {
+      "id": "agent-circuit-open",
+      "family": "agent",
+      "scenario": "fallback_bound",
+      "severity": "critical",
+      "split": "dev",
+      "graders": ["state_termination"],
+      "invoke": {
+        "task": "Purchase SKU-7 and post the catalog price to the cash ledger.",
+        "store": "catalog",
+        "inject": "all_failures"
+      },
+      "gold": {
+        "terminal": "circuit_open",
+        "degraded": false,
+        "circuit_open": true
+      },
+      "notes": "Both rungs fail; circuit opens within the attempt bound."
+    },
+    {
+      "id": "agent-memory-relevance",
+      "family": "agent",
+      "scenario": "memory_scope",
+      "severity": "major",
+      "split": "dev",
+      "graders": ["state_termination"],
+      "invoke": {
+        "task": "Purchase SKU-7 and post the catalog price to the cash ledger.",
+        "store": "relevant_and_irrelevant",
+        "inject": null
+      },
+      "gold": {
+        "terminal": "complete",
+        "degraded": false,
+        "retrieved_ids": ["mem-sku7-price"]
+      },
+      "notes": "Irrelevant warehouse and SKU-9 rows must be excluded. Exclusion is a component signal."
+    },
+    {
+      "id": "tool-schema-invalid",
+      "family": "tool",
+      "scenario": "tool_schema",
+      "severity": "critical",
+      "split": "dev",
+      "graders": ["tool_schema"],
+      "invoke": {
+        "proposal": {
+          "tool": "compute_vat",
+          "arguments": {"amount": 80.0, "rate": 0.25, "currency": "USD"}
+        }
+      },
+      "gold": {
+        "expect_schema_error": true,
+        "execution_reached": false
+      },
+      "notes": "Extra field must fail closed before execution."
+    },
+    {
+      "id": "tool-idempotency-replay",
+      "family": "tool",
+      "scenario": "idempotency",
+      "severity": "critical",
+      "split": "holdout",
+      "graders": ["idempotency"],
+      "invoke": {
+        "proposal": {
+          "tool": "post_ledger_entry",
+          "arguments": {
+            "account": "cash",
+            "amount": 20.0,
+            "memo": "vat-tax",
+            "idempotency_key": "vat-80-0.25"
+          }
+        }
+      },
+      "gold": {
+        "effect_count": 1,
+        "second_replayed": true
+      },
+      "notes": "Held-out idempotency replay. A timeout-retry that skips the key is a known M37 defect, not a pack edit."
+    }
+  ]
+}
