@@ -1,0 +1,2 @@
+# Mission M42 requirements
+pytest>=8.0.0

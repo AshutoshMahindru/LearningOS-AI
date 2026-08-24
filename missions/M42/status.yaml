@@ -1,0 +1,24 @@
+mission_id: M42
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: required
+flagship_status:
+  flagship: V12
+  implementation_progress: capstone_orchestrator_completed
+  learner_progress: pending_evidence
+  v12_closed: false
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+  exact_head_actions: required
+parallel_safety:
+  prohibited_shared_files_modified: false
+notes:
+  - Implementation status is not learner completion.
+  - M42 implements the final capstone AI system orchestrator and defense suite.
+  - This branch does not mark M42 repository-executable.
+  - After merge, global reconciliation must not jump executable inventory from this package.
+  - This branch validate_repo.py still reports M01-M40 (correct; do not fix).

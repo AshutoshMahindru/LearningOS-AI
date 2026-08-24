@@ -1,0 +1,19 @@
+id: M42
+title: Build, Evaluate, and Explain the Capstone
+bundle: integrated-architecture
+topics:
+  - capstone-orchestration
+  - system-defense
+  - technical-leadership
+  - production-readiness
+sources:
+  - id: anthropic-agents
+    name: Anthropic Building Effective Agents
+  - id: anthropic-evals
+    name: Anthropic Demystifying Evals
+  - id: langgraph-docs
+    name: LangGraph Workflows & State
+  - id: qdrant-docs
+    name: Qdrant Vector Architecture
+depth: L5
+mode: build

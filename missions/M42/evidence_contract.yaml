@@ -1,0 +1,7 @@
+evidence_contract:
+  mission_id: M42
+  required_evidence:
+    - capstone_execution_trace
+    - evaluation_suite_report
+    - failure_degradation_matrix
+    - capstone_adr_defense

@@ -1,0 +1,13 @@
+experiments:
+  - id: exp-42-01
+    name: Capstone End-to-End Execution
+    objective: Verify that the CapstoneSystemOrchestrator successfully processes queries through retrieval, reasoning, tool execution, and memory.
+    steps:
+      - instantiate CapstoneSystemOrchestrator
+      - execute end-to-end query workflow
+  - id: exp-42-02
+    name: System Defense & Failure Recovery
+    objective: Verify that simulated pipeline errors trigger clean degradation without crashing the orchestrator.
+    steps:
+      - inject mock tool execution error
+      - verify orchestrator falls back gracefully and logs telemetry trace
