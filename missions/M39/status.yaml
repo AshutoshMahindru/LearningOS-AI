@@ -17,7 +17,9 @@ parallel_safety:
   prohibited_shared_files_modified: false
 test_contract_history:
   branch_era_repository_assertion: "does not mark M39 repository-executable"
+  branch_era_executable_inventory: M01-M35
   current_repository_state: repository_executable
+  current_executable_inventory: M01-M42
 notes:
   - Implementation status is not learner completion.
   - Local memory fixtures and SKU-7 catalog arithmetic are fixture facts, not learner evidence.
