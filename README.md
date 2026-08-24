@@ -122,4 +122,4 @@ Prefer primary/official sources. The AI tutor supplements rather than replaces c
 
 ## Status
 
-**M01-M39 integrated and verified; M40-M42 pending implementation.**
+**M01-M40 integrated and verified; M41-M42 pending implementation.**
