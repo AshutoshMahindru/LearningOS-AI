@@ -22,5 +22,3 @@ notes:
   - Bundled metric and id properties are fixture facts, not learner evidence.
   - M36 opens vector-database and hybrid-retrieval infrastructure; M37 owns tools; M32 owns decoding; M34 owns generation.
   - V09 does not close because this package exists. Learner ADR, evidence, and formal review remain required.
-  - This branch does not mark M36 repository-executable.
-  - After merge, global reconciliation must not jump executable inventory from this package.

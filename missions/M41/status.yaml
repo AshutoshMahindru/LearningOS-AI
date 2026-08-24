@@ -21,6 +21,3 @@ notes:
   - M41 opens integrated AI system architecture; M42 owns final capstone implementation.
   - V11 does not close because this package exists.
   - M42 learner progression remains blocked until M41 learner evidence and formal review are satisfied.
-  - This branch does not mark M41 repository-executable.
-  - After merge, global reconciliation must not jump executable inventory from this package.
-  - This branch validate_repo.py still reports M01-M39 (correct; do not fix).

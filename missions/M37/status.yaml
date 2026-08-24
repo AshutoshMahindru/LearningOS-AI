@@ -20,5 +20,3 @@ notes:
   - Local model-call fixtures and VAT/catalog arithmetic are fixture facts, not learner evidence.
   - M37 opens tool schemas, validation, selection, idempotency, and staged traces; M38 owns persistent state machines.
   - M38 learner progression remains blocked until M37 learner evidence and formal review are satisfied.
-  - This branch does not mark M37 repository-executable.
-  - After merge, global reconciliation must not jump executable inventory to M37; validate_repo currently freezes M01-M31.

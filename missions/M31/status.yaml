@@ -20,4 +20,3 @@ notes:
   - Teaching loss curves are fixture facts, not learner evidence.
   - M31 opens causal next-token training; M32 owns inference and adaptation controls.
   - M32 learner progression remains blocked until M31 learner evidence and formal review are satisfied.
-  - This branch does not mark M31 repository-executable.

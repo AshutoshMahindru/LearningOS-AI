@@ -22,6 +22,3 @@ notes:
   - M40 opens systematic evaluation; M41 owns integrated architecture.
   - V11 does not close because this package exists.
   - M41 learner progression remains blocked until M40 learner evidence and formal review are satisfied.
-  - This branch does not mark M40 repository-executable.
-  - After merge, global reconciliation must not jump executable inventory from this package.
-  - This branch's validate_repo.py still reports M01-M36 (correct; do not "fix").
