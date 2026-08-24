@@ -1,0 +1,101 @@
+name: Release closeout reconcile status tests
+
+on:
+  push:
+    branches: [release/v1-closeout]
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/v1-closeout
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reconcile stale branch-era status assertions
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          missions = [30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42]
+          stale = re.compile(
+              r'^(?P<indent>[ \t]*)self\.assertIn\("(?:This branch )?does not mark M\d{2} repository-executable", (?P<var>status|content)\)\s*$',
+              re.MULTILINE,
+          )
+          changed = []
+          for mission in missions:
+              path = Path(f"tests/missions/test_m{mission:02d}.py")
+              original = path.read_text(encoding="utf-8")
+              text = original.replace(
+                  "test_status_does_not_claim_repository_executable",
+                  "test_status_separates_implementation_from_learner_completion",
+              )
+
+              replacements = 0
+              def replace_stale(match):
+                  nonlocal replacements
+                  replacements += 1
+                  indent = match.group("indent")
+                  variable = match.group("var")
+                  implementation = (
+                      f'{indent}self.assertIn("implementation_status: implemented", {variable})'
+                  )
+                  learner_not_complete = (
+                      f'{indent}self.assertNotIn("learner_evidence_status: complete", {variable})'
+                  )
+                  lines = []
+                  if implementation not in text:
+                      lines.append(implementation)
+                  lines.append(learner_not_complete)
+                  return "\n".join(lines)
+
+              text = stale.sub(replace_stale, text)
+              text = re.sub(
+                  r"test_validate_repo_reports_m01_m4[01]",
+                  "test_validate_repo_reports_m01_m42",
+                  text,
+              )
+              if replacements != 1:
+                  raise SystemExit(
+                      f"{path}: expected exactly one stale repository-executability assertion, found {replacements}"
+                  )
+              if "does not mark M" in text or "This branch does not mark" in text:
+                  raise SystemExit(f"{path}: stale branch-era assertion remains")
+              if "implementation_status: implemented" not in text:
+                  raise SystemExit(f"{path}: implementation assertion missing after rewrite")
+              if "intentionally_unpopulated" not in text:
+                  raise SystemExit(f"{path}: learner-evidence separation missing after rewrite")
+              if text != original:
+                  path.write_text(text, encoding="utf-8")
+                  changed.append(str(path))
+
+          if len(changed) != len(missions):
+              raise SystemExit(
+                  f"expected {len(missions)} changed mission tests, changed {len(changed)}: {changed}"
+              )
+          print("Reconciled:", *changed, sep="\n- ")
+          PY
+      - name: Remove temporary workflow from final tree
+        run: rm .github/workflows/release-closeout-reconcile-tests.yml
+      - name: Verify patch shape
+        run: |
+          git diff --check
+          test "$(git diff --name-only | wc -l | tr -d ' ')" = "13"
+          git diff --name-only
+      - name: Commit reconciliation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- tests/missions/test_m30.py tests/missions/test_m31.py tests/missions/test_m32.py \
+            tests/missions/test_m34.py tests/missions/test_m35.py tests/missions/test_m36.py \
+            tests/missions/test_m37.py tests/missions/test_m38.py tests/missions/test_m39.py \
+            tests/missions/test_m40.py tests/missions/test_m41.py tests/missions/test_m42.py \
+            .github/workflows/release-closeout-reconcile-tests.yml
+          git commit -m "Reconcile mission status tests with M01-M42 baseline"
+          git push origin HEAD:release/v1-closeout
