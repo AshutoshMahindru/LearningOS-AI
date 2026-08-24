@@ -1,0 +1,23 @@
+mission: M39
+boundary:
+  inherited_from_m38: Explicit serializable AgentState, nodes, allowed transitions, terminals including loop_exhausted, checkpoints, resume without replaying completed side effects, human approval as a workflow node, and M37 tool execution behind that machine. InferenceConfig remains recorded with training_time=False and weights_updated=False. Live adapters fail closed.
+  manipulated_here: Working versus persistent memory, provenance/expiry/scope on persistent entries, deliberate retrieval, explicit route selection for at least two task classes plus no-match, wrapping the M38 workflow, bounded retry/fallback ladders, circuit/loop breakers, and explicit degraded terminals.
+  deferred_to_m40: Formal system evaluation design and eval harnesses.
+  closed_here: M34 RAG packs, M35 rerank/chunk tuning, M36 ANN/Qdrant, retrieve_and_generate, and a decoding/sampling lab.
+handoff_summary: M38 supplies run_workflow, AgentState, checkpoint/resume, approval, and loop bounds. M39 hands M40 a robust agent with declared memory, route, fallback, and trace surfaces. It does not hand M40 an eval harness, a RAG pack, or a LangGraph SDK store.
+concepts:
+  - working memory is ephemeral workflow state; persistent memory is scoped and provenance-bearing
+  - retrieve deliberately; do not append the whole store
+  - expired and superseded entries are flagged or excluded
+  - routing is explicit predicates, not a hidden prompt
+  - no-match is a first-class outcome
+  - fallbacks are a bounded ladder, not an unbounded retry
+  - a circuit breaker is orchestration policy
+  - degraded success is labeled and is not silent incorrect success
+  - no memory or no fallback can be safer than a wrong complete
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M39 may explain working versus persistent memory, provenance/expiry/scope, retrieval, route predicates, fallback ladders, circuit breakers, and degraded terminals. It may not implement a systematic eval harness, RAG, ANN/Qdrant, or a sampling lab. It may not import LangGraph or Anthropic SDKs. It may not claim the teaching robustness layer is a production agent runtime.
+canonical_sources:
+  - langgraph-docs
+  - anthropic-agents
+content_bundle: tool-using-agents

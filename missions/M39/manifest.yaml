@@ -1,0 +1,112 @@
+id: M39
+title: Add Memory, Routing, and Fallbacks
+phase: P7
+flagship: V10
+phase_end: false
+objective: Make an agentic system more robust through memory and control flow
+competencies:
+  - memory
+  - routing
+  - fallbacks
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M38
+  helpful: []
+handoff:
+  receives: M38 explicit workflow state, checkpointing, termination, approval, and tool execution
+  provides: M40 receives a robust agent with declared memory, route, fallback, and trace surfaces that can be evaluated systematically
+learning_sequence:
+  - classify M38 state fields into ephemeral versus persistent candidates
+  - add a provenance-bearing memory store
+  - retrieve only relevant memory for a fixed task
+  - create explicit routes for at least two task classes plus no-match
+  - wrap the M38 workflow as the primary path
+  - add one primary failure and a bounded fallback
+  - add a reliable degraded terminal path
+  - inject stale or superseded memory
+  - inject repeated primary/fallback failure and verify no loop
+  - diagnose stale-memory trust or fallback oscillation from traces
+  - author the V10 memory/routing/fallback ADR
+  - complete no-AI robustness design
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M39_memory_routing_fallbacks.ipynb
+instrumentation: missions/M39/robust_agent.py
+requirements: requirements/m39.txt
+mission_test: tests/missions/test_m39.py
+reference_fixture:
+  robust_version: v10-teaching-robust-1
+  seed: 3901
+  catalog_sku: SKU-7
+  catalog_price: 42.0
+  stale_price: 99.0
+  max_attempts: 3
+  circuit_threshold: 2
+  default_now: 1000
+  weights_updated: false
+  live_adapter: optional-not-required
+  langgraph_adapter: optional-fail-closed
+canonical_sources:
+  - langgraph-docs
+  - anthropic-agents
+content_bundle: tool-using-agents
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_paid_api: required
+  no_required_live_model: required
+  no_langgraph_sdk: required
+  no_anthropic_sdk: required
+  no_rag_or_qdrant: required
+  no_sampling_lab: required
+  no_eval_harness: required
+  consumes_m38_package: required
+  provenance_bearing_memory: required
+  explicit_routes_plus_no_match: required
+  bounded_fallback_and_circuit: required
+  degraded_not_silent_incorrect: required
+mission_artifacts:
+  - missions/M39/README.md
+  - missions/M39/manifest.yaml
+  - missions/M39/content.yaml
+  - missions/M39/experiments.yaml
+  - missions/M39/code_reading.md
+  - missions/M39/no_ai_gate.md
+  - missions/M39/controlled_failure.md
+  - missions/M39/assessment.yaml
+  - missions/M39/evidence_contract.yaml
+  - missions/M39/flagship_integration.md
+  - missions/M39/review_brief.md
+  - missions/M39/adr_prompt.md
+  - missions/M39/status.yaml
+  - missions/M39/robust_agent.py
+  - labs/M39_memory_routing_fallbacks.ipynb
+  - requirements/m39.txt
+  - tests/missions/test_m39.py
+  - tests/test_m39.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  eval_harness_deferred_to_m40: true
+  rag_deferred_to_m34: true
+  sampling_deferred_to_m32: true
+  ann_deferred_to_m36: true
+  uses_m38_agent_workflow: true
+  local_fixtures_required: true
+  langgraph_sdk: not_imported
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false

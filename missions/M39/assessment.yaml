@@ -1,0 +1,36 @@
+mission: M39
+transfer_required: true
+criteria:
+  prediction_before_action:
+    evidence: Timestamped robustness predictions before each governed action.
+    pass: Predictions are falsifiable and precede execution evidence.
+  useful_whole:
+    evidence: SKU-7 retrieve-route-wrap run with a terminal and a degraded flag.
+    pass: Route is catalog_purchase; terminal is complete; degraded is false; posted amount matches the catalog.
+  memory_relevance:
+    evidence: Relevant plus irrelevant entries under a fixed task.
+    pass: Irrelevant ids are absent from retrieved_ids and present in excluded reasons.
+  stale_memory:
+    evidence: Aged or superseded entry under a fixed query.
+    pass: Stale id is flagged or excluded; it is not used as the posted amount.
+  route_selection:
+    evidence: Fixed case set on a frozen policy.
+    pass: Two task classes route correctly and no-match does not wrap M38.
+  primary_failure:
+    evidence: Forced primary failure of the purchase task.
+    pass: Fallback runs; terminal is degraded; degraded is true; effect_count stays 0.
+  fallback_loop:
+    evidence: Primary and fallback both fail.
+    pass: attempts is within the bound; circuit_open is true; the run stops.
+  controlled_failure_diagnosis:
+    evidence: Symptom, provenance/route/attempt hypothesis, posted_amount or attempts, repair_run from the broken trace, regression.
+    pass: Diagnosis precedes repair; swapping models is not the first lever.
+  code_reading:
+    evidence: Annotated retrieve_memory, select_route, run_fallback_ladder, repair_run.
+    pass: Learner predicts expired ids are excluded and names retrieved ids, route, attempts, and degraded as live probes.
+  no_ai_gate:
+    evidence: Independent classification, provenance fields, fresh routes, bounded fallback, diagnosis.
+    pass: Boundary reasoning is correct without generated help.
+  adr:
+    evidence: Learner-authored V10 memory/routing/fallback policy.
+    pass: Persistence, provenance, retrieval scope, route precedence, bounds, degraded outputs, and circuit breaking are complete without implementing an eval harness.
