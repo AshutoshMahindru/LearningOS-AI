@@ -59,7 +59,7 @@ class M41StaticContractTests(unittest.TestCase):
         cmd = [sys.executable, str(ROOT / "tools" / "validate_repo.py")]
         res = subprocess.run(cmd, capture_output=True, text=True, cwd=str(ROOT))
         self.assertEqual(res.returncode, 0, f"validate_repo failed: {res.stderr}")
-        self.assertIn("M01-M40 executable labs", res.stdout)
+        self.assertIn("Repository validation PASSED:", res.stdout)
 
     def test_first_code_cell_bootstraps_repository_root(self):
         nb_path = ROOT / "labs" / "M41_integrated_architecture.ipynb"
