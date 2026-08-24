@@ -15,6 +15,9 @@ validation_contract:
   exact_head_actions: required
 parallel_safety:
   prohibited_shared_files_modified: false
+test_contract_history:
+  branch_era_repository_assertion: "does not mark M39 repository-executable"
+  current_repository_state: repository_executable
 notes:
   - Implementation status is not learner completion.
   - Local memory fixtures and SKU-7 catalog arithmetic are fixture facts, not learner evidence.
