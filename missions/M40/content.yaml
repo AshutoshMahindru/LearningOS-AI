@@ -1,0 +1,25 @@
+mission: M40
+boundary:
+  inherited_from_m34: Grounded-answer traces from answer_labeled / evaluate_set / verify_support, with retrieval, pack, citation, abstention, and separable failure layers. This mission does not retune the extractive synthesizer or the M33 index.
+  inherited_from_m39: Robust-agent traces from run_robust_task, including retrieved memory ids, route, attempts, degraded, circuit_open, posted amount, and fallback rungs. This mission does not reopen memory policy or the M38 graph.
+  inherited_from_m37: Tool schema validation and idempotency keys, consumed here as deterministic graders, not as a new tool runtime.
+  manipulated_here: Versioned eval datasets, a scenario taxonomy spanning RAG and agent behavior, deterministic graders, rubric/judge boundary, task success versus component metrics, severity slices, regression baselines, observability fields, and release gates.
+  deferred_to_m41: Integrated architecture design and the system diagram as a skill.
+  closed_here: Paid eval SDKs, required LLM-as-judge, M34/M39 model retuning, and treating V11 as closed because the package exists.
+handoff_summary: M34 and M39 supply traces. M40 hands M41 a versioned suite, a failure taxonomy, gates, and observability expectations. It does not hand M41 an architecture decision or a production eval platform.
+concepts:
+  - write the eval set before optimizing the system
+  - deterministic graders own objective invariants
+  - rubric and LLM-as-judge are calibrated boundaries, not sole graders
+  - task success is not a component metric
+  - critical slices can hide under a high average
+  - eval datasets are versioned and can be contaminated
+  - traces make regressions diagnosable
+  - a release gate is allowed to fail the ship even when the average looks fine
+  - V11 does not close because this package exists
+sequence_rule: Every experiment prediction must be recorded before its execution cell.
+claims_boundary: M40 may explain eval loading, graders, slices, gates, and observability. It may not design the M41 integrated architecture, retune M34 or M39 to fit the eval, or import paid eval SDKs. Optional LLM-as-judge is fail-closed and cannot be the sole required grader.
+canonical_sources:
+  - anthropic-evals
+  - anthropic-agents
+content_bundle: ai-system-evals

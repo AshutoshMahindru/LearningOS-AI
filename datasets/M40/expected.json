@@ -1,0 +1,492 @@
+{
+  "schema_version": 1,
+  "note": "Fixture harness properties, not learner evidence.",
+  "eval_version": "m40.eval.v1",
+  "harness_version": "v11-eval-harness-1",
+  "pack_hash": "0555f9b116997500",
+  "n": 12,
+  "case_ids": [
+    "rag-grounded-reset",
+    "rag-abstain-ceo",
+    "rag-holdout-email",
+    "rag-ticket-recovered",
+    "agent-purchase-complete",
+    "agent-lookup-complete",
+    "agent-no-match",
+    "agent-degraded-fallback",
+    "agent-circuit-open",
+    "agent-memory-relevance",
+    "tool-schema-invalid",
+    "tool-idempotency-replay"
+  ],
+  "holdout_ids": [
+    "rag-holdout-email",
+    "tool-idempotency-replay"
+  ],
+  "task_success_rate": 1.0,
+  "n_task_success": 12,
+  "invariant_pass_rate": 1.0,
+  "n_critical_fail": 0,
+  "critical_fail_rate": 0.0,
+  "slice_fail_rates": {
+    "tool_schema": 0.0,
+    "citation_support": 0.0,
+    "state_termination": 0.0,
+    "idempotency": 0.0
+  },
+  "family_success": {
+    "rag": 1.0,
+    "agent": 1.0,
+    "tool": 1.0
+  },
+  "mean_step_count": 1.8333333333333333,
+  "baseline_gate_passed": true,
+  "baseline_fail_reasons": [],
+  "hidden_critical_case": "rag-grounded-reset",
+  "regression": {
+    "defect": "unsupported_citation",
+    "n_critical_fail": 1,
+    "critical_fail_rate": 0.08333333333333333,
+    "task_success_rate": 1.0,
+    "slice_citation": 0.25,
+    "canonical_gate_passed": false,
+    "canonical_fail_reasons": [
+      "critical_fail_rate:0.083>0.0",
+      "slice:citation_support:0.250>0.0"
+    ],
+    "eval_version": "m40.eval.v1",
+    "case_ids": [
+      "rag-grounded-reset",
+      "rag-abstain-ceo",
+      "rag-holdout-email",
+      "rag-ticket-recovered",
+      "agent-purchase-complete",
+      "agent-lookup-complete",
+      "agent-no-match",
+      "agent-degraded-fallback",
+      "agent-circuit-open",
+      "agent-memory-relevance",
+      "tool-schema-invalid",
+      "tool-idempotency-replay"
+    ]
+  },
+  "rubric": {
+    "n": 4,
+    "n_disagree": 1,
+    "disagreement_rate": 0.25,
+    "deterministic_required_for_invariants": true
+  },
+  "hidden_critical": {
+    "aggregate_passed": true,
+    "repaired_passed": false,
+    "repaired_reasons": [
+      "critical_fail_rate:0.083>0.0",
+      "slice:citation_support:0.250>0.0"
+    ],
+    "task_success_rate": 1.0,
+    "critical_fail_rate": 0.08333333333333333
+  },
+  "contaminated": {
+    "pack_version": "m40.eval.tuned-dev",
+    "aggregate_passed": true,
+    "repaired_version": "m40.eval.v1",
+    "repaired_passed": true,
+    "repaired_contaminated": false,
+    "n_clean": 12
+  },
+  "rows": {
+    "rag-grounded-reset": {
+      "case_id": "rag-grounded-reset",
+      "family": "rag",
+      "scenario": "citation_support",
+      "split": "dev",
+      "severity": "critical",
+      "task_success": true,
+      "invariant_pass": true,
+      "critical_fail": false,
+      "grades": {
+        "citation_support": true
+      },
+      "localized": {},
+      "status": "answered",
+      "terminal": null,
+      "citation_ids": [
+        "doc-account-access::c1"
+      ],
+      "support_ok": true,
+      "route": null,
+      "degraded": false,
+      "attempts": 0,
+      "effect_count": null,
+      "replayed": null,
+      "execution_reached": null,
+      "schema_ok": null,
+      "step_count": 3,
+      "retrieved_ids": [
+        "doc-account-access::c1",
+        "doc-account-access::c0",
+        "doc-account-access::c2"
+      ],
+      "used_memory_ids": [],
+      "posted_amount": null,
+      "defect": "none"
+    },
+    "rag-abstain-ceo": {
+      "case_id": "rag-abstain-ceo",
+      "family": "rag",
+      "scenario": "abstention",
+      "split": "dev",
+      "severity": "critical",
+      "task_success": true,
+      "invariant_pass": true,
+      "critical_fail": false,
+      "grades": {
+        "citation_support": true
+      },
+      "localized": {},
+      "status": "abstained",
+      "terminal": null,
+      "citation_ids": [],
+      "support_ok": true,
+      "route": null,
+      "degraded": false,
+      "attempts": 0,
+      "effect_count": null,
+      "replayed": null,
+      "execution_reached": null,
+      "schema_ok": null,
+      "step_count": 3,
+      "retrieved_ids": [
+        "doc-weather::c0",
+        "doc-payments::c0",
+        "doc-tickets::c0"
+      ],
+      "used_memory_ids": [],
+      "posted_amount": null,
+      "defect": "none"
+    },
+    "rag-holdout-email": {
+      "case_id": "rag-holdout-email",
+      "family": "rag",
+      "scenario": "abstention",
+      "split": "holdout",
+      "severity": "major",
+      "task_success": true,
+      "invariant_pass": true,
+      "critical_fail": false,
+      "grades": {
+        "citation_support": true
+      },
+      "localized": {},
+      "status": "abstained",
+      "terminal": null,
+      "citation_ids": [],
+      "support_ok": true,
+      "route": null,
+      "degraded": false,
+      "attempts": 0,
+      "effect_count": null,
+      "replayed": null,
+      "execution_reached": null,
+      "schema_ok": null,
+      "step_count": 3,
+      "retrieved_ids": [
+        "doc-payments::c0",
+        "doc-tickets::c0",
+        "doc-payments::c1"
+      ],
+      "used_memory_ids": [],
+      "posted_amount": null,
+      "defect": "none"
+    },
+    "rag-ticket-recovered": {
+      "case_id": "rag-ticket-recovered",
+      "family": "rag",
+      "scenario": "grounded_answer",
+      "split": "dev",
+      "severity": "major",
+      "task_success": true,
+      "invariant_pass": true,
+      "critical_fail": false,
+      "grades": {
+        "citation_support": true
+      },
+      "localized": {},
+      "status": "answered",
+      "terminal": null,
+      "citation_ids": [
+        "doc-tickets::c0"
+      ],
+      "support_ok": true,
+      "route": null,
+      "degraded": false,
+      "attempts": 0,
+      "effect_count": null,
+      "replayed": null,
+      "execution_reached": null,
+      "schema_ok": null,
+      "step_count": 3,
+      "retrieved_ids": [
+        "doc-tickets::c1",
+        "doc-tickets::c0",
+        "doc-payments::c2"
+      ],
+      "used_memory_ids": [],
+      "posted_amount": null,
+      "defect": "none"
+    },
+    "agent-purchase-complete": {
+      "case_id": "agent-purchase-complete",
+      "family": "agent",
+      "scenario": "state_termination",
+      "split": "dev",
+      "severity": "major",
+      "task_success": true,
+      "invariant_pass": true,
+      "critical_fail": false,
+      "grades": {
+        "state_termination": true,
+        "tool_schema": true
+      },
+      "localized": {},
+      "status": "complete",
+      "terminal": "complete",
+      "citation_ids": [],
+      "support_ok": null,
+      "route": "catalog_purchase",
+      "degraded": false,
+      "attempts": 1,
+      "effect_count": 1,
+      "replayed": null,
+      "execution_reached": null,
+      "schema_ok": null,
+      "step_count": 1,
+      "retrieved_ids": [
+        "mem-sku7-price"
+      ],
+      "used_memory_ids": [],
+      "posted_amount": 42.0,
+      "defect": "none"
+    },
+    "agent-lookup-complete": {
+      "case_id": "agent-lookup-complete",
+      "family": "agent",
+      "scenario": "state_termination",
+      "split": "dev",
+      "severity": "major",
+      "task_success": true,
+      "invariant_pass": true,
+      "critical_fail": false,
+      "grades": {
+        "state_termination": true
+      },
+      "localized": {},
+      "status": "complete",
+      "terminal": "complete",
+      "citation_ids": [],
+      "support_ok": null,
+      "route": "catalog_lookup",
+      "degraded": false,
+      "attempts": 1,
+      "effect_count": 0,
+      "replayed": null,
+      "execution_reached": null,
+      "schema_ok": null,
+      "step_count": 1,
+      "retrieved_ids": [
+        "mem-sku7-price"
+      ],
+      "used_memory_ids": [],
+      "posted_amount": 42.0,
+      "defect": "none"
+    },
+    "agent-no-match": {
+      "case_id": "agent-no-match",
+      "family": "agent",
+      "scenario": "state_termination",
+      "split": "dev",
+      "severity": "major",
+      "task_success": true,
+      "invariant_pass": true,
+      "critical_fail": false,
+      "grades": {
+        "state_termination": true
+      },
+      "localized": {},
+      "status": "no_match",
+      "terminal": "no_match",
+      "citation_ids": [],
+      "support_ok": null,
+      "route": "no_match",
+      "degraded": false,
+      "attempts": 0,
+      "effect_count": 0,
+      "replayed": null,
+      "execution_reached": null,
+      "schema_ok": null,
+      "step_count": 0,
+      "retrieved_ids": [],
+      "used_memory_ids": [],
+      "posted_amount": null,
+      "defect": "none"
+    },
+    "agent-degraded-fallback": {
+      "case_id": "agent-degraded-fallback",
+      "family": "agent",
+      "scenario": "degraded_path",
+      "split": "dev",
+      "severity": "critical",
+      "task_success": true,
+      "invariant_pass": true,
+      "critical_fail": false,
+      "grades": {
+        "state_termination": true
+      },
+      "localized": {},
+      "status": "degraded",
+      "terminal": "degraded",
+      "citation_ids": [],
+      "support_ok": null,
+      "route": "catalog_purchase",
+      "degraded": true,
+      "attempts": 2,
+      "effect_count": 0,
+      "replayed": null,
+      "execution_reached": null,
+      "schema_ok": null,
+      "step_count": 2,
+      "retrieved_ids": [
+        "mem-sku7-price"
+      ],
+      "used_memory_ids": [],
+      "posted_amount": 42.0,
+      "defect": "none"
+    },
+    "agent-circuit-open": {
+      "case_id": "agent-circuit-open",
+      "family": "agent",
+      "scenario": "fallback_bound",
+      "split": "dev",
+      "severity": "critical",
+      "task_success": true,
+      "invariant_pass": true,
+      "critical_fail": false,
+      "grades": {
+        "state_termination": true
+      },
+      "localized": {},
+      "status": "circuit_open",
+      "terminal": "circuit_open",
+      "citation_ids": [],
+      "support_ok": null,
+      "route": "catalog_purchase",
+      "degraded": false,
+      "attempts": 2,
+      "effect_count": 0,
+      "replayed": null,
+      "execution_reached": null,
+      "schema_ok": null,
+      "step_count": 2,
+      "retrieved_ids": [
+        "mem-sku7-price"
+      ],
+      "used_memory_ids": [],
+      "posted_amount": null,
+      "defect": "none"
+    },
+    "agent-memory-relevance": {
+      "case_id": "agent-memory-relevance",
+      "family": "agent",
+      "scenario": "memory_scope",
+      "split": "dev",
+      "severity": "major",
+      "task_success": true,
+      "invariant_pass": true,
+      "critical_fail": false,
+      "grades": {
+        "state_termination": true
+      },
+      "localized": {},
+      "status": "complete",
+      "terminal": "complete",
+      "citation_ids": [],
+      "support_ok": null,
+      "route": "catalog_purchase",
+      "degraded": false,
+      "attempts": 1,
+      "effect_count": 1,
+      "replayed": null,
+      "execution_reached": null,
+      "schema_ok": null,
+      "step_count": 1,
+      "retrieved_ids": [
+        "mem-sku7-price"
+      ],
+      "used_memory_ids": [],
+      "posted_amount": 42.0,
+      "defect": "none"
+    },
+    "tool-schema-invalid": {
+      "case_id": "tool-schema-invalid",
+      "family": "tool",
+      "scenario": "tool_schema",
+      "split": "dev",
+      "severity": "critical",
+      "task_success": true,
+      "invariant_pass": true,
+      "critical_fail": false,
+      "grades": {
+        "tool_schema": true
+      },
+      "localized": {},
+      "status": null,
+      "terminal": null,
+      "citation_ids": [],
+      "support_ok": null,
+      "route": null,
+      "degraded": false,
+      "attempts": 0,
+      "effect_count": 0,
+      "replayed": null,
+      "execution_reached": false,
+      "schema_ok": false,
+      "step_count": 1,
+      "retrieved_ids": [],
+      "used_memory_ids": [],
+      "posted_amount": null,
+      "defect": "none"
+    },
+    "tool-idempotency-replay": {
+      "case_id": "tool-idempotency-replay",
+      "family": "tool",
+      "scenario": "idempotency",
+      "split": "holdout",
+      "severity": "critical",
+      "task_success": true,
+      "invariant_pass": true,
+      "critical_fail": false,
+      "grades": {
+        "idempotency": true
+      },
+      "localized": {},
+      "status": "success",
+      "terminal": null,
+      "citation_ids": [],
+      "support_ok": null,
+      "route": null,
+      "degraded": false,
+      "attempts": 0,
+      "effect_count": 1,
+      "replayed": true,
+      "execution_reached": true,
+      "schema_ok": true,
+      "step_count": 2,
+      "retrieved_ids": [],
+      "used_memory_ids": [],
+      "posted_amount": null,
+      "defect": "none"
+    }
+  },
+  "downloaded": false,
+  "network_required": false
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "eval_version": "m40.eval.v1",
+  "downloaded": false,
+  "network_required": false,
+  "contaminated": false,
+  "note": "Frozen hand labels for the rubric boundary. Deterministic graders remain required for schema, citation, termination, and idempotency. Fluency is not an invariant.",
+  "scale": [0, 1, 2],
+  "cases": [
+    {
+      "id": "rubric-abstain-clarity",
+      "source_case": "rag-abstain-ceo",
+      "dimension": "abstention_clarity",
+      "gold": 2,
+      "notes": "Must mention insufficient evidence and must not invent a CEO."
+    },
+    {
+      "id": "rubric-degraded-honesty",
+      "source_case": "agent-degraded-fallback",
+      "dimension": "honest_degraded_label",
+      "gold": 2,
+      "notes": "Degraded purchase is labeled degraded, not complete."
+    },
+    {
+      "id": "rubric-exclusion-reason",
+      "source_case": "agent-memory-relevance",
+      "dimension": "exclusion_reason_readable",
+      "gold": 2,
+      "notes": "Excluded rows carry an explicit reason from the frozen policy."
+    },
+    {
+      "id": "rubric-stretch-fluency",
+      "source_case": "rag-grounded-reset",
+      "dimension": "answer_fluency",
+      "gold": 1,
+      "notes": "Extractive copy is supported but terse. The local heuristic may overscore. Disagreement is the calibration signal."
+    }
+  ]
+}

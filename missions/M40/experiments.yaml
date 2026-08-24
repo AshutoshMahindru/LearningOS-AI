@@ -1,0 +1,68 @@
+mission: M40
+controls:
+  runtime: local_eval_harness_over_m34_and_m39
+  harness_version: v11-eval-harness-1
+  eval_version: m40.eval.v1
+  seed: 4001
+  prediction_required_before_action: true
+  no_paid_api: true
+  no_paid_eval_sdk: true
+  no_openai_anthropic_langgraph: true
+  llm_judge_not_sole_grader: true
+  does_not_retune_m34_or_m39: true
+experiments:
+  - id: useful-whole
+    prediction_required: true
+    change: Run the frozen m40.eval.v1 pack on current M34 and M39 fixtures and store a baseline.
+    observation: Record case ids, outcome success, invariant pass, critical rate, and the canonical gate.
+    invariant: Eval pack and system fixtures fixed.
+  - id: deterministic-graders
+    prediction_required: true
+    change: Evaluate tool schema, citation support, state termination, and idempotency, including one injected unsupported citation.
+    observation: Exact failures are localized (issue kind and object id), not a blob score.
+    invariant: System fixtures fixed except the named citation defect.
+  - id: rubric-calibration
+    prediction_required: true
+    change: Score the frozen hand-labeled rubric set with the local checklist.
+    observation: Disagreement rate and the limit that invariants stay deterministic.
+    invariant: Cases frozen. LLM-as-judge remains fail-closed.
+  - id: critical-slices
+    prediction_required: true
+    change: Compare aggregate task success with high-severity grader slices on the injected suite.
+    observation: Averages can hide a citation/schema/idempotency blocker.
+    invariant: Results come from the same injected run.
+  - id: cost-proxies
+    prediction_required: true
+    change: Record step_count and cost_proxy on the baseline traces.
+    observation: Proxies are deterministic (steps/effects/packed chars), not wall-clock.
+    invariant: Pack and systems fixed.
+  - id: regression-injection
+    prediction_required: true
+    change: Reintroduce M34 unsupported_citation on the same pack.
+    observation: Canonical release gate fails. Eval version and case ids are unchanged.
+    invariant: Eval set unchanged.
+  - id: trace-ablation
+    prediction_required: true
+    change: Remove one observability field from a captured trace.
+    observation: Name the diagnoses that become impossible.
+    invariant: Behavior fixed; only the retained fields change.
+  - id: hidden-critical
+    prediction_required: true
+    change: Diagnose a high average that hides a rare critical citation failure under an aggregate-only gate.
+    observation: Named governance defect has its own predict/act step.
+    invariant: Named defect only; contamination is a later named change.
+  - id: hidden-critical-repair
+    prediction_required: true
+    change: Call repair_run on the hidden-critical broken object only.
+    observation: Canonical slice gates fail the ship. The broken object still passes the aggregate-only gate.
+    invariant: Same suite report; contamination repair is later.
+  - id: contaminated-pack
+    prediction_required: true
+    change: Diagnose an eval set that was tuned against and relabeled as holdout.
+    observation: Named defect has its own predict/act step.
+    invariant: Not a simultaneous hidden-critical repair.
+  - id: contaminated-pack-repair
+    prediction_required: true
+    change: Call repair_run on the contaminated broken object only.
+    observation: Clean m40.eval.v1 is reloaded. Original object still has tuned-dev.
+    invariant: Same system defect (none) and canonical gates.

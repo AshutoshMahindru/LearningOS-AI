@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "eval_version": "m40.eval.v1",
+  "downloaded": false,
+  "network_required": false,
+  "contaminated": false,
+  "note": "Fresh no-AI numbers. Do not print derived gate conclusions in the mission package.",
+  "requirement": "A lobby kiosk must look up which floor holds Atlas of Rivers and must refuse weather chat. A warehouse agent may reserve BIN-12 occupancy and must refuse poetry.",
+  "library": {
+    "title": "Atlas of Rivers",
+    "call_number": "QH 441",
+    "floor": 4,
+    "weather_query": "Will it frost tonight in the valley?"
+  },
+  "warehouse": {
+    "bin": "BIN-12",
+    "occupancy": 3,
+    "refund_order": 8802,
+    "poetry": "Write a sonnet about forklifts."
+  }
+}
