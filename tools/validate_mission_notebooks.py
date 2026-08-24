@@ -55,7 +55,7 @@ def execute(path: Path) -> int:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Validate M01-M41 source notebooks and optionally execute them.")
+    parser = argparse.ArgumentParser(description="Validate M01-M42 source notebooks and optionally execute them.")
     parser.add_argument("--execute", action="store_true", help="Execute each notebook in a fresh kernel after source validation.")
     args = parser.parse_args()
 
