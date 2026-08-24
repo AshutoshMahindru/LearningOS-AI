@@ -1,0 +1,2 @@
+# Mission M41 requirements
+pytest>=8.0.0

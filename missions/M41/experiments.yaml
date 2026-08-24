@@ -1,0 +1,13 @@
+experiments:
+  - id: exp-41-01
+    name: Boundary Enforcer Validation
+    objective: Verify that invalid boundary configurations trigger deterministic validation errors.
+    steps:
+      - define valid and invalid system boundaries
+      - validate system architecture configuration
+  - id: exp-41-02
+    name: Decision Routing & Degradation
+    objective: Verify graceful transition across full capability, reduced retrieval, cached fallback, and fail-closed modes.
+    steps:
+      - simulate upstream retrieval outage
+      - verify system selects fallback degradation policy
