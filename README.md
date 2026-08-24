@@ -122,4 +122,4 @@ Prefer primary/official sources. The AI tutor supplements rather than replaces c
 
 ## Status
 
-**M01-M41 integrated and verified; M42 pending implementation.**
+**M01-M42 integrated and verified as repository-executable.**
