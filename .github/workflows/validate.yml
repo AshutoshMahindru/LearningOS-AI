@@ -68,15 +68,16 @@ jobs:
           learning-os lab-status M37
           learning-os lab-status M38
           learning-os lab-status M39
+          learning-os lab-status M40
 
-  validate-missions-m01-m39:
+  validate-missions-m01-m40:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install repository and M01-M39 requirements
+      - name: Install repository and M01-M40 requirements
         run: |
           python -m pip install -e . \
             -r requirements/m01.txt -r requirements/m02.txt -r requirements/m03.txt \
@@ -93,7 +94,7 @@ jobs:
             -r requirements/m30.txt -r requirements/m31.txt \
             -r requirements/m32.txt -r requirements/m33.txt -r requirements/m34.txt \
             -r requirements/m35.txt -r requirements/m36.txt \
-            -r requirements/m37.txt -r requirements/m38.txt -r requirements/m39.txt
+            -r requirements/m37.txt -r requirements/m38.txt -r requirements/m39.txt -r requirements/m40.txt
           python -m pip check
       - name: Validate repository
         run: python tools/validate_repo.py
@@ -101,5 +102,5 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Run full pytest suite
         run: python -m pytest -q tests
-      - name: Validate and execute M01-M39 notebooks
+      - name: Validate and execute M01-M40 notebooks
         run: python tools/validate_mission_notebooks.py --execute
