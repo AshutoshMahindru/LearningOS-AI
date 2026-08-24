@@ -1,0 +1,26 @@
+mission_id: M41
+implementation_status: implemented
+learner_evidence_status: intentionally_unpopulated
+formal_engineering_review: required
+flagship_status:
+  flagship: V11
+  implementation_progress: architecture_contracts_opened
+  learner_progress: pending_evidence
+  v11_closed: false
+validation_contract:
+  notebook_restart_run_all: required
+  mission_unittest: required
+  mission_pytest: required
+  repository_unittest: required
+  repository_validator: required
+  exact_head_actions: required
+parallel_safety:
+  prohibited_shared_files_modified: false
+notes:
+  - Implementation status is not learner completion.
+  - M41 opens integrated AI system architecture; M42 owns final capstone implementation.
+  - V11 does not close because this package exists.
+  - M42 learner progression remains blocked until M41 learner evidence and formal review are satisfied.
+  - This branch does not mark M41 repository-executable.
+  - After merge, global reconciliation must not jump executable inventory from this package.
+  - This branch validate_repo.py still reports M01-M39 (correct; do not fix).

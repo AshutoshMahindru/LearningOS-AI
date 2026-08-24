@@ -1,0 +1,19 @@
+id: M41
+title: Design an Integrated AI System
+bundle: integrated-architecture
+topics:
+  - ai-architecture
+  - systems-engineering
+  - boundary-enforcement
+  - degradation-routing
+sources:
+  - id: anthropic-agents
+    name: Anthropic Building Effective Agents
+  - id: anthropic-evals
+    name: Anthropic Demystifying Evals
+  - id: langgraph-docs
+    name: LangGraph State Management & Workflows
+  - id: qdrant-docs
+    name: Qdrant Vector Architecture
+depth: L5
+mode: design

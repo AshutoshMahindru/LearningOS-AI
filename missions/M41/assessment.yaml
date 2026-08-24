@@ -1,0 +1,13 @@
+competencies:
+  - id: ai-architecture
+    name: AI Architecture Design
+    rubric:
+      A1: Identifies component boundaries.
+      A2: Specifies interface contracts and SLAs.
+      A3: Designs robust degradation and observability controls.
+  - id: systems-engineering
+    name: Systems Engineering & Boundary Isolation
+    rubric:
+      A1: Distinguishes system vs trust boundaries.
+      A2: Enforces deterministic guardrails.
+      A3: Produces complete production-ready ADRs.

@@ -1,0 +1,82 @@
+id: M41
+title: Design an Integrated AI System
+phase: P8
+flagship: V11
+phase_end: false
+objective: Produce an architecture that integrates retrieval, models, tools, memory, and evaluation.
+competencies:
+  - AI architecture
+  - systems engineering
+pedagogy: whole-system-first-prediction-before-action
+formal_engineering_review: true
+starts_flagship: false
+prerequisites:
+  blocking:
+    - M40
+  helpful: []
+handoff:
+  receives: M01-M40 components and m40.eval.v1 test suite
+  provides: M42 receives complete integrated architecture blueprints, contract specifications, degradation policies, and telemetry specs for final capstone execution
+learning_sequence:
+  - define system, data, control, and trust boundaries across component boundaries
+  - categorize system decisions into deterministic versus model-driven logic
+  - specify interface contracts between retrieval, model, tools, memory, workflow, and evaluation
+  - design tiered degradation policies and graceful failure modes
+  - establish observability budgets for latency, cost, confidence, and tool invocations
+  - author ADRs for system integration and boundary enforcement
+runtime:
+  cpu_only: true
+  deterministic_where_practical: true
+  requires_secrets: false
+  requires_paid_api: false
+  network_required: false
+  restart_run_all_required: true
+primary_artifact: labs/M41_integrated_architecture.ipynb
+instrumentation: missions/M41/integrated_architecture.py
+requirements: requirements/m41.txt
+mission_test: tests/missions/test_m41.py
+canonical_sources:
+  - anthropic-agents
+  - anthropic-evals
+  - langgraph-docs
+  - qdrant-docs
+content_bundle: integrated-architecture
+comparison_controls:
+  prediction_before_action: required
+  one_named_change_per_experiment: required
+  no_paid_api: required
+  no_required_live_model: required
+  consumes_m01_m40_packages: required
+  implementation_deferred_to_m42: required
+mission_artifacts:
+  - missions/M41/README.md
+  - missions/M41/manifest.yaml
+  - missions/M41/content.yaml
+  - missions/M41/experiments.yaml
+  - missions/M41/code_reading.md
+  - missions/M41/no_ai_gate.md
+  - missions/M41/controlled_failure.md
+  - missions/M41/assessment.yaml
+  - missions/M41/evidence_contract.yaml
+  - missions/M41/flagship_integration.md
+  - missions/M41/review_brief.md
+  - missions/M41/adr_prompt.md
+  - missions/M41/status.yaml
+  - missions/M41/integrated_architecture.py
+  - labs/M41_integrated_architecture.ipynb
+  - requirements/m41.txt
+  - tests/missions/test_m41.py
+  - tests/test_m41.py
+constraints:
+  source_notebook_outputs: empty
+  learner_evidence_prepopulated: false
+  shared_registry_edits_required: false
+  implementation_deferred_to_m42: true
+  local_fixtures_required: true
+parallel_safety:
+  modifies_lab_status: false
+  modifies_tracking: false
+  modifies_root_readme: false
+  modifies_workflows: false
+  modifies_shared_validators: false
+  modifies_shared_registries: false
