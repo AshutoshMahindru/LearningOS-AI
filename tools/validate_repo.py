@@ -12,9 +12,10 @@ REQUIRED = [
     "data/knowledge_graph.yaml", "data/knowledge_graph.csv", "learning_os/knowledge_graph.py",
     "learning_os/cli.py", "learning_os/closed_loop.py", "learning_os/learner_model.py", "learning_os/retention_engine.py",
     "learning_os/autonomy_engine.py", "learning_os/side_quest_engine.py", "learning_os/decision_engine.py", "learning_os/dashboard.py",
-    "learning_os/dashboard_server.py", "learning_os/app.py", "learning_os/mission_loader.py", "learning_os/mission_runner.py", "learning_os/gate_engine.py",
-    "learning_os/storage.py", "learning_os/retrieval.py", "learning_os/content_router.py", "learning_os/prerequisite_graph.py",
-    "learning_os/mission_context.py", "web/dashboard.html", "prompts/pedagogical_orchestrator.md", "prompts/zoom_controller.md",
+    "learning_os/dashboard_server.py", "learning_os/app.py", "learning_os/mission_player.py", "learning_os/tutor.py", "learning_os/lab_runner.py",
+    "learning_os/mission_loader.py", "learning_os/mission_runner.py", "learning_os/gate_engine.py", "learning_os/storage.py",
+    "learning_os/retrieval.py", "learning_os/content_router.py", "learning_os/prerequisite_graph.py", "learning_os/mission_context.py",
+    "web/dashboard.html", "prompts/pedagogical_orchestrator.md", "prompts/zoom_controller.md",
     "tracking/learner_state.json", "tracking/learner_model.json", "tracking/retention_events.json", "tracking/side_quests.json",
     "tracking/autonomy_events.json", "schemas/evidence.schema.json"
 ]
@@ -49,7 +50,6 @@ if dep_path.exists():
         for dep in spec.get("blocking", []):
             if int(dep[1:]) >= int(mid[1:]): errors.append(f"blocking dependency must precede mission: {mid} -> {dep}")
 
-# Canonical concept dependency graph integrity.
 kg_path = ROOT / "data" / "knowledge_graph.csv"
 if kg_path.exists():
     with kg_path.open(encoding="utf-8", newline="") as handle:
@@ -58,7 +58,6 @@ if kg_path.exists():
     concepts = [row.get("concept", "").strip() for row in rows]
     concept_keys = [concept.casefold() for concept in concepts]
     concept_set = set(concept_keys)
-
     if len(rows) != 253: errors.append(f"canonical knowledge graph must contain 253 nodes; found {len(rows)}")
     if len(set(ids)) != len(ids): errors.append("canonical knowledge graph IDs must be unique")
     if len(concept_set) != len(concepts): errors.append("canonical knowledge graph concepts must be unique case-insensitively")
@@ -110,12 +109,16 @@ html_path = ROOT / "web" / "dashboard.html"
 if html_path.exists():
     html = html_path.read_text(encoding="utf-8")
     if "/api/dashboard" not in html: errors.append("app must consume the live dashboard API")
-    for endpoint in ["/api/start", "/api/evidence", "/api/gate"]:
-        if endpoint not in html: errors.append(f"app must expose learner mutation flow through {endpoint}")
+    for endpoint in [
+        "/api/start", "/api/evidence", "/api/gate", "/api/player/complete", "/api/tutor", "/api/lab/run"
+    ]:
+        if endpoint not in html: errors.append(f"app must expose learner flow through {endpoint}")
+    for surface in ["Mission player", "Socratic tutor", "Evidence intelligence", "Canonical mission notebook"]:
+        if surface not in html: errors.append(f"app must expose V2 surface: {surface}")
     if "Read-only dashboard" in html: errors.append("interactive app must not advertise itself as read-only")
 
 if errors:
     print("Repository validation FAILED")
     for error in errors: print(f"- {error}")
     sys.exit(1)
-print("Repository validation PASSED: 42 missions, M01-M42 executable labs, canonical 253-node knowledge graph, and interactive learner app")
+print("Repository validation PASSED: 42 missions, M01-M42 executable labs, canonical 253-node knowledge graph, and guided LearningOS learner workspace")
