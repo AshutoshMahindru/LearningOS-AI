@@ -73,7 +73,7 @@ def make_handler(service: AppService, html_path: Path):
                     self._send_json(200, payload)
                     return
                 if parsed.path == "/healthz":
-                    self._send_json(200, {"status": "ok", "surface": "learningos-app"})
+                    self._send_json(200, {"status": "ok", "surface": "learningos-app", "version": "v2"})
                     return
                 self._send_json(404, {"error": "Not found"})
             except (ValueError, KeyError) as exc:
@@ -93,6 +93,18 @@ def make_handler(service: AppService, html_path: Path):
                     return
                 if parsed.path == "/api/gate":
                     self._send_json(200, service.run_gate(payload.get("mission_id")))
+                    return
+                if parsed.path == "/api/player/complete":
+                    self._send_json(200, service.complete_player_step(payload))
+                    return
+                if parsed.path == "/api/player/reset":
+                    self._send_json(200, service.reset_player(payload.get("mission_id")))
+                    return
+                if parsed.path == "/api/tutor":
+                    self._send_json(200, service.ask_tutor(payload))
+                    return
+                if parsed.path == "/api/lab/run":
+                    self._send_json(200, service.run_lab(payload))
                     return
                 if parsed.path == "/api/retention/complete":
                     self._send_json(200, service.complete_retention(payload.get("event_id"), payload.get("passed")))
