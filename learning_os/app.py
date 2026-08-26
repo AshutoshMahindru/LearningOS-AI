@@ -5,6 +5,9 @@ from typing import Any
 
 from .closed_loop import LearningLoop
 from .dashboard import DashboardService
+from .lab_runner import LabRunner
+from .mission_player import MissionPlayer
+from .tutor import TutorEngine
 
 
 class AppService:
@@ -21,9 +24,29 @@ class AppService:
         self.root = Path(root)
         self.loop = LearningLoop(self.root)
         self.dashboard = DashboardService(self.root)
+        self.player = MissionPlayer(self.root, self.loop)
+        self.tutor = TutorEngine(self.root, self.loop)
+        self.labs = LabRunner(self.root, self.loop)
 
     def snapshot(self, mission_id: str | None = None) -> dict[str, Any]:
-        return self.dashboard.snapshot(mission_id)
+        snapshot = self.dashboard.snapshot(mission_id)
+        mid = snapshot["runtime"].get("selected_mission")
+        if mid:
+            snapshot["player"] = self.player.view(mid)
+            snapshot["tutor"] = {
+                "locked": snapshot["player"]["current_step"] == "no_ai",
+                "history": self.tutor.history(mid),
+                "remote_configured": bool(__import__("os").getenv("OPENAI_API_KEY", "").strip()),
+            }
+            try:
+                snapshot["lab_runner"] = {
+                    "notebook": self.labs.inspect(mid),
+                    "recent_runs": self.labs.recent(mid),
+                }
+            except ValueError as exc:
+                snapshot["lab_runner"] = {"notebook": None, "recent_runs": [], "error": str(exc)}
+            snapshot["evidence_intelligence"] = self.evidence_intelligence(mid, snapshot)
+        return snapshot
 
     def _mission_id(self, value: Any = None) -> str:
         raw = str(value or "").strip()
@@ -84,6 +107,53 @@ class AppService:
         mid = self._mission_id(mission_id)
         result = self.loop.gate(mid)
         return {"gate": result, "snapshot": self.snapshot(mid)}
+
+    def complete_player_step(self, payload: dict[str, Any]) -> dict[str, Any]:
+        mid = self._mission_id(payload.get("mission_id"))
+        player = self.player.complete(mid, str(payload.get("step_id") or ""), str(payload.get("response") or ""))
+        return {"player": player, "snapshot": self.snapshot(mid)}
+
+    def reset_player(self, mission_id: Any) -> dict[str, Any]:
+        mid = self._mission_id(mission_id)
+        return {"player": self.player.reset(mid), "snapshot": self.snapshot(mid)}
+
+    def ask_tutor(self, payload: dict[str, Any]) -> dict[str, Any]:
+        mid = self._mission_id(payload.get("mission_id"))
+        result = self.tutor.ask(mid, str(payload.get("message") or ""))
+        result["snapshot"] = self.snapshot(mid)
+        return result
+
+    def run_lab(self, payload: dict[str, Any]) -> dict[str, Any]:
+        mid = self._mission_id(payload.get("mission_id"))
+        result = self.labs.run(mid, int(payload.get("timeout_seconds") or 240))
+        return {"run": result, "snapshot": self.snapshot(mid)}
+
+    def evidence_intelligence(self, mission_id: str, snapshot: dict[str, Any] | None = None) -> dict[str, Any]:
+        mid = self.loop.missions.get(mission_id)["id"]
+        records = self.loop.evidence.for_mission(mid)
+        gate = self.loop.gates.evaluate(mid)
+        checklist = (snapshot or self.dashboard.snapshot(mid))["workspace"]["gate_checklist"]
+        missing = [item for item in checklist if not item["complete"]]
+        actions: list[str] = []
+        mapping = {
+            "artifact": "Produce and record an independent artifact, lab, build or review result.",
+            "explanation": "Explain the observed mechanism in your own words and mark that evidence as explanation.",
+            "transfer": "Apply the competency to an unseen case and record transfer evidence.",
+            "no_ai": "Complete the mission's no-AI task from memory and record it explicitly as no-AI evidence.",
+        }
+        actions.extend(mapping[item["id"]] for item in missing if item["id"] in mapping)
+        if not actions and gate.status != "PASS":
+            actions.extend(str(reason) for reason in gate.reasons)
+        if not actions and gate.status == "PASS":
+            actions.append("Evidence is gate-ready. Run the formal gate if it has not yet been recorded.")
+        weak = [record for record in records if len(str(record.get("summary") or "").split()) < 6]
+        return {
+            "gate_status": gate.status,
+            "missing": [item["id"] for item in missing],
+            "actions": actions,
+            "weak_evidence_count": len(weak),
+            "evidence_count": len(records),
+        }
 
     def complete_retention(self, event_id: Any, passed: Any) -> dict[str, Any]:
         event = str(event_id or "").strip()
