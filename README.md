@@ -18,7 +18,7 @@ This repository merges an adaptive ML/AI curriculum engine with the apprenticesh
 - **One flagship system / 12 versions** — an Operations Intelligence System that evolves from data workbench to evaluated agentic AI system.
 - **Tutor orchestration** — navigator, Socratic tutor, debugger, examiner, Feynman reviewer, zoom controller, chaos engineer, code-reading coach and principal-engineer reviewer.
 - **Evidence infrastructure** — ledgers for experiments, side quests, no-AI work, chaos, review, ADRs and macro maturity.
-- **Interactive local-first learner app** — mission navigation, evidence capture, gates, retention and repair over the same runtime used by the CLI.
+- **Interactive local-first learner workspace** — guided mission execution, contextual tutoring, notebook running, evidence intelligence, formal gates, retention and repair over the same runtime used by the CLI.
 
 ## Canonical runtime
 
@@ -57,16 +57,33 @@ learning-os app
 
 Then open `http://127.0.0.1:8765`.
 
-The app provides:
+The V2 workspace provides:
 
-- the full 42-mission navigator and phase progress;
-- the current adaptive next action;
-- mission objective, prerequisites, routed canonical content and local workspace artifacts;
+- the full 42-mission navigator and adaptive next action;
+- a guided mission player that enforces **Whole → Map → Interrogate → Experiment → Break → Explain → No-AI → Transfer → Gate** rather than treating the sequence as a cosmetic checklist;
+- a context-aware Socratic tutor that uses the mission objective, competencies, current player step, gate state and recent evidence;
+- a deliberate tutor lock during the no-AI step;
+- an offline deterministic Socratic fallback when no model API is configured;
+- integrated inspection and bounded execution of the selected mission's canonical repository notebook;
 - learner evidence capture with explanation, transfer and no-AI markers;
-- evidence-based gate evaluation and mission advancement;
-- retention-event completion;
-- bounded side-quest opening and resolution;
-- competency, autonomy and progress projections from the existing runtime.
+- evidence intelligence that identifies missing gate evidence and flags thin evidence summaries;
+- formal gate evaluation and mission advancement;
+- retention-event completion, bounded side quests, competency projections and autonomy state.
+
+### Optional AI tutor backend
+
+The app works without network access. To enable the remote AI tutor, provide an OpenAI API key only to the local server process:
+
+```bash
+export OPENAI_API_KEY="..."
+# optional; defaults to gpt-5.4-mini
+export LEARNINGOS_OPENAI_MODEL="gpt-5.4-mini"
+learning-os app
+```
+
+The browser never receives the API key. If the API is unavailable, LearningOS automatically falls back to the local Socratic coach. The no-AI player step blocks tutor use regardless of backend.
+
+Notebook execution is intentionally restricted to the canonical `labs/Mxx_*.ipynb` file for the selected mission and is bounded by a server-side timeout. Executed copies and run logs are stored under `tracking/`.
 
 The legacy `learning-os dashboard --serve` command remains available and serves the same app. Bind to `127.0.0.1` by default; use another host only when you intentionally want to expose the local runtime.
 
@@ -128,8 +145,8 @@ ai-learning-os/
 ├── labs/
 ├── datasets/
 ├── missions/
-├── learning_os/        # closed-loop runtime + app service/server
-├── web/                # browser learner app
+├── learning_os/        # closed-loop runtime + guided app services/server
+├── web/                # browser learner workspace
 ├── prompts/
 ├── templates/
 ├── tracking/
