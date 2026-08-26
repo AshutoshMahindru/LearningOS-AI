@@ -18,6 +18,7 @@ This repository merges an adaptive ML/AI curriculum engine with the apprenticesh
 - **One flagship system / 12 versions** — an Operations Intelligence System that evolves from data workbench to evaluated agentic AI system.
 - **Tutor orchestration** — navigator, Socratic tutor, debugger, examiner, Feynman reviewer, zoom controller, chaos engineer, code-reading coach and principal-engineer reviewer.
 - **Evidence infrastructure** — ledgers for experiments, side quests, no-AI work, chaos, review, ADRs and macro maturity.
+- **Interactive local-first learner app** — mission navigation, evidence capture, gates, retention and repair over the same runtime used by the CLI.
 
 ## Canonical runtime
 
@@ -45,15 +46,40 @@ GIT EVIDENCE + ADR / REVIEW
 ADVANCE / TARGETED REPAIR
 ```
 
+## Learner app
+
+The browser app is a second client of the canonical `LearningLoop`; it does not maintain a separate web-only learner model. State changes made in the app are written to the same `tracking/` files used by the CLI.
+
+```bash
+python -m pip install -e .
+learning-os app
+```
+
+Then open `http://127.0.0.1:8765`.
+
+The app provides:
+
+- the full 42-mission navigator and phase progress;
+- the current adaptive next action;
+- mission objective, prerequisites, routed canonical content and local workspace artifacts;
+- learner evidence capture with explanation, transfer and no-AI markers;
+- evidence-based gate evaluation and mission advancement;
+- retention-event completion;
+- bounded side-quest opening and resolution;
+- competency, autonomy and progress projections from the existing runtime.
+
+The legacy `learning-os dashboard --serve` command remains available and serves the same app. Bind to `127.0.0.1` by default; use another host only when you intentionally want to expose the local runtime.
+
 ## Start here
 
 1. Read [`docs/SYSTEM_BLUEPRINT.md`](docs/SYSTEM_BLUEPRINT.md).
 2. Read [`docs/LEARNING_RUNTIME.md`](docs/LEARNING_RUNTIME.md).
-3. Open [`dashboard.html`](dashboard.html) locally.
-4. Start **M01** in [`docs/MISSION_PLAYBOOK.md`](docs/MISSION_PLAYBOOK.md).
-5. Use the exact content route in [`docs/CONTENT_MAP_42_MISSIONS.md`](docs/CONTENT_MAP_42_MISSIONS.md).
-6. Record learner evidence under `tracking/`; repository implementation status is tracked separately in `data/lab_status.json` and mission-local status files.
-7. Run `python tools/validate_repo.py` before committing structural changes.
+3. Install the local package with `python -m pip install -e .`.
+4. Launch the learner app with `learning-os app`.
+5. Start **M01** in the app or read [`docs/MISSION_PLAYBOOK.md`](docs/MISSION_PLAYBOOK.md).
+6. Use the exact content route in [`docs/CONTENT_MAP_42_MISSIONS.md`](docs/CONTENT_MAP_42_MISSIONS.md).
+7. Record learner evidence under `tracking/`; repository implementation status is tracked separately in `data/lab_status.json` and mission-local status files.
+8. Run `python tools/validate_repo.py` before committing structural changes.
 
 ## Flagship release spine
 
@@ -97,12 +123,13 @@ Learner progress is intentionally separate from repository implementation progre
 ```text
 ai-learning-os/
 ├── README.md
-├── dashboard.html
 ├── docs/
 ├── data/
 ├── labs/
 ├── datasets/
 ├── missions/
+├── learning_os/        # closed-loop runtime + app service/server
+├── web/                # browser learner app
 ├── prompts/
 ├── templates/
 ├── tracking/
