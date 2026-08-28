@@ -55,8 +55,15 @@ def make_handler(service: AppService, html_path: Path, m01_path: Path):
             mission = query.get("mission", [None])[0]
             try:
                 if parsed.path == "/":
-                    body = html_path.read_bytes()
-                    self._send(200, "text/html; charset=utf-8", body)
+                    html = html_path.read_text(encoding="utf-8")
+                    banner = (
+                        '<a href="/m01" style="display:block;margin:0 0 14px;padding:12px 14px;border-radius:11px;'
+                        'background:#eeebff;color:#4937d1;text-decoration:none;font:600 12px system-ui">'
+                        'M01 now has a guided reference workspace → Open M01'</n                        'a>'
+                    )
+                    if '<div class="content">' in html:
+                        html = html.replace('<div class="content">', '<div class="content">' + banner, 1)
+                    self._send(200, "text/html; charset=utf-8", html.encode("utf-8"))
                     return
                 if parsed.path == "/m01":
                     body = m01_path.read_bytes()
@@ -112,6 +119,9 @@ def make_handler(service: AppService, html_path: Path, m01_path: Path):
                     return
                 if parsed.path == "/api/lab/run":
                     self._send_json(200, service.run_lab(payload))
+                    return
+                if parsed.path == "/api/m01/whole/run":
+                    self._send_json(200, service.m01_run_whole(payload))
                     return
                 if parsed.path == "/api/m01/stage":
                     self._send_json(200, service.m01_save_stage(payload))
