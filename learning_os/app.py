@@ -35,8 +35,9 @@ class AppService:
         mid = snapshot["runtime"].get("selected_mission")
         if mid:
             snapshot["player"] = self.player.view(mid)
+            m01_no_ai = mid == "M01" and self.m01.view().get("no_ai_submission") == "__ACTIVE__"
             snapshot["tutor"] = {
-                "locked": snapshot["player"]["current_step"] == "no_ai",
+                "locked": snapshot["player"]["current_step"] == "no_ai" or m01_no_ai,
                 "history": self.tutor.history(mid),
                 "remote_configured": bool(__import__("os").getenv("OPENAI_API_KEY", "").strip()),
             }
@@ -50,6 +51,7 @@ class AppService:
             snapshot["evidence_intelligence"] = self.evidence_intelligence(mid, snapshot)
             if mid == "M01":
                 snapshot["m01_experience"] = self.m01.view()
+                snapshot["reference_workspace_url"] = "/m01"
         return snapshot
 
     def _mission_id(self, value: Any = None) -> str:
@@ -80,32 +82,20 @@ class AppService:
         summary = str(payload.get("summary") or "").strip()
         if not summary:
             raise ValueError("Evidence summary is required")
-
         evidence_type = str(payload.get("type") or "artifact").strip().lower()
         if evidence_type not in self.EVIDENCE_TYPES:
             allowed = ", ".join(sorted(self.EVIDENCE_TYPES))
             raise ValueError(f"Unsupported evidence type {evidence_type!r}; choose one of: {allowed}")
-
         raw_competencies = payload.get("competencies") or []
         if isinstance(raw_competencies, str):
             raw_competencies = [raw_competencies]
         competencies = [str(item).strip() for item in raw_competencies if str(item).strip()]
-
         record = self.loop.record_evidence(
-            mid,
-            evidence_type,
-            summary,
-            competencies,
-            self._bool(payload.get("no_ai")),
-            self._bool(payload.get("transfer")),
-            self._bool(payload.get("explanation")),
+            mid, evidence_type, summary, competencies,
+            self._bool(payload.get("no_ai")), self._bool(payload.get("transfer")), self._bool(payload.get("explanation")),
         )
         gate = self.loop.gates.evaluate(mid)
-        return {
-            "evidence": record,
-            "gate": {"status": gate.status, "reasons": gate.reasons},
-            "snapshot": self.snapshot(mid),
-        }
+        return {"evidence": record, "gate": {"status": gate.status, "reasons": gate.reasons}, "snapshot": self.snapshot(mid)}
 
     def run_gate(self, mission_id: Any = None) -> dict[str, Any]:
         mid = self._mission_id(mission_id)
@@ -135,26 +125,36 @@ class AppService:
     def run_lab(self, payload: dict[str, Any]) -> dict[str, Any]:
         mid = self._mission_id(payload.get("mission_id"))
         if mid == "M01":
-            raise ValueError("M01 uses the guided experiment runner. Open /m01 and complete prediction-gated E1-E5 instead of batch-running the notebook.")
+            raise ValueError("M01 uses the guided experiment runner. Open /m01 and complete the whole-system run plus prediction-gated E1-E5 instead of batch-running the notebook.")
         result = self.labs.run(mid, int(payload.get("timeout_seconds") or 240))
         return {"run": result, "snapshot": self.snapshot(mid)}
 
     def m01_view(self) -> dict[str, Any]:
         return self.m01.view()
 
+    def m01_run_whole(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self.m01.run_whole(int(payload.get("timeout_seconds") or 180))
+
     def m01_save_stage(self, payload: dict[str, Any]) -> dict[str, Any]:
         stage = str(payload.get("stage") or "").strip().lower()
+        state = self.m01._state()
         if stage == "no_ai_begin":
-            state = self.m01._state()
+            if not all(state["experiments"].get(eid, {}).get("reflection") for eid in ["E1", "E2", "E3", "E4", "E5"]):
+                raise ValueError("Complete E1-E5 before beginning the no-AI gate")
+            if not state.get("explanation"):
+                raise ValueError("Complete the Explain stage before beginning the no-AI gate")
             state["no_ai_submission"] = "__ACTIVE__"
             self.m01._save(state)
             return self.m01.view()
         if stage == "no_ai_cancel":
-            state = self.m01._state()
             if state.get("no_ai_submission") == "__ACTIVE__":
                 state["no_ai_submission"] = ""
                 self.m01._save(state)
             return self.m01.view()
+        if stage == "no_ai" and state.get("no_ai_submission") != "__ACTIVE__":
+            raise ValueError("Begin No-AI mode before submitting independent work")
+        if stage == "transfer" and (not state.get("no_ai_submission") or state.get("no_ai_submission") == "__ACTIVE__"):
+            raise ValueError("Complete the No-AI reconstruction before transfer")
         return self.m01.save_stage(stage, str(payload.get("content") or ""))
 
     def m01_prediction(self, payload: dict[str, Any]) -> dict[str, Any]:
@@ -195,13 +195,7 @@ class AppService:
         if not actions and gate.status == "PASS":
             actions.append("Evidence is gate-ready. Run the formal gate if it has not yet been recorded.")
         weak = [record for record in records if len(str(record.get("summary") or "").split()) < 6]
-        return {
-            "gate_status": gate.status,
-            "missing": [item["id"] for item in missing],
-            "actions": actions,
-            "weak_evidence_count": len(weak),
-            "evidence_count": len(records),
-        }
+        return {"gate_status": gate.status, "missing": [item["id"] for item in missing], "actions": actions, "weak_evidence_count": len(weak), "evidence_count": len(records)}
 
     def complete_retention(self, event_id: Any, passed: Any) -> dict[str, Any]:
         event = str(event_id or "").strip()
