@@ -13,9 +13,9 @@ REQUIRED = [
     "learning_os/cli.py", "learning_os/closed_loop.py", "learning_os/learner_model.py", "learning_os/retention_engine.py",
     "learning_os/autonomy_engine.py", "learning_os/side_quest_engine.py", "learning_os/decision_engine.py", "learning_os/dashboard.py",
     "learning_os/dashboard_server.py", "learning_os/app.py", "learning_os/mission_player.py", "learning_os/tutor.py", "learning_os/lab_runner.py",
-    "learning_os/mission_loader.py", "learning_os/mission_runner.py", "learning_os/gate_engine.py", "learning_os/storage.py",
+    "learning_os/m01_experience.py", "learning_os/mission_loader.py", "learning_os/mission_runner.py", "learning_os/gate_engine.py", "learning_os/storage.py",
     "learning_os/retrieval.py", "learning_os/content_router.py", "learning_os/prerequisite_graph.py", "learning_os/mission_context.py",
-    "web/dashboard.html", "prompts/pedagogical_orchestrator.md", "prompts/zoom_controller.md",
+    "web/dashboard.html", "web/m01.html", "prompts/pedagogical_orchestrator.md", "prompts/zoom_controller.md",
     "tracking/learner_state.json", "tracking/learner_model.json", "tracking/retention_events.json", "tracking/side_quests.json",
     "tracking/autonomy_events.json", "schemas/evidence.schema.json"
 ]
@@ -109,16 +109,30 @@ html_path = ROOT / "web" / "dashboard.html"
 if html_path.exists():
     html = html_path.read_text(encoding="utf-8")
     if "/api/dashboard" not in html: errors.append("app must consume the live dashboard API")
-    for endpoint in [
-        "/api/start", "/api/evidence", "/api/gate", "/api/player/complete", "/api/tutor", "/api/lab/run"
-    ]:
+    for endpoint in ["/api/start", "/api/evidence", "/api/gate", "/api/player/complete", "/api/tutor", "/api/lab/run"]:
         if endpoint not in html: errors.append(f"app must expose learner flow through {endpoint}")
     for surface in ["Mission player", "Socratic tutor", "Evidence intelligence", "Canonical mission notebook"]:
         if surface not in html: errors.append(f"app must expose V2 surface: {surface}")
     if "Read-only dashboard" in html: errors.append("interactive app must not advertise itself as read-only")
 
+m01_html_path = ROOT / "web" / "m01.html"
+if m01_html_path.exists():
+    html = m01_html_path.read_text(encoding="utf-8")
+    for endpoint in ["/api/m01", "/api/m01/stage", "/api/m01/prediction", "/api/m01/experiment/run", "/api/m01/reflection"]:
+        if endpoint not in html: errors.append(f"M01 reference workspace must use {endpoint}")
+    for surface in ["Whole first", "Prediction-gated experiments", "No-AI reconstruction", "M01 evidence contract"]:
+        if surface not in html: errors.append(f"M01 reference workspace missing surface: {surface}")
+
+m01_notebooks = list((ROOT / "labs").glob("M01_*.ipynb"))
+if len(m01_notebooks) == 1:
+    payload = json.loads(m01_notebooks[0].read_text(encoding="utf-8"))
+    experiment_roles = {(str((cell.get("metadata") or {}).get("experiment_id")), str((cell.get("metadata") or {}).get("role"))) for cell in payload.get("cells", []) if isinstance(cell, dict)}
+    for eid in ["E1", "E2", "E3", "E4", "E5"]:
+        if (eid, "prediction") not in experiment_roles or (eid, "action") not in experiment_roles:
+            errors.append(f"M01 notebook must expose prediction/action metadata for {eid}")
+
 if errors:
     print("Repository validation FAILED")
     for error in errors: print(f"- {error}")
     sys.exit(1)
-print("Repository validation PASSED: 42 missions, M01-M42 executable labs, canonical 253-node knowledge graph, and guided LearningOS learner workspace")
+print("Repository validation PASSED: 42 missions, M01-M42 executable labs, canonical 253-node knowledge graph, guided workspace, and reference M01 learning experience")
