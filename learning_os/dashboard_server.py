@@ -16,7 +16,7 @@ def _json_bytes(payload: object) -> bytes:
     return json.dumps(payload, indent=2, ensure_ascii=False).encode("utf-8")
 
 
-def make_handler(service: AppService, html_path: Path):
+def make_handler(service: AppService, html_path: Path, m01_path: Path):
     class DashboardHandler(BaseHTTPRequestHandler):
         def _send(self, status: int, content_type: str, body: bytes) -> None:
             self.send_response(status)
@@ -58,8 +58,15 @@ def make_handler(service: AppService, html_path: Path):
                     body = html_path.read_bytes()
                     self._send(200, "text/html; charset=utf-8", body)
                     return
+                if parsed.path == "/m01":
+                    body = m01_path.read_bytes()
+                    self._send(200, "text/html; charset=utf-8", body)
+                    return
                 if parsed.path == "/api/dashboard":
                     self._send_json(200, service.snapshot(mission))
+                    return
+                if parsed.path == "/api/m01":
+                    self._send_json(200, service.m01_view())
                     return
                 if parsed.path == "/api/step":
                     self._send_json(200, service.loop.step(mission))
@@ -73,12 +80,12 @@ def make_handler(service: AppService, html_path: Path):
                     self._send_json(200, payload)
                     return
                 if parsed.path == "/healthz":
-                    self._send_json(200, {"status": "ok", "surface": "learningos-app", "version": "v2"})
+                    self._send_json(200, {"status": "ok", "surface": "learningos-app", "version": "v2-m01-reference"})
                     return
                 self._send_json(404, {"error": "Not found"})
             except (ValueError, KeyError) as exc:
                 self._send_json(400, {"error": str(exc)})
-            except Exception as exc:  # local app boundary: return a readable error
+            except Exception as exc:
                 self._send_json(500, {"error": str(exc)})
 
         def do_POST(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API
@@ -106,6 +113,18 @@ def make_handler(service: AppService, html_path: Path):
                 if parsed.path == "/api/lab/run":
                     self._send_json(200, service.run_lab(payload))
                     return
+                if parsed.path == "/api/m01/stage":
+                    self._send_json(200, service.m01_save_stage(payload))
+                    return
+                if parsed.path == "/api/m01/prediction":
+                    self._send_json(200, service.m01_prediction(payload))
+                    return
+                if parsed.path == "/api/m01/experiment/run":
+                    self._send_json(200, service.m01_run_experiment(payload))
+                    return
+                if parsed.path == "/api/m01/reflection":
+                    self._send_json(200, service.m01_reflection(payload))
+                    return
                 if parsed.path == "/api/retention/complete":
                     self._send_json(200, service.complete_retention(payload.get("event_id"), payload.get("passed")))
                     return
@@ -118,7 +137,7 @@ def make_handler(service: AppService, html_path: Path):
                 self._send_json(404, {"error": "Not found"})
             except (ValueError, KeyError) as exc:
                 self._send_json(400, {"error": str(exc)})
-            except Exception as exc:  # local app boundary: return a readable error
+            except Exception as exc:
                 self._send_json(500, {"error": str(exc)})
 
         def log_message(self, format: str, *args: object) -> None:
@@ -130,11 +149,15 @@ def make_handler(service: AppService, html_path: Path):
 def serve_app(root: str | Path = ".", host: str = "127.0.0.1", port: int = 8765) -> None:
     root_path = Path(root).resolve()
     html_path = root_path / "web" / "dashboard.html"
+    m01_path = root_path / "web" / "m01.html"
     if not html_path.exists():
         raise FileNotFoundError(f"Learning OS app HTML not found: {html_path}")
+    if not m01_path.exists():
+        raise FileNotFoundError(f"M01 guided workspace HTML not found: {m01_path}")
     service = AppService(root_path)
-    server = ThreadingHTTPServer((host, port), make_handler(service, html_path))
+    server = ThreadingHTTPServer((host, port), make_handler(service, html_path, m01_path))
     print(f"Learning OS app: http://{host}:{port}")
+    print(f"M01 guided workspace: http://{host}:{port}/m01")
     print("Local-first learner surface. State is stored under tracking/. Press Ctrl+C to stop.")
     try:
         server.serve_forever()
