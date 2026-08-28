@@ -5,7 +5,10 @@ import json
 import subprocess
 import sys
 import tempfile
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
+from hashlib import sha256
+from math import log, sqrt
 from pathlib import Path
 from typing import Any
 
@@ -13,26 +16,14 @@ from .closed_loop import LearningLoop
 
 
 EXPERIMENT_ORDER = ["E1", "E2", "E3", "E4", "E5"]
-WHOLE_EVENTS = [
-    "labelled examples loaded",
-    "training created learned model state",
-    "new request entered inference",
-    "prediction reached the application controller",
-    "external knowledge was retrieved",
-    "controller selected the next action",
-    "tool path was available for urgent work",
-    "application memory was updated",
-    "evaluation and runtime trace were recorded",
-]
 
 
 class M01Experience:
     """Reference-quality learner experience for M01.
 
-    The notebook remains the execution substrate, but the learner-facing flow is
-    whole -> map -> interrogate -> prediction -> run -> observe -> explain.
-    Predictions are persisted before execution and completed learner work creates
-    evidence automatically.
+    Whole-first uses a concrete demonstration transaction with different inputs
+    from the later experiments. The experiment sequence remains prediction ->
+    run -> observe -> explain, with outcomes withheld until a prediction exists.
     """
 
     def __init__(self, root: str | Path, loop: LearningLoop) -> None:
@@ -69,6 +60,7 @@ class M01Experience:
         return {
             "python": sys.executable,
             "notebook_found": self.notebook is not None,
+            "whole_demo_available": True,
             "jupyter_available": available,
             "install_command": f"{sys.executable} -m pip install jupyter nbconvert ipykernel",
         }
@@ -115,7 +107,12 @@ class M01Experience:
         for index, spec in enumerate(self.experiments()):
             item = dict(experiment_state.get(spec["id"], {}))
             previous_done = index == 0 or bool(experiment_state.get(EXPERIMENT_ORDER[index - 1], {}).get("reflection"))
-            status = "complete" if item.get("reflection") else "observed" if item.get("result") else "predicted" if item.get("prediction") else "ready" if previous_done else "locked"
+            status = (
+                "complete" if item.get("reflection") else
+                "observed" if item.get("result") else
+                "predicted" if item.get("prediction") else
+                "ready" if previous_done else "locked"
+            )
             experiments.append({
                 "id": spec["id"],
                 "title": spec["title"],
@@ -157,6 +154,8 @@ class M01Experience:
         if len(text.split()) < 3:
             raise ValueError("Write a substantive learner response before saving this stage")
         state = self._state()
+        if stage == "whole" and not state.get("whole_run"):
+            raise ValueError("Run the whole system once before writing your observation")
         state[key_map[stage]] = text
         self._save(state)
         self._record_stage_evidence(stage)
@@ -178,51 +177,196 @@ class M01Experience:
         elif stage == "transfer":
             self.loop.record_evidence("M01", "note", marker + " unseen architecture transfer assessment", ["system mapping"], False, True, True)
 
-    def _execute_subset(self, subset: dict[str, Any], output_name: str, timeout: int) -> Path:
-        runtime = self.runtime()
-        if not runtime["jupyter_available"]:
-            raise ValueError("Notebook runtime is not installed. Stop LearningOS, run: " + runtime["install_command"] + ", then restart LearningOS.")
-        output_dir = self.root / "tracking" / "lab_runs"
-        output_dir.mkdir(parents=True, exist_ok=True)
-        with tempfile.TemporaryDirectory(prefix="learningos-m01-") as temp_dir:
-            source = Path(temp_dir) / "M01_guided.ipynb"
-            source.write_text(json.dumps(subset), encoding="utf-8")
-            command = [sys.executable, "-m", "jupyter", "nbconvert", "--to", "notebook", "--execute", str(source), "--output", output_name, "--output-dir", str(output_dir), f"--ExecutePreprocessor.timeout={timeout}"]
-            completed = subprocess.run(command, cwd=self.root, capture_output=True, text=True, timeout=timeout + 30, check=False)
-        if completed.returncode != 0:
-            detail = (completed.stderr or completed.stdout or "Experiment execution failed")[-4000:]
-            raise ValueError(detail)
-        return output_dir / output_name
+    @staticmethod
+    def _tok(text: str) -> list[str]:
+        return [word.strip(".,!?;:").lower() for word in text.split() if word.strip(".,!?;:")]
+
+    @classmethod
+    def _train_classifier(cls, rows: list[dict[str, Any]]) -> dict[str, Any]:
+        docs: Counter[str] = Counter()
+        words: defaultdict[str, Counter[str]] = defaultdict(Counter)
+        vocab: set[str] = set()
+        for row in rows:
+            docs[row["label"]] += 1
+            for word in cls._tok(row["text"]):
+                words[row["label"]][word] += 1
+                vocab.add(word)
+        return {
+            "labels": sorted(docs),
+            "docs": dict(docs),
+            "words": {key: dict(words[key]) for key in sorted(docs)},
+            "vocab": sorted(vocab),
+        }
+
+    @staticmethod
+    def _digest(model: dict[str, Any]) -> str:
+        return sha256(json.dumps(model, sort_keys=True).encode()).hexdigest()[:12]
+
+    @classmethod
+    def _predict(cls, model: dict[str, Any], text: str) -> tuple[str, dict[str, float]]:
+        scores: dict[str, float] = {}
+        total_docs = sum(model["docs"].values())
+        vocab_size = max(1, len(model["vocab"]))
+        for label in model["labels"]:
+            counts = model["words"][label]
+            total_words = sum(counts.values())
+            score = log(model["docs"][label] / total_docs)
+            for word in cls._tok(text):
+                score += log((counts.get(word, 0) + 1) / (total_words + vocab_size))
+            scores[label] = score
+        return max(scores, key=scores.get), scores
+
+    @classmethod
+    def _whole_demo(cls) -> dict[str, Any]:
+        train = [
+            {"id": 1, "priority": "normal", "text": "reset password account", "label": "account"},
+            {"id": 2, "priority": "normal", "text": "cannot sign in account", "label": "account"},
+            {"id": 3, "priority": "urgent", "text": "card charged twice invoice", "label": "billing"},
+            {"id": 4, "priority": "normal", "text": "copy of invoice billing", "label": "billing"},
+            {"id": 5, "priority": "normal", "text": "app crashes dashboard", "label": "technical"},
+            {"id": 6, "priority": "urgent", "text": "upload service error", "label": "technical"},
+        ]
+        test = [
+            {"text": "password sign in", "label": "account"},
+            {"text": "invoice duplicate charge", "label": "billing"},
+            {"text": "upload crashes error", "label": "technical"},
+        ]
+        docs = [
+            {"id": "K1", "text": "Reset password from account security. Sign in problems may require recovery."},
+            {"id": "K2", "text": "For duplicate card charge compare invoice identifiers before billing review."},
+            {"id": "K3", "text": "For upload errors check file size and retry after reopening the application."},
+        ]
+
+        model = cls._train_classifier(train)
+        demo_request = {
+            "id": 301,
+            "priority": "normal",
+            "text": "account security password recovery",
+        }
+        prediction, scores = cls._predict(model, demo_request["text"])
+
+        retrieval_vocab = sorted({word for document in docs for word in cls._tok(document["text"])})
+
+        def embed(text: str) -> list[float]:
+            counts = Counter(cls._tok(text))
+            return [float(counts.get(word, 0)) for word in retrieval_vocab]
+
+        def cosine(left: list[float], right: list[float]) -> float:
+            dot = sum(x * y for x, y in zip(left, right))
+            left_norm = sqrt(sum(x * x for x in left))
+            right_norm = sqrt(sum(y * y for y in right))
+            return 0.0 if not left_norm or not right_norm else dot / (left_norm * right_norm)
+
+        doc_vectors = {document["id"]: embed(document["text"]) for document in docs}
+        query_vector = embed(demo_request["text"])
+        ranked = sorted(
+            [
+                {**document, "score": cosine(query_vector, doc_vectors[document["id"]])}
+                for document in docs
+            ],
+            key=lambda row: (-row["score"], row["id"]),
+        )
+        retrieved = ranked[0]
+
+        memory_before: dict[str, Any] = {}
+        memory_after = {
+            "runs": 1,
+            "last_intent": prediction,
+            "last_ticket": demo_request["id"],
+        }
+        tool_result = None
+        application_result = {
+            "intent": prediction,
+            "knowledge_document": retrieved["id"],
+            "tool_result": tool_result,
+        }
+        trace = [
+            {"event": "inference", "value": prediction},
+            {"event": "retrieval", "value": retrieved["id"]},
+            {"event": "memory", "value": memory_after},
+        ]
+
+        evaluated = []
+        for row in test:
+            predicted, _ = cls._predict(model, row["text"])
+            evaluated.append({"input": row["text"], "expected": row["label"], "predicted": predicted, "correct": predicted == row["label"]})
+        correct = sum(1 for row in evaluated if row["correct"])
+
+        return {
+            "training_data": {
+                "count": len(train),
+                "labels": sorted({row["label"] for row in train}),
+                "examples": [{"text": row["text"], "label": row["label"]} for row in train],
+            },
+            "training": {
+                "operation": "learn token statistics from labelled examples",
+                "output": "MODEL",
+            },
+            "model_state": {
+                "id": "MODEL",
+                "digest": cls._digest(model),
+                "labels": model["labels"],
+                "vocabulary_size": len(model["vocab"]),
+                "description": "learned token statistics used later by inference",
+            },
+            "request": demo_request,
+            "inference": {
+                "input": "MODEL + represented demo request",
+                "output": "label scores",
+            },
+            "prediction": {
+                "label": prediction,
+                "scores": {label: round(value, 3) for label, value in sorted(scores.items())},
+            },
+            "retrieval": {
+                "query": demo_request["text"],
+                "document_id": retrieved["id"],
+                "score": round(retrieved["score"], 3),
+                "context": retrieved["text"],
+            },
+            "controller": {
+                "decision": "continue with retrieved knowledge; no external tool used in this demo request",
+                "tool_called": False,
+                "trace": trace,
+            },
+            "application": application_result,
+            "memory": {"before": memory_before, "after": memory_after},
+            "evaluation": {
+                "correct": correct,
+                "total": len(evaluated),
+                "accuracy": round(correct / len(evaluated), 3),
+                "cases": evaluated,
+            },
+            "infrastructure": {
+                "compute": "single local CPU process",
+                "network_calls": 0,
+                "python": f"{sys.version_info.major}.{sys.version_info.minor}",
+            },
+            "flow": [
+                "training_data", "training", "model_state", "request", "inference",
+                "prediction", "controller", "retrieval", "application", "memory",
+                "evaluation", "infrastructure",
+            ],
+        }
 
     def run_whole(self, timeout_seconds: int = 180) -> dict[str, Any]:
-        payload = self._notebook_payload()
-        cells: list[dict[str, Any]] = []
-        for cell in payload.get("cells", []):
-            if not isinstance(cell, dict):
-                continue
-            meta = cell.get("metadata") or {}
-            eid = meta.get("experiment_id")
-            if eid == "E5":
-                continue
-            source = self._text(cell.get("source"))
-            if "SYSTEM_MAP=" in source or "## No-AI gate" in source:
-                continue
-            if cell.get("cell_type") == "markdown" and eid in EXPERIMENT_ORDER:
-                continue
-            if eid in {"E1", "E2", "E3", "E4"} and meta.get("role") not in {"action", None}:
-                continue
-            cells.append(cell)
-        subset = {"cells": cells, "metadata": payload.get("metadata", {}), "nbformat": payload.get("nbformat", 4), "nbformat_minor": payload.get("nbformat_minor", 5)}
-        timeout = max(30, min(int(timeout_seconds), 600))
+        del timeout_seconds  # whole-first is a bounded in-process deterministic demo
+        demo = self._whole_demo()
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-        output_name = f"M01_WHOLE_{stamp}.ipynb"
-        path = self._execute_subset(subset, output_name, timeout)
+        output_dir = self.root / "tracking" / "lab_runs"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        artifact = output_dir / f"M01_WHOLE_{stamp}.json"
+        ran_at = datetime.now(timezone.utc).isoformat()
+        artifact.write_text(
+            json.dumps({"mission_id": "M01", "ran_at": ran_at, "demo": demo}, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
         state = self._state()
         state["whole_run"] = {
             "status": "PASS",
-            "events": WHOLE_EVENTS,
-            "executed_notebook": path.relative_to(self.root).as_posix(),
-            "ran_at": datetime.now(timezone.utc).isoformat(),
+            "demo": demo,
+            "artifact": artifact.relative_to(self.root).as_posix(),
+            "ran_at": ran_at,
         }
         self._save(state)
         return self.view()
@@ -249,6 +393,25 @@ class M01Experience:
         self._save(state)
         return self.view()
 
+    def _execute_subset(self, subset: dict[str, Any], output_name: str, timeout: int) -> Path:
+        runtime = self.runtime()
+        if not runtime["jupyter_available"]:
+            raise ValueError("Notebook runtime is not installed. Stop LearningOS, run: " + runtime["install_command"] + ", then restart LearningOS.")
+        output_dir = self.root / "tracking" / "lab_runs"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix="learningos-m01-") as temp_dir:
+            source = Path(temp_dir) / "M01_guided.ipynb"
+            source.write_text(json.dumps(subset), encoding="utf-8")
+            command = [
+                sys.executable, "-m", "jupyter", "nbconvert", "--to", "notebook", "--execute", str(source),
+                "--output", output_name, "--output-dir", str(output_dir), f"--ExecutePreprocessor.timeout={timeout}",
+            ]
+            completed = subprocess.run(command, cwd=self.root, capture_output=True, text=True, timeout=timeout + 30, check=False)
+        if completed.returncode != 0:
+            detail = (completed.stderr or completed.stdout or "Experiment execution failed")[-4000:]
+            raise ValueError(detail)
+        return output_dir / output_name
+
     def _subset_notebook(self, experiment_id: str) -> dict[str, Any]:
         payload = self._notebook_payload()
         target_index = EXPERIMENT_ORDER.index(experiment_id)
@@ -266,7 +429,12 @@ class M01Experience:
             if "SYSTEM_MAP=" in source or "## No-AI gate" in source:
                 continue
             cells.append(cell)
-        return {"cells": cells, "metadata": payload.get("metadata", {}), "nbformat": payload.get("nbformat", 4), "nbformat_minor": payload.get("nbformat_minor", 5)}
+        return {
+            "cells": cells,
+            "metadata": payload.get("metadata", {}),
+            "nbformat": payload.get("nbformat", 4),
+            "nbformat_minor": payload.get("nbformat_minor", 5),
+        }
 
     @staticmethod
     def _experiment_output_text(notebook_payload: dict[str, Any], experiment_id: str) -> str:
@@ -333,7 +501,10 @@ class M01Experience:
         if all(state["experiments"].get(key, {}).get("reflection") for key in EXPERIMENT_ORDER):
             existing = self.loop.evidence.for_mission("M01")
             if not any(str(record.get("summary", "")).startswith("m01:experiments:") for record in existing):
-                self.loop.record_evidence("M01", "lab", "m01:experiments: E1-E5 prediction-run-observe-explain sequence completed", ["AI systems vocabulary", "system mapping"], False, False, True)
+                self.loop.record_evidence(
+                    "M01", "lab", "m01:experiments: E1-E5 prediction-run-observe-explain sequence completed",
+                    ["AI systems vocabulary", "system mapping"], False, False, True,
+                )
         return self.view()
 
     def _contract_status(self) -> dict[str, Any]:
