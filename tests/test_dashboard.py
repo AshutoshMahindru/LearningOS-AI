@@ -19,6 +19,9 @@ class DashboardTests(unittest.TestCase):
         self.root = Path(self.tmp.name)
         shutil.copytree(ROOT / "data", self.root / "data")
         shutil.copytree(ROOT / "web", self.root / "web")
+        (self.root / "labs").mkdir()
+        source = next((ROOT / "labs").glob("M01_*.ipynb"))
+        shutil.copy2(source, self.root / "labs" / source.name)
         (self.root / "tracking").mkdir()
         payloads = {
             "learner_state.json": '{"learner_id":"default","current_mission":null,"mission_status":{},"blockers":[]}',
@@ -34,6 +37,18 @@ class DashboardTests(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
+    def _mark_m01_contract_ready(self):
+        self.app.m01._save({
+            "whole_observation": "I observed the whole system and its major boundaries.",
+            "initial_map": "data -> training -> model state -> inference -> application",
+            "questions": "What changes during inference and what remains fixed?",
+            "experiments": {eid: {"prediction": "a committed prediction", "result": {"status": "PASS"}, "reflection": "This observation explains the relevant system boundary clearly."} for eid in ["E1", "E2", "E3", "E4", "E5"]},
+            "controlled_failure": "I repaired the confused architecture using observed behavior.",
+            "explanation": "I can explain training inference retrieval tools memory and evaluation.",
+            "no_ai_submission": "I reconstructed the architecture independently from memory.",
+            "transfer_submission": "I mapped an unseen architecture and stated uncertainty explicitly.",
+        })
+
     def test_empty_dashboard_starts_at_m01(self):
         snapshot = self.app.snapshot()
         self.assertEqual(snapshot["runtime"]["next_action"]["action"], "START")
@@ -46,6 +61,8 @@ class DashboardTests(unittest.TestCase):
         self.assertEqual(snapshot["player"]["current_step"], "whole")
         self.assertEqual(len(snapshot["player"]["steps"]), 9)
         self.assertIn("evidence_intelligence", snapshot)
+        self.assertEqual(snapshot["m01_experience"]["mission_id"], "M01")
+        self.assertEqual(len(snapshot["m01_experience"]["experiments"]), 5)
 
     def test_dashboard_reflects_passed_mission_and_evidence(self):
         self.loop.start("M01")
@@ -59,9 +76,8 @@ class DashboardTests(unittest.TestCase):
         self.assertEqual(snapshot["workspace"]["evidence"][0]["summary"], "AI system map")
         self.assertEqual(snapshot["learner_model"]["competencies"][0]["name"], "system mapping")
         self.assertTrue(all(item["complete"] for item in snapshot["workspace"]["gate_checklist"]))
-        self.assertEqual(snapshot["evidence_intelligence"]["gate_status"], "PASS")
 
-    def test_app_service_uses_same_closed_loop_state(self):
+    def test_app_service_uses_same_closed_loop_state_and_m01_contract(self):
         started = self.app.start("m01")
         self.assertEqual(started["snapshot"]["runtime"]["current_mission"], "M01")
         result = self.app.record_evidence({
@@ -74,9 +90,33 @@ class DashboardTests(unittest.TestCase):
             "explanation": True,
         })
         self.assertEqual(result["gate"]["status"], "PASS")
+        with self.assertRaisesRegex(ValueError, "evidence contract"):
+            self.app.run_gate("M01")
+        self._mark_m01_contract_ready()
         gated = self.app.run_gate("M01")
         self.assertEqual(gated["gate"]["status"], "PASS")
         self.assertEqual(gated["snapshot"]["progress"]["passed_count"], 1)
+
+    def test_m01_experiments_require_prediction_and_order(self):
+        view = self.app.m01_view()
+        self.assertEqual(view["experiments"][0]["status"], "ready")
+        self.assertEqual(view["experiments"][1]["status"], "locked")
+        with self.assertRaisesRegex(ValueError, "prediction"):
+            self.app.m01_run_experiment({"experiment_id": "E1"})
+        view = self.app.m01_prediction({"experiment_id": "E1", "prediction": "Inference will not mutate learned state"})
+        self.assertEqual(view["experiments"][0]["status"], "predicted")
+        with self.assertRaisesRegex(ValueError, "Complete E1"):
+            self.app.m01_prediction({"experiment_id": "E2", "prediction": "Retraining will change model state"})
+
+    def test_m01_batch_lab_runner_is_disabled(self):
+        with self.assertRaisesRegex(ValueError, "guided experiment runner"):
+            self.app.run_lab({"mission_id": "M01"})
+
+    def test_m01_stage_work_generates_evidence(self):
+        self.app.m01_save_stage({"stage": "map", "content": "data -> training -> model state -> inference -> application"})
+        records = self.loop.evidence.for_mission("M01")
+        self.assertTrue(any(str(item.get("summary", "")).startswith("m01:map:") for item in records))
+        self.assertTrue(self.app.m01_view()["gate"]["checks"][0]["complete"])
 
     def test_guided_player_enforces_evidence_and_locks_tutor_at_no_ai_step(self):
         self.app.start("M01")
@@ -100,6 +140,7 @@ class DashboardTests(unittest.TestCase):
         self.app.complete_player_step({"mission_id": "M01", "step_id": "no_ai"})
         self.app.record_evidence({"mission_id": "M01", "type": "note", "summary": "Mapped a fresh unseen AI architecture and stated uncertainty", "transfer": True})
         self.app.complete_player_step({"mission_id": "M01", "step_id": "transfer"})
+        self._mark_m01_contract_ready()
         self.app.run_gate("M01")
         completed = self.app.complete_player_step({"mission_id": "M01", "step_id": "gate"})
         self.assertEqual(completed["player"]["current_step"], "complete")
@@ -112,11 +153,7 @@ class DashboardTests(unittest.TestCase):
         self.assertIn("input", answer["turn"]["assistant"].lower())
 
     def test_lab_inspection_is_restricted_to_canonical_mission_notebook(self):
-        (self.root / "labs").mkdir()
-        source = next((ROOT / "labs").glob("M01_*.ipynb"))
-        shutil.copy2(source, self.root / "labs" / source.name)
-        app = AppService(self.root)
-        info = app.labs.inspect("M01")
+        info = self.app.labs.inspect("M01")
         self.assertTrue(info["path"].startswith("labs/M01_"))
         self.assertGreater(info["cells"], 0)
 
@@ -132,6 +169,13 @@ class DashboardTests(unittest.TestCase):
         for surface in ["Mission progress", "Mission player", "Socratic tutor", "Evidence intelligence", "Canonical mission notebook"]:
             self.assertIn(surface, html)
         self.assertNotIn("Read-only dashboard", html)
+
+    def test_m01_html_exposes_prediction_gated_reference_flow(self):
+        html = (self.root / "web" / "m01.html").read_text(encoding="utf-8")
+        for endpoint in ["/api/m01", "/api/m01/prediction", "/api/m01/experiment/run", "/api/m01/reflection", "/api/m01/stage"]:
+            self.assertIn(endpoint, html)
+        for phrase in ["Prediction-gated experiments", "No-AI reconstruction", "M01 evidence contract"]:
+            self.assertIn(phrase, html)
 
 
 if __name__ == "__main__":
