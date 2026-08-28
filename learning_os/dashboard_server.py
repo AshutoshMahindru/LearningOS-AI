@@ -59,7 +59,7 @@ def make_handler(service: AppService, html_path: Path, m01_path: Path):
                     banner = (
                         '<a href="/m01" style="display:block;margin:0 0 14px;padding:12px 14px;border-radius:11px;'
                         'background:#eeebff;color:#4937d1;text-decoration:none;font:600 12px system-ui">'
-                        'M01 now has a guided reference workspace → Open M01'</n                        'a>'
+                        'M01 now has a guided reference workspace → Open M01</a>'
                     )
                     if '<div class="content">' in html:
                         html = html.replace('<div class="content">', '<div class="content">' + banner, 1)
