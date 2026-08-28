@@ -39,6 +39,7 @@ class DashboardTests(unittest.TestCase):
 
     def _mark_m01_contract_ready(self):
         self.app.m01._save({
+            "whole_run": {"status": "PASS", "events": ["system ran"]},
             "whole_observation": "I observed the whole system and its major boundaries.",
             "initial_map": "data -> training -> model state -> inference -> application",
             "questions": "What changes during inference and what remains fixed?",
@@ -63,6 +64,7 @@ class DashboardTests(unittest.TestCase):
         self.assertIn("evidence_intelligence", snapshot)
         self.assertEqual(snapshot["m01_experience"]["mission_id"], "M01")
         self.assertEqual(len(snapshot["m01_experience"]["experiments"]), 5)
+        self.assertEqual(snapshot["reference_workspace_url"], "/m01")
 
     def test_dashboard_reflects_passed_mission_and_evidence(self):
         self.loop.start("M01")
@@ -81,13 +83,8 @@ class DashboardTests(unittest.TestCase):
         started = self.app.start("m01")
         self.assertEqual(started["snapshot"]["runtime"]["current_mission"], "M01")
         result = self.app.record_evidence({
-            "mission_id": "M01",
-            "type": "artifact",
-            "summary": "Independent system map and boundary explanation",
-            "competencies": ["system mapping"],
-            "no_ai": True,
-            "transfer": True,
-            "explanation": True,
+            "mission_id": "M01", "type": "artifact", "summary": "Independent system map and boundary explanation",
+            "competencies": ["system mapping"], "no_ai": True, "transfer": True, "explanation": True,
         })
         self.assertEqual(result["gate"]["status"], "PASS")
         with self.assertRaisesRegex(ValueError, "evidence contract"):
@@ -97,12 +94,16 @@ class DashboardTests(unittest.TestCase):
         self.assertEqual(gated["gate"]["status"], "PASS")
         self.assertEqual(gated["snapshot"]["progress"]["passed_count"], 1)
 
-    def test_m01_experiments_require_prediction_and_order(self):
+    def test_m01_experiments_require_map_interrogation_prediction_and_order(self):
         view = self.app.m01_view()
         self.assertEqual(view["experiments"][0]["status"], "ready")
         self.assertEqual(view["experiments"][1]["status"], "locked")
         with self.assertRaisesRegex(ValueError, "prediction"):
             self.app.m01_run_experiment({"experiment_id": "E1"})
+        with self.assertRaisesRegex(ValueError, "Map and Interrogate"):
+            self.app.m01_prediction({"experiment_id": "E1", "prediction": "Inference will not mutate learned state"})
+        self.app.m01_save_stage({"stage": "map", "content": "data -> training -> model state -> inference -> application"})
+        self.app.m01_save_stage({"stage": "interrogate", "content": "What state changes and what evidence would falsify my explanation?"})
         view = self.app.m01_prediction({"experiment_id": "E1", "prediction": "Inference will not mutate learned state"})
         self.assertEqual(view["experiments"][0]["status"], "predicted")
         with self.assertRaisesRegex(ValueError, "Complete E1"):
@@ -118,6 +119,18 @@ class DashboardTests(unittest.TestCase):
         self.assertTrue(any(str(item.get("summary", "")).startswith("m01:map:") for item in records))
         self.assertTrue(self.app.m01_view()["gate"]["checks"][0]["complete"])
 
+    def test_m01_no_ai_requires_prior_work_and_locks_tutor(self):
+        with self.assertRaisesRegex(ValueError, "Complete E1-E5"):
+            self.app.m01_save_stage({"stage": "no_ai_begin"})
+        self._mark_m01_contract_ready()
+        state = self.app.m01._state()
+        state["no_ai_submission"] = ""
+        self.app.m01._save(state)
+        view = self.app.m01_save_stage({"stage": "no_ai_begin"})
+        self.assertEqual(view["no_ai_submission"], "__ACTIVE__")
+        with self.assertRaisesRegex(ValueError, "locked"):
+            self.app.ask_tutor({"mission_id": "M01", "message": "Help me"})
+
     def test_guided_player_enforces_evidence_and_locks_tutor_at_no_ai_step(self):
         self.app.start("M01")
         for step in ["whole", "map", "interrogate"]:
@@ -125,7 +138,6 @@ class DashboardTests(unittest.TestCase):
         self.assertEqual(result["player"]["current_step"], "experiment")
         with self.assertRaisesRegex(ValueError, "Record artifact"):
             self.app.complete_player_step({"mission_id": "M01", "step_id": "experiment"})
-
         self.app.record_evidence({"mission_id": "M01", "type": "lab", "summary": "Ran the canonical experiment and inspected state changes"})
         self.app.complete_player_step({"mission_id": "M01", "step_id": "experiment"})
         self.app.complete_player_step({"mission_id": "M01", "step_id": "break"})
@@ -135,7 +147,6 @@ class DashboardTests(unittest.TestCase):
         self.assertTrue(self.app.snapshot("M01")["tutor"]["locked"])
         with self.assertRaisesRegex(ValueError, "locked"):
             self.app.ask_tutor({"mission_id": "M01", "message": "Give me the answer"})
-
         self.app.record_evidence({"mission_id": "M01", "type": "artifact", "summary": "Rebuilt the system map from memory without assistance", "no_ai": True})
         self.app.complete_player_step({"mission_id": "M01", "step_id": "no_ai"})
         self.app.record_evidence({"mission_id": "M01", "type": "note", "summary": "Mapped a fresh unseen AI architecture and stated uncertainty", "transfer": True})
@@ -172,9 +183,9 @@ class DashboardTests(unittest.TestCase):
 
     def test_m01_html_exposes_prediction_gated_reference_flow(self):
         html = (self.root / "web" / "m01.html").read_text(encoding="utf-8")
-        for endpoint in ["/api/m01", "/api/m01/prediction", "/api/m01/experiment/run", "/api/m01/reflection", "/api/m01/stage"]:
+        for endpoint in ["/api/m01", "/api/m01/whole/run", "/api/m01/prediction", "/api/m01/experiment/run", "/api/m01/reflection", "/api/m01/stage"]:
             self.assertIn(endpoint, html)
-        for phrase in ["Prediction-gated experiments", "No-AI reconstruction", "M01 evidence contract"]:
+        for phrase in ["Run whole system once", "Prediction-gated experiments", "No-AI reconstruction", "M01 evidence contract"]:
             self.assertIn(phrase, html)
 
 
