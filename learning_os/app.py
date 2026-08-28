@@ -6,6 +6,7 @@ from typing import Any
 from .closed_loop import LearningLoop
 from .dashboard import DashboardService
 from .lab_runner import LabRunner
+from .m01_experience import M01Experience
 from .mission_player import MissionPlayer
 from .tutor import TutorEngine
 
@@ -27,6 +28,7 @@ class AppService:
         self.player = MissionPlayer(self.root, self.loop)
         self.tutor = TutorEngine(self.root, self.loop)
         self.labs = LabRunner(self.root, self.loop)
+        self.m01 = M01Experience(self.root, self.loop)
 
     def snapshot(self, mission_id: str | None = None) -> dict[str, Any]:
         snapshot = self.dashboard.snapshot(mission_id)
@@ -46,6 +48,8 @@ class AppService:
             except ValueError as exc:
                 snapshot["lab_runner"] = {"notebook": None, "recent_runs": [], "error": str(exc)}
             snapshot["evidence_intelligence"] = self.evidence_intelligence(mid, snapshot)
+            if mid == "M01":
+                snapshot["m01_experience"] = self.m01.view()
         return snapshot
 
     def _mission_id(self, value: Any = None) -> str:
@@ -105,6 +109,9 @@ class AppService:
 
     def run_gate(self, mission_id: Any = None) -> dict[str, Any]:
         mid = self._mission_id(mission_id)
+        if mid == "M01" and not self.m01.view()["gate"]["ready"]:
+            missing = [item["label"] for item in self.m01.view()["gate"]["checks"] if not item["complete"]]
+            raise ValueError("M01 evidence contract is not ready: " + ", ".join(missing))
         result = self.loop.gate(mid)
         return {"gate": result, "snapshot": self.snapshot(mid)}
 
@@ -119,19 +126,60 @@ class AppService:
 
     def ask_tutor(self, payload: dict[str, Any]) -> dict[str, Any]:
         mid = self._mission_id(payload.get("mission_id"))
+        if mid == "M01" and self.m01.view().get("no_ai_submission") == "__ACTIVE__":
+            raise ValueError("Tutor assistance is locked during the M01 no-AI gate")
         result = self.tutor.ask(mid, str(payload.get("message") or ""))
         result["snapshot"] = self.snapshot(mid)
         return result
 
     def run_lab(self, payload: dict[str, Any]) -> dict[str, Any]:
         mid = self._mission_id(payload.get("mission_id"))
+        if mid == "M01":
+            raise ValueError("M01 uses the guided experiment runner. Open /m01 and complete prediction-gated E1-E5 instead of batch-running the notebook.")
         result = self.labs.run(mid, int(payload.get("timeout_seconds") or 240))
         return {"run": result, "snapshot": self.snapshot(mid)}
+
+    def m01_view(self) -> dict[str, Any]:
+        return self.m01.view()
+
+    def m01_save_stage(self, payload: dict[str, Any]) -> dict[str, Any]:
+        stage = str(payload.get("stage") or "").strip().lower()
+        if stage == "no_ai_begin":
+            state = self.m01._state()
+            state["no_ai_submission"] = "__ACTIVE__"
+            self.m01._save(state)
+            return self.m01.view()
+        if stage == "no_ai_cancel":
+            state = self.m01._state()
+            if state.get("no_ai_submission") == "__ACTIVE__":
+                state["no_ai_submission"] = ""
+                self.m01._save(state)
+            return self.m01.view()
+        return self.m01.save_stage(stage, str(payload.get("content") or ""))
+
+    def m01_prediction(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self.m01.save_prediction(str(payload.get("experiment_id") or ""), str(payload.get("prediction") or ""))
+
+    def m01_run_experiment(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self.m01.run_experiment(str(payload.get("experiment_id") or ""), int(payload.get("timeout_seconds") or 180))
+
+    def m01_reflection(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self.m01.save_reflection(str(payload.get("experiment_id") or ""), str(payload.get("reflection") or ""))
 
     def evidence_intelligence(self, mission_id: str, snapshot: dict[str, Any] | None = None) -> dict[str, Any]:
         mid = self.loop.missions.get(mission_id)["id"]
         records = self.loop.evidence.for_mission(mid)
         gate = self.loop.gates.evaluate(mid)
+        if mid == "M01":
+            contract = self.m01.view()["gate"]
+            missing_contract = [item for item in contract["checks"] if not item["complete"]]
+            return {
+                "gate_status": gate.status,
+                "missing": [item["id"] for item in missing_contract],
+                "actions": [f"Complete M01 requirement: {item['label']}." for item in missing_contract] or ["M01 evidence contract is complete. Run the formal gate."],
+                "weak_evidence_count": 0,
+                "evidence_count": len(records),
+            }
         checklist = (snapshot or self.dashboard.snapshot(mid))["workspace"]["gate_checklist"]
         missing = [item for item in checklist if not item["complete"]]
         actions: list[str] = []
