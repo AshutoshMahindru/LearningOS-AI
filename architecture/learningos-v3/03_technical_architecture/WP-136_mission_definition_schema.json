@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://learningos.ai/schemas/mission.v1.json",
+  "title": "LearningOS Mission Definition Schema v1",
+  "type": "object",
+  "required": ["id", "title", "phase", "order_index", "core_invariant", "competencies", "knowledge_nodes", "stages", "gate_contract"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^M[0-9]{2}$"
+    },
+    "title": { "type": "string" },
+    "phase": {
+      "type": "object",
+      "required": ["id", "title"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" }
+      }
+    },
+    "order_index": { "type": "integer", "minimum": 1, "maximum": 42 },
+    "flagship_version": { "type": "string", "pattern": "^V[0-9]{2}$" },
+    "core_invariant": { "type": "string" },
+    "competencies": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "knowledge_nodes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "stages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "type", "assistance_policy"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "orientation",
+              "trace_map",
+              "interrogate",
+              "experiment",
+              "code_reading",
+              "rebuild_debug",
+              "controlled_failure",
+              "transfer_assessment",
+              "competency_gate",
+              "reflection_adr",
+              "flagship_integration"
+            ]
+          },
+          "assistance_policy": {
+            "type": "string",
+            "enum": ["UNRESTRICTED", "SOCRATIC_ONLY", "RESTRICTED_HINTS", "NO_AI_REQUIRED"]
+          },
+          "instructions": { "type": "string" },
+          "runner": {
+            "type": "object",
+            "properties": {
+              "module": { "type": "string" },
+              "entrypoint": { "type": "string" },
+              "timeout_sec": { "type": "integer", "default": 30 }
+            }
+          },
+          "validation_rubric": {
+            "type": "object",
+            "properties": {
+              "required_evidence_type": { "type": "string" },
+              "pass_criteria": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "gate_contract": {
+      "type": "object",
+      "required": ["required_evidence", "pass_threshold"],
+      "properties": {
+        "required_evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["competency_id", "stage_id", "artifact_type"],
+            "properties": {
+              "competency_id": { "type": "string" },
+              "stage_id": { "type": "string" },
+              "artifact_type": { "type": "string" }
+            }
+          }
+        },
+        "pass_threshold": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "repair_policy": {
+          "type": "object",
+          "properties": {
+            "allow_targeted_repair": { "type": "boolean", "default": true },
+            "max_repair_attempts": { "type": "integer", "default": 3 }
+          }
+        }
+      }
+    }
+  }
+}

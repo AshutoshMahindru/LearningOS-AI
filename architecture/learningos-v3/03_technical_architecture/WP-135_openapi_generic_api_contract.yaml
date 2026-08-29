@@ -1,0 +1,186 @@
+openapi: 3.1.0
+info:
+  title: LearningOS V3 Generic Application API
+  version: 3.0.0
+  description: >
+    Strictly generic REST API powering the local-first LearningOS V3 platform.
+    Contains ZERO mission-specific endpoints. All 42 missions operate through these routes.
+servers:
+  - url: http://127.0.0.1:8765/api/v1
+    description: Local LearningOS Daemon
+
+paths:
+  /system/health:
+    get:
+      summary: Health & Diagnostics
+      responses:
+        '200':
+          description: System status and worker health.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: "HEALTHY" }
+                  version: { type: string, example: "3.0.0" }
+                  worker_alive: { type: boolean, example: true }
+                  database_path: { type: string }
+
+  /missions:
+    get:
+      summary: List Available Missions
+      responses:
+        '200':
+          description: List of missions with completion & lock metadata.
+
+  /missions/{mission_id}:
+    get:
+      summary: Get Mission Specification
+      parameters:
+        - name: mission_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Validated MDL v1 mission definition.
+
+  /sessions:
+    post:
+      summary: Start or Resume Mission Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mission_id]
+              properties:
+                mission_id: { type: string }
+      responses:
+        '200':
+          description: Active session object.
+
+  /sessions/{session_id}/stages/{stage_id}/enter:
+    post:
+      summary: Enter Learning Stage
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: stage_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Stage attempt initialized and assistance policy resolved.
+
+  /sessions/{session_id}/stages/{stage_id}/predict:
+    post:
+      summary: Commit Prediction (Predict-Commit Seal)
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: stage_id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [hypothesis, expected_values]
+              properties:
+                hypothesis: { type: string }
+                expected_values: { type: object }
+      responses:
+        '200':
+          description: Prediction sealed with timestamp and hash.
+
+  /sessions/{session_id}/stages/{stage_id}/execute:
+    post:
+      summary: Execute Lab / Code in Worker
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: stage_id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code: { type: string }
+                parameters: { type: object }
+      responses:
+        '200':
+          description: Structured execution result.
+
+  /sessions/{session_id}/stages/{stage_id}/submit:
+    post:
+      summary: Submit Stage for Assessment
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: stage_id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                artifacts: { type: array, items: { type: object } }
+                explanation: { type: string }
+      responses:
+        '200':
+          description: Assessment outcome and next stage unlock state.
+
+  /sessions/{session_id}/gates/evaluate:
+    post:
+      summary: Evaluate Mission Competency Gate
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Gate certification outcome or bounded repair plan.
+
+  /tutor/chat:
+    post:
+      summary: Request Socratic Guidance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [session_id, stage_id, prompt]
+              properties:
+                session_id: { type: string }
+                stage_id: { type: string }
+                role: { type: string, enum: [NAVIGATOR, SOCRATIC, DEBUGGER, FEYNMAN] }
+                prompt: { type: string }
+      responses:
+        '200':
+          description: Socratic tutor guidance.
+        '403':
+          description: Assistance prohibited (No-AI or sealed stage).

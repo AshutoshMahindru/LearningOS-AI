@@ -1,0 +1,119 @@
+{
+  "id": "M42",
+  "title": "Integrated AI Systems Capstone: The Autonomous Enterprise Agent",
+  "phase": {
+    "id": "phase_09",
+    "title": "Architecture, Evaluation & Capstone"
+  },
+  "order_index": 42,
+  "flagship_version": "V12",
+  "core_invariant": "An enterprise AI agent is an evaluated, observable, safety-bounded state machine capable of autonomous reasoning and tool use.",
+  "competencies": [
+    "comp.agent.tool_orchestration",
+    "comp.agent.eval_harness",
+    "comp.agent.safety_guardrails",
+    "comp.sys.flagship_architecture"
+  ],
+  "knowledge_nodes": [
+    "kn.m42.multi_agent_coordination",
+    "kn.m42.hallucination_guardrails",
+    "kn.m42.adversarial_evaluation"
+  ],
+  "prerequisites": ["M41"],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Capstone System Architecture",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Review Flagship V12 Operations Intelligence System combining SQL generation, semantic search, and tool-using incident agents."
+    },
+    {
+      "id": "stage_02_trace_map",
+      "title": "Multi-Agent Control Flow Diagram",
+      "type": "trace_map",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Map communication boundaries between planner, SQL specialist, and human-in-the-loop review nodes."
+    },
+    {
+      "id": "stage_03_rebuild_debug",
+      "title": "Build Autonomous Execution Loop",
+      "type": "rebuild_debug",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Implement the ReAct planning cycle with tool call retry and validation error feedback.",
+      "runner": {
+        "module": "missions.M42.lab",
+        "entrypoint": "run_agent_harness",
+        "timeout_sec": 60
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Chaos Day: Malicious Prompt Injection & Tool Poisoning",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "The incident agent encounters indirect prompt injection inside a log file attempting data exfiltration. Implement input sanitization and tool permission guardrails."
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "No-AI Autonomous Agent Benchmark",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Build and evaluate an end-to-end multi-step financial reconciliation agent on a fresh API environment without AI assistance.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Agent passes 100% of safety guardrail tests and resolves multi-step task in < 6 iterations."
+      }
+    },
+    {
+      "id": "stage_06_reflection_adr",
+      "title": "Architectural Decision Record (ADR-042)",
+      "type": "reflection_adr",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Author ADR-042 justifying the agent memory hierarchy and failure fallback strategy."
+    },
+    {
+      "id": "stage_07_flagship_integration",
+      "title": "Flagship V12 Release Tagging",
+      "type": "flagship_integration",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Tag Flagship Release V12 and export the final Capstone Systems Portfolio."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Final Capstone Gate Certification",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Perform final comprehensive audit of all 76 competencies and issue Level 5 AI Systems Architect Certification."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.agent.tool_orchestration",
+        "stage_id": "stage_03_rebuild_debug",
+        "artifact_type": "code"
+      },
+      {
+        "competency_id": "comp.agent.safety_guardrails",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "code"
+      },
+      {
+        "competency_id": "comp.agent.eval_harness",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.sys.flagship_architecture",
+        "stage_id": "stage_06_reflection_adr",
+        "artifact_type": "adr"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

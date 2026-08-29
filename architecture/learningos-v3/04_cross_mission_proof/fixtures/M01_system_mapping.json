@@ -1,0 +1,99 @@
+{
+  "id": "M01",
+  "title": "Map the AI/ML Landscape",
+  "phase": {
+    "id": "phase_01",
+    "title": "Data Workbench & Python Mastery"
+  },
+  "order_index": 1,
+  "flagship_version": "V01",
+  "core_invariant": "Start with the useful whole. Trace every layer before descending into components.",
+  "competencies": [
+    "comp.sys.whole_trace",
+    "comp.sys.component_mapping",
+    "comp.sys.hypothesis_testing"
+  ],
+  "knowledge_nodes": [
+    "kn.m01.pipeline_trace",
+    "kn.m01.data_flow",
+    "kn.m01.inference_latency"
+  ],
+  "prerequisites": [],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "System Orientation & Invariants",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Inspect the high-level architecture of the Operations Intelligence System."
+    },
+    {
+      "id": "stage_02_trace_map",
+      "title": "Interactive Whole-System Map",
+      "type": "trace_map",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Trace the end-to-end dataflow from raw ingestion to model prediction."
+    },
+    {
+      "id": "stage_03_interrogate",
+      "title": "System Interrogation",
+      "type": "interrogate",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Identify single points of failure and latency bottlenecks."
+    },
+    {
+      "id": "stage_04_experiment",
+      "title": "Throughput & Batch Size Experiment",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Predict the impact of doubling batch size on GPU latency before executing the benchmark.",
+      "runner": {
+        "module": "missions.M01.lab",
+        "entrypoint": "run_throughput_experiment",
+        "timeout_sec": 15
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "No-AI Architecture Transfer",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Given a fresh anomaly detection service topology, construct the trace diagram and identify data invariants.",
+      "validation_rubric": {
+        "required_evidence_type": "diagram",
+        "pass_criteria": "Accurately identifies all 4 critical data transformations without unhandled exceptions."
+      }
+    },
+    {
+      "id": "stage_06_gate",
+      "title": "Competency Gate Evaluation",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate M01 evidence items against the system mapping rubric."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.sys.whole_trace",
+        "stage_id": "stage_02_trace_map",
+        "artifact_type": "diagram"
+      },
+      {
+        "competency_id": "comp.sys.hypothesis_testing",
+        "stage_id": "stage_04_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.sys.component_mapping",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

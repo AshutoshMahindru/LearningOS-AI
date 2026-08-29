@@ -1,0 +1,92 @@
+{
+  "id": "M04",
+  "title": "Turn a Messy CSV into Usable Data",
+  "phase": {
+    "id": "phase_01",
+    "title": "Data Workbench & Python Mastery"
+  },
+  "order_index": 4,
+  "flagship_version": "V01",
+  "core_invariant": "Data cleaning is an explicit, immutable pipeline of transformations preserving data integrity.",
+  "competencies": [
+    "comp.data.schema_normalization",
+    "comp.data.missing_imputation",
+    "comp.data.outlier_detection"
+  ],
+  "knowledge_nodes": [
+    "kn.m04.pandas_dataframes",
+    "kn.m04.type_coercion",
+    "kn.m04.imputation_strategies"
+  ],
+  "prerequisites": ["M03"],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Messy Sensor Dataset Overview",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Inspect raw telemetry data with missing values, corrupt timestamps, and negative readings."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Mean vs Median Imputation Experiment",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Predict how mean vs median imputation affects standard deviation in the presence of heavy-tailed outliers.",
+      "runner": {
+        "module": "missions.M04.lab",
+        "entrypoint": "run_imputation_experiment",
+        "timeout_sec": 15
+      }
+    },
+    {
+      "id": "stage_03_controlled_failure",
+      "title": "Diagnose Silent Type Conversion Bug",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "A downstream model receives object dtypes instead of float32 due to string 'N/A' tokens. Fix the ingestion pipeline."
+    },
+    {
+      "id": "stage_04_transfer",
+      "title": "No-AI Real Estate Cleaning Challenge",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Clean a fresh real estate dataset containing mixed currency strings and missing zip codes.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Zero missing values, all numerical columns typed correctly, zero data leakage."
+      }
+    },
+    {
+      "id": "stage_05_gate",
+      "title": "Competency Gate Evaluation",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate M04 data cleaning pipeline against automated quality benchmarks."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.data.schema_normalization",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.data.missing_imputation",
+        "stage_id": "stage_03_controlled_failure",
+        "artifact_type": "code"
+      },
+      {
+        "competency_id": "comp.data.outlier_detection",
+        "stage_id": "stage_04_transfer",
+        "artifact_type": "table"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

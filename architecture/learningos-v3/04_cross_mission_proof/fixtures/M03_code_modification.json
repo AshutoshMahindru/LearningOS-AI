@@ -1,0 +1,92 @@
+{
+  "id": "M03",
+  "title": "Modify Python Before Learning Python",
+  "phase": {
+    "id": "phase_01",
+    "title": "Data Workbench & Python Mastery"
+  },
+  "order_index": 3,
+  "flagship_version": "V01",
+  "core_invariant": "Inspect unfamiliar code through tests and debuggers before writing new code.",
+  "competencies": [
+    "comp.py.code_reading",
+    "comp.py.test_debugging",
+    "comp.py.diff_verification"
+  ],
+  "knowledge_nodes": [
+    "kn.m03.stack_traces",
+    "kn.m03.unit_test_assertions",
+    "kn.m03.variable_scoping"
+  ],
+  "prerequisites": ["M01", "M02"],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Codebase Orientation",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Review the data validation utility module."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Deconstruct Validation Module",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read `validator.py` and explain how exceptions are handled."
+    },
+    {
+      "id": "stage_03_rebuild_debug",
+      "title": "Fix the Failing Schema Parser",
+      "type": "rebuild_debug",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Modify the schema parser to handle missing nullable fields.",
+      "runner": {
+        "module": "missions.M03.lab",
+        "entrypoint": "test_schema_parser",
+        "timeout_sec": 10
+      }
+    },
+    {
+      "id": "stage_04_transfer",
+      "title": "No-AI Debugging Challenge",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Debug a fresh recursive JSON flattener without AI assistance.",
+      "validation_rubric": {
+        "required_evidence_type": "code",
+        "pass_criteria": "All unit tests pass with zero unhandled edge cases."
+      }
+    },
+    {
+      "id": "stage_05_gate",
+      "title": "Competency Gate Evaluation",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate M03 code reading and debugging competencies."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.py.code_reading",
+        "stage_id": "stage_02_code_reading",
+        "artifact_type": "artifact"
+      },
+      {
+        "competency_id": "comp.py.test_debugging",
+        "stage_id": "stage_03_rebuild_debug",
+        "artifact_type": "code"
+      },
+      {
+        "competency_id": "comp.py.diff_verification",
+        "stage_id": "stage_04_transfer",
+        "artifact_type": "code"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

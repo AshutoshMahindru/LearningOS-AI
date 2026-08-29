@@ -1,0 +1,92 @@
+{
+  "id": "M25",
+  "title": "Build a Deep Neural Network from Scratch in PyTorch",
+  "phase": {
+    "id": "phase_04",
+    "title": "Neural Networks & Deep Learning"
+  },
+  "order_index": 25,
+  "flagship_version": "V05",
+  "core_invariant": "A neural network is an end-to-end differentiable computational graph optimized via the chain rule.",
+  "competencies": [
+    "comp.nn.autograd_mechanics",
+    "comp.nn.training_loop",
+    "comp.nn.gradient_debugging"
+  ],
+  "knowledge_nodes": [
+    "kn.m25.computational_graph",
+    "kn.m25.loss_backward",
+    "kn.m25.optimizer_step"
+  ],
+  "prerequisites": ["M24"],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "PyTorch Autograd Architecture",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Understand how PyTorch constructs dynamic computation graphs and tracks gradients."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Learning Rate vs Loss Surface Experiment",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Predict loss convergence behavior for learning rates [1e-1, 1e-3, 1e-5] before running 10 epochs.",
+      "runner": {
+        "module": "missions.M25.lab",
+        "entrypoint": "run_training_comparison",
+        "timeout_sec": 30
+      }
+    },
+    {
+      "id": "stage_03_controlled_failure",
+      "title": "Diagnose Exploding Gradients",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "The model outputs NaN loss at epoch 3. Inspect gradient norms, identify the exploding layer, and implement gradient clipping."
+    },
+    {
+      "id": "stage_04_transfer",
+      "title": "No-AI MLP Implementation Challenge",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Implement a 3-layer MLP with BatchNorm and Dropout on a fresh multi-class classification problem without AI assistance.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Validation accuracy > 88% and loss monotonically decreases."
+      }
+    },
+    {
+      "id": "stage_05_gate",
+      "title": "Competency Gate Evaluation",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Verify deep learning implementation competencies."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.nn.autograd_mechanics",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "chart"
+      },
+      {
+        "competency_id": "comp.nn.gradient_debugging",
+        "stage_id": "stage_03_controlled_failure",
+        "artifact_type": "code"
+      },
+      {
+        "competency_id": "comp.nn.training_loop",
+        "stage_id": "stage_04_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
