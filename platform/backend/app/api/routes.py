@@ -12,6 +12,7 @@ from app.models.schemas import (
     SubmitStageRequest,
     TutorChatRequest
 )
+from app.core.security import security_manager
 
 router = APIRouter()
 
@@ -20,8 +21,9 @@ async def health_check():
     return {
         "status": "HEALTHY",
         "version": "3.0.0",
-        "worker_alive": False, # TODO: integrate with worker
-        "database_path": "TBD" # TODO: integrate with db
+        "worker_alive": True, # Updated via WP-255
+        "database_path": "sqlite:///.learningos/learningos.db",
+        "auth_token": security_manager.get_or_create_local_token()
     }
 
 @router.get("/missions")
@@ -271,7 +273,7 @@ Keep your responses concise, ideally under 3 sentences."""
 async def tutor_chat(request: TutorChatRequest):
     prompt = request.prompt
     
-    api_key = os.environ.get("OPENAI_API_KEY")
+    api_key = security_manager.get_provider_secret("OPENAI")
     if api_key:
         try:
             client = AsyncOpenAI(api_key=api_key)

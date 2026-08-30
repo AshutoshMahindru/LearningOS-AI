@@ -15,6 +15,30 @@ def execute_task(params):
         "artifacts": []
     }
 
+def execute_task_with_timeout(params, timeout_secs=5.0):
+    # Implementation of timeout control
+    import threading
+    
+    result_container = {}
+    def target():
+        try:
+            result_container["result"] = execute_task(params)
+        except Exception as e:
+            result_container["error"] = e
+
+    thread = threading.Thread(target=target)
+    thread.start()
+    thread.join(timeout_secs)
+    
+    if thread.is_alive():
+        # In a real implementation we would kill the subprocess here
+        # For this thread mock, we return a timeout error
+        raise TimeoutError(f"Task execution exceeded {timeout_secs}s")
+        
+    if "error" in result_container:
+        raise result_container["error"]
+    return result_container.get("result", {})
+
 def handle_request(conn):
     try:
         data = conn.recv(8192)
@@ -34,9 +58,12 @@ def handle_request(conn):
         
         if method == "execute_task":
             try:
-                result = execute_task(params)
+                result = execute_task_with_timeout(params)
             except Exception as e:
+                # Crash recovery: if a task fails or crashes, format standard error
                 error = {"code": -32000, "message": str(e), "data": traceback.format_exc()}
+        elif method == "health":
+            result = {"status": "HEALTHY"}
         else:
             error = {"code": -32601, "message": "Method not found"}
             
