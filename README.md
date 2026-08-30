@@ -1,125 +1,64 @@
-# AI Learning OS
+# LearningOS V3
 
-**A top-down, mission-driven ML/AI apprenticeship system.**
+LearningOS V3 is a schema-driven, local-first pedagogy engine for software engineering. Built on the core principle of **"Transfer without AI"**, this system aims to force the learner into the driver's seat by stripping away instant answers and replacing them with deep, Socratic interrogation and rigorous code execution bounds.
 
-This repository merges an adaptive ML/AI curriculum engine with the apprenticeship discipline of a technical-builder programme. The aim is not course completion; it is to produce an AI Systems Architect/Builder who can **build, inspect, debug, challenge, evaluate and direct** AI systems — including work produced by AI agents.
+## Core Philosophy
 
-## Core invariant
+> "Start with the useful whole. Map it. Interrogate it. Descend only to the narrowest blocker. Decompose it. Rebuild it. Break it. Explain it. Transfer without AI. Prove competence. Return to the system."
 
-> **Start with the useful whole. Map it. Interrogate it. Descend only to the narrowest blocker. Decompose it. Rebuild it. Break it. Explain it. Transfer without AI. Prove competence. Return to the system.**
+**Key Principles:**
+- **Zero Mission-Specific Logic:** The platform has no hardcoded knowledge of the "missions" it runs. Everything is driven by a unified `MissionSchema`.
+- **Local-First Verification:** No internet is required to run the primary loop. Cryptographic hashes of predictions and local test execution seal the learner's evidence ledger on their local machine.
+- **Socratic Friction:** The integrated AI Tutor daemon is strictly forbidden from providing code answers. It uses generative AI only to increase the learner's cognitive load by forcing them to articulate their hypotheses.
 
-## What is inside
+## Architecture
 
-- **42 missions / 9 phases** — the ML/AI route.
-- **76 observable competencies** — L0 to L5 evidence model.
-- **253 knowledge nodes** — prerequisite/enables graph.
-- **Canonical content map** — primary/official sources, exact assignments, labs and side quests.
-- **Apprenticeship control plane** — no-AI gates, code reading, controlled failure, Chaos Days, engineering review, Git/ADR discipline and progressive autonomy.
-- **One flagship system / 12 versions** — an Operations Intelligence System that evolves from data workbench to evaluated agentic AI system.
-- **Tutor orchestration** — navigator, Socratic tutor, debugger, examiner, Feynman reviewer, zoom controller, chaos engineer, code-reading coach and principal-engineer reviewer.
-- **Evidence infrastructure** — ledgers for experiments, side quests, no-AI work, chaos, review, ADRs and macro maturity.
+LearningOS V3 consists of a three-tier architecture:
 
-## Canonical runtime
+1. **Frontend (`platform/frontend`)**
+   - React 18 + Vite SPA built with Tailwind CSS.
+   - Features a premium "Deep Space" glassmorphic UI.
+   - Responsible for rendering dynamic stages (`CodeReadingStage`, `InterrogateStage`, `CompetencyGateStage`) mapped from the backend schema.
+   
+2. **Backend Server (`platform/backend`)**
+   - FastAPI server using `uvicorn`.
+   - Manages the local SQLite database (`learningos.db`) containing the `MissionSchema`, `MissionSessions`, and `EvidenceLedger`.
+   - Hosts the `TutorChat` route which proxies requests to the OpenAI API (or falls back to a local heuristic pattern-matcher).
 
-```text
-MISSION + FLAGSHIP VERSION
-        ↓
-WHOLE FIRST → MAP → INTERROGATE
-        ↓
-MINIMUM CANONICAL CONTENT
-        ↓
-MANIPULATE / EXPERIMENT
-        ↓
-ZOOM IN ONLY IF BLOCKED
-        ↓
-DECOMPOSE / CODE READ
-        ↓
-REBUILD → BREAK → EXPLAIN
-        ↓
-NO-AI TRANSFER
-        ↓
-GATE
-        ↓
-GIT EVIDENCE + ADR / REVIEW
-        ↓
-ADVANCE / TARGETED REPAIR
+3. **Execution Worker Daemon (`platform/backend/worker_daemon.py`)**
+   - A standalone Python script running in the background.
+   - Listens on a Unix Domain Socket (`/tmp/learningos_worker.sock`).
+   - Safely isolates arbitrary code execution from the main API process.
+
+## Setup & Running
+
+This project uses `uv` for Python dependency management and `npm` for Node.js.
+
+### 1. Prerequisites
+- [uv](https://docs.astral.sh/uv/) installed on your system.
+- Node.js (v18+) and npm installed.
+
+### 2. Configuration
+If you want the Socratic Tutor to use generative AI, export your OpenAI API key in your terminal:
+```bash
+export OPENAI_API_KEY="sk-..."
+```
+*(If you do not provide this, the system will gracefully fall back to a local heuristic pattern-matching engine.)*
+
+### 3. Launching the System
+We provide a unified startup script that uses background job control to launch the Frontend, Backend, and Worker concurrently.
+
+Run the following command from the repository root:
+```bash
+./start.sh
 ```
 
-## Start here
+**Services Started:**
+- **Frontend UI:** `http://localhost:5173`
+- **Backend API:** `http://127.0.0.1:8000`
+- **Execution Socket:** `/tmp/learningos_worker.sock`
 
-1. Read [`docs/SYSTEM_BLUEPRINT.md`](docs/SYSTEM_BLUEPRINT.md).
-2. Read [`docs/LEARNING_RUNTIME.md`](docs/LEARNING_RUNTIME.md).
-3. Open [`dashboard.html`](dashboard.html) locally.
-4. Start **M01** in [`docs/MISSION_PLAYBOOK.md`](docs/MISSION_PLAYBOOK.md).
-5. Use the exact content route in [`docs/CONTENT_MAP_42_MISSIONS.md`](docs/CONTENT_MAP_42_MISSIONS.md).
-6. Record learner evidence under `tracking/`; repository implementation status is tracked separately in `data/lab_status.json` and mission-local status files.
-7. Run `python tools/validate_repo.py` before committing structural changes.
+To shut down all services cleanly, press `Ctrl+C`.
 
-## Flagship release spine
-
-| Version | Missions | Release |
-|---|---|---|
-| V01 | M03-M07 | Structured Data Workbench |
-| V02 | M08-M10 | Predictive Decision System |
-| V03 | M11-M14 | Model Comparison & Diagnostics |
-| V04 | M15-M20 | Mathematical Instrumentation Layer |
-| V05 | M21-M26 | Neural Learning Component |
-| V06 | M27-M30 | Language Representation Layer |
-| V07 | M31-M32 | LLM Inference & Adaptation Layer |
-| V08 | M33 | Semantic Search Service |
-| V09 | M34-M36 | Grounded Knowledge System |
-| V10 | M37-M39 | Tool-Using Agent System |
-| V11 | M40-M41 | Evaluated & Observable AI System |
-| V12 | M42 | Integrated AI Systems Capstone |
-
-## Apprenticeship defaults
-
-- 30–60 min no-AI competency block every mission.
-- 10–15 min unfamiliar code/artifact reading in coding sessions.
-- Controlled failure every mission.
-- Hidden-fault Chaos Day every 2 missions.
-- Engineering review every 4 missions or phase end.
-- ADRs for consequential decisions from M07 onward.
-- Git engineering record for substantive changes.
-- AI implementation autonomy expands only with independent evidence.
-- Do not study a concept for >2 hours without using it.
-
-## Implementation status
-
-The architecture, 42-mission route, canonical 253-node graph, content routing and apprenticeship overlays are instantiated.
-
-**M01-M42 are implemented and repository-executable.** Their mission packages, tests and 42 source notebooks are covered by the integrated minimal-runtime and full-dependency validation path, including clean notebook execution.
-
-Learner progress is intentionally separate from repository implementation progress: merging a mission does not mark a learner as having completed it.
-
-## Repository map
-
-```text
-ai-learning-os/
-├── README.md
-├── dashboard.html
-├── docs/
-├── data/
-├── labs/
-├── datasets/
-├── missions/
-├── prompts/
-├── templates/
-├── tracking/
-├── schemas/
-├── tools/
-├── requirements/
-└── .github/
-```
-
-## Validation
-
-The default CI keeps a dependency-light runtime job and a full M01-M42 mission-validation job. The full job installs the union of mission requirements, runs repository and mission tests, validates source notebook invariants, and executes all repository-executable notebooks in fresh kernels.
-
-## Source policy
-
-Prefer primary/official sources. The AI tutor supplements rather than replaces canonical material. Fast-moving implementation resources must be rechecked at the cadence recorded in `data/resource_library.csv`.
-
-## Status
-
-**M01-M42 integrated and verified as repository-executable.**
+---
+*Built incrementally over multiple pair-programming sessions.*
