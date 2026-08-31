@@ -1,0 +1,14 @@
+{
+  "id": "g4.fixture.f01",
+  "version": "4.0.0",
+  "title": "G4 F01 fixture package",
+  "description": "Synthetic E2E G4 journey fixture. Not a special platform mode. Mission id is WP-136 M00; F01 is package metadata only.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M00",
+      "path": "missions/M00.json"
+    }
+  ],
+  "digest": "2e4f5c5882e57104d84c7404e5a449b29a0a12f6fde2d8f5990bc9c8b3a147ed"
+}

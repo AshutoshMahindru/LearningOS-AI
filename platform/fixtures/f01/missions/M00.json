@@ -1,0 +1,89 @@
+{
+  "id": "M00",
+  "title": "Synthetic Canonical Stage Journey",
+  "phase": {
+    "id": "g4.fixture",
+    "title": "G4 Synthetic Fixture"
+  },
+  "order_index": 1,
+  "flagship_version": "V00",
+  "core_invariant": "Start with the useful whole. Predict before running. Transfer without assistance. Prove competence with evidence.",
+  "competencies": [
+    "comp.generic.orientation",
+    "comp.generic.experiment",
+    "comp.generic.transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.generic.stage_catalogue",
+    "kn.generic.predict_execute_submit",
+    "kn.generic.gate_evidence"
+  ],
+  "prerequisites": [],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the generic journey",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the mission invariant, canonical stage catalogue, and assistance policies. Identify the evidence the gate will require. This document is a generic composition of catalogue stages, not a named-mission special case."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, execute, and submit a numeric transform",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on a generic numeric series. (1) PREDICT the result of applying scale=2 to [1, 2, 3, 4]. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE the transform. (4) OBSERVE the structured metric result. (5) SUBMIT an explanation of any delta between prediction and observation.",
+      "runner": {
+        "module": "g4.fixture.generic.experiment",
+        "entrypoint": "run_scale_transform",
+        "timeout_sec": 10
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; the submitted explanation covers the observed series and the scale factor."
+      }
+    },
+    {
+      "id": "stage_03_transfer",
+      "title": "Fresh-case transform without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Apply the same scale-transform protocol to a fresh series and scale factor supplied at runtime. Tutor, hints, and prior-answer surfaces stay locked.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Produces the correctly scaled series for the unseen inputs."
+      }
+    },
+    {
+      "id": "stage_04_gate",
+      "title": "Evaluate gate evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, experiment, and transfer evidence against the mission gate contract. Issue PASSED or a targeted repair plan."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.generic.orientation",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.generic.experiment",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.generic.transfer",
+        "stage_id": "stage_03_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
