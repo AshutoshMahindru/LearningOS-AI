@@ -64,8 +64,10 @@ describe('application shell', () => {
     expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument();
     expect(screen.getByRole('main')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Dashboard' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Player' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Artifacts' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Settings' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Diagnostics' })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /demo/i })).not.toBeInTheDocument();
     expect(document.body.innerHTML).not.toContain('/missions/demo');
   });
