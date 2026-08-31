@@ -1,43 +1,111 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { apiClient } from '../api/client';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { createSession, isApiError, listMissions } from '../api/client';
+import type { Mission } from '../api/types';
+import { Button } from '../components/Button';
+import { EmptyState } from '../components/EmptyState';
+import { Spinner } from '../components/Spinner';
+import { StatusBanner } from '../components/StatusBanner';
+import { useAuth } from '../context/AuthContext';
 
-export const DashboardSurface: React.FC = () => {
-  const [missions, setMissions] = useState<any[]>([]);
+export function DashboardSurface() {
+  const { learner } = useAuth();
+  const navigate = useNavigate();
+  const [missions, setMissions] = useState<Mission[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [startingId, setStartingId] = useState<string | null>(null);
 
   useEffect(() => {
-    apiClient.getMissions()
-      .then(data => setMissions(data.missions || []))
-      .catch(console.error);
+    let cancelled = false;
+    listMissions()
+      .then((data) => {
+        if (!cancelled) {
+          setMissions(data.missions);
+        }
+      })
+      .catch((err: unknown) => {
+        if (!cancelled) {
+          setMissions([]);
+          setError(isApiError(err) ? err.message : 'Failed to load missions');
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
+  const startSession = async (missionId: string) => {
+    if (!learner) {
+      return;
+    }
+    setStartingId(missionId);
+    try {
+      const session = await createSession({
+        mission_id: missionId,
+        learner_id: learner.id,
+      });
+      void navigate(`/sessions/${session.session_id}`);
+    } catch (err) {
+      setError(isApiError(err) ? err.message : 'Failed to create session');
+    } finally {
+      setStartingId(null);
+    }
+  };
+
   return (
-    <div className="p-10 max-w-6xl mx-auto">
-      <div className="mb-12">
-        <h1 className="text-4xl font-black mb-3 tracking-tight">Dashboard</h1>
-        <p className="text-slate-400 text-lg">Current mission status and active flagship version progress.</p>
+    <div className="mx-auto max-w-5xl space-y-8">
+      <div>
+        <h1 className="text-3xl font-black tracking-tight">Dashboard</h1>
+        <p className="mt-2 text-textSecondary">
+          Catalog of missions loaded by the local API. Mission runtime is not part of G3.
+        </p>
       </div>
-      
-      <h2 className="text-2xl font-bold mb-6 flex items-center">
-        <span className="w-8 h-1 bg-indigo-500 mr-4 rounded-full"></span>
-        Available Missions
-      </h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {missions.map(m => (
-          <Link to={`/missions/${m.id}`} key={m.id} className="block p-6 glass-card rounded-xl group relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-cyan-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-            <div className="text-xs text-slate-400 mb-2 font-mono">{m.id} • {m.phase_id}</div>
-            <h3 className="text-xl font-bold text-slate-100 group-hover:text-white transition-colors">{m.title}</h3>
-            <div className="mt-6 flex justify-end">
-              <span className="text-sm font-medium text-indigo-400 group-hover:text-indigo-300 transition-colors flex items-center">
-                Launch <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
-              </span>
-            </div>
-          </Link>
-        ))}
-        {missions.length === 0 && <p className="text-textSecondary">No missions loaded.</p>}
-      </div>
+
+      {missions === null ? <Spinner label="Loading missions" /> : null}
+
+      {error ? (
+        <StatusBanner tone="error" title="Unable to load catalog">
+          {error}
+        </StatusBanner>
+      ) : null}
+
+      {missions && missions.length === 0 && !error ? (
+        <EmptyState
+          title="No missions loaded"
+          message="The catalog is empty. Load a curriculum package from Settings when the local API is available."
+          action={
+            <Button variant="secondary" onClick={() => void navigate('/settings')}>
+              Open settings
+            </Button>
+          }
+        />
+      ) : null}
+
+      {missions && missions.length > 0 ? (
+        <ul className="grid gap-4 md:grid-cols-2">
+          {missions.map((mission) => (
+            <li key={mission.id} className="panel space-y-4">
+              <div>
+                <p className="font-mono text-xs text-textSecondary">{mission.id}</p>
+                <h2 className="text-xl font-bold">{mission.title || mission.id}</h2>
+                {mission.description ? (
+                  <p className="mt-2 text-sm text-textSecondary">{mission.description}</p>
+                ) : null}
+              </div>
+              <Button
+                onClick={() => void startSession(mission.id)}
+                disabled={!learner || startingId === mission.id}
+              >
+                {startingId === mission.id ? 'Starting…' : 'Start session'}
+              </Button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
+      <p className="text-sm text-textSecondary">
+        Need stored bytes? Open the <Link to="/artifacts">artifacts surface</Link>.
+      </p>
     </div>
   );
-};
+}

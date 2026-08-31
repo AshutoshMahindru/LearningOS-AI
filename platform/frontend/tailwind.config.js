@@ -4,16 +4,46 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        background: '#0f172a', // slate-900
-        surface: '#1e293b', // slate-800
-        primary: '#3b82f6', // blue-500
-        textPrimary: '#f8fafc', // slate-50
-        textSecondary: '#94a3b8', // slate-400
-      }
+        bg: 'var(--color-bg)',
+        surface: 'var(--color-surface)',
+        elevated: 'var(--color-elevated)',
+        primary: 'var(--color-primary)',
+        'primary-strong': 'var(--color-primary-strong)',
+        danger: 'var(--color-danger)',
+        success: 'var(--color-success)',
+        warning: 'var(--color-warning)',
+        textPrimary: 'var(--color-text)',
+        textSecondary: 'var(--color-text-muted)',
+        border: 'var(--color-border)',
+        focus: 'var(--color-focus)',
+      },
+      fontFamily: {
+        sans: [
+          'ui-sans-serif',
+          'system-ui',
+          '-apple-system',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica Neue',
+          'Arial',
+          'sans-serif',
+        ],
+        mono: [
+          'ui-monospace',
+          'SFMono-Regular',
+          'Menlo',
+          'Monaco',
+          'Consolas',
+          'Liberation Mono',
+          'monospace',
+        ],
+      },
+      boxShadow: {
+        focus: '0 0 0 3px var(--color-focus-ring)',
+      },
     },
   },
   plugins: [],
