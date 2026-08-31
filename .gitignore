@@ -38,5 +38,8 @@ htmlcov/
 
 # Local LearningOS state & sandbox
 .learningos/
+learningos.db
+learningos.db-wal
+learningos.db-shm
 tracking/local_*.json
 sandbox/
