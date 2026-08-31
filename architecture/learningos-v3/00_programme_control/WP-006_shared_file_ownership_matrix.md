@@ -1,18 +1,25 @@
 # WP-006: Shared-File Ownership & Parallel Safety Matrix
 
-## Overview
-To prevent merge conflicts and inconsistent architecture changes during parallel development across multiple agents and workstreams, every subsystem, contract, and directory has a strictly designated owner.
+## Controlling G3 ownership
 
-| Subsystem / Path | Designated Owner | Secondary Reviewer | Rule |
-|---|---|---|---|
-| `architecture/` | Lead Architect | Programme Lead | Shared platform contracts require ADR for any change |
-| `schemas/` (MDL & Results) | Platform Core Lead | Lead Architect | Single source of truth; breaking changes require version bump |
-| `learning_os/core/` (API & DB) | Backend Tech Lead | Platform Core Lead | Core backend shared runtime |
-| `learning_os/worker/` | Runtime Worker Lead | Backend Tech Lead | Execution isolation and sandboxing |
-| `web/` (React Frontend Shell) | Frontend Tech Lead | UI/UX Lead | Zero mission-specific code allowed |
-| `missions/` (Curriculum YAMLs) | Curriculum Migration Lead | Pedagogy Lead | Mission-local modifications only; cannot alter platform schemas |
-| `tests/contract/` | QA & Contract Lead | Tech Lead | Contract tests run on every PR |
-| `tests/missions/` | Curriculum Migration Lead | QA Lead | Mission-specific validation suites |
+This matrix supersedes legacy path references for the G3 implementation tranche. Every lane starts from the same authorized integration SHA and works in an isolated worktree.
 
-## Parallel Safety Invariant
-No mission agent or author may modify shared platform files (`schemas/`, `learning_os/core/`, `web/src/components/stages/`) to accommodate a single mission. Any capability gap must be filed as a Platform Change Request (CR) and reviewed by the Lead Architect.
+| Lane / owner | Allowed paths | Prohibited or integrator-owned paths |
+|---|---|---|
+| 11A — Tooling / CI / Launcher | `.github/workflows/platform-ci.yml`; `start.sh` or its replacement; `tools/platform/**`; `tests/platform/tooling/**`; root V3 tooling manifests and lock files | Product runtime implementation; frozen architecture; curriculum and learner state |
+| 11B — Frontend Foundation | `platform/frontend/**` and frontend-local tests | Backend, storage, worker, curriculum, root launcher/workflows |
+| 11C — API / Security | `platform/backend/app/main.py`; `platform/backend/app/api/**`; `platform/backend/app/models/schemas.py`; `platform/backend/app/core/config.py`; `errors.py`; `security.py`; `version.py`; `platform/backend/tests/api/**` | Database/migrations, artifact/ledger services, worker/curriculum internals, frontend |
+| 11D — Storage / Ledger / Artifacts | `platform/backend/app/db/**`; storage migrations/services; `platform/backend/app/core/artifact_store.py`; ledger/backup models; `platform/backend/tests/storage/**` | API router/main, frontend, worker/curriculum, frozen architecture DDL |
+| 11E — Worker / Curriculum | `platform/worker/**`; consolidation/removal of `platform/backend/worker_daemon.py`; `platform/backend/app/core/worker_client.py`; `mission_loader.py`; `registry.py`; worker/curriculum tests and fixture package | API router/main, storage, frontend, real M01–M42 migration, frozen schemas |
+| G3 Integrator | Router/application assembly; final API-client contract reconciliation; launcher service wiring; `tests/platform/integration/**` | Redesigning frozen architecture or hiding lane defects |
+
+## Frozen and prohibited paths
+
+Implementation lanes must not modify `architecture/**`, `missions/**`, `labs/**`, `datasets/**`, `tracking/**`, `data/lab_status.json`, legacy `learning_os/**`, or legacy `web/**`. A required shared-core change must be raised to Master Control; a mission-specific workaround is never permitted.
+
+## Collision rules
+
+- Backend dependency changes are coordinated through 11A/Integrator when two lanes need the same manifest.
+- Implementers do not merge their own work.
+- Any file outside a lane's allowed set requires written Master Control disposition before editing.
+- Any commit added after independent review invalidates that review.

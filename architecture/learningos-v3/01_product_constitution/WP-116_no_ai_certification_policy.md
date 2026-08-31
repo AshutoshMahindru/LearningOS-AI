@@ -1,7 +1,7 @@
 # WP-116: No-AI Certification Policy & Provenance Protocol
 
 ## 1. Objective of No-AI Certification
-No-AI Certification proves that the learner possesses internal conceptual understanding and implementation ability without relying on external generative models, AI completions, or interactive hints.
+No-AI Certification records that LearningOS assistance was disabled during the recorded attempt. It supports an inference about independent performance from the captured evidence; it does not prove the absence of assistance from external devices, services, people, or unobserved channels. See [ADR-006](../00_programme_control/ADR/ADR-006_no_ai_assistance_boundary_erratum.md).
 
 ## 2. Enforcement Protocol
 1. **Runtime Isolation**:
@@ -16,5 +16,6 @@ No-AI Certification proves that the learner possesses internal conceptual unders
      - `code_hash`: SHA-256 hash of submitted code
      - `runner_hash`: SHA-256 hash of the execution test suite
      - `curriculum_sha`: Git commit SHA of the mission specification
-4. **Decertification on Breach**:
-   - If network telemetry indicates an attempt to access external LLM APIs during a locked test, the stage attempt is marked `INVALIDATED` and requires a new fresh-case challenge.
+4. **Invalidation within the LearningOS boundary**:
+   - If LearningOS assistance is enabled, invoked, or its lock fails during the recorded attempt, the attempt is marked `INVALIDATED` and requires a new fresh-case challenge.
+   - Network telemetry may support diagnostics or disclose a limitation, but LearningOS must not claim that it detects or blocks every external assistance channel.
