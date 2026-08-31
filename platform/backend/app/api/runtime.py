@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import sqlite3
 import time
 import uuid
@@ -64,10 +65,31 @@ def _row(row: Any) -> dict[str, Any]:
         return {"value": row}
 
 
+def validation_error_details(exc: BaseException) -> dict[str, Any]:
+    details: dict[str, Any] = dict(getattr(exc, "details", None) or {})
+    path = getattr(exc, "path", None)
+    if isinstance(path, str) and path:
+        details.setdefault("path", path)
+    code = getattr(exc, "code", None)
+    if isinstance(code, str) and code:
+        details.setdefault("code", code)
+    errors = getattr(exc, "errors", None)
+    if isinstance(errors, list) and errors:
+        details.setdefault("errors", errors)
+    return details
+
+
 def _maybe_validate_spec(spec: dict[str, Any]) -> None:
+    """Validate complete M## specs via 21A; skip G3/legacy and incomplete payloads."""
     try:
         from app.core import mdl_validator
+        from app.core.mdl_types import MISSION_ID_PATTERN, MISSION_REQUIRED_FIELDS
     except ImportError:
+        return
+    mission_id = str(spec.get("id") or "")
+    if not re.fullmatch(MISSION_ID_PATTERN, mission_id):
+        return
+    if any(field not in spec for field in MISSION_REQUIRED_FIELDS):
         return
     validator = None
     for name in ("validate_mission", "validate_spec", "validate"):
@@ -84,7 +106,10 @@ def _maybe_validate_spec(spec: dict[str, Any]) -> None:
     except AppError:
         raise
     except (ValueError, TypeError) as exc:
-        raise ValidationAppError(str(exc) or "Mission spec failed validation") from exc
+        raise ValidationAppError(
+            str(exc) or "Mission spec failed validation",
+            details=validation_error_details(exc),
+        ) from exc
     except Exception:
         return
     if result is False:

@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - integration/v3-g3-platform
+      - integration/v3-g4-runtime
 
 permissions:
   contents: read
@@ -32,7 +33,7 @@ jobs:
       - name: G3 integration scenario
         env:
           PYTHONPATH: platform/backend
-        run: python -m pytest -q tests/platform/integration
+        run: python -m pytest -q tests/platform/integration tests/platform/authoring
 
   frontend:
     runs-on: ubuntu-latest
@@ -69,7 +70,7 @@ jobs:
       - name: Repository contract validation
         run: python tools/validate_repo.py
       - name: Platform Python static compile
-        run: python -m compileall -q platform/backend/app platform/worker tools/platform
+        run: python -m compileall -q platform/backend/app platform/worker tools/platform tools/authoring
 
   tooling:
     runs-on: ubuntu-latest

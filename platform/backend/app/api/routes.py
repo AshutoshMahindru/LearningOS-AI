@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import importlib
 import json
+import re
 import sqlite3
 import uuid
 from contextlib import contextmanager
@@ -202,6 +203,33 @@ def _append_ledger_event(
         EventLedger(conn).append(learner_id, event_type, payload)
     except Exception:
         return
+
+
+def _maybe_validate_imported_missions(result: Any) -> None:
+    """Validate imported M## missions with 21A; G3-style ids stay G3-loader-only."""
+    try:
+        from app.core.mdl_types import MISSION_ID_PATTERN, ValidationError
+        from app.core.mdl_validator import validate_mission
+    except ImportError:
+        return
+    missions = getattr(result, "missions", None)
+    if missions is None and isinstance(result, dict):
+        missions = result.get("missions")
+    if not missions:
+        return
+    pattern = re.compile(MISSION_ID_PATTERN)
+    for spec in missions:
+        if not isinstance(spec, dict):
+            continue
+        if not pattern.fullmatch(str(spec.get("id") or "")):
+            continue
+        try:
+            validate_mission(spec)
+        except ValidationError as exc:
+            raise ValidationAppError(
+                str(exc),
+                details=runtime.validation_error_details(exc),
+            ) from exc
 
 
 def _register_loaded_package(result: Any) -> None:
@@ -497,6 +525,7 @@ async def load_curriculum_package(payload: CurriculumLoadRequest) -> dict[str, A
             )
     if not loaded:
         raise CurriculumUnavailableError("Curriculum loader is not available")
+    _maybe_validate_imported_missions(result)
     _register_loaded_package(result)
     return _normalize_package(result)
 
