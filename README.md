@@ -8,57 +8,57 @@ LearningOS V3 is a schema-driven, local-first pedagogy engine for software engin
 
 **Key Principles:**
 - **Zero Mission-Specific Logic:** The platform has no hardcoded knowledge of the "missions" it runs. Everything is driven by a unified `MissionSchema`.
-- **Local-First Verification:** No internet is required to run the primary loop. Cryptographic hashes of predictions and local test execution seal the learner's evidence ledger on their local machine.
-- **Socratic Friction:** The integrated AI Tutor daemon is strictly forbidden from providing code answers. It uses generative AI only to increase the learner's cognitive load by forcing them to articulate their hypotheses.
+- **Local-First Verification:** No internet is required to run the primary loop. Learner state lives under `LEARNINGOS_HOME` (default `~/.learningos`), never inside the Git worktree.
+- **Socratic Friction:** The tutor surface is a later-gate capability. In the G3 platform foundation, `POST /api/v1/tutor/chat` returns `501 TUTOR_NOT_AVAILABLE` and does not proxy provider APIs or read `OPENAI_API_KEY`.
 
 ## Architecture
 
 LearningOS V3 consists of a three-tier architecture:
 
 1. **Frontend (`platform/frontend`)**
-   - React 18 + Vite SPA built with Tailwind CSS.
-   - Features a premium "Deep Space" glassmorphic UI.
-   - Responsible for rendering dynamic stages (`CodeReadingStage`, `InterrogateStage`, `CompetencyGateStage`) mapped from the backend schema.
-   
-2. **Backend Server (`platform/backend`)**
-   - FastAPI server using `uvicorn`.
-   - Manages the local SQLite database (`learningos.db`) containing the `MissionSchema`, `MissionSessions`, and `EvidenceLedger`.
-   - Hosts the `TutorChat` route which proxies requests to the OpenAI API (or falls back to a local heuristic pattern-matcher).
+   - React + Vite SPA with a generic application shell (catalog, artifacts, settings).
+   - Talks to the local API at `/api/v1` (Vite proxies to `http://127.0.0.1:8765` in development).
+   - No mission-specific pages or provider secrets in the browser.
 
-3. **Execution Worker Daemon (`platform/backend/worker_daemon.py`)**
-   - A standalone Python script running in the background.
-   - Listens on a Unix Domain Socket (`/tmp/learningos_worker.sock`).
-   - Safely isolates arbitrary code execution from the main API process.
+2. **Backend Server (`platform/backend`)**
+   - FastAPI + uvicorn on `http://127.0.0.1:8765`.
+   - SQLite at `$LEARNINGOS_HOME/learningos.db` (WAL), checksummed artifacts, append-only ledger, backup/restore.
+   - Local loopback bearer token in `$LEARNINGOS_HOME/.auth_token`. Provider keys, if present in the process environment, are never returned on `/system/config`.
+
+3. **Execution Worker (`platform/worker/daemon.py`)**
+   - Canonical JSON-RPC 2.0 daemon started by `./start.sh`.
+   - Socket: `$LEARNINGOS_WORKER_SOCKET`, else `$LEARNINGOS_HOME/run/worker.sock`.
+   - Isolated from the API process. G3 does not `exec()` untrusted mission code (WP400 sandbox is later). There is no `platform/backend/worker_daemon.py`.
 
 ## Setup & Running
 
-This project uses `uv` for Python dependency management and `npm` for Node.js.
+Python 3.11+ and Node.js 20+ are required.
 
-### 1. Prerequisites
-- [uv](https://docs.astral.sh/uv/) installed on your system.
-- Node.js (v18+) and npm installed.
-
-### 2. Configuration
-If you want the Socratic Tutor to use generative AI, export your OpenAI API key in your terminal:
 ```bash
-export OPENAI_API_KEY="sk-..."
-```
-*(If you do not provide this, the system will gracefully fall back to a local heuristic pattern-matching engine.)*
-
-### 3. Launching the System
-We provide a unified startup script that uses background job control to launch the Frontend, Backend, and Worker concurrently.
-
-Run the following command from the repository root:
-```bash
+python3 -m pip install -r platform/backend/requirements.txt
+npm ci --prefix platform/frontend
 ./start.sh
 ```
 
-**Services Started:**
-- **Frontend UI:** `http://localhost:5173`
-- **Backend API:** `http://127.0.0.1:8000`
-- **Execution Socket:** `/tmp/learningos_worker.sock`
+Learner data defaults to `~/.learningos`. Override with an **external** directory:
 
-To shut down all services cleanly, press `Ctrl+C`.
+```bash
+LEARNINGOS_HOME=/tmp/learningos-dev ./start.sh
+```
 
----
-*Built incrementally over multiple pair-programming sessions.*
+**Services started:**
+- Frontend UI: `http://127.0.0.1:5173`
+- Backend API: `http://127.0.0.1:8765/api/v1`
+- Worker socket: `$LEARNINGOS_HOME/run/worker.sock`
+
+Diagnostics:
+
+```bash
+./start.sh --check
+./start.sh --smoke --timeout 60
+python3 tools/platform/state_guard.py
+```
+
+`Ctrl+C` stops every service. See `tools/platform/README.md` for preflight and environment overrides.
+
+Backup restore unpacks into a **clean** `dest_home` (Settings and `POST /api/v1/system/restore`). The live data home is not a valid restore target because it already contains the database.

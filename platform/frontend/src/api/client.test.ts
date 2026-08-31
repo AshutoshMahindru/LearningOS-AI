@@ -6,6 +6,7 @@ import {
   getAuthToken,
   listMissions,
   mapErrorResponse,
+  restoreBackup,
   setAuthToken,
 } from './client';
 
@@ -76,5 +77,26 @@ describe('API client', () => {
     expect(String(url)).toContain('/api/v1/missions');
     const headers = new Headers(init?.headers);
     expect(headers.get('Authorization')).toBe('Bearer loopback-token');
+  });
+
+  it('sends dest_home on restore so a clean home can be the target', async () => {
+    const fetchMock = vi.fn(async () =>
+      jsonResponse({ status: 'RESTORED', path: '/tmp/backup.tar.gz', dest_home: '/tmp/clean-home' }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+    setAuthToken('loopback-token');
+
+    await restoreBackup({
+      path: '/tmp/backup.tar.gz',
+      dest_home: '/tmp/clean-home',
+    });
+
+    const url = String(fetchMock.mock.calls[0]?.[0]);
+    const init = fetchMock.mock.calls[0]?.[1] as RequestInit | undefined;
+    expect(url).toContain('/api/v1/system/restore');
+    expect(JSON.parse(String(init?.body))).toEqual({
+      path: '/tmp/backup.tar.gz',
+      dest_home: '/tmp/clean-home',
+    });
   });
 });
