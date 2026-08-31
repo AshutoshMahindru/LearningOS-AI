@@ -1,10 +1,5 @@
-import React from 'react';
+import { UnavailableSurface } from '../components/UnavailableSurface';
 
-export const ReviewsSurface: React.FC = () => {
-  return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">Reviews & Flagship Portfolio</h1>
-      <p className="text-textSecondary">Engineering reviews, ADRs, and Flagship System release management.</p>
-    </div>
-  );
-};
+export function ReviewsSurface() {
+  return <UnavailableSurface title="Reviews" />;
+}
