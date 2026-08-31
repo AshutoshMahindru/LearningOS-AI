@@ -1,0 +1,12 @@
+{
+  "id": "g3.fixture.curriculum",
+  "version": "3.0.0",
+  "title": "G3 fixture curriculum",
+  "missions": [
+    {
+      "id": "g3.fixture.orientation",
+      "path": "missions/g3.fixture.orientation.json"
+    }
+  ],
+  "digest": "2217dfb20e33ce0246e945475efbd748e16f182ef2da185a0ea73c3e088dd7e3"
+}

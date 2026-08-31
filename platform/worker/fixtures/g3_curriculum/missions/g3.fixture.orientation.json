@@ -1,0 +1,17 @@
+{
+  "id": "g3.fixture.orientation",
+  "title": "Orientation",
+  "version": "3.0.0",
+  "phase": {
+    "id": "g3.fixture",
+    "title": "G3 Fixture"
+  },
+  "order_index": 1,
+  "stages": [
+    {
+      "id": "orientation",
+      "title": "Meet the platform",
+      "type": "orientation"
+    }
+  ]
+}
