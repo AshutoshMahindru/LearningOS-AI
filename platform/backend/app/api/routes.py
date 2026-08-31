@@ -11,8 +11,9 @@ from pathlib import Path
 from typing import Any, Iterator
 
 from fastapi import APIRouter, Depends, Request
-from fastapi.responses import Response
+from fastapi.responses import JSONResponse, Response
 
+from app.api import runtime
 from app.core.config import get_settings, public_config, worker_alive
 from app.core.errors import (
     AppError,
@@ -20,7 +21,6 @@ from app.core.errors import (
     CurriculumUnavailableError,
     InternalError,
     NotFoundError,
-    QuarantinedError,
     StorageUnavailableError,
     TutorUnavailableError,
     ValidationAppError,
@@ -314,6 +314,7 @@ async def get_learner(learner_id: str) -> dict[str, Any]:
 @protected_router.post("/sessions")
 async def create_session(payload: SessionCreateRequest) -> dict[str, Any]:
     session_id = str(uuid.uuid4())
+    current_stage_id = None
     with _db_conn() as conn:
         try:
             cursor = conn.cursor()
@@ -328,13 +329,16 @@ async def create_session(payload: SessionCreateRequest) -> dict[str, Any]:
                 raise
             except sqlite3.OperationalError:
                 pass
+            spec = runtime.load_mission_spec(conn, payload.mission_id)
+            current_stage_id = runtime.first_stage_id(spec)
             cursor.execute(
                 """
-                INSERT INTO mission_sessions (id, learner_id, mission_id, current_stage_id)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO mission_sessions (id, learner_id, mission_id, status, current_stage_id)
+                VALUES (?, ?, ?, ?, ?)
                 """,
-                (session_id, payload.learner_id, payload.mission_id, "start"),
+                (session_id, payload.learner_id, payload.mission_id, runtime.SESSION_ACTIVE, current_stage_id),
             )
+            runtime.ensure_ready_attempt(conn, session_id, runtime.get_stage(spec, current_stage_id))
             conn.commit()
         except AppError:
             conn.rollback()
@@ -346,6 +350,8 @@ async def create_session(payload: SessionCreateRequest) -> dict[str, Any]:
         "session_id": session_id,
         "mission_id": payload.mission_id,
         "learner_id": payload.learner_id,
+        "status": runtime.SESSION_ACTIVE,
+        "current_stage_id": current_stage_id,
     }
 
 
@@ -353,17 +359,12 @@ async def create_session(payload: SessionCreateRequest) -> dict[str, Any]:
 async def get_session(session_id: str) -> dict[str, Any]:
     with _db_conn() as conn:
         try:
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM mission_sessions WHERE id = ?", (session_id,))
-            row = cursor.fetchone()
+            session = runtime.load_session(conn, session_id)
+            return runtime.enrich_session(conn, session)
+        except AppError:
+            raise
         except Exception as exc:
             raise _map_sqlite_write_error(exc, "Session get") from exc
-    if not row:
-        raise NotFoundError("Session not found", details={"session_id": session_id})
-    data = _row_dict(row)
-    if "id" in data and "session_id" not in data:
-        data["session_id"] = data["id"]
-    return data
 
 
 @protected_router.get("/missions")
@@ -589,28 +590,78 @@ async def restore_system_backup(payload: RestoreRequest) -> dict[str, Any]:
 
 
 @protected_router.post("/sessions/{session_id}/stages/{stage_id}/enter")
-async def enter_stage(session_id: str, stage_id: str) -> None:
-    raise QuarantinedError("Stage enter is not available in G3")
+async def enter_stage(session_id: str, stage_id: str) -> dict[str, Any]:
+    with _db_conn() as conn:
+        try:
+            return runtime.enter_stage(conn, session_id, stage_id)
+        except AppError:
+            raise
+        except Exception as exc:
+            raise _map_sqlite_write_error(exc, "Stage enter") from exc
 
 
 @protected_router.post("/sessions/{session_id}/stages/{stage_id}/predict")
-async def predict_stage(session_id: str, stage_id: str, _payload: PredictCommitRequest) -> None:
-    raise QuarantinedError("Predict-commit is not available in G3")
+async def predict_stage(session_id: str, stage_id: str, payload: PredictCommitRequest) -> dict[str, Any]:
+    with _db_conn() as conn:
+        try:
+            return runtime.commit_prediction(
+                conn,
+                session_id,
+                stage_id,
+                payload.hypothesis,
+                payload.expected_values,
+            )
+        except AppError:
+            raise
+        except Exception as exc:
+            raise _map_sqlite_write_error(exc, "Predict-commit") from exc
 
 
 @protected_router.post("/sessions/{session_id}/stages/{stage_id}/execute")
-async def execute_stage(session_id: str, stage_id: str, _payload: ExecuteStageRequest) -> None:
-    raise QuarantinedError("Stage execute is not available in G3")
+async def execute_stage(session_id: str, stage_id: str, payload: ExecuteStageRequest) -> JSONResponse:
+    with _db_conn() as conn:
+        try:
+            body = runtime.execute_stage(
+                conn,
+                session_id,
+                stage_id,
+                payload.code,
+                payload.parameters,
+            )
+        except AppError:
+            raise
+        except Exception as exc:
+            raise _map_sqlite_write_error(exc, "Stage execute") from exc
+    status_code = 202 if body.get("status") == "ACCEPTED" else 200
+    return JSONResponse(content=body, status_code=status_code)
 
 
 @protected_router.post("/sessions/{session_id}/stages/{stage_id}/submit")
-async def submit_stage(session_id: str, stage_id: str, _payload: SubmitStageRequest) -> None:
-    raise QuarantinedError("Stage submit is not available in G3")
+async def submit_stage(session_id: str, stage_id: str, payload: SubmitStageRequest) -> dict[str, Any]:
+    with _db_conn() as conn:
+        try:
+            return runtime.submit_stage(
+                conn,
+                session_id,
+                stage_id,
+                payload.explanation,
+                payload.artifacts,
+            )
+        except AppError:
+            raise
+        except Exception as exc:
+            raise _map_sqlite_write_error(exc, "Stage submit") from exc
 
 
 @protected_router.post("/sessions/{session_id}/gates/evaluate")
-async def evaluate_gate(session_id: str) -> None:
-    raise QuarantinedError("Gate evaluation is not available in G3")
+async def evaluate_gate(session_id: str) -> dict[str, Any]:
+    with _db_conn() as conn:
+        try:
+            return runtime.evaluate_gate(conn, session_id)
+        except AppError:
+            raise
+        except Exception as exc:
+            raise _map_sqlite_write_error(exc, "Gate evaluate") from exc
 
 
 @protected_router.post("/tutor/chat")
