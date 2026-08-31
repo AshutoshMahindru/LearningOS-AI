@@ -1,0 +1,8 @@
+# Repository owner is the enforceable reviewer while lane ownership is recorded in WP-006.
+* @AshutoshMahindru
+
+/architecture/learningos-v3/ @AshutoshMahindru
+/.github/workflows/ @AshutoshMahindru
+/platform/backend/ @AshutoshMahindru
+/platform/frontend/ @AshutoshMahindru
+/platform/worker/ @AshutoshMahindru
