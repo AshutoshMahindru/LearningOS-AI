@@ -3,4 +3,3 @@ uvicorn>=0.23.2
 pydantic>=2.0.0
 jsonschema>=4.19.0
 python-multipart>=0.0.6
-openai

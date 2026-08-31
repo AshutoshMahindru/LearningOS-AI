@@ -39,6 +39,7 @@ export function SettingsSurface() {
   const [notice, setNotice] = useState<string | null>(null);
   const [packageDir, setPackageDir] = useState('');
   const [restoreValue, setRestoreValue] = useState('');
+  const [destHome, setDestHome] = useState('');
   const [backup, setBackup] = useState<BackupResponse | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -116,17 +117,26 @@ export function SettingsSurface() {
   const handleRestore = async (event: FormEvent) => {
     event.preventDefault();
     const value = restoreValue.trim();
+    const destination = destHome.trim();
     if (!value) {
       setError('Provide a backup id or path.');
+      return;
+    }
+    if (!destination) {
+      setError('Provide an empty dest_home directory. The live LEARNINGOS_HOME cannot be the restore target.');
       return;
     }
     setBusy(true);
     setError(null);
     setNotice(null);
     try {
-      const body = value.includes('/') || value.endsWith('.gz') ? { path: value } : { backup_id: value };
-      await restoreBackup(body);
-      setNotice('Restore requested.');
+      const body =
+        value.includes('/') || value.endsWith('.gz')
+          ? { path: value, dest_home: destination }
+          : { backup_id: value, dest_home: destination };
+      const result = await restoreBackup(body);
+      const restoredTo = typeof result.dest_home === 'string' ? result.dest_home : destination;
+      setNotice(`Restore requested into ${restoredTo}.`);
     } catch (err) {
       setError(isApiError(err) ? err.message : 'Restore failed');
     } finally {
@@ -262,7 +272,23 @@ export function SettingsSurface() {
             value={restoreValue}
             onChange={(event) => setRestoreValue(event.target.value)}
           />
-          <Button type="submit" variant="secondary" disabled={busy || !restoreValue.trim()}>
+          <label htmlFor="restore-dest-home" className="block text-sm font-medium">
+            Destination home (empty directory)
+          </label>
+          <input
+            id="restore-dest-home"
+            className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm"
+            value={destHome}
+            onChange={(event) => setDestHome(event.target.value)}
+            placeholder="/tmp/learningos-restore"
+            autoComplete="off"
+          />
+          <p className="text-xs text-textSecondary">
+            Restore unpacks into a clean <code>dest_home</code>. The live data home
+            {config?.data_home ? ` (${config.data_home})` : ''} already contains the database, so it
+            cannot be the target.
+          </p>
+          <Button type="submit" variant="secondary" disabled={busy || !restoreValue.trim() || !destHome.trim()}>
             Restore
           </Button>
         </form>

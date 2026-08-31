@@ -104,6 +104,7 @@ export type BackupResponse = {
 export type RestoreRequest = {
   backup_id?: string;
   path?: string;
+  dest_home?: string;
 };
 
 export type ApiErrorEnvelope = {

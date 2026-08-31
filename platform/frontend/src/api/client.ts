@@ -384,9 +384,16 @@ export async function createBackup(): Promise<BackupResponse> {
 }
 
 export async function restoreBackup(body: RestoreRequest): Promise<Record<string, unknown>> {
-  const payload: RestoreRequest = body.backup_id
-    ? { backup_id: body.backup_id }
-    : { path: body.path };
+  const payload: RestoreRequest = {};
+  if (body.backup_id) {
+    payload.backup_id = body.backup_id;
+  } else if (body.path) {
+    payload.path = body.path;
+  }
+  const destHome = body.dest_home?.trim();
+  if (destHome) {
+    payload.dest_home = destHome;
+  }
   return requestJson('/system/restore', {
     method: 'POST',
     ...jsonBody(payload),
