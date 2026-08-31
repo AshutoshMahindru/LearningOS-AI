@@ -179,6 +179,39 @@ def _import_backup_fn(name: str) -> Any | None:
     return None
 
 
+def _home_empty_of_db_and_artifacts(home: Path) -> bool:
+    db = home / "learningos.db"
+    if db.exists() or Path(str(db) + "-wal").exists() or Path(str(db) + "-shm").exists():
+        return False
+    artifacts = home / "artifacts"
+    if artifacts.is_dir():
+        for path in artifacts.rglob("*"):
+            if path.is_file() and not path.name.startswith("."):
+                return False
+    return True
+
+
+def _append_ledger_event(
+    conn: sqlite3.Connection, learner_id: str, event_type: str, payload: dict[str, Any]
+) -> None:
+    try:
+        from app.db.ledger import EventLedger
+    except ImportError:
+        return
+    try:
+        EventLedger(conn).append(learner_id, event_type, payload)
+    except Exception:
+        return
+
+
+def _register_loaded_package(result: Any) -> None:
+    try:
+        registry = importlib.import_module("app.core.registry")
+    except ImportError:
+        return
+    _call_first(registry, ("register_package",), result)
+
+
 def _decode_artifact_bytes(raw_b64: str) -> bytes:
     try:
         return base64.b64decode(raw_b64, validate=True)
@@ -245,6 +278,12 @@ async def create_learner(payload: LearnerCreateRequest) -> dict[str, Any]:
         except Exception as exc:
             conn.rollback()
             raise _map_sqlite_write_error(exc, "Learner create") from exc
+        _append_ledger_event(
+            conn,
+            learner_id,
+            "learner_created",
+            {"username": payload.username, "display_name": display_name},
+        )
     return {"learner_id": learner_id, "username": payload.username, "display_name": display_name}
 
 
@@ -429,12 +468,21 @@ async def load_curriculum_package(payload: CurriculumLoadRequest) -> dict[str, A
         mission_loader = importlib.import_module("app.core.mission_loader")
     except ImportError:
         mission_loader = None
-    if mission_loader is not None:
-        loaded, result = _call_first(
-            mission_loader,
-            ("load_package", "load", "install_package"),
-            package_dir,
-        )
+    try:
+        if mission_loader is not None:
+            loaded, result = _call_first(
+                mission_loader,
+                ("load_package", "load", "install_package"),
+                package_dir,
+            )
+    except Exception as exc:
+        code = getattr(exc, "code", None)
+        if code or isinstance(exc, ValueError):
+            details = dict(getattr(exc, "details", None) or {})
+            if code:
+                details["code"] = code
+            raise ValidationAppError(str(exc), details=details) from exc
+        raise
     if not loaded:
         try:
             registry = importlib.import_module("app.core.registry")
@@ -443,11 +491,12 @@ async def load_curriculum_package(payload: CurriculumLoadRequest) -> dict[str, A
         if registry is not None:
             loaded, result = _call_first(
                 registry,
-                ("load_package", "load", "install_package", "register_package"),
+                ("load_package", "load", "install_package"),
                 package_dir,
             )
     if not loaded:
         raise CurriculumUnavailableError("Curriculum loader is not available")
+    _register_loaded_package(result)
     return _normalize_package(result)
 
 
@@ -509,16 +558,34 @@ async def restore_system_backup(payload: RestoreRequest) -> dict[str, Any]:
     if not archive:
         raise ValidationAppError("backup_id or path is required")
     archive_path = Path(archive).expanduser()
+    if payload.dest_home:
+        dest = Path(payload.dest_home).expanduser().resolve()
+    else:
+        dest = settings.data_home
+        if not _home_empty_of_db_and_artifacts(dest):
+            raise ValidationAppError(
+                "Restore destination is not empty of db/artifacts; provide dest_home pointing at a clean directory"
+            )
     try:
-        fn(archive_path, settings.data_home)
+        fn(archive_path, dest)
     except TypeError:
         try:
             fn(archive_path)
+        except FileExistsError as exc:
+            raise ValidationAppError(str(exc) or "Restore destination is not empty") from exc
+        except FileNotFoundError as exc:
+            raise NotFoundError("Backup archive not found") from exc
         except Exception as exc:
             raise StorageUnavailableError("Restore failed") from exc
+    except FileExistsError as exc:
+        raise ValidationAppError(str(exc) or "Restore destination is not empty") from exc
+    except FileNotFoundError as exc:
+        raise NotFoundError("Backup archive not found") from exc
+    except (NotADirectoryError, ValueError) as exc:
+        raise ValidationAppError(str(exc)) from exc
     except Exception as exc:
         raise StorageUnavailableError("Restore failed") from exc
-    return {"status": "RESTORED", "path": str(archive_path)}
+    return {"status": "RESTORED", "path": str(archive_path), "dest_home": str(dest)}
 
 
 @protected_router.post("/sessions/{session_id}/stages/{stage_id}/enter")

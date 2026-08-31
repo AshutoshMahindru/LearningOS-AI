@@ -44,7 +44,11 @@ def test_health_worker_alive_when_socket_accepts(data_home, monkeypatch):
         def _accept() -> None:
             try:
                 conn, _ = server.accept()
-                conn.close()
+                try:
+                    conn.recv(65536)
+                    conn.sendall(b'{"jsonrpc":"2.0","id":"1","result":{"alive":true,"pid":1}}\n')
+                finally:
+                    conn.close()
             except OSError:
                 pass
 

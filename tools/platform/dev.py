@@ -404,6 +404,10 @@ def main(argv: list[str] | None = None) -> int:
     environment = os.environ.copy()
     environment["LEARNINGOS_HOME"] = str(data_home)
     environment.setdefault("PYTHONUNBUFFERED", "1")
+    if not environment.get("LEARNINGOS_WORKER_SOCKET"):
+        worker_socket = data_home / "run" / "worker.sock"
+        worker_socket.parent.mkdir(parents=True, exist_ok=True)
+        environment["LEARNINGOS_WORKER_SOCKET"] = str(worker_socket)
     supervisor = Supervisor(environment=environment)
     stop_requested = Event()
 
@@ -424,7 +428,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Backend:  http://{args.host}:{args.backend_port}/api/v1")
         print(f"Data:     {data_home}")
         if args.smoke:
-            socket_path = Path(os.environ.get("LEARNINGOS_WORKER_SOCKET", DEFAULT_WORKER_SOCKET))
+            socket_path = Path(
+                environment.get("LEARNINGOS_WORKER_SOCKET")
+                or os.environ.get("LEARNINGOS_WORKER_SOCKET")
+                or DEFAULT_WORKER_SOCKET
+            )
             passed = wait_for_smoke(
                 supervisor,
                 host=args.host,

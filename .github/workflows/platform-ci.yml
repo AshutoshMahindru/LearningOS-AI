@@ -29,6 +29,10 @@ jobs:
       - name: Backend tests
         working-directory: platform/backend
         run: python -m pytest -q tests
+      - name: G3 integration scenario
+        env:
+          PYTHONPATH: platform/backend
+        run: python -m pytest -q tests/platform/integration
 
   frontend:
     runs-on: ubuntu-latest
@@ -48,6 +52,9 @@ jobs:
       - name: Type-check and build
         working-directory: platform/frontend
         run: npm run build
+      - name: Unit tests
+        working-directory: platform/frontend
+        run: npm test
 
   contracts:
     runs-on: ubuntu-latest

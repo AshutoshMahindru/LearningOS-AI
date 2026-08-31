@@ -144,13 +144,14 @@ def test_registry_persists_when_connection_available():
 def test_register_does_not_write_developer_home(isolated_home):
     package = load_package(fixture_package_path())
     registry = CurriculumRegistry()
-    registry.register_package(package)
     real_home_db = Path.home() / ".learningos" / "learningos.db"
-    # Loader must not create or touch the implicit home database.
-    assert not (isolated_home / "learningos.db").exists()
-    # And it must not use Path.home() just because LEARNINGOS_HOME is a tmp dir.
-    if real_home_db.exists():
-        before = real_home_db.stat().st_mtime_ns
-        registry.register_package(package)
+    before = real_home_db.stat().st_mtime_ns if real_home_db.exists() else None
+    registry.register_package(package)
+    # After 11D, probing get_connection() may create a db under LEARNINGOS_HOME.
+    # The lane contract is that the developer home must not be used.
+    if before is None:
+        assert not real_home_db.exists()
+    else:
         after = real_home_db.stat().st_mtime_ns
         assert after == before
+    assert isolated_home.resolve() != (Path.home() / ".learningos").resolve()

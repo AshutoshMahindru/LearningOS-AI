@@ -24,7 +24,13 @@ def test_artifacts_return_501_when_store_missing(client, auth_headers, monkeypat
     assert_typed_error(fetched, 501, "STORAGE_UNAVAILABLE")
 
 
-def test_curriculum_returns_501_when_loader_missing_methods(client, auth_headers):
+def test_curriculum_returns_501_when_loader_missing_methods(client, auth_headers, monkeypatch):
+    from app.api import routes
+
+    def _missing(_name: str, *args, **kwargs):
+        raise ImportError(_name)
+
+    monkeypatch.setattr(routes.importlib, "import_module", _missing)
     load = client.post(
         "/api/v1/curriculum/packages/load",
         json={"package_dir": "/tmp/missing-package"},

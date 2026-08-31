@@ -48,6 +48,7 @@ class CurriculumLoadRequest(BaseModel):
 class RestoreRequest(BaseModel):
     backup_id: Optional[str] = None
     path: Optional[str] = None
+    dest_home: Optional[str] = None
 
     @model_validator(mode="after")
     def require_backup_target(self) -> "RestoreRequest":
