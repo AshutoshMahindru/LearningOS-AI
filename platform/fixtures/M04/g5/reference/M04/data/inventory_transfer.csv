@@ -1,0 +1,11 @@
+sku,item_name,warehouse,quantity,unit_cost,received_date
+SKU-1001,Widget A,North,10,12.50,2026-03-01
+SKU-1002,  Gadget B , north ,5,"₹1,200.00",01/03/2026
+SKU-1003,Bolt C,East,20,3.10,Mar 2 2026
+SKU-1003,Bolt C,East,20,3.10,Mar 2 2026
+SKU-1004,Panel D,West,two,45.00,2026-03-04
+SKU-1005,Crate E,,8,22.00,2026-03-05
+SKU-1006,Reel F,North,4,18.75,2026/03/06
+SKU-1006,Reel F,South,12,18.75,2026-03-06
+SKU-1007,Drum G,Central,1,"$2,500.00",2026-03-07
+SKU-1008,Pallet H approved bulk receipt,East,500,9.99,2026-03-08
