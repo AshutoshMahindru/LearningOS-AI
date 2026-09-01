@@ -1,0 +1,108 @@
+{
+  "id": "M05",
+  "title": "Understand Arrays by Making Python Too Slow",
+  "phase": {
+    "id": "P1",
+    "title": "Computational & Data Fluency"
+  },
+  "order_index": 5,
+  "flagship_version": "V01",
+  "core_invariant": "Keep the useful pricing rule identical while changing only the computational representation. Treat timing as measured evidence, not a universal speed guarantee. A faster result is only acceptable after numerical equivalence is checked. Generic WP-137 chart, metric, and table blocks carry the benchmark; there is no custom M05 frontend.",
+  "competencies": [
+    "comp.array.performance_reasoning",
+    "comp.array.timing_prediction",
+    "comp.array.benchmark_fairness",
+    "comp.array.vectorization_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m05.loop_overhead",
+    "kn.m05.vectorization",
+    "kn.m05.correctness_before_speed",
+    "kn.m05.fair_benchmark",
+    "kn.m05.chart_interpretation"
+  ],
+  "prerequisites": ["M04"],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the timing problem as a useful whole",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the mission invariant and the whole-first pricing route: order quantities × product prices → discounts → shipping rule → order totals. The same business rule is kept while the representation changes from nested Python loops to bulk array operations. Identify the evidence the gate will require: a WP-137 chart of timings, a table diagnosing benchmark fairness, and an unassisted transfer metric. The generic Mission Player and Workbench render those catalogue block types; do not expect a named-mission chart page."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, execute, and chart a timing comparison",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on a CPU-only timing benchmark of the same pricing rule. (1) PREDICT which representation (Python-level element loops vs bulk/vectorized array operations) will be faster at a stated workload size, and whether floating-point totals will be exactly equal or only tolerance-equal. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE the benchmark with data generation outside both timed regions; emit WP-137 blocks: a bar or line chart of durations (and optionally scale versus time), a metric of loop_seconds / bulk_seconds / observed_speedup, and a table of raw timings. (4) OBSERVE the structured chart and metrics. (5) SUBMIT an explanation of any delta between prediction and observation. Treat timing as hardware-dependent evidence. Do not require a fixed speedup. Correctness must be checked before trusting speed.",
+      "runner": {
+        "module": "g5.reference.M05.experiment",
+        "entrypoint": "run_timing_benchmark",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "chart",
+        "pass_criteria": "Prediction is sealed before execute; the submitted explanation covers the observed chart series, the raw durations, the correctness comparison, and why speed is not proof of correctness. No universal speed threshold is used."
+      }
+    },
+    {
+      "id": "stage_03_controlled_failure",
+      "title": "Diagnose an unfair benchmark and a wrong-axis reduction",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Two faults are injected. Fault A: a benchmark includes random data generation inside the bulk/vectorized timing but uses prebuilt data in the loop timing. Predict why the comparison is unfair, execute the broken and repaired protocols, and emit a WP-137 table of setup-inside versus setup-outside durations plus a metric of the confound. Repair by moving common setup outside both timings, repeating measurements, and reporting raw durations without a universal speed threshold. Fault B: a valid aggregation returns product totals when the caller expects order totals. Diagnose the removed axis from shapes and meanings, make the smallest repair, and verify shape plus numerical results as metric blocks. Capture both diagnoses with generic table and metric blocks — not a custom debugger page.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Identifies the unfair timing confound and the semantic axis error; the repaired benchmark keeps shared setup outside both timings; the repaired reduction matches the intended axis meaning."
+      }
+    },
+    {
+      "id": "stage_04_transfer",
+      "title": "Fresh-case timing and shape transfer without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Apply the same predict → execute → observe → explain protocol to a fresh case supplied at runtime: units shaped (stores, products), prices shaped (products,), and markdown rates shaped (stores, 1). Predict every intermediate shape, which broadcasts occur, and which representation will be faster. Implement vectorized net revenue, compare it to a loop baseline with an explicit tolerance, and emit a WP-137 chart of the fresh timing comparison plus a metric of shapes, broadcasts, and numerical agreement. Tutor, hints, and prior-answer surfaces stay locked. Do not treat observed speedup as a pass/fail score.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Predictions precede implementation; shapes and both broadcasts are correct; vectorized results match a loop baseline within an explicit tolerance; the chart reports observed durations without a hardware-dependent pass threshold."
+      }
+    },
+    {
+      "id": "stage_05_gate",
+      "title": "Evaluate timing, fairness, and transfer evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, timing-chart experiment, controlled-failure diagnosis, and transfer evidence against the mission gate contract. Issue PASSED or a targeted repair plan. Do not award speed claims without a correctness comparison. Timing charts remain observations."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.array.performance_reasoning",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.array.timing_prediction",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "chart"
+      },
+      {
+        "competency_id": "comp.array.benchmark_fairness",
+        "stage_id": "stage_03_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.array.vectorization_transfer",
+        "stage_id": "stage_04_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
