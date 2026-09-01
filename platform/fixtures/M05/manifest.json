@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M05",
+  "version": "5.0.0",
+  "title": "G5 M05 reference package",
+  "description": "Reference M05 timings, benchmarking, charts, and performance reasoning on the generic runtime. WP-136 mission id is M05. Package id is g5.reference.M05. Stages are catalogue experiment/chart-oriented compositions; WP-137 chart, metric, and table blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M05",
+      "path": "missions/M05.json"
+    }
+  ],
+  "digest": "95df37f2173d4c24425eae70a0e5628fd93681a9886da2972c3ac4bf9928dab8"
+}
