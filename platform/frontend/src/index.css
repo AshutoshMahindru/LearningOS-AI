@@ -138,6 +138,32 @@
     border-color: var(--color-primary);
     background: rgb(12 74 110 / 0.3);
   }
+
+  .diagnostics-root {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+  }
+
+  .diagnostics-backdrop {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: rgb(2 6 23 / 0.55);
+  }
+
+  .diagnostics-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: min(32rem, 100%);
+    overflow: auto;
+    background: var(--color-surface);
+    border-left: 1px solid var(--color-border);
+    box-shadow: var(--shadow-panel);
+    padding: var(--space-6);
+  }
 }
 
 @layer utilities {

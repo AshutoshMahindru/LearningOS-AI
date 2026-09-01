@@ -1,17 +1,18 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from '../components/Button';
+import { DiagnosticsDrawer } from '../components/DiagnosticsDrawer';
 import { useAuth } from '../context/AuthContext';
 import { cn } from '../cn';
 
 const PRIMARY_NAV = [
   { to: '/', label: 'Dashboard' },
+  { to: '/player', label: 'Player' },
   { to: '/artifacts', label: 'Artifacts' },
   { to: '/settings', label: 'Settings' },
 ] as const;
 
 const LATER_NAV = [
-  { to: '/player', label: 'Player' },
   { to: '/workbench', label: 'Workbench' },
   { to: '/tutor', label: 'Tutor' },
   { to: '/reviews', label: 'Reviews' },
@@ -24,6 +25,7 @@ function navClassName({ isActive }: { isActive: boolean }): string {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { learner, logout } = useAuth();
+  const [diagnosticsOpen, setDiagnosticsOpen] = useState(false);
 
   return (
     <div className="app-shell">
@@ -71,11 +73,15 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Button variant="secondary" onClick={logout} className="w-full">
             Switch learner
           </Button>
+          <Button variant="ghost" className="w-full" onClick={() => setDiagnosticsOpen(true)}>
+            Diagnostics
+          </Button>
         </div>
       </header>
       <main id="main-content" className="min-h-screen overflow-auto p-8" tabIndex={-1}>
         {children}
       </main>
+      <DiagnosticsDrawer open={diagnosticsOpen} onClose={() => setDiagnosticsOpen(false)} />
     </div>
   );
 }

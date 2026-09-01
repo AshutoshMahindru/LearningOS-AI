@@ -57,7 +57,7 @@ export function DashboardSurface() {
       <div>
         <h1 className="text-3xl font-black tracking-tight">Dashboard</h1>
         <p className="mt-2 text-textSecondary">
-          Catalog of missions loaded by the local API. Mission runtime is not part of G3.
+          Catalog of missions loaded by the local API. Starting a session opens the generic mission player.
         </p>
       </div>
 
