@@ -402,3 +402,40 @@ def test_f01_m00_runtime_roundtrip(f01_env):
         assert not (REPO_ROOT / "learningos.db").exists()
     finally:
         _stop_worker(worker)
+
+
+def test_live_worker_client_denies_io_open_db_write(f01_env):
+    """Independent-review probe: import io; io.open(db, 'w') on live WorkerClient."""
+    from app.core.worker_client import WorkerClient
+
+    home: Path = f01_env["home"]
+    sock: Path = f01_env["sock"]
+    env: dict[str, str] = f01_env["env"]
+    db_path = home / "learningos.db"
+    db_path.write_bytes(b"untouched")
+    repo_marker = REPO_ROOT / f".wp400-pwn-{uuid.uuid4().hex}.txt"
+    limits = {"limits": {"timeout_sec": 5, "memory_mb": 256}}
+    worker = _start_worker(env)
+    try:
+        assert _wait_until(lambda: sock.exists()), f"worker socket was not created at {sock}"
+        client = WorkerClient(sock)
+        assert _wait_until(client.health)
+        allowed = client.execute("print('sandbox-ok')", limits)
+        assert allowed.get("status") == "SUCCESS", allowed
+        assert allowed.get("status") != "UNSUPPORTED"
+        probe = client.execute(
+            f"import io\nio.open({str(db_path)!r}, 'w').write('corrupt-via-io')",
+            limits,
+        )
+        assert probe.get("status") in {"DENIED", "FAILED"}, probe
+        assert db_path.read_bytes() == b"untouched"
+        tree = client.execute(
+            f"import io\nio.open({str(repo_marker)!r}, 'w').write('pwned')",
+            limits,
+        )
+        assert tree.get("status") in {"DENIED", "FAILED"}, tree
+        assert not repo_marker.exists()
+        client.shutdown()
+    finally:
+        repo_marker.unlink(missing_ok=True)
+        _stop_worker(worker)

@@ -471,7 +471,11 @@ def _normalize_upstream(raw: Any) -> dict[str, Any]:
 
 
 def _invoke_upstream(upstream: Any, spec: dict[str, Any]) -> dict[str, Any]:
-    """Run 31A run_job(ExecutionJob) inside the isolated child."""
+    """Run 31A run_job(ExecutionJob) inside the isolated child.
+
+    WP-137 schema is loaded before path guards so validation does not open
+    architecture files through the job-dir open() wrap.
+    """
     try:
         from app.execution.result_schema import load_result_schema
 
@@ -516,14 +520,14 @@ def main(argv: list[str] | None = None) -> int:
         sys.stderr = err_f
         try:
             upstream = _try_upstream_runner(spec)
-            # Path guards (builtins.open + io.open) apply on every exec path.
-            _install_path_guards(spec, block_dynamic_exec=upstream is None)
             if upstream is not None:
                 try:
                     payload = _invoke_upstream(upstream, spec)
                 except (TypeError, ValueError, AttributeError):
+                    _install_path_guards(spec, block_dynamic_exec=True)
                     payload = _restricted_exec(spec)
             else:
+                _install_path_guards(spec, block_dynamic_exec=True)
                 payload = _restricted_exec(spec)
             status = str(payload.get("status") or "SUCCESS")
             exit_code = int(payload.get("exit_code") or 0)
