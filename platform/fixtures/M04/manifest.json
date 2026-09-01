@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M04",
+  "version": "5.0.0",
+  "title": "G5 M04 reference package",
+  "description": "Tabular data cleaning / quality evidence on the generic runtime. WP-136 id is M04; package id is g5.reference.M04. Lab source and data live in this fixture; not a special platform route.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M04",
+      "path": "missions/M04.json"
+    }
+  ],
+  "digest": "d751aad1065202b41237dbda3eda161844ac5733764e403cc5d5dae3535f8dad"
+}
