@@ -18,6 +18,7 @@ symlink escape, Git worktree writes, and $LEARNINGOS_HOME/*.db are refused.
 from __future__ import annotations
 
 import builtins
+import io as _stdlib_io
 import json
 import os
 import sys
@@ -118,6 +119,7 @@ BANNED_MODULES = frozenset(
 _REAL_EXEC = builtins.exec
 _REAL_COMPILE = builtins.compile
 _REAL_OPEN = builtins.open
+_REAL_FILEIO = _stdlib_io.FileIO
 
 ALLOWED_BUILTIN_NAMES = frozenset(
     {
@@ -300,7 +302,7 @@ def _blocked(name: str):  # type: ignore[no-untyped-def]
     return _fn
 
 
-def _make_path_guards(spec: dict[str, Any]) -> tuple[Any, Any]:
+def _make_path_guards(spec: dict[str, Any]) -> tuple[Any, Any, Any]:
     workdir = Path(spec["workdir"]).resolve()
     repo_root = Path(spec["repo_root"]).resolve() if spec.get("repo_root") else None
     data_home = Path(spec["data_home"]).resolve() if spec.get("data_home") else None
@@ -327,41 +329,66 @@ def _make_path_guards(spec: dict[str, Any]) -> tuple[Any, Any]:
             raise SandboxViolation(f"import of {name!r} is blocked")
         module = original_import(name, globals, locals, fromlist, level)
         if root in {"io", "_io"}:
-            _patch_module_open(module, safe_open)
+            _patch_io_module(module, safe_open, guarded_fileio)
         return module
 
-    return safe_open, safe_import
+    guarded_fileio = _make_guarded_fileio(spec)
+    return safe_open, safe_import, guarded_fileio
 
 
-def _patch_module_open(module: Any, safe_open: Any) -> None:
+def _make_guarded_fileio(spec: dict[str, Any]) -> Any:
+    """Factory wrapping io.FileIO so the real constructor never runs on a denied path."""
+    workdir = Path(spec["workdir"]).resolve()
+    repo_root = Path(spec["repo_root"]).resolve() if spec.get("repo_root") else None
+    data_home = Path(spec["data_home"]).resolve() if spec.get("data_home") else None
+
+    def guarded_fileio(file, mode="r", *args, **kwargs):  # type: ignore[no-untyped-def]
+        if isinstance(file, int):
+            raise SandboxViolation("opening raw file descriptors is not allowed")
+        writing = any(flag in str(mode) for flag in ("w", "a", "x", "+"))
+        _assert_allowed_path(
+            file,
+            workdir=workdir,
+            repo_root=repo_root,
+            data_home=data_home,
+            writing=writing,
+        )
+        return _REAL_FILEIO(file, mode, *args, **kwargs)
+
+    guarded_fileio.__name__ = "FileIO"
+    guarded_fileio.__qualname__ = "FileIO"
+    return guarded_fileio
+
+
+def _patch_io_module(module: Any, safe_open: Any, guarded_fileio: Any) -> None:
     if module is None:
         return
     if hasattr(module, "open"):
         module.open = safe_open
+    if hasattr(module, "FileIO"):
+        module.FileIO = guarded_fileio
 
 
-def _patch_open_primitives(safe_open: Any) -> None:
-    """Wrap builtins.open, io.open, and _io.open on every exec path (including 31A)."""
+def _patch_open_primitives(safe_open: Any, guarded_fileio: Any) -> None:
+    """Wrap open and FileIO aliases on every exec path (including 31A)."""
     builtins.open = safe_open  # type: ignore[assignment]
     import io as io_mod
 
-    _patch_module_open(io_mod, safe_open)
+    _patch_io_module(io_mod, safe_open, guarded_fileio)
     try:
         import _io as io_c
 
-        _patch_module_open(io_c, safe_open)
+        _patch_io_module(io_c, safe_open, guarded_fileio)
     except ImportError:
         pass
-    cached = sys.modules.get("io")
-    if cached is not None:
-        _patch_module_open(cached, safe_open)
-    cached_c = sys.modules.get("_io")
-    if cached_c is not None:
-        _patch_module_open(cached_c, safe_open)
+    for name in ("io", "_io"):
+        cached = sys.modules.get(name)
+        if cached is not None:
+            _patch_io_module(cached, safe_open, guarded_fileio)
 
 
 def _restricted_builtins(spec: dict[str, Any]) -> dict[str, Any]:
-    safe_open, safe_import = _make_path_guards(spec)
+    safe_open, safe_import, _guarded_fileio = _make_path_guards(spec)
     restricted: dict[str, Any] = {"__import__": safe_import, "open": safe_open}
     for name in ALLOWED_BUILTIN_NAMES:
         if hasattr(builtins, name):
@@ -374,10 +401,11 @@ def _install_path_guards(spec: dict[str, Any], *, block_dynamic_exec: bool = Tru
 
     31A's in-process runner copies builtins and uses exec/eval/compile for the
     snippet (block_dynamic_exec=False). Isolation is the subprocess, rlimits,
-    and path-guarded open — including io.open / _io.open, not only builtins.open.
+    and path-guarded open — including io.open / io.FileIO / _io.*, not only
+    builtins.open.
     """
-    safe_open, _safe_import = _make_path_guards(spec)
-    _patch_open_primitives(safe_open)
+    safe_open, _safe_import, guarded_fileio = _make_path_guards(spec)
+    _patch_open_primitives(safe_open, guarded_fileio)
     if block_dynamic_exec:
         builtins.eval = _blocked("eval")  # type: ignore[assignment]
         builtins.exec = _blocked("exec")  # type: ignore[assignment]

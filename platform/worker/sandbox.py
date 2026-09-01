@@ -195,10 +195,13 @@ def prepare_workdir(job_id: str, data_home: Path | None) -> Path:
     return workdir
 
 
-def _is_io_open_call(node: ast.Call) -> bool:
-    """True for io.open(...) / _io.open(...) — filesystem write primitives."""
+_IO_FILE_PRIMITIVES = frozenset({"open", "FileIO"})
+
+
+def _is_io_file_primitive_call(node: ast.Call) -> bool:
+    """True for io.open / io.FileIO / _io.* — filesystem write primitives."""
     func = node.func
-    if isinstance(func, ast.Attribute) and func.attr == "open":
+    if isinstance(func, ast.Attribute) and func.attr in _IO_FILE_PRIMITIVES:
         base = func.value
         if isinstance(base, ast.Name) and base.id in {"io", "_io"}:
             return True
@@ -233,15 +236,16 @@ def ast_preflight(code: str) -> None:
             # still applies, but reject the unguarded alias so 31A cannot skip io.open.
             if root in {"io", "_io"}:
                 for alias in node.names:
-                    if alias.name == "open":
-                        raise SandboxViolation("from io import open is not allowed; use open() inside the job workdir")
+                    if alias.name in _IO_FILE_PRIMITIVES:
+                        raise SandboxViolation(
+                            f"from io import {alias.name} is not allowed; use open() inside the job workdir"
+                        )
         elif isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
             if node.func.id in banned_names:
                 raise SandboxViolation(f"{node.func.id} is not allowed in the sandbox")
-        elif isinstance(node, ast.Call) and _is_io_open_call(node):
-            # io.open is a filesystem write primitive. Runtime wrapping of io.open
+        elif isinstance(node, ast.Call) and _is_io_file_primitive_call(node):
+            # io.open / io.FileIO are filesystem write primitives. Runtime wrapping
             # on every exec path (including 31A) enforces workdir / db / repo policy.
-            # Do not reject the call here so in-workdir io.open still works.
             continue
 
 

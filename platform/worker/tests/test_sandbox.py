@@ -222,6 +222,93 @@ def test_from_io_import_open_is_rejected_by_preflight():
         ast_preflight("from io import open\nopen('x','w')")
 
 
+def test_from_io_import_fileio_is_rejected_by_preflight():
+    with pytest.raises(SandboxViolation, match="FileIO"):
+        ast_preflight("from io import FileIO\nFileIO('x','w')")
+
+
+def test_io_fileio_to_learningos_db_is_denied(worker_env):
+    """Reviewer probe: import io; io.FileIO(LEARNINGOS_HOME/learningos.db, 'w')."""
+    home = worker_env["home"]
+    db_path = home / "learningos.db"
+    db_path.write_bytes(b"safe-bytes")
+    proc = start_daemon(worker_env["env"])
+    client = WorkerClient(worker_env["sock"])
+    try:
+        assert wait_until(client.health)
+        result = client.execute(
+            f"import io\nio.FileIO({str(db_path)!r}, 'w').write(b'corrupt')",
+            _limits(),
+        )
+        assert result.get("status") in {"DENIED", "FAILED"}, result
+        assert db_path.read_bytes() == b"safe-bytes"
+        aliased = client.execute(
+            f"from io import FileIO\nFileIO({str(db_path)!r}, 'w').write(b'corrupt')",
+            _limits(),
+        )
+        assert aliased.get("status") in {"DENIED", "FAILED"}, aliased
+        assert db_path.read_bytes() == b"safe-bytes"
+        client.shutdown()
+        proc.wait(timeout=3)
+    finally:
+        if proc.poll() is None:
+            proc.send_signal(signal.SIGTERM)
+            proc.wait(timeout=3)
+
+
+def test_io_fileio_to_git_worktree_is_denied(worker_env):
+    repo_marker = _repo_root() / f".wp400-pwn-{uuid.uuid4().hex}.txt"
+    proc = start_daemon(worker_env["env"])
+    client = WorkerClient(worker_env["sock"])
+    try:
+        assert wait_until(client.health)
+        result = client.execute(
+            f"import io\nio.FileIO({str(repo_marker)!r}, 'w').write(b'pwned')",
+            _limits(),
+        )
+        assert result.get("status") in {"DENIED", "FAILED"}, result
+        assert not repo_marker.exists()
+        aliased = client.execute(
+            f"from io import FileIO\nFileIO({str(repo_marker)!r}, 'w').write(b'pwned')",
+            _limits(),
+        )
+        assert aliased.get("status") in {"DENIED", "FAILED"}, aliased
+        assert not repo_marker.exists()
+        client.shutdown()
+        proc.wait(timeout=3)
+    finally:
+        repo_marker.unlink(missing_ok=True)
+        if proc.poll() is None:
+            proc.send_signal(signal.SIGTERM)
+            proc.wait(timeout=3)
+
+
+def test_io_fileio_inside_job_dir_still_works(worker_env):
+    proc = start_daemon(worker_env["env"])
+    client = WorkerClient(worker_env["sock"])
+    job_id = "io-fileio-ok"
+    try:
+        assert wait_until(client.health)
+        result = client._rpc(
+            "execute_task",
+            {
+                "job_id": job_id,
+                "code": "import io\nio.FileIO('out.bin','w').write(b'ok')",
+                "limits": {"timeout_sec": 5, "memory_mb": 256},
+            },
+            timeout=10,
+        )
+        assert result.get("status") == "SUCCESS", result
+        workdir = worker_env["home"] / "run" / "jobs" / job_id
+        assert (workdir / "out.bin").read_bytes() == b"ok"
+        client.shutdown()
+        proc.wait(timeout=3)
+    finally:
+        if proc.poll() is None:
+            proc.send_signal(signal.SIGTERM)
+            proc.wait(timeout=3)
+
+
 def test_install_path_guards_wrap_io_open_on_31a_path(tmp_path):
     """31A copies builtins and only patched builtins.open; io.open must still be guarded."""
     workdir = tmp_path / "job"
@@ -238,11 +325,17 @@ def test_install_path_guards_wrap_io_open_on_31a_path(tmp_path):
     }
     original_builtin = builtins.open
     original_io = io.open
+    original_fileio = io.FileIO
     original_cio = getattr(sys.modules.get("_io"), "open", None)
+    original_cfileio = getattr(sys.modules.get("_io"), "FileIO", None)
     try:
         _install_path_guards(spec, block_dynamic_exec=False)
         with pytest.raises(ChildSandboxViolation):
             io.open(str(db_path), "w").write("corrupt")
+        with original_io(str(db_path), "rb") as fh:
+            assert fh.read() == b"safe-bytes"
+        with pytest.raises(ChildSandboxViolation):
+            io.FileIO(str(db_path), "w").write(b"corrupt")
         with original_io(str(db_path), "rb") as fh:
             assert fh.read() == b"safe-bytes"
         with pytest.raises(ChildSandboxViolation):
@@ -252,11 +345,16 @@ def test_install_path_guards_wrap_io_open_on_31a_path(tmp_path):
         handle.write("ok")
         handle.close()
         assert (workdir / "inside.txt").read_text(encoding="utf-8") == "ok"
+        io.FileIO(str(workdir / "inside.bin"), "w").write(b"ok")
+        assert (workdir / "inside.bin").read_bytes() == b"ok"
     finally:
         builtins.open = original_builtin
         io.open = original_io
+        io.FileIO = original_fileio
         if original_cio is not None and "_io" in sys.modules:
             sys.modules["_io"].open = original_cio
+        if original_cfileio is not None and "_io" in sys.modules:
+            sys.modules["_io"].FileIO = original_cfileio
 
 
 def test_refuses_learningos_home_db_write(worker_env):

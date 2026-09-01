@@ -145,6 +145,38 @@ def test_timeout_status_and_worker_stays_alive(worker_env):
             proc.wait(timeout=3)
 
 
+def test_io_fileio_db_and_worktree_denied(worker_env):
+    """Reviewer probe: import io; io.FileIO(db) and from io import FileIO."""
+    db_path = worker_env["home"] / "learningos.db"
+    db_path.write_bytes(b"untouched")
+    repo_marker = _repo_root() / f".wp400-pwn-{uuid.uuid4().hex}.txt"
+    proc = start_daemon(worker_env["env"])
+    client = WorkerClient(worker_env["sock"])
+    try:
+        assert wait_until(client.health)
+        for code in (
+            f"import io; io.FileIO({str(db_path)!r}, 'w').write(b'corrupt')",
+            f"from io import FileIO; FileIO({str(db_path)!r}, 'w').write(b'corrupt')",
+        ):
+            hit = client.execute(code, _limits())
+            assert hit.get("status") in {"DENIED", "FAILED"}, (code, hit)
+            assert db_path.read_bytes() == b"untouched"
+        for code in (
+            f"import io; io.FileIO({str(repo_marker)!r}, 'w').write(b'pwned')",
+            f"from io import FileIO; FileIO({str(repo_marker)!r}, 'w').write(b'pwned')",
+        ):
+            hit = client.execute(code, _limits())
+            assert hit.get("status") in {"DENIED", "FAILED"}, (code, hit)
+            assert not repo_marker.exists()
+        client.shutdown()
+        proc.wait(timeout=3)
+    finally:
+        repo_marker.unlink(missing_ok=True)
+        if proc.poll() is None:
+            proc.send_signal(signal.SIGTERM)
+            proc.wait(timeout=3)
+
+
 def test_io_open_db_and_worktree_denied(worker_env):
     """Reviewer probe: import io; io.open(LEARNINGOS_HOME/learningos.db) and repo writes."""
     db_path = worker_env["home"] / "learningos.db"
