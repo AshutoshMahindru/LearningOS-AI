@@ -115,6 +115,10 @@ BANNED_MODULES = frozenset(
     }
 )
 
+_REAL_EXEC = builtins.exec
+_REAL_COMPILE = builtins.compile
+_REAL_OPEN = builtins.open
+
 ALLOWED_BUILTIN_NAMES = frozenset(
     {
         "ArithmeticError",
@@ -300,7 +304,6 @@ def _make_path_guards(spec: dict[str, Any]) -> tuple[Any, Any]:
     workdir = Path(spec["workdir"]).resolve()
     repo_root = Path(spec["repo_root"]).resolve() if spec.get("repo_root") else None
     data_home = Path(spec["data_home"]).resolve() if spec.get("data_home") else None
-    original_open = builtins.open
     original_import = builtins.__import__
 
     def safe_open(file, mode="r", *args, **kwargs):  # type: ignore[no-untyped-def]
@@ -314,7 +317,7 @@ def _make_path_guards(spec: dict[str, Any]) -> tuple[Any, Any]:
             data_home=data_home,
             writing=writing,
         )
-        return original_open(file, mode, *args, **kwargs)
+        return _REAL_OPEN(file, mode, *args, **kwargs)
 
     def safe_import(name, globals=None, locals=None, fromlist=(), level=0):  # type: ignore[no-untyped-def]
         if level != 0:
@@ -323,11 +326,38 @@ def _make_path_guards(spec: dict[str, Any]) -> tuple[Any, Any]:
         if root in BANNED_MODULES or root not in ALLOWED_MODULES:
             raise SandboxViolation(f"import of {name!r} is blocked")
         module = original_import(name, globals, locals, fromlist, level)
-        if root == "io" and hasattr(module, "open"):
-            module.open = safe_open  # type: ignore[attr-defined]
+        if root in {"io", "_io"}:
+            _patch_module_open(module, safe_open)
         return module
 
     return safe_open, safe_import
+
+
+def _patch_module_open(module: Any, safe_open: Any) -> None:
+    if module is None:
+        return
+    if hasattr(module, "open"):
+        module.open = safe_open
+
+
+def _patch_open_primitives(safe_open: Any) -> None:
+    """Wrap builtins.open, io.open, and _io.open on every exec path (including 31A)."""
+    builtins.open = safe_open  # type: ignore[assignment]
+    import io as io_mod
+
+    _patch_module_open(io_mod, safe_open)
+    try:
+        import _io as io_c
+
+        _patch_module_open(io_c, safe_open)
+    except ImportError:
+        pass
+    cached = sys.modules.get("io")
+    if cached is not None:
+        _patch_module_open(cached, safe_open)
+    cached_c = sys.modules.get("_io")
+    if cached_c is not None:
+        _patch_module_open(cached_c, safe_open)
 
 
 def _restricted_builtins(spec: dict[str, Any]) -> dict[str, Any]:
@@ -339,13 +369,19 @@ def _restricted_builtins(spec: dict[str, Any]) -> dict[str, Any]:
     return restricted
 
 
-def _install_path_guards(spec: dict[str, Any]) -> None:
-    """Wrap process-global open() so 31A runners still cannot escape the job dir."""
+def _install_path_guards(spec: dict[str, Any], *, block_dynamic_exec: bool = True) -> None:
+    """Wrap every open() alias so 31A runners cannot escape the job dir.
+
+    31A's in-process runner copies builtins and uses exec/eval/compile for the
+    snippet (block_dynamic_exec=False). Isolation is the subprocess, rlimits,
+    and path-guarded open — including io.open / _io.open, not only builtins.open.
+    """
     safe_open, _safe_import = _make_path_guards(spec)
-    builtins.open = safe_open  # type: ignore[assignment]
-    builtins.eval = _blocked("eval")  # type: ignore[assignment]
-    builtins.exec = _blocked("exec")  # type: ignore[assignment]
-    builtins.compile = _blocked("compile")  # type: ignore[assignment]
+    _patch_open_primitives(safe_open)
+    if block_dynamic_exec:
+        builtins.eval = _blocked("eval")  # type: ignore[assignment]
+        builtins.exec = _blocked("exec")  # type: ignore[assignment]
+        builtins.compile = _blocked("compile")  # type: ignore[assignment]
 
 
 def _try_upstream_runner(spec: dict[str, Any]) -> Any | None:
@@ -367,7 +403,7 @@ def _restricted_exec(spec: dict[str, Any]) -> dict[str, Any]:
         "__builtins__": _restricted_builtins(spec),
         "parameters": parameters,
     }
-    exec(compile(code, "<learner>", "exec"), namespace, namespace)  # noqa: S102 — isolated child
+    _REAL_EXEC(_REAL_COMPILE(code, "<learner>", "exec"), namespace, namespace)  # noqa: S102 — isolated child
     result_value = namespace.get("result")
     payload: dict[str, Any] = {"status": "SUCCESS", "exit_code": 0}
     if result_value is not None:
@@ -423,8 +459,9 @@ def main(argv: list[str] | None = None) -> int:
         sys.stderr = err_f
         try:
             upstream = _try_upstream_runner(spec)
+            # Path guards (builtins.open + io.open) apply on every exec path.
+            _install_path_guards(spec, block_dynamic_exec=upstream is None)
             if upstream is not None:
-                _install_path_guards(spec)
                 try:
                     payload = _normalize_upstream(upstream(spec))
                 except TypeError:

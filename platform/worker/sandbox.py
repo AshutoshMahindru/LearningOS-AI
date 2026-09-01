@@ -195,6 +195,22 @@ def prepare_workdir(job_id: str, data_home: Path | None) -> Path:
     return workdir
 
 
+def _is_io_open_call(node: ast.Call) -> bool:
+    """True for io.open(...) / _io.open(...) — filesystem write primitives."""
+    func = node.func
+    if isinstance(func, ast.Attribute) and func.attr == "open":
+        base = func.value
+        if isinstance(base, ast.Name) and base.id in {"io", "_io"}:
+            return True
+        if (
+            isinstance(base, ast.Attribute)
+            and isinstance(base.value, ast.Name)
+            and base.attr in {"io", "_io"}
+        ):
+            return True
+    return False
+
+
 def ast_preflight(code: str) -> None:
     try:
         tree = ast.parse(code, filename="<learner>")
@@ -213,9 +229,20 @@ def ast_preflight(code: str) -> None:
             root = (node.module or "").split(".", 1)[0]
             if root in BANNED_AST_MODULES:
                 raise SandboxViolation(f"import of {node.module!r} is blocked")
+            # from io import open rebinds a filesystem primitive; wrap at runtime
+            # still applies, but reject the unguarded alias so 31A cannot skip io.open.
+            if root in {"io", "_io"}:
+                for alias in node.names:
+                    if alias.name == "open":
+                        raise SandboxViolation("from io import open is not allowed; use open() inside the job workdir")
         elif isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
             if node.func.id in banned_names:
                 raise SandboxViolation(f"{node.func.id} is not allowed in the sandbox")
+        elif isinstance(node, ast.Call) and _is_io_open_call(node):
+            # io.open is a filesystem write primitive. Runtime wrapping of io.open
+            # on every exec path (including 31A) enforces workdir / db / repo policy.
+            # Do not reject the call here so in-workdir io.open still works.
+            continue
 
 
 def is_secret_env_name(name: str) -> bool:
