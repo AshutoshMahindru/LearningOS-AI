@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import ast
 import json
+import os
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 from tools.authoring.package import load_package
@@ -76,8 +80,16 @@ def test_lab_source_and_data_are_fixture_local() -> None:
     assert cleaning.is_file()
     assert orders.is_file()
     assert inventory.is_file()
-    mission_cleaning = REPO_ROOT / "missions" / "M04" / "cleaning.py"
-    assert cleaning.read_text(encoding="utf-8") == mission_cleaning.read_text(encoding="utf-8")
+    source = cleaning.read_text(encoding="utf-8")
+    assert "def clean_orders" in source
+    assert "def load_raw" in source
+    assert "def _require_pandas" in source
+    tree = ast.parse(source)
+    for node in tree.body:
+        if isinstance(node, ast.Import):
+            assert all(alias.name.split(".", 1)[0] != "pandas" for alias in node.names)
+        if isinstance(node, ast.ImportFrom):
+            assert not str(node.module or "").startswith("pandas")
     checksums = (M04_PACKAGE / "SHA256SUMS").read_text(encoding="utf-8")
     for rel in (
         "manifest.json",
@@ -97,6 +109,37 @@ def test_wp136_schema_rejects_non_m_id() -> None:
     assert engine in {"jsonschema", "mdl_validator"}
     assert errors
     assert any("F01" in item or "M[0-9]" in item or "does not match" in item for item in errors)
+
+
+def test_reference_tests_collect_without_pandas(tmp_path: Path) -> None:
+    """Backend CI collects tests/platform/reference/M04 without pandas."""
+
+    (tmp_path / "pandas.py").write_text(
+        "raise ModuleNotFoundError(\"No module named 'pandas'\")\n",
+        encoding="utf-8",
+    )
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.pathsep.join(
+        [str(tmp_path), str(M04_PACKAGE), str(REPO_ROOT), str(REPO_ROOT / "platform" / "backend")]
+    )
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "pytest",
+            "--collect-only",
+            "-q",
+            "tests/platform/reference/M04",
+        ],
+        cwd=str(REPO_ROOT),
+        capture_output=True,
+        text=True,
+        check=False,
+        env=env,
+    )
+    assert completed.returncode == 0, completed.stdout + completed.stderr
+    assert "ModuleNotFoundError" not in completed.stdout + completed.stderr
+    assert "test_runtime.py" in completed.stdout
 
 
 def test_g3_loader_accepts_sealed_package() -> None:
