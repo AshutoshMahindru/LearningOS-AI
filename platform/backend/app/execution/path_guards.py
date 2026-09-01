@@ -102,6 +102,7 @@ BANNED_MODULES = frozenset(
         "urllib",
         "webbrowser",
         "xmlrpc",
+        "_io",
     }
 )
 
@@ -204,6 +205,9 @@ ALLOWED_BUILTIN_NAMES = frozenset(
 
 _REAL_OPEN = builtins_mod.open
 _REAL_IMPORT = builtins_mod.__import__
+_REAL_FILEIO = io_mod.FileIO
+_REAL_OPEN_CODE = getattr(io_mod, "open_code", None)
+_IO_WRITE_CTORS = frozenset({"open", "FileIO", "open_code"})
 _DB_NAME = "learningos.db"
 _DB_SIDECARS = (".db-wal", ".db-shm", ".db-journal", "-wal", "-shm")
 
@@ -301,6 +305,8 @@ class PathGuards:
         self.repo_root = repo_root.resolve() if repo_root is not None else None
         self.data_home = data_home.resolve() if data_home is not None else None
         self.safe_open = self._make_safe_open()
+        self.safe_fileio = self._make_safe_fileio()
+        self.safe_open_code = self._make_safe_open_code()
         self.safe_import = self._make_safe_import()
 
     def _make_safe_open(self) -> Callable[..., Any]:
@@ -323,16 +329,58 @@ class PathGuards:
         safe_open.__name__ = "open"
         return safe_open
 
+    def _guard_file_ctor(self, file: Any, mode: object) -> None:
+        if isinstance(file, int):
+            raise SandboxViolation("opening raw file descriptors is not allowed")
+        assert_allowed_path(
+            file,
+            workdir=self.workdir,
+            repo_root=self.repo_root,
+            data_home=self.data_home,
+            writing=_mode_writes(mode),
+        )
+
+    def _make_safe_fileio(self) -> type:
+        guards = self
+
+        class GuardedFileIO:
+            """Path-checked stand-in for io.FileIO. Does not subclass (C __new__ opens first)."""
+
+            def __new__(cls, file: Any, mode: str = "r", closefd: bool = True, opener: Any = None) -> Any:
+                if opener is not None:
+                    raise SandboxViolation("custom FileIO opener is not allowed")
+                guards._guard_file_ctor(file, mode)
+                return _REAL_FILEIO(file, mode, closefd=closefd, opener=None)
+
+        GuardedFileIO.__name__ = "FileIO"
+        GuardedFileIO.__qualname__ = "FileIO"
+        GuardedFileIO.__module__ = "io"
+        return GuardedFileIO
+
+    def _make_safe_open_code(self) -> Callable[..., Any] | None:
+        if _REAL_OPEN_CODE is None:
+            return None
+
+        def safe_open_code(path: Any) -> Any:
+            self._guard_file_ctor(path, "r")
+            return _REAL_OPEN_CODE(path)
+
+        safe_open_code.__name__ = "open_code"
+        return safe_open_code
+
     def _io_shim(self) -> Any:
         shim = types.ModuleType("io")
         for name in dir(io_mod):
-            if name == "open":
+            if name in _IO_WRITE_CTORS:
                 continue
             try:
                 setattr(shim, name, getattr(io_mod, name))
             except Exception:
                 continue
         shim.open = self.safe_open  # type: ignore[method-assign]
+        shim.FileIO = self.safe_fileio  # type: ignore[attr-defined]
+        if self.safe_open_code is not None:
+            shim.open_code = self.safe_open_code  # type: ignore[attr-defined]
         return shim
 
     def _make_safe_import(self) -> Callable[..., Any]:
@@ -368,12 +416,17 @@ class PathGuards:
 
     @contextmanager
     def patch_process_opens(self) -> Iterator[None]:
-        """Wrap process-global open/io.open for the duration of learner exec."""
+        """Wrap process-global open/io.open/io.FileIO for the duration of learner exec."""
         previous_builtin = builtins_mod.open
         previous_io = io_mod.open
+        previous_fileio = io_mod.FileIO
+        previous_open_code = getattr(io_mod, "open_code", None)
         previous_file = getattr(builtins_mod, "file", None)
         builtins_mod.open = self.safe_open  # type: ignore[assignment]
         io_mod.open = self.safe_open  # type: ignore[method-assign]
+        io_mod.FileIO = self.safe_fileio  # type: ignore[misc]
+        if self.safe_open_code is not None:
+            io_mod.open_code = self.safe_open_code  # type: ignore[attr-defined]
         if previous_file is not None:
             builtins_mod.file = self.safe_open  # type: ignore[attr-defined]
         try:
@@ -381,5 +434,8 @@ class PathGuards:
         finally:
             builtins_mod.open = previous_builtin
             io_mod.open = previous_io
+            io_mod.FileIO = previous_fileio
+            if previous_open_code is not None:
+                io_mod.open_code = previous_open_code
             if previous_file is not None:
                 builtins_mod.file = previous_file

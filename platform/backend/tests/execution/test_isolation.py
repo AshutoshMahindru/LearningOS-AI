@@ -98,6 +98,76 @@ def test_io_open_inside_workdir_still_allowed(workdir: Path):
     assert (workdir / "ok.txt").read_text(encoding="utf-8") == "ok"
 
 
+def test_io_fileio_cannot_write_learningos_home_db(isolated_home: Path, workdir: Path):
+    db_path = isolated_home / "learningos.db"
+    db_path.write_bytes(b"safe-bytes")
+    source = (
+        "import io\n"
+        f"io.FileIO({str(db_path)!r}, 'w').write(b'corrupt-via-fileio')\n"
+    )
+    result = run_source(source, workdir=workdir, data_home=isolated_home)
+    validate_structured_result(result)
+    assert result.status == "FAILED"
+    assert db_path.read_bytes() == b"safe-bytes"
+
+    from_source = (
+        "from io import FileIO\n"
+        f"FileIO({str(db_path)!r}, 'w').write(b'corrupt-via-fileio')\n"
+    )
+    from_result = run_source(from_source, workdir=workdir, data_home=isolated_home)
+    validate_structured_result(from_result)
+    assert from_result.status == "FAILED"
+    assert db_path.read_bytes() == b"safe-bytes"
+
+
+def test_io_fileio_cannot_write_fake_repo_worktree(tmp_path: Path, workdir: Path, isolated_home: Path):
+    fake_repo = tmp_path / "fake-repo-fileio"
+    (fake_repo / ".git").mkdir(parents=True)
+    (fake_repo / "platform" / "backend" / "app").mkdir(parents=True)
+    marker = fake_repo / "pwned.bin"
+    source = (
+        "import io\n"
+        f"io.FileIO({str(marker)!r}, 'w').write(b'pwned')\n"
+    )
+    result = run_source(
+        source,
+        workdir=workdir,
+        repo_root=fake_repo,
+        data_home=isolated_home,
+    )
+    validate_structured_result(result)
+    assert result.status == "FAILED"
+    assert not marker.exists()
+
+    from_marker = fake_repo / "pwned-from.bin"
+    from_source = (
+        "from io import FileIO\n"
+        f"FileIO({str(from_marker)!r}, 'w').write(b'pwned')\n"
+    )
+    from_result = run_source(
+        from_source,
+        workdir=workdir,
+        repo_root=fake_repo,
+        data_home=isolated_home,
+    )
+    validate_structured_result(from_result)
+    assert from_result.status == "FAILED"
+    assert not from_marker.exists()
+
+
+def test_io_fileio_inside_workdir_still_allowed(workdir: Path):
+    result = run_source(
+        "import io\n"
+        "handle = io.FileIO('ok.bin', 'w')\n"
+        "handle.write(b'ok')\n"
+        "handle.close()\n",
+        workdir=workdir,
+    )
+    validate_structured_result(result)
+    assert result.status == "SUCCESS"
+    assert (workdir / "ok.bin").read_bytes() == b"ok"
+
+
 def test_banned_imports_are_blocked(workdir: Path):
     for snippet in (
         "import os",
