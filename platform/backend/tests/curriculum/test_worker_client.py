@@ -77,7 +77,7 @@ def test_start_health_execute_boundary_and_shutdown(worker_env, tmp_path):
             f"open({str(marker)!r}, 'w').write('pwned'); __import__('os').system('touch {marker}')",
             {},
         )
-        assert attacked.get("status") == "UNSUPPORTED"
+        assert attacked.get("status") in {"DENIED", "FAILED"}
         assert attacked.get("job_id")
         assert not marker.exists()
         ping = client._rpc("ping")
