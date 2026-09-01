@@ -6,7 +6,6 @@ This is not a production sandbox. Isolated production exec lives in the 31B work
 from __future__ import annotations
 
 import ast
-import builtins as builtins_mod
 import inspect
 import math
 import os
@@ -41,6 +40,11 @@ from app.execution.contracts import (
     hash_payload,
     new_execution_id,
     sha256_hex,
+)
+from app.execution.path_guards import (
+    PathGuards,
+    data_home_from_env,
+    detect_repo_root,
 )
 from app.execution.result_schema import ResultSchemaError, validate_structured_result
 
@@ -218,13 +222,24 @@ class ExecSession:
         workdir: str | Path | None = None,
         code_hash: str = "",
         params_hash: str | None = None,
+        repo_root: str | Path | None = None,
+        data_home: str | Path | None = None,
     ) -> None:
         self.parameters = dict(parameters or {})
         self.runner_id = runner_id
-        self.workdir = Path(workdir) if workdir is not None else None
+        self.workdir = Path(workdir).resolve() if workdir is not None else Path.cwd()
         self.code_hash = code_hash
         self.params_hash = (
             params_hash if params_hash is not None else hash_payload(_jsonable(self.parameters))
+        )
+        resolved_repo = Path(repo_root).resolve() if repo_root is not None else detect_repo_root()
+        resolved_home = Path(data_home).resolve() if data_home is not None else data_home_from_env()
+        self.repo_root = resolved_repo
+        self.data_home = resolved_home
+        self.guards = PathGuards(
+            workdir=self.workdir,
+            repo_root=self.repo_root,
+            data_home=self.data_home,
         )
         self.blocks: list[ResultBlock] = []
         self.namespace: dict[str, Any] = self._make_namespace()
@@ -233,7 +248,7 @@ class ExecSession:
         def emit(block_type: str, payload: Any, title: str | None = None) -> None:
             self.emit(block_type, payload, title=title)
 
-        builtin_ns = dict(builtins_mod.__dict__)
+        builtin_ns = self.guards.restricted_builtins()
         builtin_ns["emit"] = emit
         namespace: dict[str, Any] = {
             "__name__": "__learningos_exec__",
@@ -241,8 +256,7 @@ class ExecSession:
             "emit": emit,
             "parameters": dict(self.parameters),
         }
-        if self.workdir is not None:
-            namespace["__file__"] = str(self.workdir / "_snippet.py")
+        namespace["__file__"] = str(self.workdir / "_snippet.py")
         return namespace
 
     def emit(self, block_type: str, payload: Any, title: str | None = None) -> None:
@@ -366,7 +380,12 @@ def run_session(
         return body()
 
     try:
-        with _maybe_chdir(session.workdir), redirect_stdout(stdout_buf), redirect_stderr(stderr_buf):
+        with (
+            _maybe_chdir(session.workdir),
+            session.guards.patch_process_opens(),
+            redirect_stdout(stdout_buf),
+            redirect_stderr(stderr_buf),
+        ):
             value = _with_timeout(invoke, timeout_sec)
         session.ingest(value)
     except ExecutionTimeout as exc:
@@ -419,12 +438,16 @@ def run_source(
     workdir: str | Path | None = None,
     runner_id: str = PYTHON_RUNNER_ID,
     filename: str = "<learningos:python_runner>",
+    repo_root: str | Path | None = None,
+    data_home: str | Path | None = None,
 ) -> StructuredResult:
     session = ExecSession(
         parameters=parameters,
         runner_id=runner_id,
         workdir=workdir,
         code_hash=sha256_hex(source),
+        repo_root=repo_root,
+        data_home=data_home,
     )
 
     def body() -> Any:
@@ -446,6 +469,8 @@ def run_callable(
     execution_id: str | None = None,
     workdir: str | Path | None = None,
     runner_id: str = PYTHON_RUNNER_ID,
+    repo_root: str | Path | None = None,
+    data_home: str | Path | None = None,
 ) -> StructuredResult:
     params = dict(parameters or {})
     call_kwargs = dict(kwargs or {})
@@ -456,6 +481,8 @@ def run_callable(
         workdir=workdir,
         code_hash=hash_callable(fn),
         params_hash=hash_payload(_jsonable(hashed)),
+        repo_root=repo_root,
+        data_home=data_home,
     )
     session.namespace[getattr(fn, "__name__", "fn")] = fn
 
