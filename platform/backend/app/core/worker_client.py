@@ -49,7 +49,12 @@ class WorkerClient:
         self.socket_path = str(resolve_worker_socket(socket_path))
         self.timeout = timeout
 
-    def _rpc(self, method: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
+    def _rpc(
+        self,
+        method: str,
+        params: dict[str, Any] | None = None,
+        timeout: float | None = None,
+    ) -> dict[str, Any]:
         request = {
             "jsonrpc": "2.0",
             "id": f"req_{uuid.uuid4().hex}",
@@ -58,9 +63,10 @@ class WorkerClient:
         }
         path = self.socket_path
         sock: socket.socket | None = None
+        wait_for = self.timeout if timeout is None else timeout
         try:
             sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            sock.settimeout(self.timeout)
+            sock.settimeout(wait_for)
             sock.connect(path)
             sock.sendall((json.dumps(request, separators=(",", ":")) + "\n").encode("utf-8"))
             chunks: list[bytes] = []
@@ -118,14 +124,30 @@ class WorkerClient:
         return response.get("alive") is True
 
     def execute(self, code: str, parameters: dict | None = None) -> dict:
+        incoming = dict(parameters or {})
+        raw_limits = incoming.pop("limits", None)
+        limits = dict(raw_limits) if isinstance(raw_limits, dict) else {}
+        timeout_sec = limits.get("timeout_sec", 30)
+        memory_mb = limits.get("memory_mb", 2048)
+        try:
+            timeout_sec = float(timeout_sec)
+        except (TypeError, ValueError):
+            timeout_sec = 30.0
+        try:
+            memory_mb = int(memory_mb)
+        except (TypeError, ValueError):
+            memory_mb = 2048
+        if timeout_sec <= 0:
+            timeout_sec = 30.0
         params: dict[str, Any] = {
             "code": code,
-            "parameters": parameters or {},
-            "limits": {"timeout_sec": 30, "memory_mb": 2048},
+            "parameters": incoming,
+            "limits": {"timeout_sec": timeout_sec, "memory_mb": memory_mb},
         }
-        if isinstance(parameters, dict) and "echo" in parameters:
-            params["echo"] = parameters["echo"]
-        return self._rpc("execute_task", params)
+        if "echo" in incoming:
+            params["echo"] = incoming["echo"]
+        rpc_timeout = max(self.timeout, timeout_sec + 5.0)
+        return self._rpc("execute_task", params, timeout=rpc_timeout)
 
     def cancel(self, job_id: str) -> dict:
         return self._rpc("cancel", {"job_id": job_id})

@@ -1,16 +1,12 @@
 from __future__ import annotations
 
 import ast
-import os
 import signal
 import socket
 import subprocess
 import sys
 import time
-import uuid
 from pathlib import Path
-
-import pytest
 
 from app.core.worker_client import WorkerClient
 
@@ -31,32 +27,14 @@ def start_daemon(env: dict[str, str]) -> subprocess.Popen[bytes]:
     return subprocess.Popen([sys.executable, str(DAEMON_PATH)], env=env)
 
 
-@pytest.fixture
-def worker_env(tmp_path, monkeypatch):
-    home = tmp_path / "learningos-home"
-    home.mkdir()
-    # macOS AF_UNIX sun_path is ~104 bytes; pytest tmp paths are too long.
-    sock = Path(f"/tmp/los-g3-{uuid.uuid4().hex}.sock")
-    monkeypatch.setenv("LEARNINGOS_HOME", str(home))
-    monkeypatch.setenv("LEARNINGOS_WORKER_SOCKET", str(sock))
-    env = os.environ.copy()
-    env["LEARNINGOS_HOME"] = str(home)
-    env["LEARNINGOS_WORKER_SOCKET"] = str(sock)
-    env["PYTHONUNBUFFERED"] = "1"
-    try:
-        yield {"home": home, "sock": sock, "env": env}
-    finally:
-        sock.unlink(missing_ok=True)
-
-
 def test_health_then_shutdown(worker_env):
     proc = start_daemon(worker_env["env"])
     try:
         client = WorkerClient(worker_env["sock"])
         assert wait_until(client.health), "daemon did not become healthy"
-        payload = client.execute("print('hello')", {})
-        assert payload.get("status") == "UNSUPPORTED"
-        assert payload.get("reason")
+        payload = client.execute("print('hello')", {"limits": {"timeout_sec": 5, "memory_mb": 256}})
+        assert payload.get("status") == "SUCCESS"
+        assert "hello" in (payload.get("stdout") or "")
         echoed = client.execute("", {"echo": "ping"})
         assert echoed.get("status") == "ACCEPTED"
         assert echoed.get("echo") == "ping"
@@ -144,8 +122,8 @@ def test_execute_task_does_not_run_attacker_payload(worker_env, tmp_path):
             f"__import__('os').system('touch {marker}')",
         ]
         for code in payloads:
-            result = client.execute(code, {})
-            assert result.get("status") == "UNSUPPORTED"
+            result = client.execute(code, {"limits": {"timeout_sec": 5, "memory_mb": 256}})
+            assert result.get("status") in {"DENIED", "FAILED"}
             assert "error" not in result or result.get("error", {}).get("code") != "WORKER_UNAVAILABLE"
         assert not marker.exists()
         client.shutdown()
@@ -156,6 +134,15 @@ def test_execute_task_does_not_run_attacker_payload(worker_env, tmp_path):
             proc.wait(timeout=3)
 
 
+def _assert_no_sqlite(tree: ast.AST, path: Path) -> None:
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                assert alias.name.split(".", 1)[0] != "sqlite3", path
+        if isinstance(node, ast.ImportFrom) and node.module:
+            assert node.module.split(".", 1)[0] != "sqlite3", path
+
+
 def test_daemon_source_has_no_exec_eval_or_sqlite():
     source = DAEMON_PATH.read_text(encoding="utf-8")
     tree = ast.parse(source)
@@ -163,11 +150,16 @@ def test_daemon_source_has_no_exec_eval_or_sqlite():
     for node in ast.walk(tree):
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
             assert node.func.id not in banned
-        if isinstance(node, ast.Import):
-            for alias in node.names:
-                assert alias.name.split(".", 1)[0] != "sqlite3"
-        if isinstance(node, ast.ImportFrom) and node.module:
-            assert node.module.split(".", 1)[0] != "sqlite3"
+    _assert_no_sqlite(tree, DAEMON_PATH)
+
+
+def test_worker_package_does_not_import_sqlite3():
+    worker_root = DAEMON_PATH.parent
+    for path in worker_root.rglob("*.py"):
+        if "tests" in path.parts:
+            continue
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        _assert_no_sqlite(tree, path)
 
 
 def test_watchdog_launches_daemon(worker_env):
