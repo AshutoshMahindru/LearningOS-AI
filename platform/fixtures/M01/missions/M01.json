@@ -1,0 +1,225 @@
+{
+  "id": "M01",
+  "title": "Map the AI/ML Landscape",
+  "phase": {
+    "id": "P0",
+    "title": "Orientation"
+  },
+  "order_index": 1,
+  "flagship_version": "V00",
+  "core_invariant": "Start with the useful whole. Trace every layer before descending into components. Predict before running. Transfer without assistance. Prove competence with evidence.",
+  "competencies": [
+    "comp.sys.whole_trace",
+    "comp.sys.system_trace",
+    "comp.sys.hypothesis_testing",
+    "comp.sys.failure_diagnosis",
+    "comp.sys.unassisted_transfer",
+    "comp.sys.component_mapping"
+  ],
+  "knowledge_nodes": [
+    "kn.m01.system_map",
+    "kn.m01.system_trace",
+    "kn.m01.training_inference_boundary",
+    "kn.m01.controlled_failure",
+    "kn.m01.no_ai_reconstruction",
+    "kn.m01.transfer"
+  ],
+  "prerequisites": [],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the whole-system map",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M01 invariant: start with the useful whole, then add surrounding system layers. The skeleton is data → features/representations → training → model state → inference → predictions → application. Around that skeleton sit embeddings/retrieval, tools, agents/controllers, memory/state, evaluation, observability, and compute/infrastructure. A useful default boundary is: training changes learned model state from labelled data and an objective; inference uses already-created model state on new inputs without retraining it. Retrieval selects external information at run time. Tools perform actions outside the model. Memory preserves application/session state. Evaluation scores behavior; observability records operational evidence. This mission uses a deterministic toy support-ticket system (standard library only): train_classifier, predict, digest, embed, retrieve, run_application, evaluate. Do not invent a training step when a scenario only describes serving, retrieval, or tools. Identify the evidence the gate will require: a system map, an annotated execution trace, prediction-sealed experiments, a controlled-failure diagnosis, a no-AI reconstruction, and a fresh-case transfer."
+    },
+    {
+      "id": "stage_02_system_map",
+      "title": "Draw the whole-system map",
+      "type": "trace_map",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Produce a structured system map of the toy support system and of a modern AI/ML application. The map must show and connect: data; features or representations; training; model state; inference; predictions; application; retrieval; tools; memory; evaluation; observability; compute/infrastructure. Annotate data-flow arrows separately from control-flow arrows. For each node, state what enters, what leaves, and whether learned model state mutates. Mark ambiguous boundaries as ambiguous rather than guessing. Submit a diagram (or structured map) that explains behavior and boundaries, not a vocabulary list.",
+      "validation_rubric": {
+        "required_evidence_type": "diagram",
+        "pass_criteria": "Map includes the required layers plus distinct data-flow and control-flow edges, and states which component changes learned model state."
+      }
+    },
+    {
+      "id": "stage_03_system_trace",
+      "title": "Trace the toy system in code",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the toy system as an architecture diagram expressed in code. Pass 1: locate train_classifier(records). What enters, what learned state leaves, which loop uses labels, and can predict still run if training never runs again? Justify the training label from behavior, not the function name. Pass 2: follow one predict(model, text) call — input, tok() features, model state read, label plus scores, and whether learned state changes. Explain why scoring is inference even though computation occurs. Pass 3: follow embed → similarity → retrieve. Record query vector, document vectors, scores, and returned document. Explain why changing retrieved context is not changing model weights. Pass 4: follow run_application for a normal account request and an urgent billing request. Draw data-flow and control-flow arrows. Separate model inference from controller policy, tool execution, and memory mutation. Pass 5: compare evaluate(...) with trace events from run_application. Labelled correctness is evaluation; event records are observability. Submit an annotated execution trace covering component inputs, outputs, mutable state, immutable model state during inference, and at least one control branch.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace identifies training versus inference, retrieval versus model state, tool versus controller, memory versus weights, and evaluation versus observability from observed inputs, outputs, and state changes."
+      }
+    },
+    {
+      "id": "stage_04_interrogate",
+      "title": "Interrogate the training/inference and layer boundaries",
+      "type": "interrogate",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Interrogate the map and trace with Socratic probes, not slogans. What evidence would show a production request updates model weights? What would show it only collected data for a later training job? If retrieval returns a different document, which state changed and which did not? If the controller calls a calculator, is that model inference? If latency rises after retrieval while model inference time and accuracy stay flat, which layer do you inspect first and why? Record residual uncertainty instead of inventing missing components."
+    },
+    {
+      "id": "stage_05_experiment_e1",
+      "title": "E1 — Does inference retrain the model?",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the toy classifier. (1) PREDICT whether one inference call changes the learned classifier state. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE several unseen inputs through the trained toy classifier. (4) OBSERVE the model-state digest before inference, the digest after inference, and the prediction outputs. (5) SUBMIT an explanation of why unchanged learned state places the operation on the inference side of the boundary. Return a structured metric block with digest_before, digest_after, unchanged, predicted_label, and scores.",
+      "runner": {
+        "module": "g5.reference.M01.experiment",
+        "entrypoint": "run_inference_boundary",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; observed digest is unchanged across inference; explanation attributes scoring to inference rather than training."
+      }
+    },
+    {
+      "id": "stage_06_experiment_e2",
+      "title": "E2 — Change training data, then retrain",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on a labelled-data change. (1) PREDICT which model scores will move after adding one strongly labelled training example. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE: add the example, create a new model state, and compare predictions with the original model. (4) OBSERVE old versus new model-state digest, changed token counts, and changed predictions or confidence ordering. (5) SUBMIT an explanation that attributes the change to a training operation rather than to inference. Return a structured metric or state_diff block with old_digest, new_digest, and at least one changed prediction.",
+      "runner": {
+        "module": "g5.reference.M01.experiment",
+        "entrypoint": "run_retrain_boundary",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; new training run produces a different digest; explanation does not call inference a retrain."
+      }
+    },
+    {
+      "id": "stage_07_experiment_e3",
+      "title": "E3 — Retrieval changes context without changing model state",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on toy embedding and retrieval. (1) PREDICT which knowledge document each of two semantically different queries will retrieve, and whether the classifier digest will change. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE both queries through embed and retrieve. (4) OBSERVE the query vector, similarity scores, retrieved document, and classifier-state digest. (5) SUBMIT an explanation that distinguishes external retrieved state from learned model state. Return a structured metric block with retrieved ids, scores, and digest_unchanged.",
+      "runner": {
+        "module": "g5.reference.M01.experiment",
+        "entrypoint": "run_retrieval_boundary",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; retrieved documents can differ while classifier digest stays unchanged."
+      }
+    },
+    {
+      "id": "stage_08_experiment_e4",
+      "title": "E4 — Controller chooses a tool or retrieval path",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the application controller. (1) PREDICT the control-flow branch for a normal account request versus an urgent billing request. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE both requests through run_application. (4) OBSERVE classifier output, branch selected, retrieval event, tool-call event, and memory update. (5) SUBMIT an explanation that separates model inference from controller policy, tool execution, and memory mutation. Return a structured trace block with both runs.",
+      "runner": {
+        "module": "g5.reference.M01.experiment",
+        "entrypoint": "run_controller_boundary",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Prediction is sealed before execute; urgent path shows a tool event; memory mutates; model digest does not."
+      }
+    },
+    {
+      "id": "stage_09_experiment_e5",
+      "title": "E5 — Observability catches a layer mistake",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on a deliberately confused architecture before any repair. The confused diagram claims: user request → TRAINING: query embedding → MODEL WEIGHTS: vector database → INFERENCE: document retrieval → MODEL: controller chooses calculator → TRAINING: calculator returns result → MEMORY: evaluation dashboard → OUTPUT, and it draws an arrow from every production request into weight updates. (1) PREDICT at least four incorrect labels and which observed inputs, outputs, or state changes will refute them. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE a comparison of claimed component roles against observed embedding, retrieval, tool, memory, and evaluation behavior. (4) OBSERVE mismatched layer labels plus data-flow and control-flow edges. (5) SUBMIT an explanation that repairs the architecture using behavior and boundaries rather than vocabulary recall. Return a structured metric block listing mismatched labels.",
+      "runner": {
+        "module": "g5.reference.M01.experiment",
+        "entrypoint": "run_observability_diagnosis",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; at least four incorrect labels are identified from behavior."
+      }
+    },
+    {
+      "id": "stage_10_controlled_failure",
+      "title": "Diagnose the architecture that calls everything the model",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "The injected fault is a team diagram that conflates layers. Faulty path: user request → TRAINING: query embedding → MODEL WEIGHTS: vector database → INFERENCE: document retrieval → MODEL: controller chooses calculator → TRAINING: calculator returns result → MEMORY: evaluation dashboard → OUTPUT. It also draws an arrow from every production request directly into weight updates without an objective, optimizer, training job, approval boundary, or newly versioned model artifact. Diagnose from observable behavior before seeing a repair: (1) which labels conflate training and inference; (2) which component stores learned model state versus retrievable external data; (3) which step is control flow rather than model inference; (4) which component is a tool; (5) which component is observability rather than memory; (6) what evidence would be required before claiming production requests update model weights; (7) redraw the architecture with explicit data-flow and control-flow arrows. Success distinguishes: request-time embedding as inference/representation unless parameters are actually updated; a vector database as indexed external representations, not generator weights; retrieval as context selection, not retraining; calculator as an external tool; dashboard as evaluation/observability; online collection as possible future training, not automatic weight updates. Submit a written diagnosis and repaired map.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "Diagnosis identifies conflated layers, repairs the training/inference boundary, distinguishes retrieval from model state, and separates tool, memory, and observability using inputs, outputs, and state mutation."
+      }
+    },
+    {
+      "id": "stage_11_no_ai_gate",
+      "title": "No-AI reconstruction from memory",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Complete this gate without an AI assistant, search engine, copied diagram, tutor, or prior-answer surface. Part A — blank-page map: from memory, draw an AI/ML system that includes and connects data, training, learned model state, inference, application, embeddings/retrieval, a tool boundary, memory/state, evaluation/observability, and compute/infrastructure, with distinct data-flow and control-flow arrows. Part B — explain the boundaries aloud in your own words: what changes during training; what does not normally change during inference; how retrieval can change an answer without retraining; how a tool differs from the model that decided to call it; where memory lives; how evaluation or observability can influence a later improvement loop without automatically being training. Part C — fresh transfer, without referring to the toy system: A user uploads a policy document. A service chunks and indexes it. Later, a chat request retrieves relevant chunks, sends them with the user's question to a language model, optionally invokes a calculator, stores the conversation state, and records latency plus answer-quality scores. Identify where training, inference, retrieval, tools, memory, evaluation, and infrastructure occur. If the described system contains no model-training step, say so explicitly rather than inventing one. Pass only with a coherent map and a defense of ambiguous boundaries from system behavior.",
+      "validation_rubric": {
+        "required_evidence_type": "diagram",
+        "pass_criteria": "Unassisted map plus boundary explanations; fresh transfer does not invent a training step; naming terms without flows is insufficient."
+      }
+    },
+    {
+      "id": "stage_12_transfer",
+      "title": "Fresh-case architecture transfer",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Transfer the M01 map onto unseen systems without assistance, without awarding yourself credit for vocabulary lists, and while marking missing information. A1 (3): A retailer retrains a demand model nightly from sales tables, serves forecasts through an API, and sends drift metrics to a dashboard. Map data, training, model state, inference, application, evaluation, and infrastructure. Identify the exact training/inference boundary and what state changes nightly versus what the API reads during serving. A2 (3): A question-answering assistant embeds a query, searches a vector index, sends retrieved passages to an LLM, sometimes calls a calculator, and stores session history. Map retrieval, generation inference, tool use, controller/control flow, and memory. State whether the scenario describes model training. Separate retrieval from learned model state and tool execution from model inference; do not invent a training step. A3 (2): Two teams disagree whether a new component belongs to the model layer or application layer. The component reads model scores, applies business constraints, and selects one action. Classify it from inputs, outputs, state mutation, and control responsibility rather than its name, and name the evidence that would change your classification. A4 (2): A production trace shows rising latency after retrieval but stable model inference time and unchanged answer accuracy. Identify the most likely layer to investigate first and what additional observations you would collect. Localize to retrieval/infrastructure before blaming training or model quality, and acknowledge uncertainty. Submit the assessment response.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Maps unseen scenarios with calibrated uncertainty; refuses invented training steps; uses behavior not labels to classify the constraint component; localizes the latency issue without blaming model quality first."
+      }
+    },
+    {
+      "id": "stage_13_gate",
+      "title": "Evaluate M01 evidence against the gate contract",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, system-map, system-trace, experiment, controlled-failure, no-AI, and transfer evidence against the mission gate_contract. Issue PASSED when every required evidence item meets the pass threshold. Otherwise issue a targeted repair plan naming the failed stage, competency, artifact type, and knowledge node — do not force a full mission repeat."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.sys.whole_trace",
+        "stage_id": "stage_02_system_map",
+        "artifact_type": "diagram"
+      },
+      {
+        "competency_id": "comp.sys.system_trace",
+        "stage_id": "stage_03_system_trace",
+        "artifact_type": "trace"
+      },
+      {
+        "competency_id": "comp.sys.hypothesis_testing",
+        "stage_id": "stage_05_experiment_e1",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.sys.failure_diagnosis",
+        "stage_id": "stage_10_controlled_failure",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.sys.unassisted_transfer",
+        "stage_id": "stage_11_no_ai_gate",
+        "artifact_type": "diagram"
+      },
+      {
+        "competency_id": "comp.sys.component_mapping",
+        "stage_id": "stage_12_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
