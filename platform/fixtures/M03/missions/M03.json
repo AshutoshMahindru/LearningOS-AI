@@ -1,0 +1,139 @@
+{
+  "id": "M03",
+  "title": "Modify Python Before Learning Python",
+  "phase": {
+    "id": "P1",
+    "title": "Computational & Data Fluency"
+  },
+  "order_index": 3,
+  "flagship_version": "V01",
+  "core_invariant": "Inspect unfamiliar code through tests and debuggers before writing new code. Predict before modifying a working program.",
+  "competencies": [
+    "comp.py.code_reading",
+    "comp.py.experiment",
+    "comp.py.test_debugging",
+    "comp.py.diff_verification"
+  ],
+  "knowledge_nodes": [
+    "kn.m03.unfamiliar_trace",
+    "kn.m03.predict_modify_observe",
+    "kn.m03.unit_test_assertions",
+    "kn.m03.variable_scoping"
+  ],
+  "prerequisites": ["M01", "M02"],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Codebase orientation",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Start with a working order-total program, not a language tutorial. Run the baseline, explain what it currently does, and list the evidence the gate will require: predictions, targeted diffs, debugging traces, tests, and a fresh no-AI transfer. Formal terminology arrives only after you have a reason to need it."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, modify, and observe a working program",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the working order-total program. (1) PREDICT how member discount and free-shipping threshold change the total for a given basket. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE the smallest useful modification (values, a condition, a loop, or a function return) without rewriting the program. (4) OBSERVE the structured state_diff between before and after. (5) SUBMIT an explanation of any delta between prediction and observation. Preserve unrelated behavior.",
+      "runner": {
+        "module": "g5.reference.M03.experiment",
+        "entrypoint": "run_order_total",
+        "timeout_sec": 10
+      },
+      "validation_rubric": {
+        "required_evidence_type": "state_diff",
+        "pass_criteria": "Prediction is sealed before execute; the submitted explanation covers the observed before/after totals and the smallest code change."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read unfamiliar Python before changing it",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read an unfamiliar short Python function before modifying it. Identify inputs, output, mutable data, loop iterations, conditions, function calls, intermediate values, and side effects. Manually trace at least one input and predict the result, then compare with execution. If they differ, name the first line where the mental trace diverged. Make one requested behavior change without rewriting the whole function.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Manual trace is recorded before execution and names inputs, intermediates, and the predicted result."
+      }
+    },
+    {
+      "id": "stage_04_rebuild_debug",
+      "title": "Diagnose failures with tests and traces",
+      "type": "rebuild_debug",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Do not repair by random editing. Use symptom → prediction → trace → hypothesis → smallest test → repair → verification. Diagnose NameError, TypeError, KeyError, a reversed condition, and an off-by-one. Add assertions that would have caught each failure. Execute the tests and submit the passing metric plus the repair diff.",
+      "runner": {
+        "module": "g5.reference.M03.rebuild_debug",
+        "entrypoint": "run_debug_tests",
+        "timeout_sec": 10
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Assertions pass after the smallest reasonable repair; unrelated behavior is preserved."
+      }
+    },
+    {
+      "id": "stage_05_controlled_failure",
+      "title": "Trace one seeded order-total failure",
+      "type": "controlled_failure",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "The order-total calculation produces a plausible number that is wrong. The failure has one seeded root cause. Record expected vs observed totals, reproduce with the smallest useful input, trace subtotal/discount/shipping intermediates, state one hypothesis, design one falsifying test, make the smallest repair, and verify original and boundary cases. Submit a trace of the diagnosis, not only the corrected code.",
+      "runner": {
+        "module": "g5.reference.M03.controlled_failure",
+        "entrypoint": "trace_buggy_total",
+        "timeout_sec": 10
+      },
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Evidence names the first incorrect intermediate and why the repair fixes the cause rather than the symptom."
+      }
+    },
+    {
+      "id": "stage_06_transfer",
+      "title": "No-AI inventory transfer",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Complete this fresh program without AI-generated code. Start from consume(stock, ingredient, quantity) on stock={'dough': 12, 'cheese': 8, 'tomato': 10}. Predict the printed value, prevent negative inventory, turn unknown ingredients into a controlled result instead of KeyError, add a reorder-threshold reporter, introduce one small bug, diagnose it with a trace or smallest failing example, and explain every change. Passing requires working code plus debugging evidence.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Fresh-program modification and repair complete without assistance; assertions cover negative stock and unknown ingredients."
+      }
+    },
+    {
+      "id": "stage_07_gate",
+      "title": "Competency gate evaluation",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted code-reading, experiment, debugging, and transfer evidence against the mission gate contract. Issue PASSED or a targeted repair plan. No AI assistance."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.py.experiment",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "state_diff"
+      },
+      {
+        "competency_id": "comp.py.code_reading",
+        "stage_id": "stage_03_code_reading",
+        "artifact_type": "artifact"
+      },
+      {
+        "competency_id": "comp.py.test_debugging",
+        "stage_id": "stage_04_rebuild_debug",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.py.diff_verification",
+        "stage_id": "stage_06_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
