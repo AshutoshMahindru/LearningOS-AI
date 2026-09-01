@@ -36,8 +36,10 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[4]
 
 
-def test_31a_hook_is_import_error_fallback():
-    assert try_upstream_runner() is None
+def test_31a_hook_imports_python_runner_run_job():
+    runner = try_upstream_runner()
+    assert runner is not None
+    assert getattr(runner, "__name__", "") == "run_job"
 
 
 def test_secrets_are_not_forwarded_to_child_env():

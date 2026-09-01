@@ -339,13 +339,18 @@ def _restricted_builtins(spec: dict[str, Any]) -> dict[str, Any]:
     return restricted
 
 
-def _install_path_guards(spec: dict[str, Any]) -> None:
-    """Wrap process-global open() so 31A runners still cannot escape the job dir."""
+def _install_path_guards(spec: dict[str, Any], *, block_dynamic_exec: bool = True) -> None:
+    """Wrap process-global open() so 31A runners still cannot escape the job dir.
+
+    When the 31A in-process runner is used it needs builtins.exec/eval/compile
+    for the snippet. Isolation is the subprocess, rlimits, and path-guarded open.
+    """
     safe_open, _safe_import = _make_path_guards(spec)
     builtins.open = safe_open  # type: ignore[assignment]
-    builtins.eval = _blocked("eval")  # type: ignore[assignment]
-    builtins.exec = _blocked("exec")  # type: ignore[assignment]
-    builtins.compile = _blocked("compile")  # type: ignore[assignment]
+    if block_dynamic_exec:
+        builtins.eval = _blocked("eval")  # type: ignore[assignment]
+        builtins.exec = _blocked("exec")  # type: ignore[assignment]
+        builtins.compile = _blocked("compile")  # type: ignore[assignment]
 
 
 def _try_upstream_runner(spec: dict[str, Any]) -> Any | None:
@@ -357,6 +362,44 @@ def _try_upstream_runner(spec: dict[str, Any]) -> Any | None:
     except ImportError:
         return None
     return run_job
+
+
+def _job_from_spec(spec: dict[str, Any]) -> Any:
+    """Adapt the sandbox spec dict to 31A ExecutionJob."""
+    from app.execution.contracts import ExecutionJob
+
+    parameters = spec.get("parameters") if isinstance(spec.get("parameters"), dict) else {}
+    try:
+        timeout_sec = float(spec.get("timeout_sec") or 30)
+    except (TypeError, ValueError):
+        timeout_sec = 30.0
+    if timeout_sec <= 0:
+        timeout_sec = 30.0
+    memory_raw = spec.get("memory_mb")
+    try:
+        memory_mb = int(memory_raw) if memory_raw is not None else None
+    except (TypeError, ValueError):
+        memory_mb = None
+    entrypoint = spec.get("entrypoint")
+    if not isinstance(entrypoint, str) or not entrypoint.strip():
+        entrypoint = None
+    workdir = spec.get("workdir")
+    kind = "notebook" if isinstance(spec.get("notebook"), dict) else "python"
+    execution_id = spec.get("execution_id")
+    runner_id = spec.get("runner_id")
+    return ExecutionJob.create(
+        job_id=str(spec.get("job_id") or "job"),
+        kind=kind,
+        source=str(spec.get("code") or spec.get("source") or ""),
+        entrypoint=entrypoint,
+        parameters=parameters,
+        timeout_sec=timeout_sec,
+        memory_mb=memory_mb,
+        execution_id=str(execution_id) if execution_id else None,
+        runner_id=str(runner_id) if runner_id else None,
+        notebook=spec.get("notebook") if isinstance(spec.get("notebook"), dict) else None,
+        workdir=str(workdir) if workdir else None,
+    )
 
 
 def _restricted_exec(spec: dict[str, Any]) -> dict[str, Any]:
@@ -381,12 +424,31 @@ def _restricted_exec(spec: dict[str, Any]) -> dict[str, Any]:
 
 
 def _normalize_upstream(raw: Any) -> dict[str, Any]:
-    if isinstance(raw, dict):
+    if raw is not None and callable(getattr(raw, "to_dict", None)):
+        payload = raw.to_dict()
+        out = dict(payload) if isinstance(payload, dict) else {"result": payload}
+    elif isinstance(raw, dict):
         out = dict(raw)
-        out.setdefault("status", "SUCCESS")
-        out.setdefault("exit_code", 0 if out.get("status") == "SUCCESS" else 1)
-        return out
-    return {"status": "SUCCESS", "exit_code": 0, "result": raw}
+    else:
+        return {"status": "SUCCESS", "exit_code": 0, "result": raw}
+    out.setdefault("status", "SUCCESS")
+    out.setdefault("exit_code", 0 if out.get("status") == "SUCCESS" else 1)
+    diagnostics = out.get("diagnostics") if isinstance(out.get("diagnostics"), dict) else {}
+    out.setdefault("stdout", str(diagnostics.get("stdout") or ""))
+    out.setdefault("stderr", str(diagnostics.get("stderr") or ""))
+    return out
+
+
+def _invoke_upstream(upstream: Any, spec: dict[str, Any]) -> dict[str, Any]:
+    """Run 31A run_job(ExecutionJob) inside the isolated child."""
+    try:
+        from app.execution.result_schema import load_result_schema
+
+        load_result_schema()
+    except Exception:
+        pass
+    _install_path_guards(spec, block_dynamic_exec=False)
+    return _normalize_upstream(upstream(_job_from_spec(spec)))
 
 
 def _write_result(path: Path, payload: dict[str, Any]) -> None:
@@ -424,10 +486,9 @@ def main(argv: list[str] | None = None) -> int:
         try:
             upstream = _try_upstream_runner(spec)
             if upstream is not None:
-                _install_path_guards(spec)
                 try:
-                    payload = _normalize_upstream(upstream(spec))
-                except TypeError:
+                    payload = _invoke_upstream(upstream, spec)
+                except (TypeError, ValueError, AttributeError):
                     payload = _restricted_exec(spec)
             else:
                 payload = _restricted_exec(spec)

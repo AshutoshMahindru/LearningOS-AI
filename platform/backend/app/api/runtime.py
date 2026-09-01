@@ -28,6 +28,7 @@ ATTEMPT_SUBMITTED = "SUBMITTED"
 EXPERIMENT_STAGE_TYPE = "experiment"
 UNSTARTED_STAGE_SENTINELS = frozenset({"", "start"})
 PREDICTION_SENSITIVE_TYPES = frozenset({EXPERIMENT_STAGE_TYPE})
+WP137_STATUSES = frozenset({"SUCCESS", "FAILED", "TIMEOUT", "CRASHED"})
 
 _ASSISTANCE_LEVELS = {
     "NO_AI_REQUIRED": "NO_AI_CERTIFIED",
@@ -557,6 +558,78 @@ def _execution_exit_code(worker_result: dict[str, Any], status: str) -> int:
     return 1
 
 
+def _wp137_status(status: str) -> str:
+    if status in WP137_STATUSES:
+        return status
+    if status == "CANCELLED":
+        return "TIMEOUT"
+    if status in {"WORKER_UNAVAILABLE"}:
+        return "CRASHED"
+    return "FAILED"
+
+
+def _structured_from_worker(
+    worker_result: dict[str, Any],
+    *,
+    execution_id: str,
+    duration_ms: int,
+    status: str,
+    exit_code: int,
+) -> dict[str, Any]:
+    """Map 31B sandbox / 31A runner output onto the WP-137 envelope."""
+    raw = worker_result if isinstance(worker_result, dict) else {}
+    exec_id = raw.get("execution_id")
+    if not isinstance(exec_id, str) or not exec_id.strip():
+        exec_id = execution_id
+    dur = raw.get("duration_ms")
+    if not isinstance(dur, int) or dur < 0:
+        dur = duration_ms
+    ex = raw.get("exit_code")
+    if not isinstance(ex, int):
+        ex = exit_code
+    blocks = raw.get("blocks") if isinstance(raw.get("blocks"), list) else []
+    diagnostics = raw.get("diagnostics") if isinstance(raw.get("diagnostics"), dict) else {}
+    stdout = diagnostics.get("stdout") if isinstance(diagnostics.get("stdout"), str) else None
+    if stdout is None:
+        stdout = str(raw.get("stdout") or "")
+    stderr = diagnostics.get("stderr") if isinstance(diagnostics.get("stderr"), str) else None
+    if stderr is None:
+        stderr = str(raw.get("stderr") or "")
+    diag: dict[str, Any] = {"stdout": stdout, "stderr": stderr}
+    metrics = diagnostics.get("system_metrics")
+    if isinstance(metrics, dict) and metrics:
+        diag["system_metrics"] = metrics
+    structured: dict[str, Any] = {
+        "execution_id": exec_id,
+        "status": _wp137_status(str(raw.get("status") or status)),
+        "exit_code": ex,
+        "duration_ms": dur,
+        "blocks": blocks,
+        "diagnostics": diag,
+    }
+    reproducibility = raw.get("reproducibility")
+    if isinstance(reproducibility, dict):
+        structured["reproducibility"] = reproducibility
+    return structured
+
+
+def _runner_parameters(
+    runner: dict[str, Any],
+    parameters: dict[str, Any] | None,
+) -> dict[str, Any]:
+    params = dict(parameters or {})
+    if "limits" in params:
+        return params
+    limits: dict[str, Any] = {}
+    if runner.get("timeout_sec") is not None:
+        limits["timeout_sec"] = runner.get("timeout_sec")
+    if runner.get("memory_mb") is not None:
+        limits["memory_mb"] = runner.get("memory_mb")
+    if limits:
+        params["limits"] = limits
+    return params
+
+
 def execute_stage(
     conn: sqlite3.Connection,
     session_id: str,
@@ -591,19 +664,22 @@ def execute_stage(
     runner = stage.get("runner") if isinstance(stage.get("runner"), dict) else {}
     runner_id = str(runner.get("module") or "worker")
     started = time.perf_counter()
-    worker_result = _call_worker_execute(source, parameters)
+    worker_result = _call_worker_execute(source, _runner_parameters(runner, parameters))
     duration_ms = max(0, int((time.perf_counter() - started) * 1000))
     status = _execution_status(worker_result)
     exit_code = _execution_exit_code(worker_result, status)
     execution_id = str(uuid.uuid4())
-    structured = {
-        "execution_id": execution_id,
-        "status": status,
-        "exit_code": exit_code,
-        "duration_ms": duration_ms,
-        "blocks": worker_result.get("blocks") if isinstance(worker_result.get("blocks"), list) else [],
-        "worker": worker_result,
-    }
+    structured = _structured_from_worker(
+        worker_result,
+        execution_id=execution_id,
+        duration_ms=duration_ms,
+        status=status,
+        exit_code=exit_code,
+    )
+    execution_id = str(structured["execution_id"])
+    exit_code = int(structured["exit_code"])
+    duration_ms = int(structured["duration_ms"])
+    diagnostics = structured.get("diagnostics") if isinstance(structured.get("diagnostics"), dict) else None
     conn.execute(
         """
         INSERT INTO executions (
@@ -620,7 +696,11 @@ def execute_stage(
             exit_code,
             duration_ms,
             canonical_dumps(structured),
-            canonical_dumps(worker_result.get("error")) if isinstance(worker_result.get("error"), dict) else None,
+            canonical_dumps(diagnostics) if diagnostics is not None else (
+                canonical_dumps(worker_result.get("error"))
+                if isinstance(worker_result.get("error"), dict)
+                else None
+            ),
         ),
     )
     conn.commit()
@@ -635,6 +715,8 @@ def execute_stage(
         "duration_ms": duration_ms,
         "runner_id": runner_id,
         "structured_result": structured,
+        "blocks": structured.get("blocks") if isinstance(structured.get("blocks"), list) else [],
+        "diagnostics": diagnostics or {},
     }
 
 

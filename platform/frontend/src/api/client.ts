@@ -479,13 +479,17 @@ function asBlocks(value: unknown): StructuredResultBlock[] | undefined {
 
 function asExecuteResponse(data: unknown): ExecuteStageResponse {
   const record = asRecord(data);
-  const diagnostics = asRecord(record.diagnostics);
+  const nested = asRecord(record.structured_result);
+  const diagnostics = {
+    ...asRecord(nested.diagnostics),
+    ...asRecord(record.diagnostics),
+  };
   return {
-    status: optionalString(record.status) ?? 'SUCCESS',
-    execution_id: optionalString(record.execution_id),
-    exit_code: optionalNumber(record.exit_code),
-    duration_ms: optionalNumber(record.duration_ms),
-    blocks: asBlocks(record.blocks),
+    status: optionalString(record.status) ?? optionalString(nested.status) ?? 'SUCCESS',
+    execution_id: optionalString(record.execution_id) ?? optionalString(nested.execution_id),
+    exit_code: optionalNumber(record.exit_code) ?? optionalNumber(nested.exit_code),
+    duration_ms: optionalNumber(record.duration_ms) ?? optionalNumber(nested.duration_ms),
+    blocks: asBlocks(record.blocks) ?? asBlocks(nested.blocks),
     diagnostics: Object.keys(diagnostics).length > 0 ? diagnostics : undefined,
   };
 }

@@ -1,4 +1,4 @@
-"""G4 F01 fixture E2E: load g4.fixture.f01, run M00 through generic runtime."""
+"""WP400 F01/M00 lifecycle: predict → execute WP-137 → evidence → gate → next-action."""
 
 from __future__ import annotations
 
@@ -34,7 +34,15 @@ PREDICT_BODY = {
     "hypothesis": "scale=2 doubles each value",
     "expected_values": {"series": [2, 4, 6, 8], "scale": 2},
 }
-EXECUTE_BODY = {"code": "print([2, 4, 6, 8])", "parameters": {"scale": 2, "series": [1, 2, 3, 4]}}
+EXECUTE_BODY = {
+    "code": (
+        "series = [value * parameters['scale'] for value in parameters['series']]\n"
+        "print(series)\n"
+        "{'type': 'metric', 'title': 'scaled', 'payload': {'series': series, 'scale': parameters['scale']}}"
+    ),
+    "parameters": {"scale": 2, "series": [1, 2, 3, 4]},
+}
+WP137_STATUSES = {"SUCCESS", "FAILED", "TIMEOUT", "CRASHED"}
 
 
 def _wait_until(predicate, timeout: float = 8.0, interval: float = 0.05) -> bool:
@@ -118,6 +126,22 @@ def test_platform_has_no_f01_special_case_routes_or_conditionals():
             continue
         text = path.read_text(encoding="utf-8")
         if eq_f01.search(text) or route_f01.search(text):
+            hits.append(path.relative_to(REPO_ROOT).as_posix())
+    assert hits == []
+
+
+def test_frontend_does_not_embed_provider_secrets():
+    frontend = REPO_ROOT / "platform" / "frontend" / "src"
+    skip_dirs = {"node_modules", "dist", "__pycache__"}
+    secret_re = re.compile(r"OPENAI_API_KEY|ANTHROPIC_API_KEY|AZURE_OPENAI|sk-[A-Za-z0-9]{12,}")
+    hits: list[str] = []
+    for path in frontend.rglob("*"):
+        if not path.is_file() or any(part in skip_dirs for part in path.parts):
+            continue
+        if path.suffix not in {".ts", ".tsx", ".js", ".jsx", ".json"}:
+            continue
+        text = path.read_text(encoding="utf-8")
+        if secret_re.search(text):
             hits.append(path.relative_to(REPO_ROOT).as_posix())
     assert hits == []
 
@@ -245,9 +269,25 @@ def test_f01_m00_runtime_roundtrip(f01_env):
                 json=EXECUTE_BODY,
                 headers=headers,
             )
-            assert executed.status_code in {200, 202}, executed.text
-            assert executed.json()["status"] in {"UNSUPPORTED", "ACCEPTED", "SUCCESS", "WORKER_UNAVAILABLE"}
-            assert executed.json()["code_hash"] != "dummy_hash"
+            assert executed.status_code == 200, executed.text
+            exec_body = executed.json()
+            assert exec_body["status"] == "SUCCESS", exec_body
+            assert exec_body["status"] != "UNSUPPORTED"
+            assert exec_body["code_hash"] != "dummy_hash"
+            structured = exec_body.get("structured_result") or {}
+            for key in ("execution_id", "status", "exit_code", "duration_ms", "blocks"):
+                assert key in structured, key
+            assert structured["status"] in WP137_STATUSES
+            assert structured["status"] == "SUCCESS"
+            assert structured["execution_id"] == exec_body["execution_id"]
+            blocks = structured.get("blocks") or exec_body.get("blocks") or []
+            assert isinstance(blocks, list) and blocks
+            assert blocks[0]["type"] == "metric"
+            assert blocks[0]["payload"]["series"] == [2, 4, 6, 8]
+            diagnostics = structured.get("diagnostics") or exec_body.get("diagnostics") or {}
+            assert "2" in str(diagnostics.get("stdout") or "")
+            assert "dummy_hash" not in json.dumps(exec_body)
+            assert "sk-test-should-never-leak" not in json.dumps(exec_body)
 
             lab_submit = resumed.post(
                 f"/api/v1/sessions/{session_id}/stages/{STAGE_EXPERIMENT}/submit",
@@ -259,6 +299,7 @@ def test_f01_m00_runtime_roundtrip(f01_env):
             )
             assert lab_submit.status_code == 200, lab_submit.text
             assert lab_submit.json()["current_stage_id"] == STAGE_TRANSFER
+            assert lab_submit.json()["payload_hash"] != "dummy_hash"
 
             transfer_enter = resumed.post(
                 f"/api/v1/sessions/{session_id}/stages/{STAGE_TRANSFER}/enter",
@@ -293,6 +334,43 @@ def test_f01_m00_runtime_roundtrip(f01_env):
             gate_body = gate.json()
             assert gate_body["status"] == "PASSED"
             assert gate_body["reason"] == "GATE_CRITERIA_MET"
+            increments = gate_body.get("competency_increments") or []
+            assert {item["competency_id"] for item in increments} == {
+                "comp.generic.orientation",
+                "comp.generic.experiment",
+                "comp.generic.transfer",
+            }
+            assert all("comp.sys." not in json.dumps(item) for item in increments)
+
+            evidence = resumed.get(f"/api/v1/learners/{learner_id}/evidence", headers=headers)
+            assert evidence.status_code == 200, evidence.text
+            evidence_body = evidence.json()
+            claims = evidence_body.get("evidence") or []
+            assert claims
+            assert "dummy_hash" not in json.dumps(evidence_body)
+            provenance_hashes = []
+            for claim in claims:
+                provenance = claim.get("provenance") or claim
+                for key in ("artifact_hash", "runner_hash", "curriculum_sha"):
+                    digest = provenance.get(key) or claim.get(key)
+                    if digest:
+                        provenance_hashes.append(digest)
+                        assert digest != "dummy_hash"
+                        assert len(str(digest)) == 64
+            assert provenance_hashes
+
+            today = resumed.get(f"/api/v1/learners/{learner_id}/next-action", headers=headers)
+            assert today.status_code == 200, today.text
+            action_body = today.json()
+            assert action_body["action"] == "IDLE"
+            assert action_body["reason"] == "ALL_MISSIONS_COMPLETE"
+            competencies = action_body.get("competencies") or []
+            assert {item["competency_id"] for item in competencies} == {
+                "comp.generic.orientation",
+                "comp.generic.experiment",
+                "comp.generic.transfer",
+            }
+            assert "M01" not in json.dumps(action_body)
 
             final = resumed.get(f"/api/v1/sessions/{session_id}", headers=headers)
             assert final.status_code == 200, final.text

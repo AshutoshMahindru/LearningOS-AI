@@ -41,18 +41,22 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[3]
 
 
-def test_31a_hook_falls_back_to_local_runner():
-    assert try_upstream_runner() is None
+def test_31a_hook_imports_python_runner_run_job():
+    runner = try_upstream_runner()
+    assert runner is not None
+    assert getattr(runner, "__name__", "") == "run_job"
     result = run_job(
         {
-            "job_id": "hook-fallback",
+            "job_id": "hook-31a",
             "code": "result = 1 + 1\nprint(result)",
             "timeout_sec": 5,
             "memory_mb": 256,
         }
     )
     assert result["status"] == "SUCCESS"
-    assert "2" in (result.get("stdout") or "")
+    assert "2" in (result.get("stdout") or result.get("diagnostics", {}).get("stdout") or "")
+    assert isinstance(result.get("blocks"), list)
+    assert result.get("execution_id")
 
 
 def test_child_env_strips_provider_secrets():
