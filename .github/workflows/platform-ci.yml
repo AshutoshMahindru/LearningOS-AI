@@ -7,6 +7,7 @@ on:
       - main
       - integration/v3-g3-platform
       - integration/v3-g4-runtime
+      - integration/v3-wp400
 
 permissions:
   contents: read
@@ -30,7 +31,11 @@ jobs:
       - name: Backend tests
         working-directory: platform/backend
         run: python -m pytest -q tests
-      - name: G3 integration scenario
+      - name: Worker sandbox tests
+        env:
+          PYTHONPATH: platform/backend:platform/worker
+        run: python -m pytest -q platform/worker/tests
+      - name: Platform integration scenario
         env:
           PYTHONPATH: platform/backend
         run: python -m pytest -q tests/platform/integration tests/platform/authoring

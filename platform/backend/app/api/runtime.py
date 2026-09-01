@@ -18,6 +18,7 @@ from app.core.errors import (
     NotFoundError,
     ValidationAppError,
 )
+from app.core.gates import GATE_CONTRACT_ABSENT as GENERIC_GATE_PLACEHOLDER
 
 SESSION_ACTIVE = "ACTIVE"
 SESSION_COMPLETED = "COMPLETED"
@@ -26,8 +27,8 @@ ATTEMPT_ACTIVE = "ACTIVE"
 ATTEMPT_SUBMITTED = "SUBMITTED"
 EXPERIMENT_STAGE_TYPE = "experiment"
 UNSTARTED_STAGE_SENTINELS = frozenset({"", "start"})
-GENERIC_GATE_PLACEHOLDER = "GENERIC_PLACEHOLDER_NO_WP400_ASSESSMENT"
 PREDICTION_SENSITIVE_TYPES = frozenset({EXPERIMENT_STAGE_TYPE})
+WP137_STATUSES = frozenset({"SUCCESS", "FAILED", "TIMEOUT", "CRASHED"})
 
 _ASSISTANCE_LEVELS = {
     "NO_AI_REQUIRED": "NO_AI_CERTIFIED",
@@ -557,6 +558,78 @@ def _execution_exit_code(worker_result: dict[str, Any], status: str) -> int:
     return 1
 
 
+def _wp137_status(status: str) -> str:
+    if status in WP137_STATUSES:
+        return status
+    if status == "CANCELLED":
+        return "TIMEOUT"
+    if status in {"WORKER_UNAVAILABLE"}:
+        return "CRASHED"
+    return "FAILED"
+
+
+def _structured_from_worker(
+    worker_result: dict[str, Any],
+    *,
+    execution_id: str,
+    duration_ms: int,
+    status: str,
+    exit_code: int,
+) -> dict[str, Any]:
+    """Map 31B sandbox / 31A runner output onto the WP-137 envelope."""
+    raw = worker_result if isinstance(worker_result, dict) else {}
+    exec_id = raw.get("execution_id")
+    if not isinstance(exec_id, str) or not exec_id.strip():
+        exec_id = execution_id
+    dur = raw.get("duration_ms")
+    if not isinstance(dur, int) or dur < 0:
+        dur = duration_ms
+    ex = raw.get("exit_code")
+    if not isinstance(ex, int):
+        ex = exit_code
+    blocks = raw.get("blocks") if isinstance(raw.get("blocks"), list) else []
+    diagnostics = raw.get("diagnostics") if isinstance(raw.get("diagnostics"), dict) else {}
+    stdout = diagnostics.get("stdout") if isinstance(diagnostics.get("stdout"), str) else None
+    if stdout is None:
+        stdout = str(raw.get("stdout") or "")
+    stderr = diagnostics.get("stderr") if isinstance(diagnostics.get("stderr"), str) else None
+    if stderr is None:
+        stderr = str(raw.get("stderr") or "")
+    diag: dict[str, Any] = {"stdout": stdout, "stderr": stderr}
+    metrics = diagnostics.get("system_metrics")
+    if isinstance(metrics, dict) and metrics:
+        diag["system_metrics"] = metrics
+    structured: dict[str, Any] = {
+        "execution_id": exec_id,
+        "status": _wp137_status(str(raw.get("status") or status)),
+        "exit_code": ex,
+        "duration_ms": dur,
+        "blocks": blocks,
+        "diagnostics": diag,
+    }
+    reproducibility = raw.get("reproducibility")
+    if isinstance(reproducibility, dict):
+        structured["reproducibility"] = reproducibility
+    return structured
+
+
+def _runner_parameters(
+    runner: dict[str, Any],
+    parameters: dict[str, Any] | None,
+) -> dict[str, Any]:
+    params = dict(parameters or {})
+    if "limits" in params:
+        return params
+    limits: dict[str, Any] = {}
+    if runner.get("timeout_sec") is not None:
+        limits["timeout_sec"] = runner.get("timeout_sec")
+    if runner.get("memory_mb") is not None:
+        limits["memory_mb"] = runner.get("memory_mb")
+    if limits:
+        params["limits"] = limits
+    return params
+
+
 def execute_stage(
     conn: sqlite3.Connection,
     session_id: str,
@@ -591,19 +664,22 @@ def execute_stage(
     runner = stage.get("runner") if isinstance(stage.get("runner"), dict) else {}
     runner_id = str(runner.get("module") or "worker")
     started = time.perf_counter()
-    worker_result = _call_worker_execute(source, parameters)
+    worker_result = _call_worker_execute(source, _runner_parameters(runner, parameters))
     duration_ms = max(0, int((time.perf_counter() - started) * 1000))
     status = _execution_status(worker_result)
     exit_code = _execution_exit_code(worker_result, status)
     execution_id = str(uuid.uuid4())
-    structured = {
-        "execution_id": execution_id,
-        "status": status,
-        "exit_code": exit_code,
-        "duration_ms": duration_ms,
-        "blocks": worker_result.get("blocks") if isinstance(worker_result.get("blocks"), list) else [],
-        "worker": worker_result,
-    }
+    structured = _structured_from_worker(
+        worker_result,
+        execution_id=execution_id,
+        duration_ms=duration_ms,
+        status=status,
+        exit_code=exit_code,
+    )
+    execution_id = str(structured["execution_id"])
+    exit_code = int(structured["exit_code"])
+    duration_ms = int(structured["duration_ms"])
+    diagnostics = structured.get("diagnostics") if isinstance(structured.get("diagnostics"), dict) else None
     conn.execute(
         """
         INSERT INTO executions (
@@ -620,7 +696,11 @@ def execute_stage(
             exit_code,
             duration_ms,
             canonical_dumps(structured),
-            canonical_dumps(worker_result.get("error")) if isinstance(worker_result.get("error"), dict) else None,
+            canonical_dumps(diagnostics) if diagnostics is not None else (
+                canonical_dumps(worker_result.get("error"))
+                if isinstance(worker_result.get("error"), dict)
+                else None
+            ),
         ),
     )
     conn.commit()
@@ -635,27 +715,9 @@ def execute_stage(
         "duration_ms": duration_ms,
         "runner_id": runner_id,
         "structured_result": structured,
+        "blocks": structured.get("blocks") if isinstance(structured.get("blocks"), list) else [],
+        "diagnostics": diagnostics or {},
     }
-
-
-def _curriculum_sha(conn: sqlite3.Connection, mission_id: str, spec: dict[str, Any]) -> str:
-    try:
-        row = conn.execute(
-            """
-            SELECT p.git_commit_sha
-            FROM missions m
-            JOIN curriculum_packages p ON p.id = m.package_id
-            WHERE m.id = ?
-            """,
-            (mission_id,),
-        ).fetchone()
-    except sqlite3.Error:
-        row = None
-    if row is not None:
-        digest = _row(row).get("git_commit_sha")
-        if isinstance(digest, str) and digest and digest != "dummy_hash":
-            return digest
-    return canonical_sha256(spec)
 
 
 def _persist_submission_evidence(
@@ -667,66 +729,19 @@ def _persist_submission_evidence(
     explanation: str | None,
     artifacts: list[dict[str, Any]],
     payload_hash: str,
-) -> None:
-    contract = spec.get("gate_contract") if isinstance(spec.get("gate_contract"), dict) else {}
-    required = contract.get("required_evidence") if isinstance(contract.get("required_evidence"), list) else []
-    matching = [
-        item
-        for item in required
-        if isinstance(item, dict) and str(item.get("stage_id") or "") == stage_id
-    ]
-    knowledge_nodes = spec.get("knowledge_nodes") if isinstance(spec.get("knowledge_nodes"), list) else []
-    fallback_kn = next((str(node) for node in knowledge_nodes if isinstance(node, str) and node), None)
-    curriculum_sha = _curriculum_sha(conn, str(session["mission_id"]), spec)
-    assistance = str(attempt.get("assistance_level") or "UNASSISTED")
-    learner_id = str(session["learner_id"])
-    mission_id = str(session["mission_id"])
+) -> list[dict[str, Any]]:
+    from app.core.evidence import persist_submission_evidence
 
-    records: list[dict[str, Any]] = list(matching)
-    for artifact in artifacts:
-        if isinstance(artifact, dict):
-            records.append(artifact)
-
-    seen: set[tuple[str, str, str]] = set()
-    for record in records:
-        competency_id = record.get("competency_id")
-        knowledge_node_id = record.get("knowledge_node_id") or fallback_kn
-        artifact_type = record.get("artifact_type") or record.get("type") or "explanation"
-        artifact_hash = record.get("artifact_hash") or payload_hash
-        if not isinstance(competency_id, str) or not competency_id:
-            continue
-        if not isinstance(knowledge_node_id, str) or not knowledge_node_id:
-            continue
-        if not isinstance(artifact_hash, str) or not artifact_hash or artifact_hash == "dummy_hash":
-            continue
-        key = (competency_id, str(artifact_type), artifact_hash)
-        if key in seen:
-            continue
-        seen.add(key)
-        conn.execute(
-            """
-            INSERT INTO evidence_items (
-                id, learner_id, mission_id, stage_id, stage_attempt_id,
-                competency_id, knowledge_node_id, artifact_type, artifact_path,
-                artifact_hash, assessment_status, assistance_level, curriculum_sha
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-            (
-                str(uuid.uuid4()),
-                learner_id,
-                mission_id,
-                stage_id,
-                attempt["id"],
-                competency_id,
-                knowledge_node_id,
-                str(artifact_type),
-                record.get("artifact_path"),
-                artifact_hash,
-                "ACCEPTED",
-                assistance,
-                curriculum_sha,
-            ),
-        )
+    return persist_submission_evidence(
+        conn,
+        session,
+        attempt,
+        stage_id,
+        spec,
+        explanation,
+        artifacts,
+        payload_hash,
+    )
 
 
 def submit_stage(
@@ -777,7 +792,7 @@ def submit_stage(
         (ATTEMPT_SUBMITTED, completed_at, attempt["id"]),
     )
     attempt["status"] = ATTEMPT_SUBMITTED
-    _persist_submission_evidence(
+    claims = _persist_submission_evidence(
         conn, session, attempt, stage_id, spec, explanation, artifact_list, payload_hash
     )
     nxt = next_stage_id(spec, stage_id)
@@ -790,23 +805,22 @@ def submit_stage(
         ensure_ready_attempt(conn, session_id, get_stage(spec, nxt))
     conn.commit()
 
-    try:
-        from app.db.ledger import EventLedger
+    from app.core.evidence import record_activity
 
-        EventLedger(conn).append(
-            str(session["learner_id"]),
-            "stage_submitted",
-            {
-                "session_id": session_id,
-                "stage_id": stage_id,
-                "attempt_id": attempt["id"],
-                "explanation": explanation,
-                "artifacts": artifact_list,
-                "payload_hash": payload_hash,
-            },
-        )
-    except Exception:
-        pass
+    record_activity(
+        conn,
+        str(session["learner_id"]),
+        "stage_submitted",
+        {
+            "session_id": session_id,
+            "stage_id": stage_id,
+            "attempt_id": attempt["id"],
+            "explanation": explanation,
+            "artifacts": artifact_list,
+            "payload_hash": payload_hash,
+            "evidence_ids": [claim.get("id") for claim in claims],
+        },
+    )
 
     refreshed = load_session(conn, session_id)
     current_stage_id = str(refreshed.get("current_stage_id") or stage_id)
@@ -823,121 +837,9 @@ def submit_stage(
     }
 
 
-def _criterion_met(
-    conn: sqlite3.Connection, session: dict[str, Any], criterion: dict[str, Any]
-) -> bool:
-    learner_id = str(session["learner_id"])
-    mission_id = str(session["mission_id"])
-    session_id = str(session["session_id"])
-    clauses = ["learner_id = ?", "mission_id = ?"]
-    params: list[Any] = [learner_id, mission_id]
-    stage_id = criterion.get("stage_id")
-    competency_id = criterion.get("competency_id")
-    artifact_type = criterion.get("artifact_type")
-    if isinstance(stage_id, str) and stage_id:
-        clauses.append("stage_id = ?")
-        params.append(stage_id)
-    if isinstance(competency_id, str) and competency_id:
-        clauses.append("competency_id = ?")
-        params.append(competency_id)
-    if isinstance(artifact_type, str) and artifact_type:
-        clauses.append("artifact_type = ?")
-        params.append(artifact_type)
-    try:
-        row = conn.execute(
-            f"SELECT id FROM evidence_items WHERE {' AND '.join(clauses)} LIMIT 1",
-            params,
-        ).fetchone()
-    except sqlite3.Error:
-        row = None
-    if row is not None:
-        return True
-    if isinstance(stage_id, str) and stage_id:
-        attempt = latest_attempt(conn, session_id, stage_id)
-        if attempt is not None and str(attempt.get("status") or "") == ATTEMPT_SUBMITTED:
-            return True
-    return False
-
-
 def evaluate_gate(conn: sqlite3.Connection, session_id: str) -> dict[str, Any]:
     session = load_session(conn, session_id)
     spec = load_mission_spec(conn, str(session["mission_id"]))
-    contract = spec.get("gate_contract") if isinstance(spec.get("gate_contract"), dict) else None
-    required = contract.get("required_evidence") if isinstance(contract, dict) else None
-    threshold_raw = contract.get("pass_threshold") if isinstance(contract, dict) else None
+    from app.core.gates import evaluate_session_gate
 
-    def _placeholder(extra: dict[str, Any] | None = None) -> dict[str, Any]:
-        body = {
-            "session_id": session_id,
-            "status": "EVALUATED",
-            "reason": GENERIC_GATE_PLACEHOLDER,
-            "passed_criteria": 0,
-            "required_criteria": 0,
-            "pass_threshold": threshold_raw,
-            "failed_evidence": [],
-        }
-        if extra:
-            body.update(extra)
-        return body
-
-    if not isinstance(required, list) or not required or threshold_raw is None:
-        return _placeholder()
-
-    criteria = [item for item in required if isinstance(item, dict)]
-    if not criteria:
-        return _placeholder()
-    try:
-        threshold = float(threshold_raw)
-    except (TypeError, ValueError):
-        return _placeholder()
-
-    passed: list[dict[str, Any]] = []
-    failed: list[dict[str, Any]] = []
-    for item in criteria:
-        if _criterion_met(conn, session, item):
-            passed.append(item)
-        else:
-            failed.append(item)
-    total = len(passed) + len(failed)
-    if total == 0:
-        return _placeholder()
-    ratio = len(passed) / total
-    repair_policy = contract.get("repair_policy") if isinstance(contract.get("repair_policy"), dict) else {}
-    allow_repair = bool(repair_policy.get("allow_targeted_repair", True)) if repair_policy is not None else True
-
-    if ratio >= threshold:
-        status = "PASSED"
-        reason = "GATE_CRITERIA_MET"
-        conn.execute(
-            "UPDATE mission_sessions SET status = ?, completed_at = ? WHERE id = ?",
-            (SESSION_COMPLETED, _now(), session_id),
-        )
-        conn.commit()
-        session_status = SESSION_COMPLETED
-    elif allow_repair:
-        status = "REPAIR_REQUIRED"
-        reason = "GATE_CRITERIA_UNMET"
-        session_status = str(session.get("status") or SESSION_ACTIVE)
-    else:
-        status = "FAILED"
-        reason = "GATE_CRITERIA_UNMET"
-        session_status = str(session.get("status") or SESSION_ACTIVE)
-
-    failed_public = [
-        {
-            key: item.get(key)
-            for key in ("stage_id", "artifact_type", "competency_id")
-            if key in item
-        }
-        for item in failed
-    ]
-    return {
-        "session_id": session_id,
-        "status": status,
-        "reason": reason,
-        "passed_criteria": len(passed),
-        "required_criteria": total,
-        "pass_threshold": threshold,
-        "failed_evidence": failed_public,
-        "session_status": session_status,
-    }
+    return evaluate_session_gate(conn, session, spec)

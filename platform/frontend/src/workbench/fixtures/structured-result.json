@@ -1,0 +1,82 @@
+{
+  "execution_id": "exec_catalog_001",
+  "status": "SUCCESS",
+  "exit_code": 0,
+  "duration_ms": 245,
+  "blocks": [
+    {
+      "type": "table",
+      "title": "Cleaned Dataset Sample",
+      "payload": {
+        "columns": ["id", "val"],
+        "rows": [[1, 2.5], [2, 3.8]]
+      }
+    },
+    {
+      "type": "markdown",
+      "title": "Observation notes",
+      "payload": {
+        "markdown": "## Shape\n\nTwo rows survived cleaning.\n\n- no missing values\n- numeric columns only"
+      }
+    },
+    {
+      "type": "chart",
+      "title": "Loss Curve",
+      "payload": {
+        "chart_type": "line",
+        "x": [1, 2, 3],
+        "y": [0.8, 0.4, 0.2]
+      }
+    },
+    {
+      "type": "metric",
+      "title": "Validation Accuracy",
+      "payload": {
+        "accuracy": 0.94,
+        "f1_score": 0.93
+      }
+    },
+    {
+      "type": "trace",
+      "title": "Pipeline trace",
+      "payload": {
+        "steps": [
+          { "id": "load", "label": "load", "status": "ok", "detail": "3 rows" },
+          { "id": "transform", "label": "transform", "status": "ok" }
+        ]
+      }
+    },
+    {
+      "type": "state_diff",
+      "title": "Row counts",
+      "payload": {
+        "before": { "rows": 4, "nulls": 2 },
+        "after": { "rows": 3, "nulls": 0 }
+      }
+    },
+    {
+      "type": "diagram",
+      "title": "Flow",
+      "payload": {
+        "nodes": [
+          { "id": "a", "label": "Input" },
+          { "id": "b", "label": "Model" },
+          { "id": "c", "label": "Output" }
+        ],
+        "edges": [
+          { "from": "a", "to": "b" },
+          { "from": "b", "to": "c" }
+        ]
+      }
+    },
+    {
+      "type": "artifact",
+      "title": "Notes artifact",
+      "payload": {
+        "filename": "notes.txt",
+        "media_type": "text/plain",
+        "preview": "preview text"
+      }
+    }
+  ]
+}

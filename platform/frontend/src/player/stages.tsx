@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Button } from '../components/Button';
 import { StatusBanner } from '../components/StatusBanner';
+import { BlockList } from '../workbench/BlockRenderer';
 import { StageFrame } from './StageFrame';
 import type { StageRenderProps } from './types';
 
@@ -338,10 +339,17 @@ export function ExperimentStage(props: StageRenderProps) {
         </Button>
       </form>
       <div className="mt-3 space-y-3">
-        <ResultBlock title="Observation" value={props.executeResult} />
-        {props.executeResult?.blocks?.map((block, index) => (
-          <ResultBlock key={`${block.type}-${index}`} title={block.title || block.type} value={block.payload} />
-        ))}
+        {props.executeResult ? (
+          <ResultBlock
+            title="Observation"
+            value={{
+              status: props.executeResult.status,
+              execution_id: props.executeResult.execution_id,
+              duration_ms: props.executeResult.duration_ms,
+            }}
+          />
+        ) : null}
+        {props.executeResult ? <BlockList blocks={props.executeResult.blocks ?? []} /> : null}
       </div>
 
       <form className="mt-6 space-y-3" onSubmit={runSubmit}>
