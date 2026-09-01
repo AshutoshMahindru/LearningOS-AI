@@ -439,3 +439,42 @@ def test_live_worker_client_denies_io_open_db_write(f01_env):
     finally:
         repo_marker.unlink(missing_ok=True)
         _stop_worker(worker)
+
+
+def test_live_worker_client_denies_io_fileio_db_and_worktree(f01_env):
+    """Independent-review probe: import io; io.FileIO(db, 'w') on live WorkerClient."""
+    from app.core.worker_client import WorkerClient
+
+    home: Path = f01_env["home"]
+    sock: Path = f01_env["sock"]
+    env: dict[str, str] = f01_env["env"]
+    db_path = home / "learningos.db"
+    db_path.write_bytes(b"untouched")
+    repo_marker = REPO_ROOT / f".wp400-pwn-{uuid.uuid4().hex}.txt"
+    limits = {"limits": {"timeout_sec": 5, "memory_mb": 256}}
+    worker = _start_worker(env)
+    try:
+        assert _wait_until(lambda: sock.exists()), f"worker socket was not created at {sock}"
+        client = WorkerClient(sock)
+        assert _wait_until(client.health)
+        allowed = client.execute("print('sandbox-ok')", limits)
+        assert allowed.get("status") == "SUCCESS", allowed
+        assert allowed.get("status") != "UNSUPPORTED"
+        for code in (
+            f"import io\nio.FileIO({str(db_path)!r}, 'w').write(b'corrupt-via-fileio')",
+            f"from io import FileIO\nFileIO({str(db_path)!r}, 'w').write(b'corrupt-via-fileio')",
+        ):
+            probe = client.execute(code, limits)
+            assert probe.get("status") in {"DENIED", "FAILED"}, (code, probe)
+            assert db_path.read_bytes() == b"untouched"
+        for code in (
+            f"import io\nio.FileIO({str(repo_marker)!r}, 'w').write(b'pwned')",
+            f"from io import FileIO\nFileIO({str(repo_marker)!r}, 'w').write(b'pwned')",
+        ):
+            tree = client.execute(code, limits)
+            assert tree.get("status") in {"DENIED", "FAILED"}, (code, tree)
+            assert not repo_marker.exists()
+        client.shutdown()
+    finally:
+        repo_marker.unlink(missing_ok=True)
+        _stop_worker(worker)
