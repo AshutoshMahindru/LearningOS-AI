@@ -3,6 +3,9 @@
 The pipeline intentionally keeps raw values beside canonical values. It removes
 only exact duplicate rows, records every coercion failure as an issue, preserves
 conflicting identifiers for review, and never deletes an outlier automatically.
+
+Pandas is imported inside functions so fixture package collection does not
+require it. Official platform CI does not install pandas.
 """
 
 from __future__ import annotations
@@ -11,9 +14,20 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 import re
-from typing import Iterable
+from typing import Any, Iterable
 
-import pandas as pd
+pd: Any = None
+
+
+def _require_pandas() -> Any:
+    """Load pandas on first use; collection and package import stay pandas-free."""
+
+    global pd
+    if pd is None:
+        import pandas as pandas_mod
+
+        pd = pandas_mod
+    return pd
 
 
 RAW_COLUMNS = [
@@ -33,8 +47,8 @@ RAW_COLUMNS = [
 ALLOWED_REGIONS = {"north", "south", "east", "west", "central"}
 ALLOWED_CATEGORIES = {"electronics", "grocery", "home", "apparel", "office"}
 ALLOWED_STATUSES = {"complete", "pending", "cancelled", "returned"}
-MIN_ORDER_DATE = pd.Timestamp("2025-01-01")
-MAX_ORDER_DATE = pd.Timestamp("2026-12-31")
+MIN_ORDER_DATE = datetime(2025, 1, 1)
+MAX_ORDER_DATE = datetime(2026, 12, 31)
 
 REGION_ALIASES = {
     "north": "north",
@@ -126,6 +140,7 @@ class CleaningResult:
 def load_raw(path: str | Path) -> pd.DataFrame:
     """Load the CSV losslessly as strings; blank fields remain blank strings."""
 
+    pd = _require_pandas()
     frame = pd.read_csv(
         Path(path),
         dtype="string",
@@ -144,6 +159,7 @@ def _collapse_whitespace(value: object) -> str:
 
 
 def _canonical_text(value: object, aliases: dict[str, str]) -> object:
+    pd = _require_pandas()
     collapsed = _collapse_whitespace(value)
     if not collapsed:
         return pd.NA
@@ -151,11 +167,13 @@ def _canonical_text(value: object, aliases: dict[str, str]) -> object:
 
 
 def _canonical_name(value: object) -> object:
+    pd = _require_pandas()
     collapsed = _collapse_whitespace(value)
     return collapsed.title() if collapsed else pd.NA
 
 
 def _parse_number(value: object) -> tuple[object, str]:
+    pd = _require_pandas()
     raw = str(value).strip()
     if not raw:
         return pd.NA, "missing"
@@ -175,6 +193,7 @@ DATE_FORMATS = (
 
 
 def _parse_date(value: object) -> tuple[object, str]:
+    pd = _require_pandas()
     raw = _collapse_whitespace(value)
     if not raw:
         return pd.NaT, "missing"
@@ -202,6 +221,7 @@ def _append_decision(frame: pd.DataFrame, mask: pd.Series, decision: str) -> Non
 
 
 def _exact_duplicate_log(raw: pd.DataFrame) -> tuple[pd.Series, pd.DataFrame]:
+    pd = _require_pandas()
     fingerprints = raw.astype("string").agg("\x1f".join, axis=1)
     duplicate_mask = fingerprints.duplicated(keep="first")
     first_source_row: dict[str, int] = {}
@@ -252,6 +272,7 @@ def _contains_blocking_issue(issue_text: str) -> bool:
 def clean_orders(raw: pd.DataFrame) -> CleaningResult:
     """Return an audit-preserving cleaned result without silent row deletion."""
 
+    pd = _require_pandas()
     missing = [column for column in RAW_COLUMNS if column not in raw.columns]
     if missing:
         raise ValueError(f"required columns missing: {missing}")
@@ -522,6 +543,7 @@ def clean_orders(raw: pd.DataFrame) -> CleaningResult:
 def assert_analysis_ready(frame: pd.DataFrame) -> bool:
     """Assert the analysis-ready contract; return True for notebook display."""
 
+    _require_pandas()
     required = [
         "order_id",
         "customer_name",
@@ -565,6 +587,7 @@ def assert_analysis_ready(frame: pd.DataFrame) -> bool:
 def raw_vs_clean_comparison(result: CleaningResult) -> pd.DataFrame:
     """Return the row-accounting table used by the notebook and review."""
 
+    pd = _require_pandas()
     metrics: Iterable[tuple[str, int]] = (
         ("raw_rows", len(result.raw)),
         ("exact_duplicates_logged", len(result.duplicate_log)),
