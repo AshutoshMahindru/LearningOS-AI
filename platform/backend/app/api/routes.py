@@ -315,6 +315,19 @@ async def create_learner(payload: LearnerCreateRequest) -> dict[str, Any]:
     return {"learner_id": learner_id, "username": payload.username, "display_name": display_name}
 
 
+def _require_learner(conn: sqlite3.Connection, learner_id: str) -> dict[str, Any]:
+    try:
+        row = conn.execute(
+            "SELECT id, username, display_name FROM learners WHERE id = ?",
+            (learner_id,),
+        ).fetchone()
+    except sqlite3.OperationalError as exc:
+        raise InternalError("Failed to load learner", status_code=503) from exc
+    if row is None:
+        raise NotFoundError("Learner not found", details={"learner_id": learner_id})
+    return _row_dict(row)
+
+
 @protected_router.get("/learners/{learner_id}")
 async def get_learner(learner_id: str) -> dict[str, Any]:
     with _db_conn() as conn:
@@ -691,6 +704,39 @@ async def evaluate_gate(session_id: str) -> dict[str, Any]:
             raise
         except Exception as exc:
             raise _map_sqlite_write_error(exc, "Gate evaluate") from exc
+
+
+@protected_router.get("/learners/{learner_id}/evidence")
+async def list_learner_evidence(learner_id: str) -> dict[str, Any]:
+    with _db_conn() as conn:
+        try:
+            _require_learner(conn, learner_id)
+            from app.core.evidence import list_evidence
+
+            items = list_evidence(conn, learner_id)
+        except AppError:
+            raise
+        except ValueError as exc:
+            raise ValidationAppError(str(exc)) from exc
+        except Exception as exc:
+            raise _map_sqlite_write_error(exc, "Evidence list") from exc
+    return {"learner_id": learner_id, "evidence": items}
+
+
+@protected_router.get("/learners/{learner_id}/next-action")
+async def get_learner_next_action(learner_id: str) -> dict[str, Any]:
+    with _db_conn() as conn:
+        try:
+            _require_learner(conn, learner_id)
+            from app.core.projection import next_action
+
+            return next_action(conn, learner_id)
+        except AppError:
+            raise
+        except ValueError as exc:
+            raise ValidationAppError(str(exc)) from exc
+        except Exception as exc:
+            raise _map_sqlite_write_error(exc, "Next action") from exc
 
 
 @protected_router.post("/tutor/chat")
