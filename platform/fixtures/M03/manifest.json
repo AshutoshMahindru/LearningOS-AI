@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M03",
+  "version": "5.0.0",
+  "title": "G5 reference M03",
+  "description": "Reference M03 (code editing, debugging, tests, diff) composed from the WP-121 generic stage catalogue. WP-136 mission id is M03; g5.reference.M03 is package metadata only.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M03",
+      "path": "missions/M03.json"
+    }
+  ],
+  "digest": "9326a99271ac252b6e94badc24a12fc7fb21491563b9197cae5de4cd2886baac"
+}
