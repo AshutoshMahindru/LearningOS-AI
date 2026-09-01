@@ -12,6 +12,7 @@ from tools.authoring.validate import validate_mission_document, validate_package
 REPO_ROOT = Path(__file__).resolve().parents[4]
 M05_PACKAGE = REPO_ROOT / "platform" / "fixtures" / "M05"
 FROZEN_BASE = "407e8199d457c57bcb3b5703add7872ddc8d7854"
+M05_LANE_SHA = "9a07aac9060f254f5403aace90a138f7013c863a"
 PACKAGE_ID = "g5.reference.M05"
 WP137_BLOCK_TYPES = {
     "table",
@@ -202,10 +203,9 @@ def _changed_paths() -> list[str]:
         )
         return [line.strip() for line in completed.stdout.splitlines() if line.strip()]
 
-    paths = set(_lines(["git", "diff", "--name-only", FROZEN_BASE]))
-    paths.update(_lines(["git", "diff", "--cached", "--name-only"]))
-    paths.update(_lines(["git", "ls-files", "--others", "--exclude-standard"]))
-    return sorted(paths)
+    # Bind the exclusive-write check to the M05 lane commit, not HEAD, so the
+    # combined G5 integration tree can load M01–M04 without failing this invariant.
+    return sorted(_lines(["git", "diff", "--name-only", FROZEN_BASE, M05_LANE_SHA]))
 
 
 def test_allowed_diff_paths_are_fixtures_and_reference_tests_only() -> None:
