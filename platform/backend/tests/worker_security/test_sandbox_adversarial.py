@@ -145,6 +145,36 @@ def test_timeout_status_and_worker_stays_alive(worker_env):
             proc.wait(timeout=3)
 
 
+def test_io_open_db_and_worktree_denied(worker_env):
+    """Reviewer probe: import io; io.open(LEARNINGOS_HOME/learningos.db) and repo writes."""
+    db_path = worker_env["home"] / "learningos.db"
+    db_path.write_bytes(b"untouched")
+    repo_marker = _repo_root() / f".wp400-pwn-{uuid.uuid4().hex}.txt"
+    proc = start_daemon(worker_env["env"])
+    client = WorkerClient(worker_env["sock"])
+    try:
+        assert wait_until(client.health)
+        db_hit = client.execute(
+            f"import io; io.open({str(db_path)!r}, 'w').write('corrupt')",
+            _limits(),
+        )
+        assert db_hit.get("status") in {"DENIED", "FAILED"}, db_hit
+        assert db_path.read_bytes() == b"untouched"
+        tree_hit = client.execute(
+            f"import io; io.open({str(repo_marker)!r}, 'w').write('pwned')",
+            _limits(),
+        )
+        assert tree_hit.get("status") in {"DENIED", "FAILED"}, tree_hit
+        assert not repo_marker.exists()
+        client.shutdown()
+        proc.wait(timeout=3)
+    finally:
+        repo_marker.unlink(missing_ok=True)
+        if proc.poll() is None:
+            proc.send_signal(signal.SIGTERM)
+            proc.wait(timeout=3)
+
+
 def test_db_file_write_denied(worker_env):
     db_path = worker_env["home"] / "learningos.db"
     db_path.write_bytes(b"untouched")
