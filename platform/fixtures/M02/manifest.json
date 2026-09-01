@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M02",
+  "version": "5.0.0",
+  "title": "G5 M02 reference package",
+  "description": "Reference M02 end-to-end ML system interrogation on the generic runtime. Mission id is WP-136 M02; g5.reference.M02 is package metadata only.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M02",
+      "path": "missions/M02.json"
+    }
+  ],
+  "digest": "dd4968c58423a015fde2ffc2b8803e61ef9f91184cf181eb16b9db99c253c1b7"
+}

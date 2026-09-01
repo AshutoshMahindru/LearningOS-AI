@@ -1,0 +1,138 @@
+{
+  "id": "M02",
+  "title": "Run and Interrogate Your First ML System",
+  "phase": {
+    "id": "P0",
+    "title": "Orientation"
+  },
+  "order_index": 2,
+  "flagship_version": "V00",
+  "core_invariant": "Start with the useful whole. Predict before running. Transfer without assistance. Prove competence with evidence.",
+  "competencies": [
+    "comp.m02.system_orientation",
+    "comp.m02.experimental_reasoning",
+    "comp.m02.evaluation_integrity",
+    "comp.m02.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m02.system_map",
+    "kn.m02.predict_execute",
+    "kn.m02.failure_diagnosis",
+    "kn.m02.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M01"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the whole supervised system",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the mission invariant and the Wine vertical slice: local CSV, 13 measurements, 3-class target, stratified split, fit on training rows only, predict on held-out features, honest metrics, then interrogation. Identify the evidence the gate will require. This is a generic composition of catalogue stages, not a custom M02 runtime."
+    },
+    {
+      "id": "stage_02_trace_map",
+      "title": "Map raw data through interrogation",
+      "type": "trace_map",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Annotate the data-flow map: raw CSV -> features and target -> stratified train/test split -> preprocessing plus classifier fit on training rows only -> predictions for held-out rows -> accuracy, balanced accuracy, confusion -> error and experiment interrogation. Mark where test labels are forbidden."
+    },
+    {
+      "id": "stage_03_interrogate",
+      "title": "Interrogate fit, predict, and evaluation boundaries",
+      "type": "interrogate",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Probe the information-flow invariants. Does predict require y_test? Must preprocessing statistics come from training rows only? What would a perfect 1.0 score mean if predictions are compared to themselves?"
+    },
+    {
+      "id": "stage_04_code_reading",
+      "title": "Locate fit, predict, and metric calls",
+      "type": "code_reading",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Trace the exact learning boundaries: the first line where model state can change (fit), the line where fitted state is consumed without new labels (predict), and the line where truth is allowed to re-enter (evaluation). Explain why comparing predictions to predictions is executable but invalid evidence."
+    },
+    {
+      "id": "stage_05_experiment",
+      "title": "Predict, execute, and submit one controlled change",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the local Wine-style supervised system. Change one dimension at a time (split, features, model, selected hyperparameter, labels, or evaluation setup). (1) PREDICT how the honest held-out score will move and why. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the controlled comparison. (4) OBSERVE metrics, class counts, and diagnostics. (5) SUBMIT an explanation of any delta between prediction and observation, naming constants you preserved.",
+      "runner": {
+        "module": "g5.reference.M02.experiment",
+        "entrypoint": "run_supervised_interrogation",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; the submitted explanation covers the single changed dimension, preserved constants, and honest held-out metrics."
+      }
+    },
+    {
+      "id": "stage_06_controlled_failure",
+      "title": "Diagnose corrupted labels and invalid evaluation",
+      "type": "controlled_failure",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Run two seeded epistemic failures. Failure A permutes training labels while preserving class counts: diagnose with disagreement rate and honest held-out metrics, then restore row-label alignment. Failure B scores accuracy_score(predictions, predictions) and returns 1.0: name the wrong boundary, repair by comparing y_test with aligned predictions, and verify against the honest baseline. Record hypothesis, evidence, root cause, smallest repair, and a monitoring check.",
+      "runner": {
+        "module": "g5.reference.M02.failure",
+        "entrypoint": "run_controlled_failures",
+        "timeout_sec": 15
+      }
+    },
+    {
+      "id": "stage_07_transfer",
+      "title": "Fresh supervised run without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "In a blank run, rebuild a supervised classifier from local Wine-style rows. Choose a split seed, feature set, model, and at least one hyperparameter so the recipe differs from the guided baseline in at least two dimensions. Tutor, hints, and prior-answer surfaces stay locked. Submit a runnable raw-data through interrogation artifact, a prediction written before execution, disjoint-row validation, metrics plus confusion, boundary identification, one controlled failure with repair, and a five-sentence limitations explanation.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Fresh no-AI supervised run with sealed reasoning, honest evaluation, and an independent explanation of what the model learned from, never saw, and cannot claim."
+      }
+    },
+    {
+      "id": "stage_08_flagship",
+      "title": "Connect the vertical slice to V00",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how this interrogable supervised slice supplies V00's first executable whole: a shared vocabulary of features, target, split, fit, prediction, evaluation, and interrogation, plus the guardrail that executable code and impressive metrics are not automatically valid evidence."
+    },
+    {
+      "id": "stage_09_gate",
+      "title": "Evaluate gate evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, experiment, controlled-failure, and transfer evidence against the mission gate contract. Issue PASSED or a targeted repair plan for unmet knowledge nodes. Do not award completion from a copied baseline or a score alone."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.m02.system_orientation",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.m02.experimental_reasoning",
+        "stage_id": "stage_05_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.m02.evaluation_integrity",
+        "stage_id": "stage_06_controlled_failure",
+        "artifact_type": "trace"
+      },
+      {
+        "competency_id": "comp.m02.unassisted_transfer",
+        "stage_id": "stage_07_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
