@@ -12,7 +12,7 @@ from tools.authoring.validate import validate_mission_document, validate_package
 REPO_ROOT = Path(__file__).resolve().parents[4]
 M05_PACKAGE = REPO_ROOT / "platform" / "fixtures" / "M05"
 FROZEN_BASE = "407e8199d457c57bcb3b5703add7872ddc8d7854"
-M05_LANE_SHA = "9a07aac9060f254f5403aace90a138f7013c863a"
+M05_LANE_SHA = "8f0ceac5508075d1e7a0587aca0898bf83487f0d"
 PACKAGE_ID = "g5.reference.M05"
 WP137_BLOCK_TYPES = {
     "table",
@@ -193,15 +193,34 @@ def test_wp136_schema_rejects_package_id_as_mission_id() -> None:
 def _changed_paths() -> list[str]:
     import subprocess
 
+    import pytest
+
     def _lines(args: list[str]) -> list[str]:
         completed = subprocess.run(
             args,
             cwd=str(REPO_ROOT),
-            check=True,
+            check=False,
             capture_output=True,
             text=True,
         )
+        if completed.returncode != 0:
+            pytest.skip(
+                "git history for path-ownership check is unavailable "
+                f"(exit {completed.returncode}: {(completed.stderr or completed.stdout).strip()[:200]})"
+            )
         return [line.strip() for line in completed.stdout.splitlines() if line.strip()]
+
+    # Shallow CI checkouts (fetch-depth: 1) do not contain FROZEN_BASE.
+    for sha, label in ((FROZEN_BASE, "frozen base"), (M05_LANE_SHA, "M05 lane")):
+        probe = subprocess.run(
+            ["git", "cat-file", "-e", f"{sha}^{{commit}}"],
+            cwd=str(REPO_ROOT),
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if probe.returncode != 0:
+            pytest.skip(f"{label} {sha} is not in this clone (shallow checkout)")
 
     # Bind the exclusive-write check to the M05 lane commit, not HEAD, so the
     # combined G5 integration tree can load M01–M04 without failing this invariant.
