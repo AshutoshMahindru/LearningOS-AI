@@ -11,12 +11,13 @@ Learner state never lives in the Git worktree.
 One-click install and launch from a checkout:
 
 ```bash
-python3 tools/platform/install.py
+python3 tools/desktop/launch.py
+# or: python3 tools/platform/install.py --launch
 ```
 
-Desktop helpers live under `tools/desktop/`. The installer starts the local UI, API, and isolated execution worker. **Jupyter is not required.**
+That command bootstraps a managed runtime under `$LEARNINGOS_HOME/runtime/` (outside the Git worktree) and starts the local UI, API, and isolated execution worker. **Jupyter is not required.** `python3 tools/platform/install.py` without `--launch` only prepares the runtime. Desktop helpers live under `tools/desktop/`.
 
-Then open the URL the installer prints (typically `http://127.0.0.1:5173`). Identify a local learner, pick a mission from the catalog, and work through stages in the player.
+Then open the URL printed at launch (typically `http://127.0.0.1:5173`). Identify a local learner, pick a mission from the catalog, and work through stages in the player.
 
 See [docs/LEARNER.md](docs/LEARNER.md) for data location, backup/restore, and the offline loop.
 

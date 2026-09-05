@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-import install
-import launch
+from tools.desktop import launch
+from tools.platform import install
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 DESKTOP_README = REPO_ROOT / "tools" / "desktop" / "README.md"

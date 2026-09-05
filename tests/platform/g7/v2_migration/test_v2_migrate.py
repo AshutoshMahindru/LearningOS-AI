@@ -23,16 +23,13 @@ def _repo_root() -> Path:
 
 
 REPO_ROOT = _repo_root()
-for _candidate in (
-    str(REPO_ROOT / "tools" / "platform"),
-    str(REPO_ROOT / "platform" / "backend"),
-    str(REPO_ROOT),
-):
-    if _candidate not in sys.path:
-        sys.path.insert(0, _candidate)
+if str(REPO_ROOT / "platform" / "backend") not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT / "platform" / "backend"))
+if str(REPO_ROOT) not in sys.path:
+    sys.path.append(str(REPO_ROOT))
 
-import state_guard  # noqa: E402
-import v2_migrate  # noqa: E402
+from tools.platform import state_guard  # noqa: E402
+from tools.platform import v2_migrate  # noqa: E402
 
 MIGRATE_PY = REPO_ROOT / "tools" / "platform" / "v2_migrate.py"
 FIXTURE_ROOT = Path(__file__).resolve().parent / "fixtures"

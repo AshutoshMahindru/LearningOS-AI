@@ -8,11 +8,13 @@ import os
 import sys
 from pathlib import Path
 
-_PLATFORM_DIR = Path(__file__).resolve().parents[1] / "platform"
-if str(_PLATFORM_DIR) not in sys.path:
-    sys.path.insert(0, str(_PLATFORM_DIR))
-
-import install  # noqa: E402
+if __package__ in {None, ""}:
+    _PLATFORM_DIR = Path(__file__).resolve().parents[1] / "platform"
+    if str(_PLATFORM_DIR) not in sys.path:
+        sys.path.insert(0, str(_PLATFORM_DIR))
+    import install  # noqa: E402
+else:
+    from tools.platform import install
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:

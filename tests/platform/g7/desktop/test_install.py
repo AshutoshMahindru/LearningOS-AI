@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-import install
+from tools.platform import install
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 

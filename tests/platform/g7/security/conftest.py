@@ -12,10 +12,12 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[4]
 BACKEND_ROOT = REPO_ROOT / "platform" / "backend"
 WORKER_ROOT = REPO_ROOT / "platform" / "worker"
-for _path in (REPO_ROOT, BACKEND_ROOT, WORKER_ROOT):
+for _path in (BACKEND_ROOT, WORKER_ROOT):
     text = str(_path)
     if text not in sys.path:
         sys.path.insert(0, text)
+if str(REPO_ROOT) not in sys.path:
+    sys.path.append(str(REPO_ROOT))
 
 
 @pytest.fixture(autouse=True)

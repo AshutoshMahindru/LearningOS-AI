@@ -7,10 +7,10 @@ LearningOS is a local app. The catalog, mission player, workbench, evidence, and
 From a source checkout, the intended one-click path is:
 
 ```bash
-python3 tools/platform/install.py
+python3 tools/desktop/launch.py
 ```
 
-Desktop packaging and shortcuts live under `tools/desktop/`. The installer is meant to install host prerequisites if needed, place learner data outside the Git worktree, and start:
+That prepares `$LEARNINGOS_HOME/runtime/` outside the Git worktree and starts the app. The same launch is `python3 tools/platform/install.py --launch`. Runtime-only bootstrap (no start) is `python3 tools/platform/install.py`. Desktop packaging and shortcuts live under `tools/desktop/`. Launch starts:
 
 - the UI (typically `http://127.0.0.1:5173`)
 - the local API (`http://127.0.0.1:8765/api/v1`)

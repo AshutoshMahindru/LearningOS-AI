@@ -5,10 +5,10 @@ This is the product a learner launches: the local V3 shell. Jupyter is not requi
 ## Launch
 
 ```bash
-python3 tools/platform/install.py
+python3 tools/desktop/launch.py
 ```
 
-Desktop helpers: `tools/desktop/`. Open the URL the installer prints (typically `http://127.0.0.1:5173`).
+Equivalent launch: `python3 tools/platform/install.py --launch`. Runtime-only bootstrap: `python3 tools/platform/install.py`. Desktop helpers: `tools/desktop/`. Open the URL printed at launch (typically `http://127.0.0.1:5173`).
 
 Developers on a source checkout may use `./start.sh` instead. See `tools/platform/README.md`.
 

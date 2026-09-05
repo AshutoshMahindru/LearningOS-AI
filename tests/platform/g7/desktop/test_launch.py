@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pytest
 
-import install
-import launch
+from tools.desktop import launch
+from tools.platform import install
 
 
 def test_prepare_launch_execs_start_sh_with_managed_python(fake_repo: Path, data_home: Path, Runner) -> None:

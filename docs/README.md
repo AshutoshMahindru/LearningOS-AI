@@ -5,7 +5,7 @@
 - [Learner guide](LEARNER.md) — one-click launch, `LEARNINGOS_HOME`, backup/restore `dest_home`, offline loop
 - [Runtime quickstart](RUNTIME_QUICKSTART.md)
 
-Launch with `python3 tools/platform/install.py`. Desktop helpers are under `tools/desktop/`. Jupyter is not required.
+Launch with `python3 tools/desktop/launch.py` (or `python3 tools/platform/install.py --launch`). Desktop helpers are under `tools/desktop/`. Jupyter is not required.
 
 ## Pedagogy notes
 

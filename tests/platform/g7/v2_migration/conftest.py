@@ -23,6 +23,7 @@ POPULATED = FIXTURE_ROOT / "populated"
 MULTI = FIXTURE_ROOT / "multi"
 GARBAGE = FIXTURE_ROOT / "garbage"
 
-for candidate in (str(PLATFORM_TOOLS), str(BACKEND_ROOT), str(REPO_ROOT)):
-    if candidate not in sys.path:
-        sys.path.insert(0, candidate)
+if str(BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(BACKEND_ROOT))
+if str(REPO_ROOT) not in sys.path:
+    sys.path.append(str(REPO_ROOT))

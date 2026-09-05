@@ -11,13 +11,11 @@ import pytest
 
 _REPO_ROOT = Path(__file__).resolve().parents[4]
 _BACKEND_ROOT = _REPO_ROOT / "platform" / "backend"
-_PLATFORM_TOOLS = _REPO_ROOT / "tools" / "platform"
-_DESKTOP_TOOLS = _REPO_ROOT / "tools" / "desktop"
 
-for path in (_BACKEND_ROOT, _PLATFORM_TOOLS, _DESKTOP_TOOLS):
-    text = str(path)
-    if text not in sys.path:
-        sys.path.insert(0, text)
+if str(_BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(_BACKEND_ROOT))
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.append(str(_REPO_ROOT))
 
 
 class RecordingRunner:

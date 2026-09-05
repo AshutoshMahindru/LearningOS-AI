@@ -20,11 +20,13 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Mapping, Sequence
 
-_PLATFORM_DIR = Path(__file__).resolve().parent
-if str(_PLATFORM_DIR) not in sys.path:
-    sys.path.insert(0, str(_PLATFORM_DIR))
-
-from dev import Check, is_within, print_checks, resolve_data_home, validate_data_home  # noqa: E402
+if __package__ in {None, ""}:
+    _PLATFORM_DIR = Path(__file__).resolve().parent
+    if str(_PLATFORM_DIR) not in sys.path:
+        sys.path.insert(0, str(_PLATFORM_DIR))
+    from dev import Check, is_within, print_checks, resolve_data_home, validate_data_home  # noqa: E402
+else:
+    from .dev import Check, is_within, print_checks, resolve_data_home, validate_data_home
 
 STAMP_VERSION = 1
 MIN_PYTHON = (3, 11)
