@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M33",
+  "version": "5.0.0",
+  "title": "G5 M33 reference package",
+  "description": "Reference M33 Build Semantic Search on the generic runtime. WP-136 mission id is M33. Package id is g5.reference.M33. Stages are catalogue compositions; WP-137 blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M33",
+      "path": "missions/M33.json"
+    }
+  ],
+  "digest": "ff9844f7cffb8770bfce77699ef7ed25f53b115d7fc2b4ade29c9d1391119e58"
+}

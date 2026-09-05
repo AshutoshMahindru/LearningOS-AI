@@ -1,0 +1,138 @@
+{
+  "id": "M39",
+  "title": "Add Memory, Routing, and Fallbacks",
+  "phase": {
+    "id": "P7",
+    "title": "Agents & Evaluation"
+  },
+  "order_index": 39,
+  "flagship_version": "V10",
+  "core_invariant": "Working memory is ephemeral workflow state; persistent memory is scoped and provenance-bearing. Retrieve deliberately; do not append the whole store. Expired and superseded entries are flagged or excluded. Routing is explicit predicates, not a hidden prompt; no-match is first-class. Fallbacks are a bounded ladder; a circuit breaker is orchestration policy. Degraded success is labeled and is not silent incorrect success. Predict before every robustness action. Transfer without assistance. Generic WP-137 metric and table blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.robust.memory",
+    "comp.robust.routing",
+    "comp.robust.fallback",
+    "comp.robust.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m39.memory",
+    "kn.m39.routing",
+    "kn.m39.fallback",
+    "kn.m39.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M38"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame memory, routing, and bounded fallbacks",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M38 workflow: explicit AgentState, checkpoints, approval, loop bounds. M39 adds provenance-bearing memory, explicit routes (at least two classes plus no-match), and a bounded fallback/circuit (robust_version v10-teaching-robust-1, circuit_threshold 2, max_attempts 3, catalog_price 42.0, stale_price 99.0). Identify gate evidence: relevant versus irrelevant retrieval, stale/superseded exclusion, route correctness, degraded primary failure, circuit-open on repeated failure, a no-AI robustness design, and a V10 memory/routing/fallback ADR. Do not open an eval harness, RAG, or LangGraph SDK. No custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Read retrieve, route, fallback ladder, circuit",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read retrieve_memory, select_route, run_fallback_ladder, and repair_run without importing a store SDK. Predict expired ids are excluded, name retrieved ids/route/attempts/degraded as live probes, and that no-match does not wrap M38. Submit an annotated robustness trace.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names the live contract and a rejected or illegal path."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, then run the robustness layer",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT a SKU-7 purchase routes catalog_purchase, posts 42.0, excludes stale 99.0 memory, and stays non-degraded; forced primary failure yields a labeled degraded terminal with effect_count 0. (2) COMMIT. (3) EXECUTE / RUN the teaching robustness layer; emit WP-137 metric of route, degraded, circuit_open, stale_excluded, posted_amount and a table of retrieved versus excluded ids. (4) OBSERVE. (5) SUBMIT / EXPLAIN. Do not silently complete on stale memory.",
+      "runner": {
+        "module": "g5.reference.M39.experiment",
+        "entrypoint": "run_robust_agent",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; submitted explanation covers the observed WP-137 blocks. No universal accuracy threshold."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose stale-memory trust and fallback oscillation",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Named faults, one change each. Fault A: post expired memory as complete (stale 99.0). Predict posted_amount is 99.0 and complete. Repair_run posts catalog 42.0 from the M38 lookup; original still posts stale. Fault B: ignore circuit and attempt bounds so primary/fallback oscillate. Repair opens the circuit at the configured bound; original still exceeds max_attempts. Emit a WP-137 table of posted_amount and attempts.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract from the broken object."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Defend robustness without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, without inventing an eval harness, classify working versus persistent memory, list provenance fields, route two fresh tasks plus no-match, bound a fallback, and diagnose stale trust. Tutor surfaces stay locked. Emit a WP-137 artifact. Leave responses unfilled.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Independent no-AI reasoning names the contract, a valid repair, and does not invent deferred machinery."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Choose a V10 memory, routing, and fallback policy",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete an ADR for V10 memory/routing/fallback policy: persistence, provenance, retrieval scope, route precedence, bounds, degraded outputs, and circuit breaking. Reject append-all memory and unbounded retry. Do not implement an eval harness here.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a decision, rejected alternative, owner, status, and date."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Hand M40 declared robustness surfaces",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Hand M40 a robust agent with declared memory, route, fallback, and trace surfaces. Not an eval harness, RAG pack, or LangGraph SDK store."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate memory-routing-fallback evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, robustness experiment, stale-memory/oscillation diagnosis, and unassisted transfer. Issue PASSED or a targeted repair plan. Do not award completion from a silent incorrect complete."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.robust.memory",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.robust.routing",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.robust.fallback",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.robust.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

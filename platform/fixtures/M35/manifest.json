@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M35",
+  "version": "5.0.0",
+  "title": "G5 M35 reference package",
+  "description": "Reference M35 Improve Retrieval on the generic runtime. WP-136 mission id is M35. Package id is g5.reference.M35. Stages are catalogue compositions; WP-137 blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M35",
+      "path": "missions/M35.json"
+    }
+  ],
+  "digest": "2dd67869b58b2b1e8c62f5187d7789bb774bf8eb33516c038c112130d37acd7b"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M37",
+  "version": "5.0.0",
+  "title": "G5 M37 reference package",
+  "description": "Reference M37 Make an LLM Call Tools Reliably on the generic runtime. WP-136 mission id is M37. Package id is g5.reference.M37. Stages are catalogue compositions; WP-137 blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M37",
+      "path": "missions/M37.json"
+    }
+  ],
+  "digest": "abfe125b4ef3df9c78712012c66c6124ee9c128eef3bdb5872aa2b0bf96ac3e7"
+}
