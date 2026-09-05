@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M41",
+  "version": "6.0.0",
+  "title": "G6 M41 reference package",
+  "description": "Reference M41 integrated architecture, boundary contracts, and degradation routing on the generic runtime. WP-136 mission id is M41. Package id is g6.reference.M41. Stages are catalogue compositions; WP-137 metric and table blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M41",
+      "path": "missions/M41.json"
+    }
+  ],
+  "digest": "9b6707b4f4f57f794d6cb8e56a24aa4d1049c9f970026a269f1dbdf56f1d4d15"
+}

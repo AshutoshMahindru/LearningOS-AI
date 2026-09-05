@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M42",
+  "version": "6.0.0",
+  "title": "G6 M42 reference package",
+  "description": "Reference M42 capstone as a WP-136 curriculum package on the generic runtime, not a one-off app. WP-136 mission id is M42. Package id is g6.reference.M42. Stages are catalogue compositions; WP-137 metric, table, and trace blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M42",
+      "path": "missions/M42.json"
+    }
+  ],
+  "digest": "d10cea7c260b21336a0239186e4d1c768c4daf1d778d8868a156fa5429e239e0"
+}
