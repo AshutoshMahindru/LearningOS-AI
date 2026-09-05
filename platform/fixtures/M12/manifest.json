@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M12",
+  "version": "5.0.0",
+  "title": "G6 M12 reference package",
+  "description": "G6 migration of M12 Improve Weak Trees with Ensembles onto the frozen generic runtime. Package id is g5.reference.M12 (G5 package shape). WP-136 mission id is M12. Lab source and data live in this fixture. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M12",
+      "path": "missions/M12.json"
+    }
+  ],
+  "digest": "e3875f009134ab754e3eb929c35d55eb5fdbef178f5054219425e3ebc73dc621"
+}

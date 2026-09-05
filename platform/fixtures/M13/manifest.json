@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M13",
+  "version": "5.0.0",
+  "title": "G6 M13 reference package",
+  "description": "G6 migration of M13 Learn from Neighbors onto the frozen generic runtime. Package id is g5.reference.M13 (G5 package shape). WP-136 mission id is M13. Lab source and data live in this fixture. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M13",
+      "path": "missions/M13.json"
+    }
+  ],
+  "digest": "642c4488f9b5c2895626795a051360aaa535733ae19895ec364e573b002ac414"
+}

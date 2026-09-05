@@ -1,0 +1,160 @@
+{
+  "id": "M11",
+  "title": "Interrogate a Decision Tree",
+  "phase": {
+    "id": "P2",
+    "title": "Classical Machine Learning"
+  },
+  "order_index": 11,
+  "flagship_version": "V03",
+  "core_invariant": "Start with a trained shallow classifier and account for one prediction at a time. A split is a threshold test; the left branch is feature <= threshold; a leaf predicts from the training rows that reached it. Impurity reduction makes child groups less class-mixed than their parent. Train/test gaps diagnose overfitting. Impurity-based feature importance is model behavior on this synthetic fixture, not a causal effect. Predict before tracing. Transfer without assistance. Prove competence with evidence.",
+  "competencies": [
+    "comp.tree.path_reasoning",
+    "comp.tree.structure_impurity",
+    "comp.tree.generalization",
+    "comp.tree.interpretation_boundary",
+    "comp.tree.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m11.decision_path",
+    "kn.m11.impurity_and_structure",
+    "kn.m11.overfitting_diagnosis",
+    "kn.m11.non_causal_importance",
+    "kn.m11.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M09"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the shallow tree as a useful whole",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M11 invariant: inspect a trained shallow classifier before changing it. The fixture is datasets/M11/learner_readiness.csv \u2014 synthetic rows with study_hours_week, practice_accuracy, attendance_pct, sleep_hours, and ready_for_assessment. learner_id is an identifier, not a feature. Identify the evidence the gate will require: path traces, a depth comparison, a min_samples_leaf comparison, a one-feature perturbation, train/test overfitting diagnosis, a non-causal importance statement, an ADR, and a no-AI textual-tree transfer. This is a generic catalogue composition on the frozen runtime; there is no custom M11 frontend."
+    },
+    {
+      "id": "stage_02_trace_map",
+      "title": "Map thresholds, branches, and leaves",
+      "type": "trace_map",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Produce a structured map of a fitted tree: root node, internal splits, left and right branches, leaves, sample counts, class counts, and predicted class. Annotate that the left branch means feature <= threshold and the right branch means the comparison is false. Mark impurity as a mix measure at a node, not a causal score. Submit a diagram of one actual fitted path, not a vocabulary list.",
+      "validation_rubric": {
+        "required_evidence_type": "diagram",
+        "pass_criteria": "Map names nodes, thresholds, left/right meaning, leaves, and class counts from a fitted tree rather than slogans."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read tree_ arrays and decision_path",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read describe_nodes / explain_path style helpers before executing them. Identify which parallel tree_ arrays describe a node, how a leaf is distinguished from an internal node, why the left branch is feature <= threshold, where sample counts and impurity come from, and how a leaf class is derived. For explain_path, connect an input row to decision_path node IDs, the comparison at each internal node, and the terminal leaf's training class distribution. Before running, manually trace one row through export_text. After execution, compare the manual trace with the observed path and name the first divergence if any.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace connects array values and comparisons to an actual row rather than paraphrasing function names."
+      }
+    },
+    {
+      "id": "stage_04_experiment",
+      "title": "Predict, then trace individual decision paths",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on a shallow tree. (1) PREDICT the branch sequence and leaf class for selected rows, including (study_hours_week=6, practice_accuracy=0.70, attendance_pct=91). (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE the path tracer (manual threshold tests or decision_path). (4) OBSERVE node sequence, leaf class counts, and any divergence from the prediction. (5) SUBMIT an explanation of the delta, then separately vary max_depth and min_samples_leaf one at a time and compare train versus test. Return a structured trace block with predicted_branches, observed path, and predicted_class. Do not treat training accuracy as sufficient.",
+      "runner": {
+        "module": "g5.reference.M11.experiment",
+        "entrypoint": "run_path_trace",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Prediction is sealed before execute; observed path matches the threshold tests; explanation does not report only the final class."
+      }
+    },
+    {
+      "id": "stage_05_controlled_failure",
+      "title": "Diagnose an over-deep tree and reject causal overreach",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Fault A: an unconstrained tree on a small noisy-label fixture can make training accuracy look excellent with extra splits and tiny leaves. Predict whether removing the depth constraint raises training accuracy, record depth, node count, leaf count, smallest leaf, train accuracy, test accuracy, and the generalization gap, then repair with max_depth or min_samples_leaf on the unchanged test split. Fault B: reject the claim that increasing the most important feature will cause readiness. Rewrite it as a model-specific split-usage observation. Quietly deleting the deep tree does not pass.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Quantifies the train/test gap and smallest leaf; rejects the causal claim with missing causal evidence named."
+      }
+    },
+    {
+      "id": "stage_06_transfer",
+      "title": "Trace a fresh textual tree without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Complete the no-AI gate on the fresh textual tree: practice_accuracy <= 0.73 splits to attendance_pct <= 86.50 (class 0) else class 1; practice_accuracy > 0.73 splits to study_hours_week <= 4.50 (class 0) else class 1. Predict every comparison for (6, 0.70, 91) and (4, 0.80, 95). Choose between a tree with train 0.91 / test 0.88 and an unconstrained tree with train 1.00 / test 0.70 using more than training fit. Critique 'practice accuracy is the first split, so raising it will cause readiness.' Tutor, hints, and prior-answer surfaces stay locked.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Correct path traces, a train/test argument, and a non-causal interpretation completed without AI-generated help."
+      }
+    },
+    {
+      "id": "stage_07_adr",
+      "title": "Record the tree-constraint decision",
+      "type": "reflection_adr",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Write an ADR choosing shallow max_depth, larger min_samples_leaf, both, or no tree deployment for the V03 interpretable baseline. Compare at least the depth-3 baseline, the unconstrained tree, and one min_samples_leaf alternative. Do not choose from training accuracy alone. Name revisit conditions. Learner-authored ADRs stay outside this package.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR states decision, alternatives, held-out evidence, trade-offs, and revisit conditions."
+      }
+    },
+    {
+      "id": "stage_08_flagship",
+      "title": "Integrate the interpretable-tree baseline into V03",
+      "type": "flagship_integration",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "M11 supplies V03 Model Comparison & Diagnostics with an interpretable-tree baseline. Retain the deterministic train/test boundary, structural diagnostics, per-row path explanations, one-constraint-at-a-time experiments, and the distinction between training fit and held-out behavior. Do not imply a tree is globally interpretable merely because one path can be traced.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "States what V03 reuses and the interpretation limits that must be preserved."
+      }
+    },
+    {
+      "id": "stage_09_gate",
+      "title": "Evaluate tree-interrogation evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, path-trace experiment, controlled-failure diagnosis, no-AI transfer, and ADR evidence against the gate contract. Issue PASSED or a targeted repair plan. Do not award causal claims or training-only model selection."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.tree.structure_impurity",
+        "stage_id": "stage_02_trace_map",
+        "artifact_type": "diagram"
+      },
+      {
+        "competency_id": "comp.tree.path_reasoning",
+        "stage_id": "stage_04_experiment",
+        "artifact_type": "trace"
+      },
+      {
+        "competency_id": "comp.tree.generalization",
+        "stage_id": "stage_05_controlled_failure",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.tree.unassisted_transfer",
+        "stage_id": "stage_06_transfer",
+        "artifact_type": "artifact"
+      },
+      {
+        "competency_id": "comp.tree.interpretation_boundary",
+        "stage_id": "stage_07_adr",
+        "artifact_type": "markdown"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "id": "M12",
+  "title": "Improve Weak Trees with Ensembles",
+  "phase": {
+    "id": "P2",
+    "title": "Classical Machine Learning"
+  },
+  "order_index": 12,
+  "flagship_version": "V03",
+  "core_invariant": "Compare bagging, random forests, and boosting by experiment, starting from a deliberately limited tree. Bootstrap disagreement is an observable sensitivity proxy, not a complete bias/variance decomposition. Bagging averages resampled trees; a random forest also randomizes split features; boosting adds stages sequentially to reduce current loss. More trees do not repair corrupted labels. Predict before running. Transfer without assistance. Prove competence with evidence.",
+  "competencies": [
+    "comp.ensemble.limited_baseline",
+    "comp.ensemble.bagging_vs_boosting",
+    "comp.ensemble.capacity_control",
+    "comp.ensemble.failure_diagnosis",
+    "comp.ensemble.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m12.limited_tree",
+    "kn.m12.bootstrap_disagreement",
+    "kn.m12.parallel_vs_sequential",
+    "kn.m12.more_trees_limit",
+    "kn.m12.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M11"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame ensembles from a weak tree",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M12 invariant and the route: limited-tree baseline \u2192 bootstrap variation \u2192 bagging and random forest \u2192 boosting sequential correction \u2192 estimator-count and depth sweeps \u2192 controlled failure. The fixture is datasets/M12/ensemble_fixture.csv with a fixed split_random_state 1200, test_size 0.30, and primary metric balanced accuracy. Identify gate evidence: prediction log, comparison table, failure diagnosis, ADR, and no-AI transfer. No custom M12 frontend."
+    },
+    {
+      "id": "stage_02_interrogate",
+      "title": "Interrogate averaging versus sequential correction",
+      "type": "interrogate",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Probe the mechanisms before fitting. What can run in parallel in bagging versus what must be sequential in boosting? If resampled trees disagree on a held-out case, which claim is licensed and which is not? Why is disagreement not a full bias/variance decomposition? What would show that added estimators are averaging a wrong training signal rather than repairing it?"
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Follow ensemble state in code",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Pass 1: locate the depth-limited baseline and what metric_row records. Pass 2: trace one bootstrap iteration \u2014 sampled indices, fitted tree, held-out prediction vector. Pass 3: compare BaggingClassifier and RandomForestClassifier for row versus feature randomness. Pass 4: trace staged_predict and name corrected versus newly wrong cases between consecutive stages. Pass 5: list what size and depth sweeps hold fixed. Evidence must connect code paths to mechanisms, not API names.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace distinguishes parallel averaging from sequential correction using code behavior."
+      }
+    },
+    {
+      "id": "stage_04_experiment",
+      "title": "Predict, then compare limited tree, bagging, and boosting",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the ensemble fixture. (1) PREDICT whether a depth-2 tree underfits, overfits, or balances, and rank a depth-4 tree, bagging, and random forest before fitting. (2) COMMIT the prediction. (3) EXECUTE the limited-tree baseline, bootstrap vote variation, and a bagging-versus-boosting comparison with the split held fixed. (4) OBSERVE train/test balanced accuracy, per-case disagreement, and staged errors. (5) SUBMIT an explanation from averaging and error correlation, including any ranking violation. Return a metric block with baseline and ensemble scores. Do not treat more estimators as monotonically better.",
+      "runner": {
+        "module": "g5.reference.M12.experiment",
+        "entrypoint": "run_ensemble_comparison",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; the explanation holds the split fixed and does not treat bootstrap disagreement as a full decomposition."
+      }
+    },
+    {
+      "id": "stage_05_controlled_failure",
+      "title": "Diagnose why more trees cannot repair the wrong signal",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "The seeded fault flips 28 percent of training labels while leaving held-out labels clean, then grows forests from 1 to 200 estimators. Predict whether clean-test balanced accuracy will rise monotonically and whether a larger forest can infer which labels were flipped. Diagnose which quantity is stabilized by adding trees, which error remains in every bootstrap sample, and why this refutes 'more trees always fixes it.' Repair by restoring clean labels and bounding estimator count and depth from held-out evidence.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Distinguishes variance reduction from corrupted-target bias; does not treat added estimators as a general repair."
+      }
+    },
+    {
+      "id": "stage_06_transfer",
+      "title": "Defend a fresh ensemble choice without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Without the M12 fixture or AI assistance, reconstruct bagging, random-forest, and boosting diagrams, then choose an approach for a tabular classification service with a strict latency budget, daily retraining, noisy labels, and a requirement to explain individual decisions. State the baseline to preserve, the ensemble to trial first, estimator-count and depth ranges, metrics, and the rejection condition.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Distinguishes parallel averaging from sequential correction and makes trade-offs explicit."
+      }
+    },
+    {
+      "id": "stage_07_adr",
+      "title": "Record the ensemble decision",
+      "type": "reflection_adr",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Write an ADR selecting an ensemble under stated latency, interpretability, and error constraints. Include decision, context, alternatives, evidence, trade-offs, and revisit conditions. Learner-authored ADRs stay outside this package.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names constraints, alternatives, held-out evidence, and reversal triggers."
+      }
+    },
+    {
+      "id": "stage_08_flagship",
+      "title": "Integrate ensemble comparison into V03",
+      "type": "flagship_integration",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "M12 supplies V03 with an evidence-backed ensemble-selection workflow, not a hard-coded winner. Before V03 adopts an ensemble, state workload constraints, metric and validation design, comparison against the limited tree, diminishing returns, and a revisit trigger for drift, latency, or label-quality changes.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "States the reusable comparison workflow and what V03 must not freeze as a universal winner."
+      }
+    },
+    {
+      "id": "stage_09_gate",
+      "title": "Evaluate ensemble evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate baseline, comparison, controlled-failure, transfer, and ADR evidence. Issue PASSED or targeted repair. Do not award 'more trees always fixes it.'"
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.ensemble.limited_baseline",
+        "stage_id": "stage_04_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.ensemble.bagging_vs_boosting",
+        "stage_id": "stage_03_code_reading",
+        "artifact_type": "trace"
+      },
+      {
+        "competency_id": "comp.ensemble.failure_diagnosis",
+        "stage_id": "stage_05_controlled_failure",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.ensemble.unassisted_transfer",
+        "stage_id": "stage_06_transfer",
+        "artifact_type": "artifact"
+      },
+      {
+        "competency_id": "comp.ensemble.capacity_control",
+        "stage_id": "stage_07_adr",
+        "artifact_type": "markdown"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
