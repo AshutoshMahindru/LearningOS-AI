@@ -1,0 +1,100 @@
+{
+  "id": "M04",
+  "title": "Turn a Messy CSV into Usable Data",
+  "phase": {
+    "id": "phase_01",
+    "title": "Computational and Data Fluency"
+  },
+  "order_index": 4,
+  "flagship_version": "V01",
+  "core_invariant": "Data cleaning is an explicit, auditable pipeline: preserve raw values and row provenance, classify every finding, and never silently discard evidence.",
+  "competencies": [
+    "comp.data.schema_normalization",
+    "comp.data.missingness_decisions",
+    "comp.data.outlier_judgment"
+  ],
+  "knowledge_nodes": [
+    "kn.m04.lossless_load",
+    "kn.m04.duplicate_semantics",
+    "kn.m04.quality_invariants"
+  ],
+  "prerequisites": ["M03"],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the messy orders CSV",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Inspect the dirty customer-orders CSV as lossless strings. Identify shape, distinct values, blanks, aliases, currency text, mixed dates, identity collisions and outliers. Record the evidence the gate will require: raw profile, defect predictions, duplicate vs conflict distinction, parse issue codes, missingness decisions, outlier judgments, row reconciliation and analysis-ready invariants. V01 Structured Data Workbench must show why each row is usable, quarantined or retained with uncertainty."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict defects, then run the auditable cleaner",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the dirty orders fixture. (1) PREDICT the defect inventory, exact-duplicate count and conflicting-ID rows before transformations reveal the answers. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE the quality pipeline that logs only exact duplicate rows, preserves raw_* columns and source-row provenance, and emits a row-accounting table. (4) OBSERVE structured table and metric results. (5) SUBMIT an explanation of any delta between prediction and observation, including what remains uncertain.",
+      "runner": {
+        "module": "g5.reference.M04.experiment",
+        "entrypoint": "run_quality_pipeline",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Prediction is sealed before execute; observed row accounting matches raw=36, exact duplicates=1, rows after exact dedupe=35; conflicts and outliers remain visible."
+      }
+    },
+    {
+      "id": "stage_03_controlled_failure",
+      "title": "Diagnose unsafe cleaning shortcuts",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Measure information loss from blanket dropna, aggressive order_id dedupe, silent numeric coercion and automatic outlier deletion. Predict the loss, identify the first irreversible operation, inspect lost source rows, and replace the shortcut with the smallest auditable treatment. Quantify rows and evidence erased; do not merely warn against dropna.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Observed loss is quantified and a safe repair preserves conflicts, parse failures and outliers."
+      }
+    },
+    {
+      "id": "stage_04_transfer",
+      "title": "No-AI inventory cleaning challenge",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Apply the same quality protocol to a fresh ten-row inventory CSV (sku, item_name, warehouse, quantity, unit_cost, received_date) without assistance. Separate exact duplicates from SKU conflicts, preserve raw values, parse with issue evidence, retain the documented bulk shipment, reconcile row counts and assert analysis-ready invariants.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Every raw inventory row is accounted for; conflicting SKUs and malformed values are not silently lost; the approved bulk receipt is retained."
+      }
+    },
+    {
+      "id": "stage_05_gate",
+      "title": "Evaluate data-quality evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, experiment, controlled-failure and transfer evidence against the mission gate contract. Issue PASSED or a targeted repair plan for missing quality evidence."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.data.schema_normalization",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.data.missingness_decisions",
+        "stage_id": "stage_03_controlled_failure",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.data.outlier_judgment",
+        "stage_id": "stage_04_transfer",
+        "artifact_type": "table"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

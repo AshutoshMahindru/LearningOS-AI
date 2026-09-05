@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M01",
+  "version": "5.0.0",
+  "title": "G5 M01 reference package",
+  "description": "WP-136 curriculum package for M01 Map the AI/ML Landscape on the frozen generic runtime. Package id is metadata; mission id is M01.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M01",
+      "path": "missions/M01.json"
+    }
+  ],
+  "digest": "1524ce19af29eb1b347a6422067727722efe34ea4e5bdce78141ab40228bc9e1"
+}

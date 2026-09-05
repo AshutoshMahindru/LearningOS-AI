@@ -8,6 +8,7 @@ on:
       - integration/v3-g3-platform
       - integration/v3-g4-runtime
       - integration/v3-wp400
+      - integration/v3-g5-reference
 
 permissions:
   contents: read
@@ -38,7 +39,7 @@ jobs:
       - name: Platform integration scenario
         env:
           PYTHONPATH: platform/backend
-        run: python -m pytest -q tests/platform/integration tests/platform/authoring
+        run: python -m pytest --import-mode=importlib -q tests/platform/reference tests/platform/integration tests/platform/authoring
 
   frontend:
     runs-on: ubuntu-latest
