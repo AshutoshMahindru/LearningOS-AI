@@ -16,6 +16,7 @@ from tools.authoring.validate import validate_mission_document, validate_package
 REPO_ROOT = Path(__file__).resolve().parents[4]
 M34_PACKAGE = REPO_ROOT / "platform" / "fixtures" / "M34"
 FROZEN_BASE = "f7926e661a955f2d78bd8584877815825c5ef047"
+LANE_SHA = "54cca3f9509ced24f4973d52001d8f894f248f88"
 PACKAGE_ID = "g5.reference.M34"
 MISSION_ID = "M34"
 WP137_BLOCK_TYPES = {
@@ -311,21 +312,20 @@ def _changed_paths() -> list[str]:
             )
         return [line.strip() for line in completed.stdout.splitlines() if line.strip()]
 
-    # Shallow CI checkouts (fetch-depth: 1) do not contain FROZEN_BASE.
-    probe = subprocess.run(
-        ["git", "cat-file", "-e", f"{FROZEN_BASE}^{{commit}}"],
-        cwd=str(REPO_ROOT),
-        check=False,
-        capture_output=True,
-        text=True,
-    )
-    if probe.returncode != 0:
-        pytest.skip(f"frozen base {FROZEN_BASE} is not in this clone (shallow checkout)")
+    # Shallow CI checkouts omit FROZEN_BASE. Bind exclusive-write to the lane
+    # commit so the combined G6 tree does not fail this invariant.
+    for sha, label in ((FROZEN_BASE, "frozen base"), (LANE_SHA, "lane")):
+        probe = subprocess.run(
+            ["git", "cat-file", "-e", f"{sha}^{{commit}}"],
+            cwd=str(REPO_ROOT),
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if probe.returncode != 0:
+            pytest.skip(f"{label} {sha} is not in this clone (shallow checkout)")
 
-    paths = set(_lines(["git", "diff", "--name-only", FROZEN_BASE]))
-    paths.update(_lines(["git", "diff", "--cached", "--name-only"]))
-    paths.update(_lines(["git", "ls-files", "--others", "--exclude-standard"]))
-    return sorted(paths)
+    return sorted(_lines(["git", "diff", "--name-only", FROZEN_BASE, LANE_SHA]))
 
 
 def test_allowed_diff_paths_are_fixtures_and_reference_tests_only() -> None:

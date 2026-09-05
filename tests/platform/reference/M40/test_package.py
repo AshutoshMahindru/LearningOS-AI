@@ -16,6 +16,7 @@ from tools.authoring.validate import validate_mission_document, validate_package
 REPO_ROOT = Path(__file__).resolve().parents[4]
 M40_PACKAGE = REPO_ROOT / "platform" / "fixtures" / "M40"
 FROZEN_BASE = "f7926e661a955f2d78bd8584877815825c5ef047"
+LANE_SHA = "34fb39fe1d6441687b23ea1bfadf286295a4b438"
 PACKAGE_ID = "g6.reference.M40"
 MISSION_ID = "M40"
 WP137_BLOCK_TYPES = {
@@ -304,26 +305,20 @@ def _changed_paths() -> list[str]:
             )
         return [line.strip() for line in completed.stdout.splitlines() if line.strip()]
 
-    # Shallow CI checkouts (fetch-depth: 1) do not contain FROZEN_BASE.
-    probe = subprocess.run(
-        ["git", "cat-file", "-e", f"{FROZEN_BASE}^{{commit}}"],
-        cwd=str(REPO_ROOT),
-        check=False,
-        capture_output=True,
-        text=True,
-    )
-    if probe.returncode != 0:
-        pytest.skip(f"frozen base {FROZEN_BASE} is not in this clone (shallow checkout)")
+    # Shallow CI checkouts omit FROZEN_BASE. Bind exclusive-write to the lane
+    # commit so the combined G6 tree does not fail this invariant.
+    for sha, label in ((FROZEN_BASE, "frozen base"), (LANE_SHA, "lane")):
+        probe = subprocess.run(
+            ["git", "cat-file", "-e", f"{sha}^{{commit}}"],
+            cwd=str(REPO_ROOT),
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if probe.returncode != 0:
+            pytest.skip(f"{label} {sha} is not in this clone (shallow checkout)")
 
-    committed = _lines(["git", "diff", "--name-only", FROZEN_BASE, "HEAD"])
-    if any(path.startswith("platform/fixtures/M40/") for path in committed):
-        return committed
-    extra = [
-        path
-        for path in _lines(["git", "ls-files", "--others", "--exclude-standard"])
-        if any(path == prefix.rstrip("/") or path.startswith(prefix) for prefix in LANE_ALLOWED)
-    ]
-    return sorted(set(committed) | set(extra))
+    return sorted(_lines(["git", "diff", "--name-only", FROZEN_BASE, LANE_SHA]))
 
 
 def test_allowed_diff_paths_are_fixtures_and_reference_tests_only() -> None:

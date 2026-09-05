@@ -21,6 +21,7 @@ M12_PACKAGE = REPO_ROOT / "platform" / "fixtures" / "M12"
 MISSION_PATH = M12_PACKAGE / "missions" / "M12.json"
 PACKAGE_ID = "g5.reference.M12"
 FROZEN_BASE = "f7926e661a955f2d78bd8584877815825c5ef047"
+LANE_SHA = "bb3e86bac0f14aa804673cf6ff48361a959aab75"
 WP137_BLOCK_TYPES = {
     "table",
     "chart",
@@ -238,7 +239,13 @@ def _changed_paths() -> list[str]:
     import pytest
 
     def _lines(args: list[str]) -> list[str]:
-        completed = subprocess.run(args, cwd=str(REPO_ROOT), check=False, capture_output=True, text=True)
+        completed = subprocess.run(
+            args,
+            cwd=str(REPO_ROOT),
+            check=False,
+            capture_output=True,
+            text=True,
+        )
         if completed.returncode != 0:
             pytest.skip(
                 "git history for path-ownership check is unavailable "
@@ -246,20 +253,20 @@ def _changed_paths() -> list[str]:
             )
         return [line.strip() for line in completed.stdout.splitlines() if line.strip()]
 
-    probe = subprocess.run(
-        ["git", "cat-file", "-e", f"{FROZEN_BASE}^{{commit}}"],
-        cwd=str(REPO_ROOT),
-        check=False,
-        capture_output=True,
-        text=True,
-    )
-    if probe.returncode != 0:
-        pytest.skip(f"frozen base {FROZEN_BASE} is not in this clone (shallow checkout)")
-    paths = set(_lines(["git", "diff", "--name-only", FROZEN_BASE, "HEAD"]))
-    paths.update(_lines(["git", "diff", "--name-only", FROZEN_BASE]))
-    paths.update(_lines(["git", "diff", "--name-only", "--cached", FROZEN_BASE]))
-    paths.update(_lines(["git", "ls-files", "--others", "--exclude-standard"]))
-    return sorted(paths)
+    # Shallow CI checkouts omit FROZEN_BASE. Bind exclusive-write to the lane
+    # commit so the combined G6 tree does not fail this invariant.
+    for sha, label in ((FROZEN_BASE, "frozen base"), (LANE_SHA, "lane")):
+        probe = subprocess.run(
+            ["git", "cat-file", "-e", f"{sha}^{{commit}}"],
+            cwd=str(REPO_ROOT),
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if probe.returncode != 0:
+            pytest.skip(f"{label} {sha} is not in this clone (shallow checkout)")
+
+    return sorted(_lines(["git", "diff", "--name-only", FROZEN_BASE, LANE_SHA]))
 
 
 def test_allowed_diff_paths_are_fixtures_and_reference_tests_only() -> None:

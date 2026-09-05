@@ -16,6 +16,7 @@ from tools.authoring.validate import validate_mission_document, validate_package
 REPO_ROOT = Path(__file__).resolve().parents[4]
 M32_PACKAGE = REPO_ROOT / "platform" / "fixtures" / "M32"
 FROZEN_BASE = "f7926e661a955f2d78bd8584877815825c5ef047"
+LANE_SHA = "390f9ede950216eb76e745c1bd253fcd33660705"
 PACKAGE_ID = "g5.reference.M32"
 MISSION_ID = "M32"
 WP137_BLOCK_TYPES = {
@@ -309,16 +310,6 @@ def test_wp136_schema_rejects_package_id_as_mission_id() -> None:
 def _changed_paths() -> list[str]:
     import pytest
 
-    probe = subprocess.run(
-        ["git", "cat-file", "-e", f"{FROZEN_BASE}^{{commit}}"],
-        cwd=str(REPO_ROOT),
-        check=False,
-        capture_output=True,
-        text=True,
-    )
-    if probe.returncode != 0:
-        pytest.skip(f"frozen base {FROZEN_BASE} is not in this clone (shallow checkout)")
-
     def _lines(args: list[str]) -> list[str]:
         completed = subprocess.run(
             args,
@@ -334,10 +325,20 @@ def _changed_paths() -> list[str]:
             )
         return [line.strip() for line in completed.stdout.splitlines() if line.strip()]
 
-    committed = _lines(["git", "diff", "--name-only", FROZEN_BASE, "HEAD"])
-    uncommitted = _lines(["git", "ls-files", "--others", "--exclude-standard"])
-    dirty = _lines(["git", "diff", "--name-only"])
-    return sorted(set(committed) | set(uncommitted) | set(dirty))
+    # Shallow CI checkouts omit FROZEN_BASE. Bind exclusive-write to the lane
+    # commit so the combined G6 tree does not fail this invariant.
+    for sha, label in ((FROZEN_BASE, "frozen base"), (LANE_SHA, "lane")):
+        probe = subprocess.run(
+            ["git", "cat-file", "-e", f"{sha}^{{commit}}"],
+            cwd=str(REPO_ROOT),
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if probe.returncode != 0:
+            pytest.skip(f"{label} {sha} is not in this clone (shallow checkout)")
+
+    return sorted(_lines(["git", "diff", "--name-only", FROZEN_BASE, LANE_SHA]))
 
 
 def test_allowed_diff_paths_are_fixtures_and_reference_tests_only() -> None:

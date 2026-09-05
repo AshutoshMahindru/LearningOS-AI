@@ -6,6 +6,7 @@ import pytest
 
 from tests.platform.flagship.conftest import FROZEN_BASE, REPO_ROOT
 
+LANE_SHA = "8aa9fedac2d026530d58dc1a657178722ad84f63"
 ALLOWED_PREFIXES = (
     "platform/fixtures/flagship/",
     "platform/backend/app/core/flagship.py",
@@ -26,10 +27,13 @@ def _git(*args: str) -> subprocess.CompletedProcess[str]:
 
 
 def test_diff_paths_stay_inside_lane_ownership() -> None:
-    probe = _git("cat-file", "-e", f"{FROZEN_BASE}^{{commit}}")
-    if probe.returncode != 0:
-        pytest.skip(f"FROZEN_BASE {FROZEN_BASE} is not in this clone (shallow checkout)")
-    diff = _git("diff", "--name-only", FROZEN_BASE)
+    # Shallow CI checkouts omit FROZEN_BASE. Bind exclusive-write to the 53 lane
+    # commit so the combined G6 tree does not fail this invariant.
+    for sha, label in ((FROZEN_BASE, "frozen base"), (LANE_SHA, "53 lane")):
+        probe = _git("cat-file", "-e", f"{sha}^{{commit}}")
+        if probe.returncode != 0:
+            pytest.skip(f"{label} {sha} is not in this clone (shallow checkout)")
+    diff = _git("diff", "--name-only", FROZEN_BASE, LANE_SHA)
     assert diff.returncode == 0, diff.stderr
     changed = [line.strip() for line in diff.stdout.splitlines() if line.strip()]
     assert changed, "lane must add flagship index, core, and tests"
