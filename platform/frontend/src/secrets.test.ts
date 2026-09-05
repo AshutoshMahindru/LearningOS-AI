@@ -30,9 +30,11 @@ function walk(dir: string, acc: string[] = []): string[] {
 describe('secret isolation', () => {
   it('does not embed provider secrets or persist api keys in source', () => {
     const openai = ['OPENAI', 'API', 'KEY'].join('_');
+    const anthropic = ['ANTHROPIC', 'API', 'KEY'].join('_');
     const sk = `sk${'-'}`;
     const apiKey = `api${'Key'}`;
     const vitePrefix = `VITE${'_'}`;
+    const importMetaEnv = ['import', 'meta', 'env'].join('.');
     const files = walk(FRONTEND_ROOT).filter((file) => !file.endsWith('package-lock.json'));
     const hits: string[] = [];
 
@@ -42,11 +44,17 @@ describe('secret isolation', () => {
       if (text.includes(openai)) {
         hits.push(`${relative}: contains ${openai}`);
       }
+      if (text.includes(anthropic)) {
+        hits.push(`${relative}: contains ${anthropic}`);
+      }
       if (text.includes(sk)) {
         hits.push(`${relative}: contains ${sk}`);
       }
       if (text.includes(vitePrefix)) {
         hits.push(`${relative}: contains ${vitePrefix} env binding`);
+      }
+      if (text.includes(importMetaEnv) && text.includes(vitePrefix)) {
+        hits.push(`${relative}: contains ${importMetaEnv} ${vitePrefix} binding`);
       }
       const persist = new RegExp(
         `(localStorage|sessionStorage)\\.(setItem|getItem)\\([^\\n]*${apiKey}|${apiKey}[^\\n]*(localStorage|sessionStorage)`,
