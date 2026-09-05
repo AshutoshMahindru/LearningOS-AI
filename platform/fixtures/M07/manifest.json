@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M07",
+  "version": "6.0.0",
+  "title": "G6 M07 reference package",
+  "description": "WP-136 curriculum package for M07 Build a Reusable Data-to-Model Pipeline on the frozen generic runtime. Package id is metadata; mission id is M07.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M07",
+      "path": "missions/M07.json"
+    }
+  ],
+  "digest": "440cb3b9b3dbd3a8e5d48f0986fa4c127b0df29fd827068c387e75b424160609"
+}

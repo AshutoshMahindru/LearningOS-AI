@@ -1,0 +1,138 @@
+{
+  "id": "M09",
+  "title": "Make Binary Decisions",
+  "phase": {
+    "id": "P2",
+    "title": "Classical Machine Learning"
+  },
+  "order_index": 9,
+  "flagship_version": "V02",
+  "core_invariant": "Build one complete binary decision system before unpacking parts: baseline, split, classifier, predicted probabilities, default classification, confusion matrix, threshold changes, consequences. A threshold is policy, not an automatic property of the probability model.",
+  "competencies": [
+    "comp.clf.probability_reasoning",
+    "comp.clf.threshold_policy",
+    "comp.clf.imbalance_diagnosis",
+    "comp.clf.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m09.probability_not_label",
+    "kn.m09.confusion_metrics",
+    "kn.m09.accuracy_only_failure",
+    "kn.m09.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M07"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the disengagement decision system",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M09 invariant and the whole-first path: baseline \u2192 split \u2192 classifier \u2192 predicted probabilities \u2192 default classification \u2192 confusion matrix \u2192 threshold changes \u2192 consequences. The working case predicts whether a learner will disengage in the next 30 days (1 = event occurs). Data is synthetic; do not claim real-learner performance. Identify the evidence the gate will require: annotated system trace, split integrity, probability inspection, TP/TN/FP/FN accounting, metric comparison, accuracy-only failure diagnosis, consequence decision, learner-authored threshold ADR, calibration intuition, and a fresh no-AI threshold decision."
+    },
+    {
+      "id": "stage_02_trace_map",
+      "title": "Map probability model versus decision policy",
+      "type": "trace_map",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Annotate the baseline-to-consequence trace and mark the model versus threshold-policy boundary. Features map to estimated probability; probability plus threshold plus consequences/capacity map to action. If a threshold changes, decisions can change while learned coefficients and held-out probabilities stay fixed. Mark where test labels are forbidden during fit.",
+      "validation_rubric": {
+        "required_evidence_type": "diagram",
+        "pass_criteria": "Map separates probability production from thresholded action and preserves the holdout boundary."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, execute, and move the threshold",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the local learner-disengagement system. For every threshold or consequence experiment: (1) PREDICT the confusion-matrix cells, accuracy, precision, and recall, and which case IDs will cross the threshold. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the comparison at 0.20, 0.30, 0.50, and 0.70 without refitting the probability model, after establishing the majority baseline and a stratified holdout. (4) OBSERVE TP, TN, FP, FN and metric tables with correct denominators. (5) SUBMIT an explanation referring to cases that crossed the threshold. Treat probability as a graded estimate, not a label or guarantee. Do not accept 0.50 merely because it is a library default.",
+      "runner": {
+        "module": "g6.reference.M09.experiment",
+        "entrypoint": "run_threshold_sweep",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Prediction is sealed before execute; confusion counts and precision/recall denominators are correct; threshold is treated as policy."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose accurate-enough, harmful-by-default policy",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "The seeded failure is a decision process, not a syntax error: the team accepts threshold 0.50 because it is the library-style default and reports only accuracy. It does not compare the majority baseline, inspect false negatives, or declare missed-disengagement consequences. On this imbalanced holdout, high accuracy can coexist with low recall. Diagnose before changing anything: compute the all-negative baseline; compute TP/TN/FP/FN at 0.50; state which cell is a learner who disengages with no outreach; compare metrics at 0.20, 0.30, 0.50, and 0.70; identify similar accuracy with different recall; declare FP and FN costs; compare total consequence cost; recommend a threshold and the operational trade-off. The repair is not always use a lower threshold; it is to treat threshold selection as explicit, reviewable policy.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "Diagnosis shows accuracy-only reasoning concealing costly false negatives and repairs the policy with declared consequences."
+      }
+    },
+    {
+      "id": "stage_05_adr",
+      "title": "Author the threshold policy ADR",
+      "type": "reflection_adr",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Create a separate learner-authored ADR for the operating threshold. It must record the selected threshold and comparison rule, FP/FN cost assumptions, operating capacity, alternatives and rejected reasons, held-out evidence, accepted trade-offs, owner/status/date, monitoring, rollback, and measurable revisit triggers. The repository prompt remains unfilled. Notebook output alone does not satisfy the ADR requirement.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "Learner-authored ADR governs the threshold with costs, capacity, alternatives, and revisit triggers."
+      }
+    },
+    {
+      "id": "stage_06_transfer",
+      "title": "Fresh probability and threshold decision without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Complete this gate without AI-generated analysis or code and without reusing the notebook threshold table. A quality team assigns defect probabilities to eight batches A-H: 0.08, 0.19, 0.27, 0.36, 0.48, 0.59, 0.73, 0.88. Inspecting a good batch costs 2 units (FP); shipping a defective batch without inspection costs 9 units (FN); at most four batches can be inspected. Part A \u2014 commit before outcomes: define positive class 1, choose a threshold that respects capacity, list positive batches, predict how lowering the threshold affects FP/FN/precision/recall, and record why 0.50 is or is not appropriate. Part B \u2014 only after Part A, use outcomes A0 B0 C1 D0 E1 F0 G1 H1: compute TP/TN/FP/FN, accuracy, precision, recall, cost 2*FP+9*FN, compare with threshold 0.50, keep or revise, explain why a predicted probability is not a guarantee, and describe calibration evidence without naming a library. Arithmetic without a decision rationale is insufficient. Do not invent unseen training.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Committed pre-outcome policy, correct confusion accounting, capacity/consequence argument, and calibration explanation."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Hand probabilities and policy to V02",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M09 adds the binary-decision path to V02: a probability-producing classifier plus an explicit probability-to-class policy. Hand off held-out probabilities, targets, candidate thresholds, TP/TN/FP/FN counts, and the threshold ADR to M10 without quietly changing the model or evaluation population. V02 must keep the probability model and the decision policy separable."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate M09 evidence against the gate contract",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, experiment, controlled-failure, ADR, and transfer evidence against the mission gate_contract. Issue PASSED when every required evidence item meets the pass threshold. Otherwise issue a targeted repair plan naming the failed stage, competency, artifact type, and knowledge node \u2014 do not force a full mission repeat."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.clf.probability_reasoning",
+        "stage_id": "stage_02_trace_map",
+        "artifact_type": "diagram"
+      },
+      {
+        "competency_id": "comp.clf.threshold_policy",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.clf.imbalance_diagnosis",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.clf.unassisted_transfer",
+        "stage_id": "stage_06_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M09",
+  "version": "6.0.0",
+  "title": "G6 M09 reference package",
+  "description": "WP-136 curriculum package for M09 Make Binary Decisions on the frozen generic runtime. Package id is metadata; mission id is M09.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M09",
+      "path": "missions/M09.json"
+    }
+  ],
+  "digest": "2a4fb79adabfbe67792ac5b7bd8706256da61f8e924be4dd46bd0cd6877d8312"
+}

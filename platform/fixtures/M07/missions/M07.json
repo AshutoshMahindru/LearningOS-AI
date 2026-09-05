@@ -1,0 +1,140 @@
+{
+  "id": "M07",
+  "title": "Build a Reusable Data-to-Model Pipeline",
+  "phase": {
+    "id": "P1",
+    "title": "Computational & Data Fluency"
+  },
+  "order_index": 7,
+  "flagship_version": "V01",
+  "core_invariant": "Split raw rows before fitting learned preprocessing. Bind numerical and categorical treatments with the estimator into one object that accepts raw rows at both training and inference. Cross-validate the complete unfitted pipeline. Serialize one artifact and prove reload equivalence.",
+  "competencies": [
+    "comp.pipe.topology",
+    "comp.pipe.experiment",
+    "comp.pipe.failure_diagnosis",
+    "comp.pipe.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m07.fit_transform_boundary",
+    "kn.m07.predict_execute",
+    "kn.m07.encoding_mismatch",
+    "kn.m07.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M04",
+    "M05",
+    "M06"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the raw-row pipeline contract",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M07 invariant and the customer-renewals vertical slice: three numerical features and three categorical features, identifiers and post-outcome fields outside MODEL_FEATURES, ColumnTransformer plus logistic regression. Identify the evidence the gate will require: pipeline topology, fit-versus-transform inventory, same-split manual versus pipeline comparison, one treatment-change experiment, training-only cross-validation of the unfitted pipeline, leakage argument, encoding-mismatch diagnosis, serialization equivalence, an ADR, and a fresh no-AI mixed-type pipeline. This is a generic catalogue composition, not a custom M07 runtime."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Trace fit, transform, and persistence boundaries",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the pipeline module before running the notebook. Trace load_dataset, split_features_target, train_test_frames, build_pipeline, fit, transform_features, save_pipeline, and load_pipeline. Draw the raw column flow through the ColumnTransformer. Identify which methods learn state and which only apply existing state. Predict what happens when inference contains a category absent from training. List every contract location that must change if a new pre-outcome numerical feature is added.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names methods that learn state versus methods that only apply it, and locates the raw split before fit."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, execute, and compare pipeline treatments",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the local customer-renewals pipeline. Change one dimension at a time (manual versus pipeline preprocessing, numerical scaler, or persistence). (1) PREDICT how honest held-out accuracy, transformed width, or reload equality will move and why. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the controlled comparison on the same raw train/test split. (4) OBSERVE metrics, column inventories, fold scores, and reload equality. (5) SUBMIT an explanation of any delta between prediction and observation, naming constants you preserved. Cross-validate the complete unfitted pipeline on training rows only. Do not fit preprocessing on all folds or on inference rows.",
+      "runner": {
+        "module": "g6.reference.M07.experiment",
+        "entrypoint": "run_pipeline_comparison",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; explanation covers the single changed dimension, preserved split, and honest held-out or reload evidence."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose independent encoding drift",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "The injected fault independently one-hot encodes training and inference frames. An unseen inference category creates a different feature matrix; the already-fitted estimator then rejects the inference matrix. Diagnose from observable behavior: record a prediction before the failing call, capture the exception, compare training and inference feature names and shapes, state whether the defect is in the estimator or the preprocessing boundary, and identify independent get_dummies calls as the smallest root cause. Repair by sending raw inference rows through the fitted pipeline whose encoder uses handle_unknown='ignore'. Verify identical width. Do not delete the new category, edit the inference row, or fit preprocessing again on inference data.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Diagnosis names independent encoding as the root cause and verifies the fitted-pipeline repair without leaking inference data."
+      }
+    },
+    {
+      "id": "stage_05_adr",
+      "title": "Record the preprocessing-boundary decision",
+      "type": "reflection_adr",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Author a separate ADR covering the consequential preprocessing-boundary decision. Record alternatives (manual get_dummies versus one fitted pipeline), consequences, validation plan, owner, and revisit conditions. The repository prompt remains unfilled; do not fabricate completion evidence. A working score alone does not establish a reproducible boundary.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "Learner-authored ADR names alternatives, consequences, and a verification plan; the prompt remains unfilled."
+      }
+    },
+    {
+      "id": "stage_06_transfer",
+      "title": "Fresh mixed-type pipeline without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Complete this gate without AI-generated code, tutor, or prior-answer surface. You receive a fresh local table with two numerical columns containing missing values, two categorical columns including a category seen only at inference, a binary target, one identifier, and one post-outcome field that must not become features. Declare an explicit pre-outcome allow-list, split raw rows before learned preprocessing, impute/scale numerical features, impute/one-hot categorical features, cross-validate the entire pipeline on training rows, fit once, predict raw inference rows with the unseen category, serialize and reload one fitted artifact, and prove transformed matrices and predictions are identical after reload. Copying the M07 fixture or its fitted artifact does not demonstrate transfer. Do not invent a training step on inference rows.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Unassisted fresh pipeline with leakage argument, unseen-category inference, and reload equivalence."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Hand the reusable boundary to V01",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M07 supplies V01 Structured Data Workbench with a reusable raw-data-to-prediction boundary: explicit feature allow-list, numerical and categorical treatments by column role, learned state fitted inside the split or CV boundary, raw rows at fit and predict, one serialized artifact, reload equivalence, and controlled-failure evidence against duplicated preprocessing. V01 may replace the fixture or estimator but must retain these boundaries."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate M07 evidence against the gate contract",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, experiment, controlled-failure, ADR, and transfer evidence against the mission gate_contract. Issue PASSED when every required evidence item meets the pass threshold. Otherwise issue a targeted repair plan naming the failed stage, competency, artifact type, and knowledge node \u2014 do not force a full mission repeat."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.pipe.topology",
+        "stage_id": "stage_02_code_reading",
+        "artifact_type": "trace"
+      },
+      {
+        "competency_id": "comp.pipe.experiment",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.pipe.failure_diagnosis",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "trace"
+      },
+      {
+        "competency_id": "comp.pipe.unassisted_transfer",
+        "stage_id": "stage_06_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

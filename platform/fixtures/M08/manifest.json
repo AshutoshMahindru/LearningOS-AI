@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M08",
+  "version": "6.0.0",
+  "title": "G6 M08 reference package",
+  "description": "WP-136 curriculum package for M08 Predict a Continuous Outcome on the frozen generic runtime. Package id is metadata; mission id is M08.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M08",
+      "path": "missions/M08.json"
+    }
+  ],
+  "digest": "62273d0837d345920ac48169c5e90fdaad239bfc5a1ea4d835dbdff9285034c3"
+}
