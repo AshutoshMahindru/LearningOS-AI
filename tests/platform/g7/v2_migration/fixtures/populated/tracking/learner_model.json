@@ -1,0 +1,37 @@
+{
+  "learner_id": "default",
+  "display_name": "V2 Prototype Learner",
+  "current_mission": "M02",
+  "autonomy_level": "A1",
+  "competencies": {
+    "comp.ml.system_mapping": {
+      "level": 3,
+      "confidence": 0.8,
+      "evidence": ["EV-M01-001"]
+    }
+  },
+  "misconceptions": [],
+  "confidence": {
+    "comp.ml.system_mapping": 0.8
+  },
+  "retention_due": [],
+  "open_side_quests": [],
+  "evidence_summary": {
+    "M01": {
+      "records": 2,
+      "no_ai": 1,
+      "transfer": 1,
+      "explanation": 1
+    }
+  },
+  "gate_history": {
+    "M01": {
+      "attempts": 1,
+      "passes": 1,
+      "failures": 0,
+      "last_status": "PASS",
+      "last_reasons": []
+    }
+  },
+  "autonomy_history": []
+}

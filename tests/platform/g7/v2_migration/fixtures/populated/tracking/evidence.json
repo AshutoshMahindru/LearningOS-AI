@@ -1,0 +1,24 @@
+[
+  {
+    "id": "EV-M01-001",
+    "mission_id": "M01",
+    "type": "artifact",
+    "summary": "Whole-system map of the M01 pipeline.",
+    "competencies": ["comp.ml.system_mapping"],
+    "no_ai": true,
+    "transfer": false,
+    "explanation": true,
+    "created_at": "2026-01-01T10:15:00+00:00"
+  },
+  {
+    "id": "EV-M01-002",
+    "mission_id": "M01",
+    "type": "lab",
+    "summary": "Ran the canonical notebook after sealing a prediction.",
+    "competencies": ["comp.ml.system_mapping"],
+    "no_ai": false,
+    "transfer": true,
+    "explanation": true,
+    "created_at": "2026-01-01T11:00:00+00:00"
+  }
+]
