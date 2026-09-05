@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M38",
+  "version": "5.0.0",
+  "title": "G5 M38 reference package",
+  "description": "Reference M38 Build a Stateful Agent Workflow on the generic runtime. WP-136 mission id is M38. Package id is g5.reference.M38. Stages are catalogue compositions; WP-137 blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M38",
+      "path": "missions/M38.json"
+    }
+  ],
+  "digest": "e8fccf8fbf1ea7e0c7a2a7de19c3df6bed6bf0d2a8553d61088d1a6d79287fca"
+}

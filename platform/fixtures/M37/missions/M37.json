@@ -1,0 +1,138 @@
+{
+  "id": "M37",
+  "title": "Make an LLM Call Tools Reliably",
+  "phase": {
+    "id": "P7",
+    "title": "Agents & Evaluation"
+  },
+  "order_index": 37,
+  "flagship_version": "V10",
+  "core_invariant": "A tool interface is a schema plus an execution boundary, not a prompt suggestion. Model-proposed calls are untrusted input and must be validated before side effects. Parseable JSON is not sufficient reliability. Schema failure is distinct from tool failure. Side-effecting tools require approval and an idempotency key; replay applies the effect at most once. Retries are bounded. Predict before every tool action. Transfer without assistance. Generic WP-137 metric and table blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.tool.schema",
+    "comp.tool.idempotency",
+    "comp.tool.typed_errors",
+    "comp.tool.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m37.schema",
+    "kn.m37.idempotency",
+    "kn.m37.typed_errors",
+    "kn.m37.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M32"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the V10 tool-execution trust boundary",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M32 inference-provider / InferenceConfig discipline: training_time=False, weights_updated=False, fail-closed live adapter. M37 starts V10 with a validated tool registry (runtime_version v10-teaching-tools-1, registry_id v10-teaching-registry-1, seed 3701, max_attempts 3). Identify gate evidence: fail-closed schema cases, tool selection including no-tool, structured success/error, idempotent side effects, bounded retry, a no-AI tool-contract, and a V10 tool-execution ADR. Do not import LangGraph or Anthropic SDKs, open RAG/Qdrant, or build a state machine. No custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Read parse, validate, permission, idempotency, execute",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read parse, validate, permission, idempotency, execute, and result without running a live model. Predict that invalid calls never reach execute_tool, that schema versus tool error types are distinct, and that a same-key replay does not increment the ledger. Submit an annotated call-trace. Live adapters fail closed.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names the live contract and a rejected or illegal path."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, then validate and execute tool calls",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT valid VAT/catalog calls execute once, missing-field/wrong-type/extra-field/unsafe proposals never increment the execution counter, and a same-key replay is idempotent. (2) COMMIT. (3) EXECUTE / RUN the teaching registry on fixture proposals; emit WP-137 table of proposal/status/execution_reached and a metric of schema_valid, effect_count, idempotent_replay. (4) OBSERVE. (5) SUBMIT / EXPLAIN. Do not coerce invalid JSON. Do not call a paid API.",
+      "runner": {
+        "module": "g5.reference.M37.experiment",
+        "entrypoint": "run_tool_validation",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Prediction is sealed before execute; submitted explanation covers the observed WP-137 blocks. No universal accuracy threshold."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose malformed arguments and duplicate posts",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Named faults, one change each. Fault A: malformed arguments reach a side-effecting tool because validation is skipped. Predict effect_count increments; repair restores validation so effect_count stays 0 on the repaired path while the original object still posted. Fault B: a timeout-retry posts twice without an idempotency key. Repair keys the post; original object still shows two posts. Swapping models is not the first lever. Emit a WP-137 table of broken versus repaired effect_count.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract from the broken object."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Defend a tool contract without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, without inventing an SDK, do duty arithmetic, four-way classification (valid, schema, tool, no-tool), an idempotency count, error locus, and why JSON is not enough. Tutor surfaces stay locked. Emit a WP-137 artifact. Leave responses unfilled.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Independent no-AI reasoning names the contract, a valid repair, and does not invent deferred machinery."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Choose a V10 tool-execution policy",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete an ADR for the V10 tool-execution trust boundary: schema strictness, permissions, idempotency, retry limits, and trace fields. Reject parseable-JSON-as-sufficient and unbounded retry. Do not implement a state machine here.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a decision, rejected alternative, owner, status, and date."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Start V10 from a validated registry",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Start V10 from a validated registry/executor and structured call/result/error traces. M38 may add a state machine only after invalid calls never reach execution."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate tool-calling evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, tool-validation experiment, malformed/duplicate diagnosis, and unassisted transfer. Issue PASSED or a targeted repair plan. Do not award completion from a successful happy-path only."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.tool.schema",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.tool.idempotency",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.tool.typed_errors",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.tool.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

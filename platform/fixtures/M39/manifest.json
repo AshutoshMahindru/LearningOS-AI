@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M39",
+  "version": "5.0.0",
+  "title": "G5 M39 reference package",
+  "description": "Reference M39 Add Memory, Routing, and Fallbacks on the generic runtime. WP-136 mission id is M39. Package id is g5.reference.M39. Stages are catalogue compositions; WP-137 blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M39",
+      "path": "missions/M39.json"
+    }
+  ],
+  "digest": "f257869b91f21d729a5466ffd50a292d02d974cbf0223425831d603fe03cdc65"
+}

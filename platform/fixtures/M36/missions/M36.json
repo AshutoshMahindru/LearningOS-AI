@@ -1,0 +1,138 @@
+{
+  "id": "M36",
+  "title": "Understand Vector Databases and Hybrid Retrieval",
+  "phase": {
+    "id": "P6",
+    "title": "Knowledge Systems"
+  },
+  "order_index": 36,
+  "flagship_version": "V09",
+  "core_invariant": "Exact search is the correctness reference. Approximate search trades recall for fewer comparisons. Search effort (ef) is one named knob. Metadata filters must run before a small top-k. Dense and sparse scores are incomparable; fuse ranks with declared RRF. A store owns insert/update/delete/rebuild and fails closed while dirty. Predict before every infrastructure action. Transfer without assistance. Generic WP-137 metric and table blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.store.exact_oracle",
+    "comp.store.hybrid_fusion",
+    "comp.store.filter_lifecycle",
+    "comp.store.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m36.exact_oracle",
+    "kn.m36.hybrid_fusion",
+    "kn.m36.filter_lifecycle",
+    "kn.m36.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M35"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame exact oracle versus retrieval infrastructure",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M35 exact oracle on frozen m34.eval.v1. M36 chooses infrastructure against that oracle (store_id v09-teaching-store, backend_approx teaching-graph, fusion_id rrf, rrf_k 60, default_ef 8). Identify gate evidence: neighbor-recall versus exact ids, ef effort, pre-filter versus late-filter, dense/sparse/hybrid slices, dirty-store StoreStaleError, raw-score-mix diagnosis, a no-AI transfer, a V09 infrastructure ADR, and an honest phase-end close. Do not require Qdrant/FAISS, agents, or generation retuning. No custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Read store, effort, filter, sparse, RRF, lifecycle",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read store schema, graph/ef, filter placement, sparse BM25, RRF fusion, and lifecycle without importing a live client. Predict ids missed at low ef, late-filter misses of eligible relevant, fusion field equals rrf, and dirty generation flags. Submit an annotated infrastructure trace.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names the live contract and a rejected or illegal path."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, then fuse dense and sparse ranks",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT that exact ids are the oracle, that RRF fusion of dense and sparse ranks can promote a lexical gold, and that pre-filter keeps eligible relevant that late-filter of a small top-k drops. (2) COMMIT. (3) EXECUTE / RUN declared RRF (k=60) on two tiny rank lists; emit WP-137 table of channel ranks and a metric of fusion=rrf, exact_is_oracle, prefilter. (4) OBSERVE. (5) SUBMIT / EXPLAIN. Do not add raw scores. Do not open a live store.",
+      "runner": {
+        "module": "g5.reference.M36.experiment",
+        "entrypoint": "run_hybrid_fusion",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Prediction is sealed before execute; submitted explanation covers the observed WP-137 blocks. No universal accuracy threshold."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose raw-score mix and late-filter",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Named fault: add cosine and BM25 as if they shared a scale so a high BM25 trap can outrank a high-cosine gold. Predict mixed ids. Diagnose incomparable scores, not a better index. Repair by declared RRF from the broken ChannelResult objects; the mix object still fails. Late-filter miss remains a separate regression. Emit a WP-137 table.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract from the broken object."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Defend infrastructure without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, without inventing a cluster, compute hand RRF, diagnose a late-filter miss, explain ef effort, choose channels for two query slices, and state when exact is preferable. Tutor surfaces stay locked. Emit a WP-137 artifact. Leave responses unfilled.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Independent no-AI reasoning names the contract, a valid repair, and does not invent deferred machinery."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Choose a V09 retrieval-infrastructure contract",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete an ADR for V09 retrieval infrastructure: exact versus ANN, local versus remote store, dense/sparse/hybrid, filters, fusion, lifecycle, latency/recall targets, and migration triggers. Reject raw-score mix and required live Qdrant. Package implementation is not phase completion.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a decision, rejected alternative, owner, status, and date."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Close V09 with architecture, not a cluster",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Close V09 only with a defended store architecture and a measurable retrieval component for M40. Status remains learner-unpopulated. Agents stay deferred to M37."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate hybrid-retrieval evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, hybrid experiment, raw-mix diagnosis, and unassisted transfer. Issue PASSED or a targeted repair plan. Do not award completion from a live-store screenshot."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.store.exact_oracle",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.store.hybrid_fusion",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.store.filter_lifecycle",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.store.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
