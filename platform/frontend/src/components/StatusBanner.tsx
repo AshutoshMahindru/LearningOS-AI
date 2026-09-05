@@ -8,12 +8,14 @@ type StatusBannerProps = {
   title: string;
   children?: ReactNode;
   className?: string;
+  id?: string;
 };
 
-export function StatusBanner({ tone = 'info', title, children, className }: StatusBannerProps) {
+export function StatusBanner({ tone = 'info', title, children, className, id }: StatusBannerProps) {
   const role = tone === 'error' ? 'alert' : 'status';
   return (
     <div
+      id={id}
       className={cn('status-banner', className)}
       data-tone={tone}
       role={role}

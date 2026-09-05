@@ -145,5 +145,6 @@ describe('Tutor surface', () => {
     });
     expect(screen.getByTestId('tutor-transcript')).toHaveTextContent('reproduce the symptom');
     expect(screen.getByTestId('tutor-transcript')).toHaveTextContent('DEBUGGER');
+    expect(screen.getByRole('log', { name: 'Tutor transcript' })).toBeInTheDocument();
   });
 });

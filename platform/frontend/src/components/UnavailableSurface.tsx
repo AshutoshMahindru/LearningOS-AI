@@ -8,7 +8,7 @@ export function UnavailableSurface({ title }: UnavailableSurfaceProps) {
   return (
     <EmptyState
       title={title}
-      message="This surface is not available in G3. The shell keeps a generic route so later work packages can land without mission-specific UI."
+      message="This surface is not available yet. The shell keeps a generic route so later work can land without mission-specific UI."
     />
   );
 }

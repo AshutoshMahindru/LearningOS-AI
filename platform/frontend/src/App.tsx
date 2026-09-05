@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Spinner } from './components/Spinner';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -21,6 +22,13 @@ function SkipLink() {
   );
 }
 
+function DocumentTitle({ title }: { title: string }) {
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+  return null;
+}
+
 export function AppRoutes() {
   const { status, learner } = useAuth();
 
@@ -28,6 +36,7 @@ export function AppRoutes() {
     return (
       <>
         <SkipLink />
+        <DocumentTitle title="LearningOS" />
         <main id="main-content" className="flex min-h-screen items-center justify-center" tabIndex={-1}>
           <Spinner label="Connecting to local API" />
         </main>
@@ -39,6 +48,7 @@ export function AppRoutes() {
     return (
       <>
         <SkipLink />
+        <DocumentTitle title="Sign in · LearningOS" />
         <LoginSurface />
       </>
     );
