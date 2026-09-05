@@ -141,4 +141,9 @@ def get_provider_secret(provider: str) -> str | None:
         value = os.environ.get(name)
         if value:
             return value
-    return None
+    try:
+        from app.core.secrets import lookup_persisted_secret
+
+        return lookup_persisted_secret(raw)
+    except Exception:
+        return None
