@@ -70,7 +70,9 @@ describe('application shell', () => {
     expect(screen.getByRole('button', { name: 'Diagnostics' })).toBeInTheDocument();
     expect(screen.getByRole('banner', { name: 'LearningOS' })).toBeInTheDocument();
     expect(screen.getByRole('main', { name: 'Main content' })).toBeInTheDocument();
-    expect(document.title).toMatch(/catalog/i);
+    await waitFor(() => {
+      expect(document.title).toMatch(/catalog/i);
+    });
     expect(screen.queryByRole('link', { name: /demo/i })).not.toBeInTheDocument();
     expect(document.body.innerHTML).not.toContain('/missions/demo');
   });

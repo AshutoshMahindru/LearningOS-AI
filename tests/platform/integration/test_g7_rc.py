@@ -630,4 +630,3 @@ def test_g7_docs_name_real_one_click_and_omit_stale_paths() -> None:
             hits.append(path.relative_to(REPO_ROOT).as_posix())
     assert hits == []
     _assert_state_guard_clean()
-
