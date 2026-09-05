@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M24",
+  "version": "5.0.0",
+  "title": "G5 M24 reference package",
+  "description": "Reference M24 backpropagation / credit assignment on the generic runtime. WP-136 mission id is M24. Package id is g5.reference.M24. WP-137 metric, table, and trace blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M24",
+      "path": "missions/M24.json"
+    }
+  ],
+  "digest": "051d477be19e69242efb6e17ef145049fa12827f0a0ff8d0f171e5e0f5e5b6f2"
+}

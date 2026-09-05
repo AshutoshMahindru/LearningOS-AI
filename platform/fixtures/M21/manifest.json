@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M21",
+  "version": "5.0.0",
+  "title": "G5 M21 reference package",
+  "description": "Reference M21 black-box neural training on the generic runtime. WP-136 mission id is M21. Package id is g5.reference.M21. Stages are catalogue compositions; WP-137 chart, metric, and table blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M21",
+      "path": "missions/M21.json"
+    }
+  ],
+  "digest": "549066c06ec34881fd7f37e47ed030600d2115d54c972a057200ce750e151055"
+}

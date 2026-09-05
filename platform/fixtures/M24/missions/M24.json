@@ -1,0 +1,133 @@
+{
+  "id": "M24",
+  "title": "Assign Blame with Backpropagation",
+  "phase": {
+    "id": "P4",
+    "title": "Deep Learning"
+  },
+  "order_index": 24,
+  "flagship_version": "V05",
+  "core_invariant": "Backpropagation is structured credit assignment on a named forward graph: local derivatives composed in reverse, with branches accumulating by sum. Analytic / backprop gradients must agree with central finite differences within declared tolerance on smooth parameters. Predict gradient signs before deriving them. One declared update only; no framework autograd and no training loop. Generic WP-137 metric, table, and trace blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.nn.backprop_credit",
+    "comp.nn.chain_rule",
+    "comp.nn.finite_difference",
+    "comp.nn.gradient_rule_repair"
+  ],
+  "knowledge_nodes": [
+    "kn.m24.named_reverse_graph",
+    "kn.m24.local_derivatives",
+    "kn.m24.central_differences",
+    "kn.m24.omitted_branch_repair"
+  ],
+  "prerequisites": [
+    "M19",
+    "M23"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Restate the one-parameter gradient invariant and named graph",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M19 one-parameter gradient invariant and draw the M23 forward pass as a named computation graph: x \u2192 hidden_preactivation \u2192 hidden_activation \u2192 logits \u2192 probabilities \u2192 softmax-NLL loss. Teaching controls: ReLU at zero uses derivative 0.0, targets [0, 0], mean reduction, central finite difference, epsilon 1e-5, atol 1e-6, rtol 1e-5, update \u03b8 \u2190 \u03b8 \u2212 \u03b7 g. Identify gate evidence: a WP-137 metric of selected gradients, a table of epsilon-sweep vs analytic, and a trace of reverse accumulation. Do not open torch.autograd or a training loop."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict signs, backpropagate, and check finite differences",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the teaching graph. (1) PREDICT selected gradient signs by perturbing a parameter up and down before deriving them, and predict whether a value feeding two downstream paths receives one contribution or the sum. (2) COMMIT the prediction. (3) EXECUTE / RUN scalar-chain reverse mode, branch accumulation, a tiny dense-layer/activation backward pass, and a central finite-difference sweep; emit WP-137 blocks: a metric of analytic vs backprop vs finite-difference gradients, a table of epsilon vs error, and a trace of reverse topological order. (4) OBSERVE. (5) SUBMIT an explanation of any delta. Apply one small learning-rate update and verify local loss movement without claiming global convergence. ReLU at zero remains 0.0. No autograd.",
+      "runner": {
+        "module": "g5.reference.M24.experiment",
+        "entrypoint": "run_backprop",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; manual and programmatic gradients agree within tolerance on smooth parameters; one declared update only."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read stored values, local rules, and reverse order",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the reverse-mode implementation. Identify stored forward values, local derivative rules, reverse topological order, gradient accumulation, and gradient-reset semantics. Submit an annotated system-flow artifact.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "The trace names stored values, local rules, reverse order, accumulation, and reset without opening a framework autograd engine."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose an omitted branch or wrong ReLU derivative",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Inject one named local-rule defect: omit one branch contribution into a shared node, or treat relu' as identity including on non-positive pre-activations. Predict whether a dead ReLU unit should pass an upstream gradient. The defect can still emit finite gradient-looking numbers. Isolate the first finite-difference mismatch on the true loss. Repair only the named local rule. Emit a WP-137 table of first-mismatch parameter and a trace of the missing contribution.",
+      "runner": {
+        "module": "g5.reference.M24.failure",
+        "entrypoint": "run_gradient_rule_failure",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Names the omitted-branch or wrong-ReLU defect, shows the first finite-difference mismatch, and restores only that local rule."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Fresh gradient trace without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, backpropagate a fresh scalar chain and a tiny dense layer, check selected gradients with central finite differences, and apply one declared update. Tutor surfaces stay locked. Emit a WP-137 metric of independent gradient agreement. Do not open autograd or a training loop.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Independent no-AI reverse mode agrees with finite differences on the fresh case; claims cite named gradients."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Author a V05 gradient-verification policy ADR",
+      "type": "reflection_adr",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Record parameters and cases checked, tolerance and epsilon, when checks run, blocking failures, owner, status, and date. Formal engineering review is required for this mission. Future-mission autograd and training loops stay closed."
+    },
+    {
+      "id": "stage_07_gate",
+      "title": "Evaluate backpropagation evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, reverse-mode experiment, controlled-failure diagnosis, and unassisted transfer against the gate contract. Issue PASSED or a targeted repair plan. Do not award completion from 'backprop is working.'"
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.nn.backprop_credit",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.nn.chain_rule",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.nn.gradient_rule_repair",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.nn.finite_difference",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
