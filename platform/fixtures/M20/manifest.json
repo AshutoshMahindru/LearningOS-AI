@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M20",
+  "version": "6.0.0",
+  "title": "G6 M20 reference package",
+  "description": "Reference M20 optimization dynamics, learning-rate regimes, and V04 closeout on the generic runtime. WP-136 mission id is M20. Package id is g6.reference.M20. Stages are catalogue compositions; WP-137 chart, metric, and table blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M20",
+      "path": "missions/M20.json"
+    }
+  ],
+  "digest": "c17125bc51034ca7bc52843d9c89f459d506dcd6bff443bba0997320984327a0"
+}

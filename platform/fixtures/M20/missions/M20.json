@@ -1,0 +1,138 @@
+{
+  "id": "M20",
+  "title": "Understand Optimization Experimentally",
+  "phase": {
+    "id": "P3",
+    "title": "Mathematical Foundations on Demand"
+  },
+  "order_index": 20,
+  "flagship_version": "V04",
+  "core_invariant": "Optimizer behavior is observed from traces, not from a universal ranking. Learning rate interacts with curvature. Stagnation, smooth convergence, decaying oscillation, and divergence are classified from loss, parameter path, update magnitude, and sign changes. Predict the curve before each run. Repair the learning rate, not the gradient.",
+  "competencies": [
+    "comp.opt.learning_rate",
+    "comp.opt.trace_classification",
+    "comp.opt.failure_diagnosis",
+    "comp.opt.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m20.rate_regimes",
+    "kn.m20.stability_boundary",
+    "kn.m20.too_large_rate",
+    "kn.m20.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M19"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame learning dynamics on a fixed objective",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M20 invariant and the anisotropic quadratic: loss = 0.5 * (theta_0^2 + 10 * theta_1^2), gradient [theta_0, 10 * theta_1], initialization [4, 4]. M19 explains gradients; M20 manipulates optimizer state, stochasticity, and learning rate; M21 consumes the monitored training policy. Identify gate evidence: rate-regime traces, a stability-boundary comparison, GD versus seeded SGD, momentum and Adam trade-offs without universal superiority, too-small and too-large failures, and a no-AI transfer. Generic WP-137 chart, table, and metric blocks; no custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Trace gradient to optimizer state to update",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the optimization core. Follow gradient \u2192 optimizer state \u2192 update \u2192 parameters \u2192 next loss. Locate where learning rate scales the step and where the high-curvature coordinate's multiplier is 1 - learning_rate * 10. Predict which rates stagnate, converge, oscillate, or diverge before running.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names the high-curvature multiplier and the four regime labels used to classify traces."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict rate regimes, then record traces",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT the observable outcome before any numbers appear. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the measurement. (4) OBSERVE structured WP-137 blocks. (5) SUBMIT / EXPLAIN any delta between prediction and observation. On the fixed quadratic and initialization, compare a small, a stable, and a too-large learning rate with exact gradient descent. Predict stagnation versus convergence versus divergence. EXECUTE and emit a WP-137 metric of final losses and sign changes plus a chart of loss-by-step. Treat traces as fixture behavior, not a universal optimizer ranking.",
+      "runner": {
+        "module": "g6.reference.M20.experiment",
+        "entrypoint": "run_learning_rate_regimes",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; large rate is worse than stable; classification uses traces not a single threshold."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose stagnation and outward oscillation",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Failure A uses learning_rate = 1e-5: diagnose stagnation from relative progress and update magnitudes; the code and gradient are correct. Failure B uses learning_rate = 0.21: the high-curvature multiplier 1 - 0.21 * 10 crosses zero while magnitude expands. Name only the learning rate as the seeded cause. Restore a rate inside the observed stable region from the original start. Do not change curvature, initialization, budget, loss, gradient, or optimizer to hide the failure.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure is compared with a stable run; the repair changes only learning rate."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Optimizer traces from a blank page",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Without AI-generated code, for loss(theta) = 0.5 * 5 * theta^2, gradient 5 * theta, theta=2: predict and calculate four exact-gradient updates at rates 0.1, 0.3, and 0.5; classify from the multiplier 1 - learning_rate * 5. Then compute four classical-momentum updates at rate 0.1 and momentum 0.8. Propose a monitored learning-rate response that distinguishes SGD noise from divergence.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Fresh no-AI arithmetic, regime classification from the multiplier, and a monitored-rate policy."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Submit an optimizer and learning-rate policy",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete a formal-review ADR: default optimizer, learning-rate region supported by traces, rollback trigger, and evidence that would revisit the optimizer choice. Reject universal superiority claims for momentum or Adam.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR records hyperparameters, a stability region, and a revisit condition without ranking optimizers universally."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Close V04 with monitored training policy",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "M20 closes V04. Explain how vector, matrix, probability, statistics, gradient, and optimization instruments now form a predict \u2192 measure \u2192 compare \u2192 diagnose loop that M21 can consume as a monitored training policy. Reference traces are fixture behavior, not universal optimizer rankings."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate optimization evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, experiment, controlled-failure, transfer, and ADR evidence. Issue PASSED or a targeted repair plan. Do not award completion from a single final-loss number without a trace classification."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.opt.learning_rate",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.opt.trace_classification",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.opt.failure_diagnosis",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.opt.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

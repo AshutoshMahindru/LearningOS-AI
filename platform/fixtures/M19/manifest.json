@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M19",
+  "version": "6.0.0",
+  "title": "G6 M19 reference package",
+  "description": "Reference M19 gradients, descent updates, and wrong-sign diagnosis on the generic runtime. WP-136 mission id is M19. Package id is g6.reference.M19. Stages are catalogue compositions; WP-137 metric and table blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M19",
+      "path": "missions/M19.json"
+    }
+  ],
+  "digest": "82f64fb9647544b6a5d561b587722897204c907f8c82d2e07c45050e1a19e74d"
+}

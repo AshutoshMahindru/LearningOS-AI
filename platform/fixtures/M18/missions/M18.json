@@ -1,0 +1,138 @@
+{
+  "id": "M18",
+  "title": "Decide What Data Can Tell You",
+  "phase": {
+    "id": "P3",
+    "title": "Mathematical Foundations on Demand"
+  },
+  "order_index": 18,
+  "flagship_version": "V04",
+  "core_invariant": "Statistical evidence is a point estimate, an uncertainty interval, an effect size, a sample size, and stated assumptions together. A p-value is not the probability the null is true. Correlation is not identification. Cherry-picking among many comparisons is not a confirmatory test. Predict before simulating. Transfer without assistance.",
+  "competencies": [
+    "comp.stat.sampling_variation",
+    "comp.stat.interval_estimation",
+    "comp.stat.multiple_comparisons",
+    "comp.stat.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m18.standard_error",
+    "kn.m18.confidence_interval",
+    "kn.m18.cherry_pick",
+    "kn.m18.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M17"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the estimand before the test",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M18 invariant and the checkout experiment: primary metric checkout_conversion, estimand variant_B_rate minus variant_A_rate, 95% interval, alpha 0.05, one planned comparison. Identify gate evidence: sampling-variation simulations, mean/median/variance in distribution context, analytic and bootstrap intervals, a useful hypothesis test, a refused causal claim from seasonal correlation, a cherry-pick diagnosis, and no-AI transfer. Generic WP-137 table and metric blocks; no custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Trace interval, bootstrap, and selection",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the inference helpers. Locate the unpooled standard error, the normal interval, the seeded bootstrap resampling unit, and any filter that keeps p < 0.05. Predict whether hiding the comparison family changes the reported story without changing the data.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names estimand, resampling unit, and the selection line that creates a cherry-pick."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict the interval, then compute B minus A",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT the observable outcome before any numbers appear. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the measurement. (4) OBSERVE structured WP-137 blocks. (5) SUBMIT / EXPLAIN any delta between prediction and observation. Given two binomial conversion counts, predict whether a 95% interval for B minus A includes zero. EXECUTE the unpooled standard error and normal interval. Emit a WP-137 metric of point estimate, SE, interval, and sample sizes plus a table of rates. Interpret compatible effect values without declaring proof of equality.",
+      "runner": {
+        "module": "g6.reference.M18.experiment",
+        "entrypoint": "run_difference_interval",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; report includes estimate, interval, effect size, and n together."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose a manufactured significant win",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Twenty independent null comparisons are generated; the table is filtered to p < 0.05. The seeded failure is cherry-picking. Predict the chance of at least one false positive, show the full comparison family, minimum p-value, selection line, and familywise false-positive rate. Repair by pre-specifying one primary comparison and a Bonferroni (or FDR) control before rerunning. Never use the failure procedure on real stakeholder data.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Diagnosis shows the hidden family, the selection mechanism, and a pre-specified repair."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Fresh policy comparison without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Without AI-generated code, a support team trials a queue policy: 91/140 versus 101/140 one-day resolutions, then explores many post-hoc metrics and segments. Produce a decision note: population, estimand, rates, absolute and relative effect, SE, 95% interval, a useful null, a calibrated test interpretation, the post-hoc family, and a decision that includes operational value. A calculator and the Python standard library are allowed. Pandas is not required.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Fresh no-AI note reports estimate+interval+n, refuses certainty-from-p, and names the comparison family."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Record an inference policy",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete an inference-policy ADR: primary metric, estimand, interval, planned comparisons, and revisit conditions. Reject treating p < 0.05 as proof and reject causal claims from correlation alone.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR states a pre-specified family, interval reporting, and a causal-identification boundary."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Connect inference instruments to V04",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M18 supplies V04 statistical instruments: sampling variation, standard error, confidence and bootstrap intervals, effect size with n, hypothesis tests as one input, and audit trails that keep exploration distinct from confirmation."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate inference evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, experiment, controlled-failure, transfer, and ADR evidence. Issue PASSED or a targeted repair plan. A bare significant/not-significant label does not pass."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.stat.sampling_variation",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.stat.interval_estimation",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.stat.multiple_comparisons",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.stat.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
