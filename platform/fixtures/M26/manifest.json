@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M26",
+  "version": "5.0.0",
+  "title": "G5 M26 reference package",
+  "description": "Reference M26 deep-learning failure diagnosis on the generic runtime. WP-136 mission id is M26. Package id is g5.reference.M26. WP-137 table, metric, and trace blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M26",
+      "path": "missions/M26.json"
+    }
+  ],
+  "digest": "6c4e9c8495f61f20cc60e410cb53efbbe3f5efbafbd294f58a21b32d74e6016c"
+}

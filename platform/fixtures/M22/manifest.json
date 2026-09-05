@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M22",
+  "version": "5.0.0",
+  "title": "G5 M22 reference package",
+  "description": "Reference M22 neuron and dense-layer arithmetic on the generic runtime. WP-136 mission id is M22. Package id is g5.reference.M22. WP-137 metric, table, and state_diff blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M22",
+      "path": "missions/M22.json"
+    }
+  ],
+  "digest": "93bc55352cd129e64215eac9776b554655b39e70675d04d0e1d047baf2f6d47e"
+}

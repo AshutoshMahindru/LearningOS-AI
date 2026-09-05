@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M25",
+  "version": "5.0.0",
+  "title": "G5 M25 reference package",
+  "description": "Reference M25 CPU PyTorch training loop on the generic runtime. WP-136 mission id is M25. Package id is g5.reference.M25. WP-137 metric, table, and trace blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M25",
+      "path": "missions/M25.json"
+    }
+  ],
+  "digest": "da3f37db5da9839cbe7a484b192f7b3c42e2e69f3f9e9aa52d1131197a535b82"
+}

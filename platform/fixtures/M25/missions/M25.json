@@ -1,0 +1,132 @@
+{
+  "id": "M25",
+  "title": "Train Networks in PyTorch",
+  "phase": {
+    "id": "P4",
+    "title": "Deep Learning"
+  },
+  "order_index": 25,
+  "flagship_version": "V05",
+  "core_invariant": "A training loop is a named control sequence on an autograd graph: zero_grad \u2192 forward \u2192 loss \u2192 backward \u2192 step. Evaluation uses eval() and no_grad and must not update parameters. Held-out rows stay out of the optimizer. Autograd gradients on the teaching micro-case must match M24 within tolerance, noting nn.Linear stores W as (out, in). CPU and float64 are canonical; no weight downloads. Predict before every training action. Generic WP-137 metric, table, and trace blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.nn.autograd_mechanics",
+    "comp.nn.training_loop",
+    "comp.nn.train_eval_boundary",
+    "comp.nn.gradient_debugging"
+  ],
+  "knowledge_nodes": [
+    "kn.m25.computational_graph",
+    "kn.m25.loop_order",
+    "kn.m25.eval_no_grad",
+    "kn.m25.stale_grad_repair"
+  ],
+  "prerequisites": [
+    "M24"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Translate the M24 graph into a CPU PyTorch module",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Translate the M24 tiny network into a PyTorch module with matching initial parameters. Teaching architecture: affine-ReLU-affine logits, n_in=3, n_hidden=2, n_out=3; training architecture widens hidden to 8. Loss is mean CrossEntropyLoss (softmax NLL). Device cpu, dtype float64, SGD, seed 2501, disjoint train 24 / val 6 / held_out 6. Identify gate evidence: a WP-137 metric of autograd vs M24 gradients, a trace of loop order, and a table of train/eval boundary. Do not download weights or require a GPU. Multi-cause DL debugging is deferred to M26."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, train one canonical step, and verify autograd parity",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the CPU teaching loop. (1) PREDICT whether selected autograd gradients match M24 after transposing nn.Linear weight, whether backward without step leaves parameters unchanged, and whether held-out evaluation updates parameters. (2) COMMIT the prediction. (3) EXECUTE / RUN forward parity, autograd parity, one canonical step, batched loading, eval/no-grad validation, and checkpoint save/reload; emit WP-137 blocks: a metric of W2_00 autograd vs M24 and mean softmax-NLL, a trace of zero_grad/forward/loss/backward/step, and a table of disjoint split sizes plus checkpoint keys. (4) OBSERVE. (5) SUBMIT an explanation of any delta. Change batch size as a named control without asserting universal invariance. Evaluation must not update parameters.",
+      "runner": {
+        "module": "g5.reference.M25.experiment",
+        "entrypoint": "run_pytorch_training",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; autograd matches M24 on the teaching micro-case within tolerance; loop order and eval/no-grad are observed."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read parameter registration, reset, mode, and checkpoint",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the training-loop implementation. Identify parameter registration, gradient reset, optimizer state versus .grad, model.training, checkpoint contents, and the held-out boundary. Submit an annotated system-flow artifact.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "The trace names registration, zero_grad, optimizer state, model mode, checkpoint keys, and held-out exclusion."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose stale gradients or train-mode evaluation",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Inject one named loop-control defect: skip optimizer.zero_grad() on a training step, or score a split while model.training is still true (Dropout active) instead of eval() + no_grad. Predict leftover .grad accumulation and whether Dropout can change evaluation outputs without an optimizer step. The defect can still emit finite learning-looking updates. Diagnose from zero_grad_called, .grad before reset, model.training during the forward, and whether step ran. Smallest repair restores zero_grad before each training backward and eval()+no_grad for validation and held-out inference. Do not open M26 data/architecture catalogues. Emit a WP-137 table of discriminating traces.",
+      "runner": {
+        "module": "g5.reference.M25.failure",
+        "entrypoint": "run_loop_control_failure",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Names the stale-grad or train-mode-eval defect, shows a discriminating trace, and restores only the named loop control."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Reconstruct a training loop without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, reconstruct a 3-layer-or-equivalent tiny CPU training loop: module, zero_grad/forward/loss/backward/step, eval/no-grad, disjoint splits, and a checkpoint roundtrip. Tutor surfaces stay locked. Emit a WP-137 metric of independent loop evidence. Do not download weights.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Independent no-AI loop records named controls, autograd or finite parity on a micro-case, and frozen evaluation parameters."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Author a reproducibility and checkpoint policy ADR",
+      "type": "reflection_adr",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Record seeds, saved state, optimizer state, validation evidence, restart and rollback, owner, status, and date. Formal engineering review is required. Multi-cause debugging remains deferred to M26."
+    },
+    {
+      "id": "stage_07_gate",
+      "title": "Evaluate PyTorch training-loop evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, autograd/loop experiment, controlled-failure diagnosis, and unassisted transfer against the gate contract. Issue PASSED or a targeted repair plan. Do not award completion from 'it trained.'"
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.nn.autograd_mechanics",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.nn.training_loop",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.nn.gradient_debugging",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.nn.train_eval_boundary",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

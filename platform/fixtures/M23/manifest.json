@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M23",
+  "version": "5.0.0",
+  "title": "G5 M23 reference package",
+  "description": "Reference M23 NumPy forward-pass reconstruction on the generic runtime. WP-136 mission id is M23. Package id is g5.reference.M23. WP-137 metric and table parity blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M23",
+      "path": "missions/M23.json"
+    }
+  ],
+  "digest": "67c53b2fff9bc3fe5636488303994194861302ea092a916e2a2451cd3f430cab"
+}
