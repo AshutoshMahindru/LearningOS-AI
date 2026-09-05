@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M16",
+  "version": "6.0.0",
+  "title": "G6 M16 reference package",
+  "description": "Reference M16 matrix transformations, composition order, and batch orientation on the generic runtime. WP-136 mission id is M16. Package id is g6.reference.M16. Stages are catalogue compositions; WP-137 metric and table blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M16",
+      "path": "missions/M16.json"
+    }
+  ],
+  "digest": "e335d5d9666379ddf42fa67533364193a8bbc42b02b204f4fce670f8d5468bd9"
+}

@@ -181,13 +181,15 @@ def _assert_provenance(claims: list[dict]) -> None:
 
 
 def test_platform_has_no_mission_specific_ui_or_api():
-    """Grep platform/ excluding fixtures for M01–M05 special-case UI/API."""
+    """Grep platform/ excluding fixtures for M01–M42 special-case UI/API."""
     platform = REPO_ROOT / "platform"
     skip_dirs = {"node_modules", "dist", "__pycache__", ".git", "fixtures", "tests"}
-    eq_mission = re.compile(r"""(?:mission_id\s*==\s*|==\s*)["']M0[1-5]["']""")
-    route_mission = re.compile(r"/missions/M0[1-5]\b")
+    eq_mission = re.compile(
+        r"""(?:mission_id\s*==\s*|==\s*)["']M(?:0[1-9]|[1-3][0-9]|4[0-2])["']"""
+    )
+    route_mission = re.compile(r"/missions/M(?:0[1-9]|[1-3][0-9]|4[0-2])\b")
     custom_route = re.compile(
-        r"/m0[1-5][-_/]|array-vectorization|ai-ml-landscape|messy-csv",
+        r"/m(?:0[1-9]|[1-3][0-9]|4[0-2])[-_/]|array-vectorization|ai-ml-landscape|messy-csv",
         re.IGNORECASE,
     )
     hits: list[str] = []

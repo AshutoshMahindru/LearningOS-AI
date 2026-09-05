@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M17",
+  "version": "6.0.0",
+  "title": "G6 M17 reference package",
+  "description": "Reference M17 probability, screening counts, and base-rate neglect on the generic runtime. WP-136 mission id is M17. Package id is g6.reference.M17. Stages are catalogue compositions; WP-137 metric and table blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M17",
+      "path": "missions/M17.json"
+    }
+  ],
+  "digest": "42996842bb9cc38a1b42a3fdac82a3d594b7e0839f1868ea1552fdf6240be965"
+}

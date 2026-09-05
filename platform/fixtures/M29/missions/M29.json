@@ -1,0 +1,144 @@
+{
+  "id": "M29",
+  "title": "Understand Attention Through Context",
+  "phase": {
+    "id": "P5",
+    "title": "Foundation Models"
+  },
+  "order_index": 29,
+  "flagship_version": "V06",
+  "core_invariant": "Single-head attention is Q, K, V projections, scaled dots, a mask applied before softmax over keys, then a weighted sum of values. The same token identity (bank) yields a different output when one context vector changes (cash versus water). Softmax runs over keys so each query row sums to 1; future keys under a causal mask carry no mass. Values can move the output without moving weights. Attention weights are not proof of intent. Predict before every attention action. Multi-head split, residuals, LayerNorm, and FFN stay closed until M30. Generic WP-137 table, metric, and trace blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.attn.qkv_scores",
+    "comp.attn.softmax_keys",
+    "comp.attn.mask_invariants",
+    "comp.attn.context_dependence"
+  ],
+  "knowledge_nodes": [
+    "kn.m29.qkv_shapes",
+    "kn.m29.scaled_dots",
+    "kn.m29.causal_mask",
+    "kn.m29.bank_context"
+  ],
+  "prerequisites": [
+    "M16",
+    "M28"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame attention as context-dependent weighting",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M16 matrix convention and M28 static-vector intuition. M29's whole is X → Q,K,V → scaled dots → mask → softmax over keys → weighted values on two three-token sequences that differ only at the third token: river bank cash versus river bank water. Identify gate evidence: a WP-137 table of bank weights, a metric of hand softmax e/(e+1), and a mask-invariant trace. Do not split heads or add residuals. The generic workbench renders catalogue blocks; do not expect a named attention page."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, attend, and table the bank row",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on identity projections. (1) PREDICT whether the bank output stays fixed when cash becomes water, whether a two-key score pair (1, 0) softmaxes to e/(e+1) and 1/(e+1), and whether a causal mask zeros future mass. (2) COMMIT the prediction. (3) EXECUTE / RUN single-head attention; emit WP-137 blocks: a table of bank weights in cash versus water context, a metric of hand softmax and row sums, and a trace of Q/K/V/score/mask/weight/output. (4) OBSERVE the structured table. (5) SUBMIT an explanation of any delta. Change only the third token, or only values, or only a mask. Do not assign intent to weights and do not open a transformer block.",
+      "runner": {
+        "module": "g5.reference.M29.experiment",
+        "entrypoint": "run_single_head_attention",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Prediction is sealed before execute; the submitted explanation covers the observed table and why later-mission mechanisms stayed closed."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read project, scale, mask, softmax(keys), aggregate",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read Q/K/V shapes, scale by 1/sqrt(d_k), mask before softmax, softmax over keys, weighted value sum. Predict shapes (queries, d_k) / (keys, d_k) / (queries, keys) and zero future mass. Do not inspect multi-head merge or residuals. Submit an annotated system-flow artifact.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "The trace names the teaching dataflow and does not open later-mission internals."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose wrong-axis softmax or post-softmax masking",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "One named fault: softmax over queries, or multiply a causal keep-mask after softmax without renormalizing. Predict that numbers can still look like probabilities while query rows fail to sum to 1 or masked keys retain mass. Execute, emit a WP-137 table of row sums and masked mass, and repair softmax axis or mask order from the broken trace. Q, K, V, and scale stay fixed. Submit prediction, discriminator, smallest repair, and regression.",
+      "runner": {
+        "module": "g5.reference.M29.failure",
+        "entrypoint": "run_controlled_failures",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Compute a two-key attention pass without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, compute scores (1, 0), scaled softmax, a causal mask, and state the wrong-axis invariant. Weights are not intent. Tutor surfaces stay locked. Emit a WP-137 metric of independent arithmetic. Leave learner answers unfilled in the repository.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Independent no-AI reasoning names the teaching contract and a valid repair."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Author the V06 attention-trace observability ADR",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Author the attention observability ADR: logged shapes and checkpoints, mask and row-sum invariants, score summaries, over-interpretation limits, alternatives, owner, status, and date. Do not claim transformer-block completeness.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a teaching-scale decision, alternatives, and a revisit trigger."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Hand M30 a single-head trace",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Connect the accepted single-head trace to V06: Q/K/V, scaled dots, masks, softmax over keys, weighted values, named checkpoints. M30 may split heads only after this trace is defensible. Do not invent head job titles."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate attention evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, bank-weight experiment, softmax/mask failure, unassisted transfer, and ADR against the gate contract. Issue PASSED or targeted repair. Do not award completion from intent language."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.attn.qkv_scores",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.attn.softmax_keys",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.attn.mask_invariants",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.attn.context_dependence",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

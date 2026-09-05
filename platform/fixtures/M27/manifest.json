@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M27",
+  "version": "5.0.0",
+  "title": "G5 M27 reference package",
+  "description": "Reference M27 tokenization on the generic runtime. WP-136 mission id is M27. Package id is g5.reference.M27. Stages are catalogue compositions; WP-137 table, metric, and artifact blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M27",
+      "path": "missions/M27.json"
+    }
+  ],
+  "digest": "566f19064c680646ccaf1ab535efe8b79df9caee5624d0e228f0ab1a6ba92142"
+}

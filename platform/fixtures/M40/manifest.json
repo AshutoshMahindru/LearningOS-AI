@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M40",
+  "version": "6.0.0",
+  "title": "G6 M40 reference package",
+  "description": "Reference M40 evaluation harness, slice gates, and hidden-critical diagnosis on the generic runtime. WP-136 mission id is M40. Package id is g6.reference.M40. Stages are catalogue compositions; WP-137 metric and table blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M40",
+      "path": "missions/M40.json"
+    }
+  ],
+  "digest": "6dc2366011e3c6eab7d421d35102f1a42c22c8ca08fd0fc0981445095b1d7419"
+}

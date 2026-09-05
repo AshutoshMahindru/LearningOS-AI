@@ -1,0 +1,139 @@
+{
+  "id": "M40",
+  "title": "Evaluate AI Systems Systematically",
+  "phase": {
+    "id": "P7",
+    "title": "Agents & Evaluation"
+  },
+  "order_index": 40,
+  "flagship_version": "V11",
+  "core_invariant": "Write the eval set before optimizing the system. Deterministic graders own schema, citation support, termination, and idempotency. Critical slices can fail a release even when the average looks fine. Rubric and LLM-as-judge are calibrated and cannot be the sole required grader. Architecture remains M41. V11 does not close because this package exists. Predict before measuring. Transfer without assistance. Prove competence with evidence.",
+  "competencies": [
+    "comp.eval.suite_versioning",
+    "comp.eval.deterministic_graders",
+    "comp.eval.slice_gates",
+    "comp.eval.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m40.eval_versioning",
+    "kn.m40.deterministic_graders",
+    "kn.m40.hidden_critical",
+    "kn.m40.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M34",
+    "M39"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the V11 evaluation harness",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M40 invariant: freeze m40.eval.v1 before retuning M34 or M39. The useful whole is a local eval harness over RAG and agent traces, not a production eval platform and not an M41 architecture diagram. Identify gate evidence: a versioned suite report, deterministic grader localization, slice-versus-aggregate release gates, a hidden-critical or contaminated-pack diagnosis, a V11 evaluation-governance ADR, and a no-AI transfer design. Generic WP-137 metric and table blocks carry measurements; there is no custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Trace pack load, graders, slices, and the release gate",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read load_eval_pack, invoke_case, grade_tool_schema, grade_citation_support, grade_state_termination, grade_idempotency, aggregate_report, decide_release_gate, ablate_trace, and repair_run without running them. Predict what load_eval_pack(..., require_canonical=True) does with m40.eval.tuned-dev; the fail-reason strings when outcome success is high and one citation is critical; which diagnosis ablate_trace(..., 'used_memory_ids') blocks; and whether optional_llm_judge can be the sole required grader. Do not look for a paid eval SDK or an M41 architecture diagram.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names version refusal, fail-reason strings, blocked diagnoses, and the judge boundary."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, then run the frozen pack against a hidden-critical citation",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT whether an aggregate-only 0.80 gate can pass while one unsupported citation on rag-grounded-reset is critical. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the frozen m40.eval.v1 pack of twelve cases with the named citation defect injected. (4) OBSERVE structured WP-137 metric and table blocks for task_success_rate, critical_fail_rate, citation slice, and fail_reasons. (5) SUBMIT / EXPLAIN any delta between prediction and observation. Canonical slice gates must fail the ship. Do not retune M34. Do not import a paid eval SDK. Do not make a judge the sole grader.",
+      "runner": {
+        "module": "g6.reference.M40.experiment",
+        "entrypoint": "run_eval_suite",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; canonical slice gates fail while the aggregate-only gate can pass."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose hidden-critical governance or a contaminated pack",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Two named governance defects, one predict/act step each. Hidden-critical: inject unsupported_citation on rag-grounded-reset and score an aggregate-only gate; n_critical_fail is 1, citation slice is non-zero, aggregate-only passed is true, canonical slice gates fail, case ids still match m40.eval.v1. Contaminated-pack: load m40.eval.tuned-dev which dropped holdout and idempotency cases and relabeled the rest as holdout; eval_version is m40.eval.tuned-dev, contaminated is true, n is smaller than 12. Repair from the broken object with repair_run. Do not treat contamination as a simultaneous repair of hidden-critical. Do not start with a bigger judge.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Diagnosis names the defect, rates or eval_version, smallest repair, and the regression that the broken path still fails."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Design a fresh eval without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Without AI-generated code, design five eval cases for a lobby kiosk and a warehouse desk (Atlas of Rivers / BIN-12), not the notebook SKU-7 purchase and not rag-reset-login. Include at least one RAG lookup/abstention case and one agent tool/termination case. Choose deterministic versus rubric grading for two cases without making a judge the only grader for an invariant. Using n=20, task_success=0.95, and one remaining severe idempotency miss, compute slice versus aggregate and state whether an aggregate-only 0.80 gate would ship.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Fresh no-AI five-case design with grader choice, slice report, and a named release blocker."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Choose a V11 evaluation-governance contract",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete an ADR for V11 evaluation governance. Decide dataset ownership and versioning, grader hierarchy (deterministic versus rubric versus judge), severities and slices, regression baseline, release thresholds, human-review triggers, audit retention, and contamination policy. Reject optimizing against the visible average, dropping failing cases, or using an LLM judge as the only scorer. Do not close V11 in this ADR and do not implement M41 architecture.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names versioning, grader hierarchy, slice gates, and a revisit condition without closing V11."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Open V11 evaluation without closing the flagship",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M40 supplies V11 with a versioned suite, four invariant graders, a fail-closed judge adapter, slice gates, and observability fields M41 can cite. P7 lists M40 as phase-end because evaluation is the last Agents and Evaluation skill; V11 also includes M41. Package existence is not learner completion and is not V11 closed. M42 may reuse the suite."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate evaluation-harness evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, experiment, controlled-failure, transfer, and ADR evidence against the gate contract. Issue PASSED or a targeted repair plan. Do not award completion from a high average alone or from a copied fixture ranking."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.eval.suite_versioning",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.eval.deterministic_graders",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.eval.slice_gates",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.eval.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

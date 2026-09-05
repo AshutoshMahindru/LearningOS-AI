@@ -1,0 +1,133 @@
+{
+  "id": "M23",
+  "title": "Implement a Forward Pass with NumPy",
+  "phase": {
+    "id": "P4",
+    "title": "Deep Learning"
+  },
+  "order_index": 23,
+  "flagship_version": "V05",
+  "core_invariant": "Inference is the named graph X \u2192 Z1 = X @ W1 + b1 \u2192 H = activation(Z1) \u2192 logits = H @ W2 + b2 \u2192 probabilities = softmax(logits) with row-batch layout and class-axis softmax. Named intermediates must match a trusted reference within declared tolerance. Predict before every forward action. Gradients, backpropagation, and framework autograd stay closed. Generic WP-137 metric and table blocks carry parity evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.nn.forward_pass",
+    "comp.nn.named_intermediates",
+    "comp.nn.softmax_invariance",
+    "comp.nn.forward_boundary_repair"
+  ],
+  "knowledge_nodes": [
+    "kn.m23.affine_activation",
+    "kn.m23.named_graph",
+    "kn.m23.softmax_axis",
+    "kn.m23.wrong_axis_repair"
+  ],
+  "prerequisites": [
+    "M16",
+    "M22"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the named forward graph",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Load the M22 deterministic parameters and reference outputs. The teaching fixture is X (2, 3), W1 (3, 2), b1 (2,), W2 (2, 3), b2 (3,), hidden ReLU, class-axis softmax. Named intermediates: hidden_preactivation, hidden_activation, logits, probabilities. Identify gate evidence: a WP-137 metric of named intermediates, a table of one-example versus batch parity, and a repaired wrong-axis or omitted-activation diagnosis. Do not assign blame with backpropagation or author a PyTorch loop. Changing one weight to see which outputs move is an inference probe, not a gradient."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, vectorize, and prove forward parity",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the two-layer NumPy stack. (1) PREDICT the first-layer hidden pre-activation and ReLU activation for the teaching X before writing vectorized code, plus whether adding a constant to one example's logits will change probabilities. (2) COMMIT the prediction. (3) EXECUTE / RUN scalar then batched affine+activation, logits, and stable softmax; emit WP-137 blocks: a metric of named intermediates, a table of loop-level vs batched parity within atol 1e-12, and a metric of softmax row-sums and shift invariance. (4) OBSERVE. (5) SUBMIT an explanation of any delta. Perturb exactly one weight and trace which intermediates change. Reorder input rows and verify outputs reorder without cross-row contamination. No autograd.",
+      "runner": {
+        "module": "g5.reference.M23.experiment",
+        "entrypoint": "run_forward_pass",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; every named intermediate matches the trusted reference within declared tolerance; softmax is class-axis."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read matmul, bias broadcast, and stable softmax",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the forward implementation. Identify shape validation, matmul and bias broadcast, activation-after-affine, stable softmax axis, and parity tolerances. Predict malformed-shape and wrong-axis behavior. Submit an annotated system-flow artifact.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "The trace names matmul, bias broadcast, activation placement, softmax axis, and tolerances without opening gradients."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose wrong-axis softmax or omitted hidden activation",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Inject one named defect: softmax along the batch axis, or omit the hidden ReLU. Predict the teaching-fixture probabilities including the uniform first row. The defect can still emit finite probability-looking numbers. Diagnose with one-example versus batch parity and named-intermediate checks against the M22 first-layer reference. Repair only the named boundary. Emit a WP-137 table of singleton-vs-batch and intermediate mismatches.",
+      "runner": {
+        "module": "g5.reference.M23.failure",
+        "entrypoint": "run_forward_boundary_failure",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Names the wrong-axis or omitted-activation defect, shows a discriminator, and restores only that boundary."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Fresh forward pass without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, reconstruct a two-layer forward pass on a fresh tiny fixture: named intermediates, class-axis softmax, one-example versus batch parity, and a single-weight perturbation trace. Tutor surfaces stay locked. Emit a WP-137 metric of independent parity. Do not open a loss or gradient.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Independent no-AI forward pass matches named intermediates and softmax invariants without backpropagation language."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Author an inference-parity and tolerance ADR",
+      "type": "reflection_adr",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Record which intermediates are compared, dtype assumptions, tolerance, failure handling, owner, status, and date. Claims must cite named intermediates and axes rather than 'the network is working.'"
+    },
+    {
+      "id": "stage_07_gate",
+      "title": "Evaluate forward-pass evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, forward-parity experiment, controlled-failure diagnosis, and unassisted transfer against the gate contract. Issue PASSED or a targeted repair plan."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.nn.forward_pass",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.nn.named_intermediates",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.nn.forward_boundary_repair",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.nn.softmax_invariance",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

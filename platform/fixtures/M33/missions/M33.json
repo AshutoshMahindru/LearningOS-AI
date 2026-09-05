@@ -1,0 +1,138 @@
+{
+  "id": "M33",
+  "title": "Build Semantic Search",
+  "phase": {
+    "id": "P6",
+    "title": "Knowledge Systems"
+  },
+  "order_index": 33,
+  "flagship_version": "V08",
+  "core_invariant": "A retriever is a versioned service, not a cosine call. Every hit carries document/chunk IDs, scores, text spans, and embedding/index provenance. Exact search scores every eligible row; top-k truncates after scoring. Metadata filters change eligibility, not labels. A retrieval score is not labeled relevance and not an answer. Stale or mixed indexes fail closed (rebuild or reject). Predict before every search action. Transfer without assistance. Generic WP-137 metric and table blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.search.retriever_interface",
+    "comp.search.exact_baseline",
+    "comp.search.stale_index",
+    "comp.search.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m33.retriever_interface",
+    "kn.m33.exact_baseline",
+    "kn.m33.stale_index",
+    "kn.m33.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M28"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the V08 exact retriever whole",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M28 embedding handoff: v06-teaching-meanpool v06.1, mean pooling, L2, cosine, provenance fingerprint, mix-or-refuse. M33 attaches a V08 exact in-memory retriever (index_id v08-exact-memory, corpus_version m33.corpus.v1, filter schema topic/source/locale, ties (-score, chunk_id), stale_policy fail-closed-rebuild-or-reject). Identify gate evidence: ranked hits with IDs and spans, exact-baseline parity, labeled hit@k/recall@k without relabeling, a stale-index diagnosis, a no-AI transfer ranking, and a V08 index-identity ADR. Do not generate answers, rerank, open ANN/Qdrant, or treat attention as search. The generic Mission Player and Workbench render catalogue block types; do not expect a named-mission search page. No custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Read ingest, index, query, filter, score, ties, freshness",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read ingest, index, query, filter, score, ties, and freshness without running the service. Record how document_id/chunk_id and text spans are assigned, where bundled vectors are loaded (not downloaded), how embedding fingerprint plus source_hash form index identity, that metadata filters apply before scoring, that exact cosine scores every eligible row, that sort is (-score, chunk_id) then top-k cut, and that search refuses a live corpus whose hash does not match. Predict whether changing top-k changes scored_candidates on unfiltered exact search, and whether a mutated live corpus raises before hits when enforce_freshness=True. Submit an annotated system-flow trace. Do not look for softmax, Q/K/V, a generator, a reranker, or HNSW.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names the live contract and a rejected or illegal path."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, then run exact cosine search",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT whether exact cosine ranking of the frozen vectors matches an independent brute-force baseline, whether a topic filter changes only eligibility, and whether top-k changes the returned window but not scored_candidates. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the seeded exact index over bundled vectors; emit WP-137 blocks: a table of ranked chunk_id/score/span and a metric of scored_candidates, hit@k, recall@k, metric=cosine, and stale_rejected. (4) OBSERVE structured blocks. (5) SUBMIT / EXPLAIN any delta. Vary only top-k, then only a declared topic filter, then compare service ranking with brute-force cosine. Do not relabel after seeing ranks. Do not download an encoder. Do not open generation, rerank, or ANN.",
+      "runner": {
+        "module": "g5.reference.M33.experiment",
+        "entrypoint": "run_exact_search",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Prediction is sealed before execute; submitted explanation covers the observed WP-137 blocks. No universal accuracy threshold."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose stale and mixed indexes",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Two named faults, one change each. Fault A: change live chunk text for doc-account-access::c0 without rebuilding; query q-password stays fixed. Predict unchecked search still serves indexed password text while source_hash disagrees; search(..., enforce_freshness=True) raises. Repair by rebuild_index from the broken index object or reject. Fault B: query the canonical encoder against the v06.2 incompatible index with the provenance gate off, then on. Predict plausible unchecked ranking and IndexIncompatibleError when gated. Submit prediction, named defect, preserved invariants, observed metrics, root cause, smallest repair, and a regression that silent stale serving is rejected. Do not relabel, open Qdrant, or generate an answer. Emit a WP-137 table of hash mismatch versus served text.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract from the broken object."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Defend a retriever without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, without inventing a generator or vector database, rank datasets/M33/transfer.json by hand: unit cosine, ties by chunk_id, top-3 ids, one query trace to evidence fields for M34, hit@1 and recall@2 on frozen labels, the high-scoring unlabeled neighbor, stale-index hashes, and why a high similarity score is not answer correctness. Tutor, hints, and prior-answer surfaces stay locked. Emit a WP-137 artifact of independent quantitative reasoning. Leave learner responses unfilled in the repository.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Independent no-AI reasoning names the contract, a valid repair, and does not invent deferred machinery."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Choose a V08 index identity and rebuild policy",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete an ADR for the V08 teaching retriever. The decision is index identity and rebuild policy: embedding model/version/metric, corpus version/hash, filter schema, (-score, chunk_id) ties, and fail-closed rebuild-or-reject versus serve-stale. Reject at least one alternative (batch rebuild later, required Qdrant backend). Do not claim the choice is a production vector database. Record owner, status, date, and a revisit condition.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a decision, rejected alternative, owner, status, and date."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Freeze the V08 semantic search service",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Connect the accepted exact retriever to V08: query text to 12-D unit vector (v06-teaching-meanpool v06.1) to exact cosine against a hashed chunk index to ranked evidence (document_id, chunk_id, score, text, span, provenance). M34 may pack hits only after exact baseline parity, IDs/spans as evidence, score versus labeled relevance, filter eligibility, and refused stale/mixed indexes are defensible. Do not retroactively alter frozen datasets/M33 labels to make later RAG look successful."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate semantic-search evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, exact-search experiment, stale-index diagnosis, and unassisted transfer against the mission gate contract. Issue PASSED or a targeted repair plan. Do not award completion from a high cosine score or from opened ANN internals."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.search.retriever_interface",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.search.exact_baseline",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.search.stale_index",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.search.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

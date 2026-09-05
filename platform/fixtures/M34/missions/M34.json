@@ -1,0 +1,139 @@
+{
+  "id": "M34",
+  "title": "Build RAG",
+  "phase": {
+    "id": "P6",
+    "title": "Knowledge Systems"
+  },
+  "order_index": 34,
+  "flagship_version": "V09",
+  "core_invariant": "RAG is a pipeline boundary, not a prompt trick. Packed context carries source IDs, spans, and index identity from the M33 retriever. High retrieval score is not answer correctness. Unsupported citations must fail. Unanswerable queries abstain. Retrieval, context budget, generation, and citation fail separately. Held-out questions are not for synthesizer tuning. Predict before every RAG action. Transfer without assistance. Generic WP-137 metric and table blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.rag.grounding",
+    "comp.rag.citations",
+    "comp.rag.abstention",
+    "comp.rag.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m34.grounding",
+    "kn.m34.citations",
+    "kn.m34.abstention",
+    "kn.m34.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M31",
+    "M33"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the V09 grounding pipeline whole",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M33 retriever handoff: search / RankedHit.as_evidence with index and embedding identity. M31 supplies the training-versus-inference boundary: retrieval here is an inference-time context change, not a training run. M34 attaches a V09 extractive grounding contract (pipeline_id v09-rag-extractive, synthesizer extractive-span-v1, policy support_gated, default_top_k 3, default_budget_chars 400). Identify gate evidence: provenance-preserving answer traces, abstention on unanswerable queries, separable retrieval/context/generation/citation failures, unsupported-citation fail-closed, a frozen holdout, a no-AI transfer, and a V09 grounding ADR. Do not rerank, retune chunks, open ANN, or open a decoding lab. No custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Read retrieve, pack, synthesize, cite, abstain, evaluate",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read retrieve, pack, synthesize, cite, abstain, and evaluate without running a live model. Record how M33 as_evidence IDs survive into the pack and citations, where rank-ordered packing drops a tail span when max_chars is lowered, where support validation binds claims to cited spans, and where an unanswerable query abstains instead of answering from a high-scoring distractor. Predict provenance retention, tail-drop packing, and support failure on a wrong citation. Submit an annotated pipeline trace. Do not open temperature/top-p sampling as the skill.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names the live contract and a rejected or illegal path."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, then run extractive grounded generation",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT whether enabling retrieval turns a closed-book abstention into a supported extractive answer, whether lowering the context budget can drop gold support while retrieval_hit stays true, and whether an unanswerable query abstains. (2) COMMIT the prediction. (3) EXECUTE / RUN the extractive pipeline on a tiny packed context; emit WP-137 metric of supported, abstained, citation_id, eval_pass, retrieval_hit and a table of pack spans. (4) OBSERVE structured blocks. (5) SUBMIT / EXPLAIN any delta. Do not edit holdout ids after seeing ranks. Do not call a paid API.",
+      "runner": {
+        "module": "g5.reference.M34.experiment",
+        "entrypoint": "run_grounded_rag",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; submitted explanation covers the observed WP-137 blocks. No universal accuracy threshold."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose unsupported citations",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Named fault: alter one claim/citation mapping on a fixed packed context so a fluent gold-like answer cites a neighbor span. Predict verify_support is false and eval_pass is false even though the answer text looks fluent. Diagnose a citation-layer defect, not a retrieval miss. Repair by rebind-or-abstain from the broken answer and pack objects. A related invented_support defect on a retrieval miss is a later named change, not a second simultaneous repair. Submit prediction, named defect, preserved invariants, observed support flags, root cause, smallest repair, and regression. Emit a WP-137 table.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract from the broken object."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Defend grounding without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, without inventing a live LLM, classify transfer.json cases by failure layer (retrieval miss, context-budget drop, generation misuse, unsupported citation), assemble a pack with source IDs, write one supported claim, reject a fluent unsupported answer, and state that RAG does not guarantee correctness. Tutor surfaces stay locked. Emit a WP-137 artifact of independent reasoning. Leave responses unfilled.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Independent no-AI reasoning names the contract, a valid repair, and does not invent deferred machinery."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Choose a V09 grounding contract",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete an ADR for the V09 grounding contract: evidence inclusion, citation mapping, abstention, trace retention, and release-blocking unsupported claims. Compare support_gated extractive copy versus always-answer fluent generation versus citation as decoration. Reject at least one option with a consequence. Do not claim a production LLM.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a decision, rejected alternative, owner, status, and date."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Start V09 from a defended RAG baseline",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Start V09 from a defended RAG baseline: query to M33 evidence to packed context to extractive answer to citations to abstention to frozen eval. M35 may optimize ranking only after this baseline is stable. Do not rewrite held-out questions after seeing ranks."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate RAG evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, grounded experiment, unsupported-citation diagnosis, and unassisted transfer against the gate contract. Issue PASSED or a targeted repair plan. Do not award completion from fluent text without support checks."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.rag.grounding",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.rag.citations",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.rag.abstention",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.rag.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

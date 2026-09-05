@@ -1,0 +1,132 @@
+{
+  "id": "M21",
+  "title": "Train a Neural Network as a Black Box",
+  "phase": {
+    "id": "P4",
+    "title": "Deep Learning"
+  },
+  "order_index": 21,
+  "flagship_version": "V05",
+  "core_invariant": "Train and diagnose a complete neural estimator as a bounded whole before opening neurons, activations, forward-pass equations, gradients, or backpropagation. Predict before every training action. Held-out test data never influences fitting or early stopping. Same-seed replay must match; a different seed is reported, not cherry-picked. Claims cite observable metrics and curves, not invented internals. Generic WP-137 chart, metric, and table blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.nn.black_box_training",
+    "comp.nn.holdout_baseline",
+    "comp.nn.seed_replay",
+    "comp.nn.training_failure_diagnosis"
+  ],
+  "knowledge_nodes": [
+    "kn.m21.system_boundary",
+    "kn.m21.holdout_vs_baseline",
+    "kn.m21.seed_policy",
+    "kn.m21.budget_and_labels"
+  ],
+  "prerequisites": [
+    "M20"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the black-box neural training whole",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M20 monitoring handoff: declared optimizer policy, seed policy, loss/update monitoring, and rollback. M21 applies that discipline to one offline sklearn digits MLP pipeline (split_seed 2101, test_fraction 0.25, StandardScaler on training rows only, hidden_units 64, relu, adam, learning_rate_init 0.001, batch_size 64, max_iter 60, early_stopping with validation_fraction 0.15 from the training split, model_seed 2101). Identify gate evidence: a WP-137 chart of training-loss and validation scores, a metric of majority baseline vs held-out accuracy and macro F1, and a table of same-seed replay plus controlled failures. Do not inspect weight matrices, activations, a manual forward pass, gradients, or backprop. The generic Mission Player and Workbench render catalogue block types; do not expect a named-mission neural page."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, train, and chart one reference black-box run",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the declared reference MLP. (1) PREDICT whether held-out accuracy and macro F1 will beat the majority-class baseline, whether training loss will fall across the budget, and whether the confusion matrix will be near-diagonal. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the seeded pipeline; emit WP-137 blocks: a line chart of training loss (and validation score if present), a metric of majority_baseline_accuracy / train_accuracy / test_accuracy / macro_f1 / iterations, and a table of split, seed, hidden_units, max_iter, and confusion counts. (4) OBSERVE the structured chart and metrics. (5) SUBMIT an explanation of any delta between prediction and observation. Replay model seed 2101 exactly, then change only the model seed to 2102. Compare a tiny-capacity network (hidden_units 4) under the same split, optimizer, seed, and budget without claiming larger networks are always better. Test data remains fit-excluded. Do not open coefs_ or intercepts_.",
+      "runner": {
+        "module": "g5.reference.M21.experiment",
+        "entrypoint": "run_black_box_training",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "chart",
+        "pass_criteria": "Prediction is sealed before execute; the submitted explanation covers the observed loss chart, baseline vs held-out metrics, same-seed replay, and why internals were not inspected. No universal accuracy threshold."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read the training harness, not the neuron",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the training harness from split through held-out evaluation. Name the stratified split boundary, the training-only scaler fit, the estimator fit call, early-stopping validation taken from the training split, and the held-out evaluation boundary. Trace one reference configuration with concrete values. Do not inspect weight matrices, activations, manual matrix products, gradients, or backpropagation. Submit an annotated system-flow artifact.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "The trace names split, preprocessing-fit, estimator-fit, and held-out evaluation boundaries and does not open network internals."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose undertraining and shuffled training labels",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Two faults are injected, one named change each. Fault A: reduce only max_iter from the reference budget to 1. Predict high loss and weak held-out metrics, execute, emit a WP-137 table of budget vs loss vs held-out accuracy, and repair by restoring the reference budget without changing hidden units or labels. Fault B: permute only training labels with a recorded seed while leaving held-out labels intact. Predict near-baseline held-out behavior, diagnose a broken target mapping rather than a reason to open neurons, and restore original labels. Submit prediction, changed variable, preserved invariants, observed metrics, root cause, smallest repair, and repaired rerun for each fault.",
+      "runner": {
+        "module": "g5.reference.M21.failure",
+        "entrypoint": "run_controlled_failures",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract and preserves split, architecture, optimizer, and seed except the named variable."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Defend a whole-system run without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, interpret a fresh learning-run table (baseline, train accuracy, validation-score history, training-loss history, held-out accuracy, macro F1, confusion matrix). Decide whether the run beat baseline, name two observations that support or weaken generalization, identify the most-confused class pair, and state remaining evidence before accepting the run for V05. Isolate a one-iteration undertraining twin and propose checks that distinguish a bad target mapping from seed sensitivity. Tutor, hints, and prior-answer surfaces stay locked. Emit a WP-137 metric of independent quantitative reasoning. Leave learner responses unfilled in the repository.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Independent no-AI reasoning names fit/test boundaries, quantitative evidence, a valid repair, and a rollback trigger without inventing neuron-level mechanisms."
+      }
+    },
+    {
+      "id": "stage_06_flagship",
+      "title": "Start V05 Neural Learning Component from black-box evidence",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Connect the accepted black-box run to V05: dataset/split \u2192 preprocessing \u2192 declared neural estimator \u2192 fit \u2192 learning/validation traces \u2192 held-out metrics \u2192 error profile. M22 may open the neuron only after this whole is defensible. Author the black-box training acceptance-policy ADR: acceptance metrics, seed and replay policy, monitored signals, rollback triggers, alternatives, owner, status, and date. Do not retroactively alter held-out evidence to make later internals look successful."
+    },
+    {
+      "id": "stage_07_gate",
+      "title": "Evaluate black-box training evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, training-chart experiment, controlled-failure diagnosis, and unassisted transfer against the mission gate contract. Issue PASSED or a targeted repair plan. Do not award completion from training loss alone or from opened internals."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.nn.black_box_training",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.nn.holdout_baseline",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "chart"
+      },
+      {
+        "competency_id": "comp.nn.training_failure_diagnosis",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.nn.seed_replay",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

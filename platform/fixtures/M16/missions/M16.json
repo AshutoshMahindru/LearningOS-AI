@@ -1,0 +1,138 @@
+{
+  "id": "M16",
+  "title": "Use Matrices as Transformations",
+  "phase": {
+    "id": "P3",
+    "title": "Mathematical Foundations on Demand"
+  },
+  "order_index": 16,
+  "flagship_version": "V04",
+  "core_invariant": "A matrix is a transformation with named input and output axes. Composition order is executable architecture, not typography. Single vectors are columns y = A x; row-major batches use X @ A.T. Predict landmark movement before multiplying. Diagnose wrong order and wrong orientation from counterexamples, not from a plausible plot.",
+  "competencies": [
+    "comp.mat.transformation",
+    "comp.mat.composition",
+    "comp.mat.batch_orientation",
+    "comp.mat.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m16.matrix_as_function",
+    "kn.m16.composition_order",
+    "kn.m16.batch_transpose",
+    "kn.m16.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M15"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame matrices as visual transformations",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M16 invariant: see a transformation before formalizing matrix algebra. Convention: a single vector is a column y = A x; a batch stores one sample per row and transforms as X @ A.T. Identify gate evidence: landmark predictions, scale/rotate/shear matrices, composition-order comparison, wrong-order and wrong-orientation diagnoses, a shape table, and a no-AI pipeline. Generic WP-137 chart, table, and metric blocks; no custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Trace y = A x versus the batch expression",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read a transformation helper. Locate the single-vector product, the batch product, and any transpose. For each operand name the semantic axis (features in, features out, batch). Predict a landmark under a non-symmetric matrix before execution, and state what X @ A would mean under the mission convention.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names axis roles and justifies any transpose from representation, not habit."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict composition order, then execute",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT the observable outcome before any numbers appear. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the measurement. (4) OBSERVE structured WP-137 blocks. (5) SUBMIT / EXPLAIN any delta between prediction and observation. Compare shear-then-rotate with rotate-then-shear on landmark [1, 0]. Predict intermediate and final coordinates. Emit a WP-137 metric of both results and a table of application order versus written matrix order. Keep the useful geometry identical while changing only composition.",
+      "runner": {
+        "module": "g6.reference.M16.experiment",
+        "entrypoint": "run_composition_order",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; the two orders disagree on a documented landmark."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose wrong order and wrong batch orientation",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Two seeded faults, each with one root cause. Fault A composes rotation and shear in reverse application order; run the smallest one-vector counterexample and identify the first diverging intermediate. Fault B computes X @ A for square A, which runs and preserves (n, 2) but applies A.T @ x per row. Use a non-symmetric matrix and one landmark. Repair A by restoring application order; repair B as X @ A.T. A plausible plot is a symptom, not verification.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each fault has a counterexample, first divergence, smallest repair, and restated invariant."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Fresh batch pipeline without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Without AI-generated code, apply scale (1.5, 0.5), horizontal shear -0.4, then 30\u00b0 rotation to a fresh (n, 2) polygon stored one point per row. Predict a landmark, write the three elementary matrices and the composite with application order, justify any transpose, include a shape table, assert composite-batch equals the three-step batch, show one reversed order differs, and connect the pattern to a dense ML layer X @ W + b.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Fresh no-AI pipeline with predictions, shapes, order counterexample, and ML-layer mapping."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Record the batch-orientation contract",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete an ADR for the V04 matrix convention: column-vector y = A x versus row-batch X @ A.T. Reject storing samples as columns without an explicit conversion. State migration cost and a condition that would justify revisiting.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR chooses one convention, rejects the alternative with a concrete orientation failure, and names a revisit trigger."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Connect matrix instruments to V04",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M16 supplies V04's transformation and batch-shape instruments: matrices as functions, predicted landmark movement, composition as architecture, named batch/feature/output axes, justified transposes, and sample-wise equivalence. With row-major X (batch, in_features) and W (in_features, out_features), a dense layer is X @ W + b, which agrees with A = W.T."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate transformation evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, experiment, controlled-failure, transfer, and ADR evidence. Issue PASSED or a targeted repair plan. Do not award completion from a plot that merely looks reasonable."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.mat.transformation",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.mat.composition",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.mat.batch_orientation",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.mat.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

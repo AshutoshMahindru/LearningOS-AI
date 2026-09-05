@@ -1,0 +1,138 @@
+{
+  "id": "M41",
+  "title": "Design an Integrated AI System",
+  "phase": {
+    "id": "P8",
+    "title": "Integration Capstone"
+  },
+  "order_index": 41,
+  "flagship_version": "V11",
+  "core_invariant": "An integrated AI system is a set of explicit boundaries, contracts, and degradation policies, not a pile of components. Separate system, data, control, and trust boundaries. Classify decisions as deterministic versus model-driven. Interface contracts carry schema and SLA. Observability budgets govern latency, cost, confidence, and tool invocations. Implementation is deferred to M42. Predict before validating. Transfer without assistance. Prove competence with evidence.",
+  "competencies": [
+    "comp.arch.boundaries",
+    "comp.arch.contracts",
+    "comp.arch.degradation",
+    "comp.arch.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m41.system_data_control_trust",
+    "kn.m41.interface_contracts",
+    "kn.m41.degradation_hierarchy",
+    "kn.m41.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M40"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame V11 architecture as contracts, not components",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M41 invariant: consume the M40 eval suite as a constraint, then design system, data, control, and trust boundaries across retrieval, model, tools, memory, workflow, and evaluation. Identify gate evidence: a serialized architecture config, a boundary-validation log, a degradation-matrix execution, and an ADR. Generic WP-137 metric and table blocks carry measurements; there is no custom frontend. Do not implement the orchestrator here; M42 executes."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Trace validators, decision kinds, and degradation modes",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read ArchitectureValidator, DecisionKind, DegradationMode, ObservabilityBudget, and build_default_v11_architecture without running them. Record which missing boundary fails validation, which SLA is illegal, why a model decision without a fallback is a warning rather than an error, and the four degradation modes FULL_CAPABILITY, REDUCED_RETRIEVAL, FALLBACK_CACHED, FAIL_CLOSED. Predict one invalid config and one valid V11 default before execution.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names boundary types, SLA check, model-fallback warning, and the four degradation modes."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, then validate boundaries and degradation routing",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT whether a config missing boundaries is invalid, whether a non-positive retrieval SLA is rejected, and which degradation mode a 500ms retrieval outage should select. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the validator and a latency-driven degradation router. (4) OBSERVE structured WP-137 metric and table blocks for is_valid, errors, warnings, and selected mode. (5) SUBMIT / EXPLAIN any delta. Do not implement M42 orchestration. Do not call a live model.",
+      "runner": {
+        "module": "g6.reference.M41.experiment",
+        "entrypoint": "run_boundary_validation",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; invalid SLA is rejected; retrieval outage selects a named degradation mode."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose retrieval outage, trust-boundary violation, and budget exhaustion",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Three injected faults, one named change each. Cascading retrieval outage: vector-store latency exceeds the 500ms SLA and must degrade to cached keyword retrieval, not crash. Trust-boundary violation: a model attempts unauthenticated tool execution and the deterministic guard must reject it at the control boundary. Observability budget exhaustion: token budget depleted; the request degrades to a cached answer. Predict the mode, execute, emit a WP-137 table of fault versus mode versus enforcement, and repair the policy not the fixture.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each fault names one controlled cause, the selected degradation or rejection, and the smallest policy repair."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Classify fresh decisions without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Without AI-generated code, classify validating API payload JSON schema, summarizing user query intent, and routing by exact subscription tier as deterministic or model-driven. Explain the risk of exposing raw model outputs across a trust boundary without a deterministic guard. Produce a fresh boundary map for a kiosk-plus-warehouse system that reuses M40 eval constraints.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Unassisted classification of deterministic versus model-driven decisions with a trust-boundary guard."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Record V11 boundary and fallback decisions",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Author ADR-41 for integrated AI system boundaries and fallback hierarchy. Decide deterministic versus model decision boundaries, trust-boundary enforcement, and the four-rung degradation hierarchy. Reject collapsing all routing into a single model call. Implementation remains M42.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names boundaries, fallback hierarchy, and a revisit condition without implementing the orchestrator."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Close V11 architecture for M42 execution",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M41 finishes V11 Evaluated and Observable AI System: M40 supplied the eval suite; M41 supplies boundaries, contracts, degradation, and telemetry budgets. M42 receives those contracts and must not invent a one-off app. The generic Mission Player and Workbench render catalogue stages; there is no custom architecture canvas."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate architecture evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, experiment, controlled-failure, transfer, and ADR evidence against the gate contract. Issue PASSED or a targeted repair plan. Do not award completion from a component list without contracts."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.arch.boundaries",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.arch.contracts",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.arch.degradation",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.arch.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

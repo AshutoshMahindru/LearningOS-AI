@@ -1,0 +1,160 @@
+{
+  "id": "M13",
+  "title": "Learn from Neighbors",
+  "phase": {
+    "id": "P2",
+    "title": "Classical Machine Learning"
+  },
+  "order_index": 13,
+  "flagship_version": "V03",
+  "core_invariant": "Every KNN prediction is a vote among nearby training cases. An explanation must name which feature changed a distance, which cases entered or left the neighborhood, and how their votes changed the prediction. Accuracy alone is insufficient. Fit scaling on training rows only. An incompatible high-scale weak feature can dominate Euclidean distance. Predict before querying. Transfer without assistance. Prove competence with evidence.",
+  "competencies": [
+    "comp.knn.neighbor_trace",
+    "comp.knn.k_and_metric",
+    "comp.knn.scaling_contract",
+    "comp.knn.failure_diagnosis",
+    "comp.knn.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m13.query_neighbors",
+    "kn.m13.k_and_distance",
+    "kn.m13.training_only_scaler",
+    "kn.m13.scale_failure",
+    "kn.m13.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M09"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame instance-based classification as a useful whole",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M13 invariant and datasets/M13/knn_scale_cases.csv. practice_hours and assessment_score define a curved local pattern; interface_event_count is generated independently of the target and is intentionally much larger in numeric scale. The weak high-scale feature is a teaching instrument, not a recommended production feature. Identify gate evidence: neighbor traces, k and metric comparisons, scaling round-trip, failure diagnosis, no-AI hand calculation, and an ADR. No custom M13 frontend."
+    },
+    {
+      "id": "stage_02_trace_map",
+      "title": "Map query to neighbors to votes",
+      "type": "trace_map",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Draw the instance-based data flow: stored training cases \u2192 distance to query \u2192 ordered neighbor identities \u2192 majority vote \u2192 prediction. Mark where the scaler learns state (training rows only) and where the same transform is applied to the query. Mark evaluation as a later boundary that may use labels the predictor does not see.",
+      "validation_rubric": {
+        "required_evidence_type": "diagram",
+        "pass_criteria": "Map includes stored cases, distance, neighbor identities, vote, and training-only scaling."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Trace the scaling-and-KNN pipeline",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the notebook pipeline before modifying it. Trace CSV row to feature matrix, train/test indices, training features to fitted scaler statistics, raw query to transformed query, transformed query to distances, neighbor indices to labels, labels to majority vote, and prediction to metric. Record which objects learn state during fit and one failure path from passing raw coordinates to a model trained on scaled coordinates.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names shapes, units, fit-time state, and the raw-versus-scaled failure path."
+      }
+    },
+    {
+      "id": "stage_04_experiment",
+      "title": "Predict, then inspect neighbors, k, and metrics",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle. (1) PREDICT the class of a fixed query, how k in {1,3,5,9,15,25} will change the vote, and whether Euclidean and Manhattan retrieve the same neighbors. (2) COMMIT the prediction. (3) EXECUTE neighbor retrieval with ordered IDs, distances, and votes, then the k sweep and metric comparison with the split held fixed. (4) OBSERVE neighbor identity changes, not only accuracy. (5) SUBMIT an explanation naming which cases entered or left the neighborhood. Return a metric block with neighbor_ids, distances, and predicted_class.",
+      "runner": {
+        "module": "g5.reference.M13.experiment",
+        "entrypoint": "run_knn_query",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; evidence includes neighbor identities and distances."
+      }
+    },
+    {
+      "id": "stage_05_controlled_failure",
+      "title": "Diagnose incompatible-scale neighbor capture",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Add interface_event_count without scaling. Predict which coordinate will dominate raw Euclidean distance, reproduce the metric and query-prediction change, inspect feature ranges, retrieve neighbors before and after, and decompose squared distance by feature for the closest polluted neighbor. Repair by fitting scaling on training rows only inside a pipeline, then compare with a model that excludes the irrelevant feature. Do not begin by changing k or deleting rows. A repaired score alone is insufficient.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Connects feature scale to distance contribution, neighbor membership, votes, and the changed prediction."
+      }
+    },
+    {
+      "id": "stage_06_transfer",
+      "title": "Hand-work a fresh neighbor classifier without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Without AI-generated code, use guided points (1,8), (2,7), (3,9), (7,3) and independent points (7,8), (8,7), (9,9), (3,2) with query (6,6). Predict labels for k=1,3,5, compute Euclidean distances by hand, implement distance, ordering, and majority vote without KNeighborsClassifier, multiply the first coordinate by 100 and repair using training-only statistics, then diagnose an extra high-scale irrelevant coordinate.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Hand-worked distances, predictions before execution, and a scale-repair explanation."
+      }
+    },
+    {
+      "id": "stage_07_adr",
+      "title": "Record the distance-design decision",
+      "type": "reflection_adr",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Write an ADR for the distance design: feature set, metric, k, and scaling. Include decision, alternatives, evidence, trade-offs, and revisit conditions. Learner-authored ADRs stay outside this package.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR covers feature set, metric, k, training-only scaling, and reversal triggers."
+      }
+    },
+    {
+      "id": "stage_08_flagship",
+      "title": "Integrate neighbor diagnostics into V03",
+      "type": "flagship_integration",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "M13 adds a transparent instance-based classifier to V03. Preserve scaler and classifier as one pipeline, record the chosen feature set, and expose neighbor-level diagnostics. Compare trees (thresholds), ensembles (aggregated votes), and neighbors (stored cases and local membership).",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "States the V03 comparison surface and pipeline/scaler coupling."
+      }
+    },
+    {
+      "id": "stage_09_gate",
+      "title": "Evaluate neighbor-learning evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate neighbor traces, scale-failure diagnosis, no-AI transfer, and ADR. Issue PASSED or targeted repair. Accuracy without neighbor identities does not pass."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.knn.neighbor_trace",
+        "stage_id": "stage_04_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.knn.k_and_metric",
+        "stage_id": "stage_02_trace_map",
+        "artifact_type": "diagram"
+      },
+      {
+        "competency_id": "comp.knn.failure_diagnosis",
+        "stage_id": "stage_05_controlled_failure",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.knn.unassisted_transfer",
+        "stage_id": "stage_06_transfer",
+        "artifact_type": "artifact"
+      },
+      {
+        "competency_id": "comp.knn.scaling_contract",
+        "stage_id": "stage_07_adr",
+        "artifact_type": "markdown"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

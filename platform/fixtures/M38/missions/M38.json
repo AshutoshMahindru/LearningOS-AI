@@ -1,0 +1,138 @@
+{
+  "id": "M38",
+  "title": "Build a Stateful Agent Workflow",
+  "phase": {
+    "id": "P7",
+    "title": "Agents & Evaluation"
+  },
+  "order_index": 38,
+  "flagship_version": "V10",
+  "core_invariant": "Workflow state is an explicit serializable schema, not hidden chat history. Design state fields before transitions. Nodes and allowed edges are inspectable control flow. Terminals are complete, denied, failed, and loop_exhausted. Loop bounds are orchestration policy. Resume must not replay a completed side effect. Human approval is a node that gates execution. Invalid transitions raise and leave state unchanged. Predict before every workflow action. Transfer without assistance. Generic WP-137 trace and metric blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.agent.state_schema",
+    "comp.agent.checkpoint_resume",
+    "comp.agent.loop_approval",
+    "comp.agent.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m38.state_schema",
+    "kn.m38.checkpoint_resume",
+    "kn.m38.loop_approval",
+    "kn.m38.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M37"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame explicit workflow state before transitions",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M37 registry/executor and staged traces. M38 wraps them in an explicit state machine (workflow_version v10-teaching-workflow-1, graph_id v10-teaching-graph-1, max_steps 8, catalog_sku SKU-7). Identify gate evidence: happy-path terminal complete, resume without duplicate lookup, loop_exhausted at max_steps, approve versus deny, InvalidTransition leaving start unchanged, deterministic replay, a no-AI reconstruction, and a V10 workflow ADR. Do not add a memory store, router, fallback, RAG, or LangGraph SDK. No custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Read schema, transitions, checkpoints, approval, bounds",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the state schema, apply_transition, checkpoint/resume, approval node, and loop counter without importing LangGraph. Predict illegal edges do not mutate, last_tool_result is resume state, and execute is not re-entered for a completed effect key. Submit an annotated node/edge trace.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names the live contract and a rejected or illegal path."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, then run the teaching state machine",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT the SKU-7 lookup-then-post path terminates complete with effect_count 1, that resume after the lookup checkpoint does not re-execute lookup, and that deny leaves effect_count at 0. (2) COMMIT. (3) EXECUTE / RUN the teaching graph on fixture proposals; emit WP-137 trace of nodes and a metric of terminal, effect_count, loop_bound, resume_replays_lookup. (4) OBSERVE. (5) SUBMIT / EXPLAIN. Do not import a graph SDK.",
+      "runner": {
+        "module": "g5.reference.M38.experiment",
+        "entrypoint": "run_state_machine",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Prediction is sealed before execute; submitted explanation covers the observed WP-137 blocks. No universal accuracy threshold."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose missing loop bounds and replayed effects",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Named faults, one change each. Fault A: missing loop bound so unresolved lookup exceeds max_steps without loop_exhausted. Repair_run on that broken object yields loop_exhausted; the original still exceeds. Fault B: execute re-entered without idempotency so two posts. Repair keys the post; original still shows two. Swapping models is not the first lever. Emit a WP-137 table of terminals and effect_count.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract from the broken object."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Reconstruct the machine without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, without inventing a hidden chat buffer, draw the machine, list resume fields, name a missing terminal, place approval, and diagnose a replayed side effect. Tutor surfaces stay locked. Emit a WP-137 artifact. Leave responses unfilled.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Independent no-AI reasoning names the contract, a valid repair, and does not invent deferred machinery."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Choose a V10 workflow checkpoint policy",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete an ADR for V10 workflow state/checkpoint policy: state schema, persistence boundary, resume, loop limits, approval points, and trace retention. Reject hidden chat-history state. Do not implement memory routing here.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a decision, rejected alternative, owner, status, and date."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Hand M39 a stateful workflow, not a memory store",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Hand M39 a stateful workflow with an explicit serializable schema and failure/termination semantics. Not a memory store, router, or LangGraph SDK graph."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate stateful-agent evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, workflow experiment, loop/replay diagnosis, and unassisted transfer. Issue PASSED or a targeted repair plan. Do not award completion from one happy path."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.agent.state_schema",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.agent.checkpoint_resume",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "trace"
+      },
+      {
+        "competency_id": "comp.agent.loop_approval",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.agent.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

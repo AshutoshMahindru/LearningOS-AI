@@ -1,0 +1,138 @@
+{
+  "id": "M10",
+  "title": "Make Metrics Reflect Consequences",
+  "phase": {
+    "id": "P2",
+    "title": "Classical Machine Learning"
+  },
+  "order_index": 10,
+  "flagship_version": "V02",
+  "core_invariant": "Choose evaluation metrics and a decision threshold from the consequences of action and inaction. Start with the decision, not a dictionary of metrics. Never tune on the test split. Report the confusion matrix with any aggregate metric.",
+  "competencies": [
+    "comp.metric.consequence_mapping",
+    "comp.metric.threshold_selection",
+    "comp.metric.accuracy_failure",
+    "comp.metric.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m10.confusion_costs",
+    "kn.m10.validation_lock",
+    "kn.m10.accuracy_harms_utility",
+    "kn.m10.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M09"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame asset-alert consequences before metrics",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M10 invariant and the decision: an asset-risk score triggers a manual inspection. A false positive spends scarce inspection capacity and costs 2 units; a false negative misses an imminent failure and costs 18 units. The score is fixed; M10 changes only how it is evaluated and converted into an action. Validation evidence selects and locks a threshold; the test split opens once. Identify the evidence the gate will require: consequence map, metric derivation, accuracy-harms-utility diagnosis, validation threshold sweep with expected cost and capacity, locked test evaluation, ADR, formal review, and a no-AI unseen-consequence gate. Do not interpret a score as a calibrated probability without evidence."
+    },
+    {
+      "id": "stage_02_trace_map",
+      "title": "Map actions, costs, and metric meanings",
+      "type": "trace_map",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Name the positive event and the action triggered by a positive prediction. Write TP, FP, TN and FN operational meanings before calculating a metric. State cost assumptions and the inspection-capacity constraint. Map accuracy, precision, recall, specificity, F1, ROC points, PR points, and expected cost/value to what each omits. Mark the validation-only selection boundary versus the one-time test evaluation.",
+      "validation_rubric": {
+        "required_evidence_type": "diagram",
+        "pass_criteria": "Map orients confusion outcomes to operational consequences and separates validation selection from test evaluation."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, sweep thresholds, and lock on validation",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the local asset-alert scores. For every threshold, cost, or constraint change: (1) PREDICT which threshold region will be defensible, which error must dominate, and whether accuracy, F1, or expected cost will select different operating points. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the validation-only sweep, derive accuracy/precision/recall/specificity/F1 from the confusion matrix, compare ROC and PR views, expose the all-negative baseline, and compute expected cost. (4) OBSERVE structured table, chart, and metric blocks including alert volume and capacity. (5) SUBMIT an explanation of any delta, then freeze the consequence-selected threshold and evaluate it once on the untouched test split. Never retune on test outcomes.",
+      "runner": {
+        "module": "g6.reference.M10.experiment",
+        "entrypoint": "run_consequence_sweep",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; threshold is locked from validation expected cost and capacity; test is opened once."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose accuracy that harms decision utility",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Validation contains 6 imminent failures and 24 non-failures. Missing a failure costs 18 units; an unnecessary inspection costs 2 units; at most half the validation population can be alerted. The deliberate mistake: sweep thresholds, select the highest validation accuracy, report the attractive percentage, and omit the confusion matrix and consequence table. Before running selection, predict whether accuracy will favor a high or low threshold, which confusion outcome it will concentrate, and whether the most accurate feasible threshold will minimize expected cost. Then record the accuracy-selected threshold and TP/FP/TN/FN, compute 2*FP+18*FN, select the lowest-cost feasible threshold, and compare accuracy, recall, alert rate, expected cost, and value versus no alerts. Root cause: the optimized objective assigned equal value to every correct row, contrary to the decision contract. Replacing accuracy with F1 is not automatically sufficient. Repair by making the cost matrix and constraints explicit, verify on validation, lock, then inspect test.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "Diagnosis shows the more accurate threshold harming utility, does not merely substitute F1, and repairs selection with explicit costs and capacity."
+      }
+    },
+    {
+      "id": "stage_05_adr",
+      "title": "Record the consequential threshold decision",
+      "type": "reflection_adr",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Author a completed ADR covering decision, context, alternatives, evidence, trade-offs, monitoring, and quantitative revisit conditions. Version costs, constraints, dataset window, threshold, tie-breaks, and owner. Formal review must cover artifact and architecture, failure analysis, uncertainty, and accept/reject/defer dispositions. Do not fabricate review outcomes.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "Learner-authored ADR versions the locked threshold, costs, capacity, monitoring, and revisit triggers."
+      }
+    },
+    {
+      "id": "stage_06_transfer",
+      "title": "Choose from unseen consequences without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Complete this gate without an AI assistant, generated formulas, or a copied solution. Fresh scenario: a food-safety system scores lots for an undeclared-allergen audit. Auditing a safe lot costs 4 units (FP); failing to audit an unsafe lot costs 60 units (FN); at most 20 alerts per 100 lots. Use datasets/M10/unseen_threshold_evidence.csv. Before calculating, predict which threshold region will be defensible and which error must dominate. Then for every candidate: verify TP+FP+TN+FN equals 100; compute accuracy, precision, recall, specificity and F1; compute alert volume; mark capacity feasibility; compute expected cost 4*FP+60*FN; choose a feasible threshold and primary operating metric; defend from consequences not metric popularity; name two assumptions that could reverse the decision; define monitoring and a quantitative revisit condition. Challenge: would the answer change if FN cost 12; what is lost if only ROC AUC or only F1 is reported; if calibration is unknown, what may still be concluded? Do not invent a recommended threshold in the fixture. Do not tune on hidden test labels.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Unassisted feasible threshold from stated consequences, correct arithmetic, explicit uncertainty, and preserved test boundary."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Complete the V02 operating policy",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M10 completes the V02 Predictive Decision System: M09 fixed score \u2192 M10 versioned threshold policy \u2192 alert/no-alert action \u2192 observed FP and FN consequences \u2192 monitoring and review. The model score and the action policy are separate artifacts. V02 is not ready merely because notebooks run; the release must name the deployed threshold, decision owner, cost/constraint version, validation window, tie-break rule, action volume, realized FP/FN monitoring, and rollback or revisit trigger."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate M10 evidence against the gate contract",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, experiment, controlled-failure, ADR, and transfer evidence against the mission gate_contract. Issue PASSED when every required evidence item meets the pass threshold. Otherwise issue a targeted repair plan naming the failed stage, competency, artifact type, and knowledge node \u2014 do not force a full mission repeat."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.metric.consequence_mapping",
+        "stage_id": "stage_02_trace_map",
+        "artifact_type": "diagram"
+      },
+      {
+        "competency_id": "comp.metric.threshold_selection",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.metric.accuracy_failure",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.metric.unassisted_transfer",
+        "stage_id": "stage_06_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

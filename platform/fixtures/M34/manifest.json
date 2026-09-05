@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M34",
+  "version": "5.0.0",
+  "title": "G5 M34 reference package",
+  "description": "Reference M34 Build RAG on the generic runtime. WP-136 mission id is M34. Package id is g5.reference.M34. Stages are catalogue compositions; WP-137 blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M34",
+      "path": "missions/M34.json"
+    }
+  ],
+  "digest": "b101560681c4cbbf6d26a542e606094383d95fa2d3beef88a0cafd928b199ae1"
+}

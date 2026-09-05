@@ -1,0 +1,138 @@
+{
+  "id": "M35",
+  "title": "Improve Retrieval",
+  "phase": {
+    "id": "P6",
+    "title": "Knowledge Systems"
+  },
+  "order_index": 35,
+  "flagship_version": "V09",
+  "core_invariant": "Freeze labels before tuning. Candidate recall is not final ranking. Cosine is not a relevance label. One named change per experiment. Aggregate metrics hide critical slices. Leaking eval phrasing is metric gaming. Hard negatives can survive a weak reranker. Predict before every ranking action. Transfer without assistance. Generic WP-137 metric and table blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.ret.eval_freeze",
+    "comp.ret.rerank",
+    "comp.ret.leakage",
+    "comp.ret.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m35.eval_freeze",
+    "kn.m35.rerank",
+    "kn.m35.leakage",
+    "kn.m35.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M34"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame frozen eval before retrieval tuning",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M34 frozen eval (eval_version m34.eval.v1) and M33 exact search. M35 measures ranking and chunking without breaking that freeze (pipeline_id v09-retrieval-eval, reranker_id lex-overlap-v1, default_candidate_k 3). Identify gate evidence: frozen label hash, recall@k/MRR/nDCG@k, worst-query failure modes (candidate_miss, trap_at_1, ranking_miss), chunk-version identity, candidate-k versus rerank, leakage diagnosis, a no-AI transfer, and a V09 chunking/rerank ADR. Do not require ANN/Qdrant, retune extractive synthesis, or open a decoding lab. No custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Read chunk, candidate, rerank, and metric identity",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read chunk, candidate generation, label projection, rerank, metric, and config identity without running a live model. Predict that identity rerank keeps member sets equal, that lex-overlap-v1 may change order, that scored_candidates on exact search stays corpus-sized when k changes, and that corpus_version/source_hash change with chunk spec while M34 labels remain originals. Submit an annotated flow trace.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names the live contract and a rejected or illegal path."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, then measure ranking and rerank",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT baseline recall@3/MRR/nDCG@3 on frozen labels, whether lex-overlap-v1 can change top ids without changing member sets, and whether leaking query phrasing into gold chunks inflates metrics. (2) COMMIT the prediction. (3) EXECUTE / RUN identity ranking then the local lexical reranker on a tiny candidate set; emit WP-137 metric of recall_at_3, mrr, ndcg_at_3, labels_frozen, leakage and a table of per-query ranks. (4) OBSERVE. (5) SUBMIT / EXPLAIN. Do not edit M34 files. Do not relabel after seeing scores.",
+      "runner": {
+        "module": "g5.reference.M35.experiment",
+        "entrypoint": "run_retrieval_eval",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; submitted explanation covers the observed WP-137 blocks. No universal accuracy threshold."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose evaluation leakage",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Named fault: copy eval query phrasing into gold support chunks so aggregate nDCG/MRR improve while the eval boundary is dirty. Predict metric inflation with unchanged ranking code. Diagnose leakage, not a better retriever. Repair by restoring the clean corpus and frozen labels from the broken objects; the leaked corpus still contains query phrasing. Relabel-gaming (mark top-1 relevant after seeing ranks) is a later named change. Emit a WP-137 table of clean versus leaked metrics.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract from the broken object."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Defend ranking without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, without inventing labels, compute hand metrics on transfer.json, name two failure modes, choose one lever (chunk, k, or rerank), reject leakage, and explain candidate recall versus final rank. Tutor surfaces stay locked. Emit a WP-137 artifact. Leave responses unfilled.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Independent no-AI reasoning names the contract, a valid repair, and does not invent deferred machinery."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Choose a V09 chunking and rerank policy",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete an ADR for the V09 chunking/candidate/rerank policy: evaluation governance, metric set, latency budget, rollback, and revisit conditions. Compare identity ranking, lex-overlap-v1, and leaking eval phrasing. Reject leakage. Do not claim a production vector database.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a decision, rejected alternative, owner, status, and date."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Hand M36 a measured retrieval baseline",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Hand M36 a measured exact baseline, candidate/rerank interface, frozen eval set, and known failure slices. Do not relabel after seeing ranks. ANN/hybrid remain closed here."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate retrieval-improvement evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, ranking experiment, leakage diagnosis, and unassisted transfer. Issue PASSED or a targeted repair plan. Do not award completion from an inflated leaked metric."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.ret.eval_freeze",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.ret.rerank",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.ret.leakage",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.ret.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

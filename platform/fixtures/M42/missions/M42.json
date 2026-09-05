@@ -1,0 +1,138 @@
+{
+  "id": "M42",
+  "title": "Build, Evaluate, and Explain the Capstone",
+  "phase": {
+    "id": "P8",
+    "title": "Integration Capstone"
+  },
+  "order_index": 42,
+  "flagship_version": "V12",
+  "core_invariant": "The capstone is a WP-136 curriculum package on the frozen generic runtime, not a one-off app and not a custom frontend. Assemble retrieval, memory, tools, inference, and the M40 eval suite behind M41 contracts. Predict before executing. Degrade rather than crash. Defend production readiness with evidence. Transfer without assistance.",
+  "competencies": [
+    "comp.cap.orchestration",
+    "comp.cap.evaluation_reuse",
+    "comp.cap.degradation_defense",
+    "comp.cap.unassisted_defense"
+  ],
+  "knowledge_nodes": [
+    "kn.m42.end_to_end_orchestrator",
+    "kn.m42.m40_eval_reuse",
+    "kn.m42.degradation_and_sla",
+    "kn.m42.no_ai_defense"
+  ],
+  "prerequisites": [
+    "M41"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the capstone as a WP-136 package, not a one-off app",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M42 invariant: this capstone is a WP-136 curriculum package composed from the WP-121 catalogue on the frozen generic runtime. It is not a one-off app, not a custom Mission Player, and not a special platform route. Consume M01-M41 components, m40.eval.v1, and M41 contracts. Identify gate evidence: an end-to-end orchestrator trace, an M40 suite report, a failure-degradation matrix, and a capstone ADR. Generic WP-137 metric, table, and trace blocks render on the generic workbench. No custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Trace the orchestrator loop and defense evaluation",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read CapstoneSystemOrchestrator.execute_capstone_task and run_defense_evaluation without running them. Record how retrieval, model, tool, memory, and evaluation components register; where latency versus ObservabilityBudget selects FALLBACK_CACHED; how memory is appended only on the full-capability path; and which fields the defense report aggregates. Predict full-capability versus degraded outputs for one query before execution. Do not look for a dedicated capstone application process.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names component registry, budget-driven degradation, and defense-report fields."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, then run one end-to-end capstone query",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT the full-capability path for a retrieval-plus-tool query under budget, and the degraded cached fallback when simulated latency exceeds max_latency_ms. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the orchestrator; emit WP-137 metric, table, and trace blocks. (4) OBSERVE status, eval_score, degradation_applied, memory_depth, and active components. (5) SUBMIT / EXPLAIN any delta. Reuse m40.eval.v1 constraints; do not invent a one-off scoring UI. This remains a catalogue experiment stage.",
+      "runner": {
+        "module": "g6.reference.M42.experiment",
+        "entrypoint": "run_capstone_orchestrator",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; full-capability and degraded paths are both observed as WP-137 blocks."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose timeout, overflow, and eval-gate failure",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Three injected faults, one named change each. Context-window overflow: truncate oldest conversation history while preserving system instructions. Tool execution timeout: abort a hanging tool after the 500ms SLA and return a degraded response. Evaluation gate failure: reject deployment when the M40 canonical slice gate fails even if the average score is high. Predict, execute, emit a WP-137 table of fault versus action versus eval_version, and repair the orchestrator policy not the M40 pack.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each fault names one controlled cause, the degradation or reject action, and reuse of m40.eval.v1."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Defend production readiness without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Without AI-generated code, explain the trade-off between aggressive caching and retrieval freshness, outline the four graceful-degradation stages from M41, and decide whether a high average with one critical citation miss may ship. Produce a blank-page defense that cites M40 slice gates and M41 trust-boundary enforcement. Do not build a separate capstone application.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Unassisted defense names degradation hierarchy, eval reuse, and a named ship/no-ship rule."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Defend V12 production readiness",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Author ADR-42 for Flagship V12. Decide end-to-end pipeline architecture, observability and SLA enforcement, and how empirical M40 evaluation plus M41 contracts justify production readiness. Reject a one-off app, a custom frontend, and mission-id platform conditionals. Record owner, status, date, and a revisit condition.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR defends V12 as a WP-136 package on the generic runtime and records a revisit condition."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Tag Flagship V12 on the generic runtime",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M42 releases V12 Integrated AI Systems Capstone: structured and unstructured data, retrieval, tools, evals, and observability composed as catalogue stages. The generic Mission Player loads this WP-136 package. There is no capstone-only binary, no custom workbench, and no special /m42 route. Learner evidence remains unfilled in the repository."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate capstone evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, experiment, controlled-failure, transfer, and ADR evidence against the gate contract. Issue PASSED or a targeted repair plan. Do not award completion from a one-off demo or from a high average that hides a critical slice."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.cap.orchestration",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.cap.evaluation_reuse",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.cap.degradation_defense",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.cap.unassisted_defense",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

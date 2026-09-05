@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M11",
+  "version": "5.0.0",
+  "title": "G6 M11 reference package",
+  "description": "G6 migration of M11 Interrogate a Decision Tree onto the frozen generic runtime. Package id is g5.reference.M11 (G5 package shape). WP-136 mission id is M11. Lab source and data live in this fixture. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M11",
+      "path": "missions/M11.json"
+    }
+  ],
+  "digest": "0e7029ecc597014d00f0aac656c7743d4151a354844601376a46a1ee5ffdeabc"
+}

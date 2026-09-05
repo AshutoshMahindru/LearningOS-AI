@@ -1,0 +1,132 @@
+{
+  "id": "M22",
+  "title": "Open the Neuron and Layer",
+  "phase": {
+    "id": "P4",
+    "title": "Deep Learning"
+  },
+  "order_index": 22,
+  "flagship_version": "V05",
+  "core_invariant": "A neuron is an affine map followed by an activation: z = w\u00b7x + b, y = activation(z). A dense layer is the row-batch lift Y = activation(X @ W + b) with X (batch, n_in), W (n_in, n_out), b (n_out,). Activation belongs after the affine map. Stacked affine layers without a nonlinearity collapse to one affine map. Predict before every layer action. Gradients, multi-layer softmax stacks, and autograd stay closed. Generic WP-137 metric, table, and state_diff blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.nn.neuron_arithmetic",
+    "comp.nn.activation_maps",
+    "comp.nn.dense_layer_shapes",
+    "comp.nn.layer_boundary_repair"
+  ],
+  "knowledge_nodes": [
+    "kn.m22.weighted_sum_bias",
+    "kn.m22.activation_sweep",
+    "kn.m22.row_batch_shapes",
+    "kn.m22.orientation_repair"
+  ],
+  "prerequisites": [
+    "M21"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame one neuron and one dense layer as arithmetic",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the accepted M21 black-box configuration without opening training. The useful whole is input features \u2192 z = w\u00b7x + b \u2192 activation(z) \u2192 neuron output, lifted to Y = activation(X @ W + b). The teaching micro-case is x=[1.0, 2.0], w=[0.5, -0.25], b=0.5, pre-activation 0.5. Identify gate evidence: a WP-137 metric of hand-computed neuron output, a table of ReLU / sigmoid / tanh on the same pre-activations, and a state_diff of a repaired orientation fault. Do not introduce gradients, backpropagation, softmax stacks, or a framework training loop."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, compute, and observe neuron and layer maps",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the teaching neuron and dense layer. (1) PREDICT the pre-activation and ReLU output for the micro-case, the effect of setting only bias to zero, and the shapes of a (2, 3) @ (3, 2) layer. (2) COMMIT the prediction. (3) EXECUTE / RUN the arithmetic; emit WP-137 blocks: a metric of weighted_sum / bias / preactivation / relu_output, a table of ReLU, sigmoid, and tanh on the shared pre-activation sequence [-2, -0.5, 0, 0.5, 2], and a state_diff of bias-ablation. (4) OBSERVE. (5) SUBMIT an explanation of any delta. Increase from one example to a small batch and verify per-row parity. Compose two affine layers with and without a nonlinearity and verify collapse only in the linear case. One named change per run. No autograd.",
+      "runner": {
+        "module": "g5.reference.M22.experiment",
+        "entrypoint": "run_neuron_layer",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; hand calculations match the deterministic reference; activation comparison avoids universal claims."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read affine, activation placement, and shape validation",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the layer implementation. Identify shape validation, the affine map, activation-after-affine placement, and error paths for malformed shapes. Predict what a transposed W or a pre-affine activation would do to shapes and to a hand-computed micro-case. Submit an annotated system-flow artifact.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "The trace names shape validation, affine map, activation placement, and error paths without opening gradients."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose transposed weights or activation-before-affine",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Inject one named boundary defect: a transposed weight matrix, or activation applied before the affine map. Predict the shape or value failure from the intended X, W, b, and activation name. Execute the broken and repaired paths. Diagnose with expected dimensions and a hand-computed discriminator. The smallest repair restores the named boundary; do not change several knobs or open backpropagation. Emit a WP-137 table of expected vs observed shapes and a state_diff of the repair.",
+      "runner": {
+        "module": "g5.reference.M22.failure",
+        "entrypoint": "run_layer_boundary_failure",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Names the orientation or activation-boundary defect, shows a hand-computed discriminator, and restores only the named boundary."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Fresh neuron and layer arithmetic without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, compute a fresh two-input neuron (weighted sum, pre-activation, ReLU and sigmoid) and a fresh two-neuron layer with a (3, 2) weight matrix. Name every dimension in X, W, b, and Y. Explain why two stacked affine maps without a nonlinearity cannot represent more than one affine map. Repair a fresh orientation error from expected dimensions without referring to gradients. Tutor surfaces stay locked. Emit a WP-137 metric of the independent arithmetic.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Independent no-AI arithmetic matches the declared maps and shapes; linearity collapse is explained without M21 capacity stories as causes."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Author a teaching activation and width ADR",
+      "type": "reflection_adr",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Record the teaching activation and width choice for V05, alternatives and trade-offs, evidence from this mission, revisit triggers, owner, status, and date. M21 capacity results remain observations, not causal proofs about ReLU. Future-mission mechanisms stay closed."
+    },
+    {
+      "id": "stage_07_gate",
+      "title": "Evaluate neuron and layer evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, neuron/layer experiment, controlled-failure diagnosis, and unassisted transfer against the gate contract. Issue PASSED or a targeted repair plan. Do not award completion from neuron mythology."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.nn.neuron_arithmetic",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.nn.activation_maps",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.nn.layer_boundary_repair",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.nn.dense_layer_shapes",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

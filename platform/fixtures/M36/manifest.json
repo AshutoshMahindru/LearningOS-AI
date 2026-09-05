@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M36",
+  "version": "5.0.0",
+  "title": "G5 M36 reference package",
+  "description": "Reference M36 Understand Vector Databases and Hybrid Retrieval on the generic runtime. WP-136 mission id is M36. Package id is g5.reference.M36. Stages are catalogue compositions; WP-137 blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M36",
+      "path": "missions/M36.json"
+    }
+  ],
+  "digest": "1d93f0ee4900c4ab435cd13083c91c863c81cf92f3bb359dde8435e4f92ec318"
+}

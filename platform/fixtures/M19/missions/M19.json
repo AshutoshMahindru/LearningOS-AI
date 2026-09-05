@@ -1,0 +1,139 @@
+{
+  "id": "M19",
+  "title": "Make Models Learn with Gradients",
+  "phase": {
+    "id": "P3",
+    "title": "Mathematical Foundations on Demand"
+  },
+  "order_index": 19,
+  "flagship_version": "V04",
+  "core_invariant": "A gradient measures local loss change with respect to a parameter. Subtracting a correctly signed gradient with a positive learning rate can reduce loss; adding it climbs the loss. One parameter and manual changes precede derivatives and multiple parameters. Predict the next loss before the update. Repair the operator, not the data.",
+  "competencies": [
+    "comp.grad.loss_curve",
+    "comp.grad.update",
+    "comp.grad.sign_diagnosis",
+    "comp.grad.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m19.parameter_to_loss",
+    "kn.m19.descent_update",
+    "kn.m19.wrong_sign",
+    "kn.m19.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M16",
+    "M17"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame parameter, prediction, loss, gradient, update",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M19 invariant: connect changing parameters to changing loss through gradients. Sequence is mandatory: manual weight sweep, loss curve, finite difference, analytic gradient, one update, repeated updates, wrong-sign failure, then weight and bias. Identify gate evidence: a decreasing-loss step, a finite-difference check, a wrong-sign diagnosis, and a no-AI arithmetic gate. Generic WP-137 metric and table blocks; no custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Trace the update operator",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read one_parameter_loss and analytic_weight_gradient. Follow parameter \u2192 prediction \u2192 residual \u2192 loss \u2192 gradient \u2192 update. Predict whether weight + learning_rate * gradient moves uphill or downhill from weight = 1.0 on y = 3x, and predict the next loss.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace identifies the subtraction operator as the descent step and names the gradient formula."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict one descent step, then execute",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT the observable outcome before any numbers appear. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the measurement. (4) OBSERVE structured WP-137 blocks. (5) SUBMIT / EXPLAIN any delta between prediction and observation. On a tiny linear fixture, start from weight = 1.0 with a positive learning rate. Predict whether loss falls after weight - learning_rate * gradient. EXECUTE one analytic step and emit a WP-137 metric of loss_before, gradient, weight_after, loss_after, and loss_fell.",
+      "runner": {
+        "module": "g6.reference.M19.experiment",
+        "entrypoint": "run_one_step_update",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; observed loss falls after a correctly signed step."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose the wrong gradient sign",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "The faulty update adds the gradient instead of subtracting it. All earlier stages stay unchanged so the failure has one cause. Compare correct and faulty runs from the same start, check the gradient sign against the loss curve, identify the operator, replace + with -, and verify the repaired first step lowers loss. Do not change data, learning rate, start, or loss to hide it.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Diagnosis names the + operator, shows loss rising versus falling, and verifies the minus repair."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Manual gradient and faulty-loop repair",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Without AI-generated code, for x=[-1,0,1], y=[-2,0,2], prediction = weight * x, start weight=0.5, MSE, learning rate 0.25: write predictions, residuals, loss, 2/n sum(x * residual), the updated weight, and the new loss. Then repair the unfamiliar loop that does weight = weight + learning_rate * gradient with the smallest operator change and produce a four-step decreasing-loss trace.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Fresh no-AI arithmetic plus a minimal + to - repair with a decreasing-loss verification trace."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Record the descent-update contract",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete an ADR for the V04 gradient-update contract: subtract learning_rate * gradient, keep the learning rate positive, and treat sign errors as operator bugs not data bugs. Name a revisit condition (for example, constrained parameters).",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR states the descent operator, a rejected ascent update, and a revisit condition."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Connect gradient instruments to V04",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M19 supplies V04 gradient instruments: loss as a function of parameters, finite-difference checks, analytic gradients, the descent update, and traces that make a sign error observable. M20 will manipulate optimizer state and learning-rate dynamics on this mechanism."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate gradient evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, experiment, controlled-failure, transfer, and ADR evidence. Issue PASSED or a targeted repair plan. Do not award completion if the repair changed the dataset to hide the sign error."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.grad.loss_curve",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.grad.update",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.grad.sign_diagnosis",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.grad.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "id": "M26",
+  "title": "Diagnose Deep Learning Failure",
+  "phase": {
+    "id": "P4",
+    "title": "Deep Learning"
+  },
+  "order_index": 26,
+  "flagship_version": "V05",
+  "core_invariant": "Deep-learning failure is diagnosed by a protocol, not a vibe: capture a known-good M25 trace, inject one hidden fault, write competing hypotheses before inspection, run one discriminating experiment, prove a competing family cannot explain the same traces, apply the smallest repair on the broken objects, and rerun original evidence. Symptoms are shown; the category is not preannounced. Predict before every diagnosis action. Language-model mechanisms stay closed. Generic WP-137 table, metric, and trace blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.nn.failure_triage",
+    "comp.nn.discriminating_experiment",
+    "comp.nn.smallest_repair",
+    "comp.nn.chaos_protocol"
+  ],
+  "knowledge_nodes": [
+    "kn.m26.known_good_trace",
+    "kn.m26.hypothesis_ranking",
+    "kn.m26.repair_identity",
+    "kn.m26.hidden_fault"
+  ],
+  "prerequisites": [
+    "M25"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Capture the known-good M25 reference trace",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Run the unmodified M25 loop on the canonical fixture (affine-ReLU-affine logits, n_in=3 n_hidden=8 n_out=3, CPU float64, SGD momentum 0.9, seed 2501, disjoint 24/6/6). Record train/val curves, held-out eval mode, and layer movement as the reference whole. Identify gate evidence: a WP-137 table of ranked hypotheses across data / optimization / gradient-flow / architecture / evaluation families, a metric of the discriminating experiment, and a trace of smallest repair plus regression. Do not rewrite the M25 loop. No GPU and no silent weight download."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, inject one named fault, and discriminate",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on one named catalogue change at a time. (1) PREDICT which family (data, optimization, gradient flow, architecture / regularization, evaluation) will explain the coming symptoms, and which discriminator would falsify the others. (2) COMMIT the prediction. (3) EXECUTE / RUN one named change \u2014 bounded train-label corruption, one feature column scaled, high then low learning rate, blocked fc1 gradients, tiny hidden width, crushing Dropout, or train-mode / leaked-split evaluation \u2014 and emit WP-137 blocks: a table of hypothesis ranking, a metric of the discriminator, and a chart or table of train/val traces. (4) OBSERVE. (5) SUBMIT an explanation of any delta and an updated ranking. Architecture and optimizer stay fixed unless they are the named change. Evaluation defects must show parameters unchanged.",
+      "runner": {
+        "module": "g5.reference.M26.experiment",
+        "entrypoint": "run_failure_diagnosis",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Prediction is sealed before execute; the ranking and discriminator cite named controls; only one named change is active."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read injection points without rewriting the M25 loop",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the failure lab. Identify that the M25 loop is unchanged, that each family injects a broken object, that Chaos Day redacts defect category, and that repair identity is the prepared object not a twin healthy run. Submit an annotated system-flow artifact.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "The trace names the unchanged M25 loop, per-family injection, symptom redaction, and repair identity."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Chaos Day: one hidden catalogue defect, symptoms only",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Chaos Day selects one hidden defect (labels, learning rate, blocked gradient path, capacity, or evaluation leakage). The public report omits defect, category, learning rate, width, and Dropout. Write competing hypotheses before extra inspection. Choose one discriminating experiment and update the ranking. Prove a competing family cannot explain the same traces. Repair the broken object and rerun original evidence. Do not retrain to dodge an evaluation defect or redesign the net to dodge a label or learning-rate fault. Emit a WP-137 trace of hypothesis \u2192 discriminator \u2192 root cause \u2192 smallest repair \u2192 regression.",
+      "runner": {
+        "module": "g5.reference.M26.failure",
+        "entrypoint": "run_chaos_day",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Hidden category is not preannounced; a discriminator isolates the family; the smallest repair is on the broken objects; regression evidence is rerun."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Defend the debugging protocol without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, defend the phase-end protocol on a fresh hidden fault: ranked hypotheses, one discriminator, root-cause proof, smallest repair, and regression. Tutor surfaces stay locked. Formal engineering review is required. Emit a WP-137 metric of independent diagnosis. Language-model mechanisms stay closed.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Independent no-AI protocol names families, a discriminator, repair identity, and rollback without opening P5 language-model mechanisms."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Author a failure-triage ADR",
+      "type": "reflection_adr",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Record required sanity checks, escalation order, rollback triggers, evidence required before architecture change, owner, status, and date. This mission ends P4 / V05."
+    },
+    {
+      "id": "stage_07_gate",
+      "title": "Evaluate deep-learning diagnosis evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, named-fault experiment, Chaos Day diagnosis, and unassisted transfer against the gate contract. Issue PASSED or a targeted repair plan. Do not award completion from 'it failed to learn.'"
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.nn.failure_triage",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.nn.discriminating_experiment",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.nn.chaos_protocol",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "trace"
+      },
+      {
+        "competency_id": "comp.nn.smallest_repair",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
