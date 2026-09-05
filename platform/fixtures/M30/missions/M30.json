@@ -1,0 +1,143 @@
+{
+  "id": "M30",
+  "title": "Dissect a Transformer Block",
+  "phase": {
+    "id": "P5",
+    "title": "Foundation Models"
+  },
+  "order_index": 30,
+  "flagship_version": "V06",
+  "core_invariant": "A transformer block is attention plus residual, a declared pre-norm convention, and a position-wise feed-forward. Multi-head attention is parallel projections, not human job titles. Residual connections are matching-shape adds of stream plus sublayer. Pre-norm versus post-norm is an architecture convention, not a vibe. The FFN does not mix positions. Named checkpoints catch the first residual or norm divergence. Predict before every block action. LLM training and inference policy stay closed. Generic WP-137 trace, table, and metric blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.tf.block_dataflow",
+    "comp.tf.residual_identity",
+    "comp.tf.norm_convention",
+    "comp.tf.head_split_merge"
+  ],
+  "knowledge_nodes": [
+    "kn.m30.pre_norm_graph",
+    "kn.m30.residual_add",
+    "kn.m30.head_concat",
+    "kn.m30.position_wise_ffn"
+  ],
+  "prerequisites": [
+    "M29"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame one pre-norm teaching block",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M29 single-head trace. M30's whole is a tiny pre-norm block: LN → multi-head attention → W_O + residual, then LN → position-wise FFN + residual, on a deterministic 4-D sequence (river bank cash). Identify gate evidence: a WP-137 named-checkpoint trace, a residual-identity metric, and a head-concat table. Do not train an LLM or set a decoding policy. The generic workbench renders catalogue blocks; do not expect a named transformer page."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, run the block, and trace named checkpoints",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the declared pre-norm block. (1) PREDICT the residual identity stream+sublayer, that concat reconstructs merged heads, and that an FFN activation change leaves the attention residual untouched. (2) COMMIT the prediction. (3) EXECUTE / RUN the teaching block; emit WP-137 blocks: a trace of TRACE_CHECKPOINTS, a table of shapes (B,T,D) / (B,T,H,d_head) / (B,T,d_ff), and a metric of attn_add matching stream+sublayer. (4) OBSERVE the structured trace. (5) SUBMIT an explanation of any delta. Compare labeled post-norm on the same weights without calling either universal. Do not assign linguistic roles to heads.",
+      "runner": {
+        "module": "g5.reference.M30.experiment",
+        "entrypoint": "run_transformer_block",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Prediction is sealed before execute; the submitted explanation covers the observed trace and why later-mission mechanisms stayed closed."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read split, M29 call, merge, W_O, residual, LN, FFN",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read head split, the trusted M29 attention call, merge/concat, output projection, residual that uses the original stream in pre-norm, position-wise FFN, declared convention label. Predict shapes and the residual identity. Do not inspect an M31 trainer. Submit an annotated system-flow artifact.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "The trace names the teaching dataflow and does not open later-mission internals."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose a wrong residual branch or misplaced norm",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "One named fault: add attention to LN(x) rather than to x, or skip the pre-attention LayerNorm while still labeling the run pre_norm. Predict which named checkpoint diverges first. Execute, emit a WP-137 table of first_divergence, and repair residual addend or first-norm boundary from the broken trace. Parameters and input stay fixed. Submit prediction, discriminator, smallest repair, and regression.",
+      "runner": {
+        "module": "g5.reference.M30.failure",
+        "entrypoint": "run_controlled_failures",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Trace a block without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, draw the pre-norm diagram, compute (1,0,2)+(0,1,-1)=(1,1,1), name the wrong-placement call, and list what M29 owns inside the block. Tutor surfaces stay locked. Emit a WP-137 metric of independent residual arithmetic. Leave learner answers unfilled in the repository.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Independent no-AI reasoning names the teaching contract and a valid repair."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Author the V06 teaching-block convention ADR",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Author the block convention ADR: pre- versus post-norm, activation, head dims, checkpointed intermediates, version identity, alternatives, owner, status, and date. Do not make LLM-training claims.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a teaching-scale decision, alternatives, and a revisit trigger."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Hand M31 a block dataflow map",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Connect the accepted pre-norm block to V06: convention label, shapes, residual identities, observability points. M31 may wrap a training objective only after this map is defensible. Do not retrain the block here."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate transformer-block evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, checkpoint-trace experiment, residual/norm failure, unassisted transfer, and ADR against the gate contract. Issue PASSED or targeted repair. Do not award completion from head mythology."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.tf.block_dataflow",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.tf.residual_identity",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "trace"
+      },
+      {
+        "competency_id": "comp.tf.norm_convention",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.tf.head_split_merge",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

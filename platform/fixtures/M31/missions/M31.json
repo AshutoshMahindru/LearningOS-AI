@@ -1,0 +1,143 @@
+{
+  "id": "M31",
+  "title": "Understand LLM Training",
+  "phase": {
+    "id": "P5",
+    "title": "Foundation Models"
+  },
+  "order_index": 31,
+  "flagship_version": "V07",
+  "core_invariant": "Causal next-token prediction scores token t+1 from the prefix through t. Correct pairs are inputs = tokens[:-1] and targets = tokens[1:]. A one-position shift error can still drive training loss down. Train loss is not downstream quality. Evaluation is invalid when held-out ids appear in train (leak e02). Pretraining, adaptation/post-training, evaluation, and inference are different stages; inference is not a weight update. The teaching model is a (V, V) bigram table, not a production trainer. Predict before every training-system action. Decoding policy and RAG stay closed. Generic WP-137 chart, table, and metric blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.lm.next_token_pairs",
+    "comp.lm.train_eval_boundary",
+    "comp.lm.contamination",
+    "comp.lm.lifecycle_stages"
+  ],
+  "knowledge_nodes": [
+    "kn.m31.shift_identity",
+    "kn.m31.held_out_nll",
+    "kn.m31.leak_e02",
+    "kn.m31.stage_map"
+  ],
+  "prerequisites": [
+    "M30"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the system that produces a language model",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M30 block dataflow. M31 starts V07: tokens → window → shifted (input, target) pairs → next-token NLL → checkpoint → protected evaluation on dataset v07-teaching-corpus-1, seed 3101, teaching bigram table, tokenizer word v06.1. Identify gate evidence: a WP-137 chart of train versus held-out NLL, a table of constructed pairs, and a contamination lineage report. Do not set temperature or retrieve. The generic workbench renders catalogue blocks; do not expect a named trainer page."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, train the teaching table, and chart loss",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the tiny causal fixture. (1) PREDICT that inputs equal tokens[:-1] and targets equal tokens[1:], that train objective loss falls under seed 3101 / 60 steps, and that held-out true next-token NLL is a different claim from train loss. (2) COMMIT the prediction. (3) EXECUTE / RUN the bounded teaching simulation; emit WP-137 blocks: a line chart of train objective loss, a table of (input, target) pairs, and a metric of held-out NLL, seed, dataset_version. (4) OBSERVE the structured chart. (5) SUBMIT an explanation of any delta. Classify frozen interventions as pretraining, adaptation, evaluation, or inference. Do not download a pretrained model.",
+      "runner": {
+        "module": "g5.reference.M31.experiment",
+        "entrypoint": "run_causal_lm_teaching",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "chart",
+        "pass_criteria": "Prediction is sealed before execute; the submitted explanation covers the observed chart and why later-mission mechanisms stayed closed."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read tokenize, window, shift, batch, loss, split, checkpoint, eval",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read M27 encode, shift that uses tokens[1:], eval on the correct alignment, checkpoint split hash. Predict pairs for a short sequence and that leaked eval ids invalidate held-out evidence. Do not inspect an M32 decoder. Submit an annotated system-flow artifact.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "The trace names the teaching dataflow and does not open later-mission internals."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose a one-position shift or held-out leak",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "One named fault: train targets equal window[:-1], or copy authored eval id e02 into train_ids while the eval formula stays unchanged. Predict that training loss can still fall. Execute, emit a WP-137 table of first_divergence (pairs versus tokens[1:], or train ∩ eval), and repair alignment or authored train membership from the broken trace. Tokenizer, seed, and steps stay fixed. Submit prediction, discriminator, smallest repair, and regression.",
+      "runner": {
+        "module": "g5.reference.M31.failure",
+        "entrypoint": "run_controlled_failures",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Map pairs and stages without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, construct pairs for (10, 20, 30, 40), compute a tiny NLL, map pretraining/adaptation/evaluation/inference, and call a shift or leak. Low train loss is not quality. Tutor surfaces stay locked. Emit a WP-137 metric of independent pair arithmetic. Leave learner answers unfilled in the repository.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Independent no-AI reasoning names the teaching contract and a valid repair."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Author the V07 training-data and evaluation provenance ADR",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Author the training provenance ADR: dataset version, split lineage, checkpoint identity, adaptation stage, audit metadata, alternatives, owner, status, and date. Do not make decoding claims.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a teaching-scale decision, alternatives, and a revisit trigger."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Start V07 from a stage-aware checkpoint",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Connect the accepted teaching run to V07: dataset version, split hash, objective, adaptation stage, seed, inference_ready. M32 may decode only after training-time versus inference-time is explicit. Do not retrain the M30 block."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate LLM-training evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, loss-chart experiment, shift/leak failure, unassisted transfer, and ADR against the gate contract. Issue PASSED or targeted repair. Do not award completion from train loss alone."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.lm.next_token_pairs",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.lm.train_eval_boundary",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "chart"
+      },
+      {
+        "competency_id": "comp.lm.contamination",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.lm.lifecycle_stages",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

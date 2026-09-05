@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M30",
+  "version": "5.0.0",
+  "title": "G5 M30 reference package",
+  "description": "Reference M30 transformer-block dataflow on the generic runtime. WP-136 mission id is M30. Package id is g5.reference.M30. Stages are catalogue compositions; WP-137 trace, table, and metric blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M30",
+      "path": "missions/M30.json"
+    }
+  ],
+  "digest": "faf72c520d6a672cf6e3185a08c1736f669f01253976c08b6b0c8a84286d38e2"
+}

@@ -1,0 +1,143 @@
+{
+  "id": "M27",
+  "title": "Turn Text into Tokens",
+  "phase": {
+    "id": "P5",
+    "title": "Foundation Models"
+  },
+  "order_index": 27,
+  "flagship_version": "V06",
+  "core_invariant": "Models consume token pieces mapped to integer IDs, not English words. A token ID is a frozen-vocabulary index, not a meaning. Specials [PAD] [UNK] [BOS] [EOS] consume the context budget. Padding preserves order and records a mask; right-truncation drops a named suffix. Context must be counted in tokens, including specials. Word lookup and a tiny bundled BPE can disagree on the same corpus without either being universally correct. Predict before every tokenization action. Embeddings, attention, and transformer blocks stay closed. Generic WP-137 table, metric, and artifact blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.tok.pieces_and_ids",
+    "comp.tok.specials_and_budget",
+    "comp.tok.scheme_comparison",
+    "comp.tok.budget_failure_repair"
+  ],
+  "knowledge_nodes": [
+    "kn.m27.tokenizer_identity",
+    "kn.m27.specials_pad_truncate",
+    "kn.m27.word_vs_bpe",
+    "kn.m27.token_budget"
+  ],
+  "prerequisites": [
+    "M03"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the text-to-token boundary",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M03 Python handoff: strings, lists, and functions, with no tokenizer assumed. M27 starts V06 Language Representation. The observable whole is text → normalize → pieces → IDs → specials → pad/truncate → padding mask on the bundled v06-teaching-tokenizer version v06.1 (word and tiny BPE, specials [PAD] [UNK] [BOS] [EOS], right-pad, right-truncate). Identify gate evidence: a WP-137 table of pieces/IDs/masks, a metric of token length including specials, and a repaired word/character-budget failure. Do not attach embeddings, score attention, or stack a transformer block. The generic Mission Player and Workbench render catalogue block types; do not expect a named-mission tokenizer page."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, tokenize, and table one reference encode",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the bundled teaching tokenizer. (1) PREDICT piece counts for 'the cat sat on the mat' under word lookup and BPE, whether [BOS]/[EOS] increase effective length, and which suffix a tight max_tokens drops. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the seeded encode; emit WP-137 blocks: a table of pieces, IDs, specials, pad IDs and padding mask; a metric of content_length, effective_length, tokenizer_version v06.1; and an artifact of word UNK versus BPE pieces on a rare string. (4) OBSERVE the structured table. (5) SUBMIT an explanation of any delta. Vary whitespace, punctuation, or casing one at a time. Compare word and BPE on the same corpus without claiming a universal winner. Do not download a production tokenizer and do not open embedding tables.",
+      "runner": {
+        "module": "g5.reference.M27.experiment",
+        "entrypoint": "run_tokenization",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Prediction is sealed before execute; the submitted explanation covers the observed table and why later-mission mechanisms stayed closed."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read encode, specials, pad/truncate, identity",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read the text-to-ID contract: normalize, pretokens, scheme-specific pieces, optional [BOS]/[EOS], right-truncation of content so specials still fit max_length, right-padding with [PAD] and a padding mask, decode back to normalized text, tokenizer name/version and downloaded=false. Predict max_length=4 with specials, whether extra spaces survive normalization, and whether a word-budget heuristic can report fit while BPE still drops a suffix. Do not inspect embedding tables, attention scores, or a transformer block. Submit an annotated system-flow artifact.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "The trace names the teaching dataflow and does not open later-mission internals."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose a word/character budget that silently truncates",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "One named fault: budget context with words or characters, then encode with a token limit. Predict that a critical suffix such as approve_refund disappears after BPE even though the heuristic said the text fit. Execute, emit a WP-137 table of heuristic_fit versus measured token length versus dropped suffix, and repair by restoring budget_unit=tokens without switching schemes or deleting specials. Tokenizer, text, and max_tokens stay fixed. Submit prediction, named defect, preserved invariants, observed decoded prefix, root cause, smallest repair, and repaired rerun.",
+      "runner": {
+        "module": "g5.reference.M27.failure",
+        "entrypoint": "run_controlled_failures",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Defend a token trace without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, tokenize a fresh in-vocab sentence that is not 'the cat sat on the mat', decompose one rare identifier, compute effective length including specials, and diagnose a missing trailing instruction as token truncation rather than a word budget. Tutor, hints, and prior-answer surfaces stay locked. Emit a WP-137 metric of independent token-budget reasoning. Leave learner answers unfilled in the repository.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Independent no-AI reasoning names the teaching contract and a valid repair."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Author the V06 tokenizer, version, and context-budget ADR",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Author the V06 teaching-tokenizer ADR: tokenizer identity and version, specials and truncation policy, logging, migration triggers before M28 attaches vectors, alternatives (canonical BPE vs word vs character budgets), owner, status, and date. Do not claim the teaching tokenizer is a production LLM tokenizer.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a teaching-scale decision, alternatives, and a revisit trigger."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Start V06 from a defensible token boundary",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Connect the accepted encode to V06: text → pieces → ids with named tokenizer v06-teaching-word or v06-teaching-bpe, version v06.1, specials, right-pad, right-truncate, and a padding mask. M28 may attach vectors only after tokens versus words, specials counting toward length, and a repaired token-budget defect are defensible. Do not invent meaning for IDs."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate tokenization evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, tokenization-table experiment, controlled-failure diagnosis, unassisted transfer, and ADR against the mission gate contract. Issue PASSED or a targeted repair plan. Do not award completion from a downloaded tokenizer or from opened embeddings."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.tok.pieces_and_ids",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.tok.specials_and_budget",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.tok.scheme_comparison",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.tok.budget_failure_repair",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

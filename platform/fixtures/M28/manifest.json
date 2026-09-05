@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M28",
+  "version": "5.0.0",
+  "title": "G5 M28 reference package",
+  "description": "Reference M28 embedding retrieval on the generic runtime. WP-136 mission id is M28. Package id is g5.reference.M28. Stages are catalogue compositions; WP-137 metric, table, and artifact blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M28",
+      "path": "missions/M28.json"
+    }
+  ],
+  "digest": "67bd4545f61a5af95e980ca9fdb6fdf130ace3e4b9fe363780118d4e46ff5846"
+}

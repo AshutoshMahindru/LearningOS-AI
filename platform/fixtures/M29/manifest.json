@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M29",
+  "version": "5.0.0",
+  "title": "G5 M29 reference package",
+  "description": "Reference M29 single-head attention on the generic runtime. WP-136 mission id is M29. Package id is g5.reference.M29. Stages are catalogue compositions; WP-137 table, metric, and trace blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M29",
+      "path": "missions/M29.json"
+    }
+  ],
+  "digest": "8f689c7dbb0ca5d60549338cb5800cd7df871c91f8cd715dfb1e0e6522bacff2"
+}
