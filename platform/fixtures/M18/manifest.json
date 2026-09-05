@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M18",
+  "version": "6.0.0",
+  "title": "G6 M18 reference package",
+  "description": "Reference M18 statistical inference, intervals, and multiple-comparison failure on the generic runtime. WP-136 mission id is M18. Package id is g6.reference.M18. Stages are catalogue compositions; WP-137 metric and table blocks render on the generic workbench. No custom frontend. No eager pandas: the package is JSON-only and runtime tests use the standard library.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M18",
+      "path": "missions/M18.json"
+    }
+  ],
+  "digest": "94b8eb269a75984ba85ef21cbdba5a6d1f16bc30e2257b3bdf03110ffb89a2a8"
+}

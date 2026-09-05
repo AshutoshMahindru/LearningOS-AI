@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M15",
+  "version": "6.0.0",
+  "title": "G6 M15 reference package",
+  "description": "Reference M15 vectors, similarity, and metric disagreement on the generic runtime. WP-136 mission id is M15. Package id is g6.reference.M15. Stages are catalogue compositions; WP-137 metric and table blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M15",
+      "path": "missions/M15.json"
+    }
+  ],
+  "digest": "20e94e3e21bc76ff342490fb9c0e9589d8e67701b30c57e6d1b19ce16277c93c"
+}

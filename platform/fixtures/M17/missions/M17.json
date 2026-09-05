@@ -1,0 +1,138 @@
+{
+  "id": "M17",
+  "title": "Quantify Uncertainty",
+  "phase": {
+    "id": "P3",
+    "title": "Mathematical Foundations on Demand"
+  },
+  "order_index": 17,
+  "flagship_version": "V04",
+  "core_invariant": "Probability is a relation between an event, a reference population, and a denominator. Sensitivity is not the probability of the condition given a positive result. Predict frequencies before simulating. Calibration compares predicted probabilities with observed rates by group, not by calling a single case wrong.",
+  "competencies": [
+    "comp.prob.frequency",
+    "comp.prob.conditional",
+    "comp.prob.base_rate",
+    "comp.prob.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m17.empirical_frequency",
+    "kn.m17.conditional_probability",
+    "kn.m17.base_rate_neglect",
+    "kn.m17.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M09"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame uncertainty from model outputs",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M17 invariant: reason with probability through model outputs and simulations before formalism. Identify gate evidence: prediction-before-experiment logs, frequency simulations, a complete screening count table, base-rate-neglect diagnosis, an independence check, an expected-loss decision, calibration by group, and no-AI transfer. Generic WP-137 table and metric blocks; no custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Trace denominators in a screening table",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read a screening-count helper. For P(positive | condition) and P(condition | positive), name the numerator, denominator, and reference population in words before symbols. Predict how lowering the base rate moves the posterior while sensitivity stays fixed.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names both conditional directions and their distinct denominators."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict the posterior, then count",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT the observable outcome before any numbers appear. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the measurement. (4) OBSERVE structured WP-137 blocks. (5) SUBMIT / EXPLAIN any delta between prediction and observation. Population 10000, base rate 1%, sensitivity 90%, specificity 91%. Predict P(condition | positive) before building counts. Emit a WP-137 metric of tp/fp/fn/tn and posterior, plus a table of the four cells. Compare the failed 90% claim with the count-derived posterior.",
+      "runner": {
+        "module": "g6.reference.M17.experiment",
+        "entrypoint": "run_screening_counts",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; posterior is far from sensitivity; counts are complete."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose base-rate neglect",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Seeded claim: the test is 90% sensitive, so a positive result means a 90% chance of the condition. Root cause is using sensitivity as the posterior. Do not add a second bug. State both conditionals in words, record 1%/90%/91%, predict a 10000-person table, enumerate TP/FP/FN/TN, name the posterior denominator, vary only the base rate, and add a guardrail that requires the reference population to be named.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Diagnosis includes the failed claim, counts, repaired posterior, and a base-rate counterfactual."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Fresh counts without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Without AI-generated code, use the fresh operations scenario: 200 cases, 40 scored 0.50 with 18 events, 160 scored 0.10 with 8 events; acting costs 8, missing an event costs 50. Predict the base rate, compute group frequencies, P(0.50 group | event), independence, calibration gaps, and expected-loss actions. Change one cost and predict which action moves.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Fresh no-AI calculations name denominators, calibration, expected loss, and a cost-change prediction."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Defend a threshold policy",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete the threshold ADR: when to act on a probability, how costs enter, and what calibration evidence would force a revisit. Reject treating a single probability threshold as independent of base rate and loss.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR connects threshold, costs, and base rate, and names a revisit condition."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Connect probability instruments to V04",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M17 supplies V04 uncertainty instruments: events, empirical frequencies, named denominators, conditional probabilities, calibration tables, expected loss, and guardrails against base-rate neglect. Later statistical and optimization layers reuse predict \u2192 measure \u2192 compare \u2192 diagnose."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate uncertainty evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, experiment, controlled-failure, transfer, and ADR evidence. Issue PASSED or a targeted repair plan. A formula list without interpretation does not pass."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.prob.frequency",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.prob.conditional",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.prob.base_rate",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.prob.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

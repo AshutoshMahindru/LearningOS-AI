@@ -1,0 +1,138 @@
+{
+  "id": "M15",
+  "title": "Represent Meaning and Data as Vectors",
+  "phase": {
+    "id": "P3",
+    "title": "Mathematical Foundations on Demand"
+  },
+  "order_index": 15,
+  "flagship_version": "V04",
+  "core_invariant": "A vector is an operational representation with named dimensions. Similarity is produced by a representation, preprocessing choice, and metric \u2014 not an intrinsic property of two records. Predict before measuring. Diagnose cosine/Euclidean disagreement from direction, magnitude, and normalization. Transfer without assistance. Prove competence with evidence.",
+  "competencies": [
+    "comp.vec.representation",
+    "comp.vec.operations",
+    "comp.vec.similarity",
+    "comp.vec.metric_choice"
+  ],
+  "knowledge_nodes": [
+    "kn.m15.dimension_labels",
+    "kn.m15.vector_ops",
+    "kn.m15.metric_disagreement",
+    "kn.m15.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M05"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame vectors as named representations",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M15 invariant: treat a vector as an operational representation before treating it as algebra. Numeric features, positions, directions, and precomputed semantic embeddings all keep dimension labels. Identify gate evidence: prediction logs, addition/subtraction checks, norm/dot/cosine/Euclidean measurements, a cosine-versus-Euclidean disagreement diagnosis, a zero-vector normalization rejection, a metric ADR, and a no-AI transfer ranking. Generic WP-137 metric and table blocks carry measurements; there is no custom frontend."
+    },
+    {
+      "id": "stage_02_code_reading",
+      "title": "Trace ranking, ties, and rejected inputs",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read a rank_vectors implementation without running it. Record how query and candidates are validated, which metrics rank high-to-low versus low-to-high, how a deterministic tie is resolved, where magnitude affects the result, which error is raised for an unsupported metric, and one input that must be rejected. Trace two candidates by hand and predict the returned order before execution.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace names ranking direction, tie policy, magnitude role, and a rejected input."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, then measure cosine versus Euclidean",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the generic runtime. (1) PREDICT the observable outcome before any numbers appear. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the measurement. (4) OBSERVE structured WP-137 blocks. (5) SUBMIT / EXPLAIN any delta between prediction and observation. Use the disagreement fixture: query [1, 0], a far same-direction candidate, and a nearby mixed-direction candidate. Predict both winners, then emit a WP-137 metric of cosine/euclidean winners plus a table of scores. Do not declare one metric universally correct.",
+      "runner": {
+        "module": "g6.reference.M15.experiment",
+        "entrypoint": "run_metric_disagreement",
+        "timeout_sec": 15
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; cosine and Euclidean select different winners; explanation names direction versus closeness."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose metric disagreement and raw-dot-as-cosine",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "The seeded disagreement is deliberate: cosine should select the direction match; Euclidean should select the nearby point. A second fault treats an unnormalized dot product as cosine. Predict both winners, compute norms/dots/cosines/distances, verify ranking directions, name the intended invariant, reproduce the normalization mistake, repair the measurement pipeline not the fixture, and record the metric decision. A report that merely says cosine is better fails.",
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Diagnosis connects winners to representation, magnitude, normalization, and the intended invariant."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Fresh ranking without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Without AI-generated code, create a fresh two- or three-dimensional query and at least three named candidates. Before calculating: label every dimension, predict cosine and Euclidean winners, state whether magnitude should carry meaning, and choose a metric with its invariant. Then calculate both rankings, check the zero-vector normalization boundary, and explain disagreement.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Fresh no-AI ranking with labelled dimensions, sealed predictions, both metrics, and a defended choice."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Choose a V04 similarity contract",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Complete an ADR for the V04 measurement contract. The decision is which invariant this measurement must preserve: direction, absolute closeness, or magnitude-sensitive alignment. Evaluate cosine, Euclidean, Euclidean-on-normalized, and raw dot product. State representation, preprocessing, metric, ranking direction, zero-vector policy, and tie policy. Reject at least one option with a consequence.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names an invariant, not a universal best metric, and records a revisit condition."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Connect vector instruments to V04",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M15 supplies V04's first mathematical instruments: named dimensions, magnitudes, normalized directions, dot products, cosine scores, Euclidean distances, deterministic rankings, and explicit metric disagreement. Every measurement retains representation, preprocessing, and metric context. This is not a vector database and needs no embedding API."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate vector evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, experiment, controlled-failure, transfer, and ADR evidence against the gate contract. Issue PASSED or a targeted repair plan. Do not award completion from a copied fixture ranking."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.vec.representation",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.vec.similarity",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.vec.operations",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.vec.metric_choice",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
