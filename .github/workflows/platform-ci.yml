@@ -10,6 +10,7 @@ on:
       - integration/v3-wp400
       - integration/v3-g5-reference
       - integration/v3-g6-migration
+      - integration/v3-g7-release
 
 permissions:
   contents: read
@@ -40,7 +41,7 @@ jobs:
       - name: Platform integration scenario
         env:
           PYTHONPATH: platform/backend
-        run: python -m pytest --import-mode=importlib -q tests/platform/reference tests/platform/integration tests/platform/authoring tests/platform/flagship
+        run: python -m pytest --import-mode=importlib -q tests/platform/g7 tests/platform/reference tests/platform/integration tests/platform/authoring tests/platform/flagship
 
   frontend:
     runs-on: ubuntu-latest
@@ -77,7 +78,7 @@ jobs:
       - name: Repository contract validation
         run: python tools/validate_repo.py
       - name: Platform Python static compile
-        run: python -m compileall -q platform/backend/app platform/worker tools/platform tools/authoring
+        run: python -m compileall -q platform/backend/app platform/worker tools/platform tools/desktop tools/authoring
 
   tooling:
     runs-on: ubuntu-latest

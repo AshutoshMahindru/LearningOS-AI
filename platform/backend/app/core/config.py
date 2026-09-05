@@ -75,13 +75,17 @@ def ensure_data_layout(settings: Settings | None = None) -> Settings:
 def public_config() -> dict[str, str]:
     """Non-secret runtime configuration. Never includes provider keys or tokens."""
     settings = get_settings()
-    return {
+    payload = {
         "data_home": str(settings.data_home),
         "database_path": str(settings.database_path),
         "worker_socket": str(settings.worker_socket),
         "bind_host": settings.bind_host,
         "api_prefix": settings.api_prefix,
     }
+    from app.core.secrets import public_payload
+
+    cleaned = public_payload(payload)
+    return {str(key): str(value) for key, value in cleaned.items()}
 
 
 def _interpret_worker_health(result: object) -> bool | None:

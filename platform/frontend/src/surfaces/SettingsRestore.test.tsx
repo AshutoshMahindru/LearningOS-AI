@@ -80,4 +80,26 @@ describe('Settings restore', () => {
 
     expect(await screen.findByText(/restore requested into \/tmp\/clean-home/i)).toBeInTheDocument();
   });
+
+  it('labels settings fields and tabs through backup/restore', async () => {
+    const user = userEvent.setup();
+    render(<SettingsSurface />);
+
+    expect(await screen.findByRole('heading', { name: 'Settings' })).toBeInTheDocument();
+    expect(screen.getByLabelText('Package directory')).toBeInTheDocument();
+    const backupField = screen.getByLabelText('Backup id or path');
+    const destField = screen.getByLabelText(/destination home/i);
+    expect(destField).toHaveAccessibleDescription(/dest_home/i);
+
+    const createBackup = screen.getByRole('button', { name: 'Create backup' });
+    createBackup.focus();
+    await user.tab();
+    expect(backupField).toHaveFocus();
+    await user.keyboard('/tmp/backup.tar.gz');
+    await user.tab();
+    expect(destField).toHaveFocus();
+    await user.keyboard('/tmp/clean-home');
+    await user.tab();
+    expect(screen.getByRole('button', { name: 'Restore' })).toHaveFocus();
+  });
 });

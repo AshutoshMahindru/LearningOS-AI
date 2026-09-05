@@ -141,7 +141,7 @@ export function ArtifactsSurface() {
             <input
               id="artifact-hash"
               name="artifactHash"
-              className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm"
+              className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm text-textPrimary"
               value={lookupHash}
               onChange={(event) => setLookupHash(event.target.value)}
             />

@@ -1,41 +1,25 @@
-# Runtime Quickstart
+# Runtime quickstart
 
-The runtime is deliberately local-first and standard-library-first.
+This is the product a learner launches: the local V3 shell. Jupyter is not required. The core loop is offline.
 
-## Install
-
-```bash
-python -m pip install -e .
-```
-
-## Start a mission
+## Launch
 
 ```bash
-learning-os start M01
+python3 tools/desktop/launch.py
 ```
 
-## Record evidence
+Equivalent launch: `python3 tools/platform/install.py --launch`. Runtime-only bootstrap: `python3 tools/platform/install.py`. Desktop helpers: `tools/desktop/`. Open the URL printed at launch (typically `http://127.0.0.1:5173`).
 
-```bash
-learning-os evidence M01 \
-  --type artifact \
-  --summary "My AI/ML system map and explanation" \
-  --competency "system mapping" \
-  --no-ai --transfer --explanation
-```
+Developers on a source checkout may use `./start.sh` instead. See `tools/platform/README.md`.
 
-## Run the gate
+## Data
 
-```bash
-learning-os gate M01
-```
+Learner state lives under `LEARNINGOS_HOME` (default `~/.learningos`), never in the Git worktree.
 
-A PASS requires at least one deliverable plus explanation, unseen transfer, and no-AI evidence. PARTIAL triggers targeted repair. FAIL keeps the mission active.
+Restore requires a clean empty `dest_home`. The live data home is not a valid restore target.
 
-## Ask the runtime what to do next
+## Tutor
 
-```bash
-learning-os next
-```
+Default chat response is HTTP 501 until a provider is configured on the local API. There is no in-browser model client.
 
-The current engine returns ADVANCE, CONTINUE, ZOOM_IN, or COMPLETE. Later tutor integration will enrich these decisions without changing the evidence contract.
+Full learner notes: [LEARNER.md](LEARNER.md).

@@ -1,0 +1,10 @@
+{
+  "learner_id": "default",
+  "display_name": "V2 Prototype Learner",
+  "current_mission": "M02",
+  "mission_status": {
+    "M01": "PASSED",
+    "M02": "IN_PROGRESS"
+  },
+  "blockers": []
+}

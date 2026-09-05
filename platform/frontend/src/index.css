@@ -150,6 +150,7 @@
     inset: 0;
     border: 0;
     background: rgb(2 6 23 / 0.55);
+    cursor: pointer;
   }
 
   .diagnostics-panel {

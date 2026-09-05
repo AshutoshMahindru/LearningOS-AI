@@ -1,0 +1,9 @@
+{
+  "learner_id": "bob",
+  "display_name": "Bob",
+  "current_mission": null,
+  "mission_status": {
+    "M03": "PASSED"
+  },
+  "blockers": []
+}

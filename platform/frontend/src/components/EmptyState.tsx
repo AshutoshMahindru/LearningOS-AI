@@ -15,6 +15,8 @@ export function EmptyState({ title, message, action, className }: EmptyStateProp
         'flex flex-col items-start gap-3 rounded-lg border border-dashed border-border bg-elevated/40 p-8',
         className,
       )}
+      role="region"
+      aria-label={title}
       data-testid="empty-state"
     >
       <h2 className="text-lg font-semibold">{title}</h2>

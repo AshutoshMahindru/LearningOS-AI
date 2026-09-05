@@ -147,7 +147,9 @@ export function SettingsSurface() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
-        <h1 className="text-3xl font-black tracking-tight">Settings</h1>
+        <h1 id="settings-heading" className="text-3xl font-black tracking-tight">
+          Settings
+        </h1>
         <p className="mt-2 text-textSecondary">
           Local health, version, and non-secret configuration. Provider credentials are never displayed.
         </p>
@@ -241,9 +243,11 @@ export function SettingsSurface() {
           </label>
           <input
             id="package-dir"
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm"
+            className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm text-textPrimary"
             value={packageDir}
             onChange={(event) => setPackageDir(event.target.value)}
+            autoComplete="off"
+            spellCheck={false}
           />
           <Button type="submit" variant="secondary" disabled={busy || !packageDir.trim()}>
             Load package
@@ -268,22 +272,28 @@ export function SettingsSurface() {
           </label>
           <input
             id="restore-ref"
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm"
+            className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm text-textPrimary"
             value={restoreValue}
             onChange={(event) => setRestoreValue(event.target.value)}
+            autoComplete="off"
+            spellCheck={false}
+            required
           />
           <label htmlFor="restore-dest-home" className="block text-sm font-medium">
             Destination home (empty directory)
           </label>
           <input
             id="restore-dest-home"
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm"
+            className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm text-textPrimary"
             value={destHome}
             onChange={(event) => setDestHome(event.target.value)}
             placeholder="/tmp/learningos-restore"
             autoComplete="off"
+            spellCheck={false}
+            required
+            aria-describedby="restore-dest-home-help"
           />
-          <p className="text-xs text-textSecondary">
+          <p id="restore-dest-home-help" className="text-xs text-textSecondary">
             Restore unpacks into a clean <code>dest_home</code>. The live data home
             {config?.data_home ? ` (${config.data_home})` : ''} already contains the database, so it
             cannot be the target.

@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useId, useState, type FormEvent } from 'react';
 import { Button } from '../components/Button';
 import { StatusBanner } from '../components/StatusBanner';
 import { BlockList } from '../workbench/BlockRenderer';
@@ -30,18 +30,22 @@ function ResultBlock({ title, value }: { title: string; value: unknown }) {
 }
 
 function NotesForm({
+  id,
   label,
   submitLabel,
   busy,
   disabled,
   onSubmit,
 }: {
+  id?: string;
   label: string;
   submitLabel: string;
   busy: boolean;
   disabled?: boolean;
   onSubmit: (explanation: string) => void;
 }) {
+  const generatedId = useId();
+  const fieldId = id ?? `stage-notes-${generatedId}`;
   const [notes, setNotes] = useState('');
   return (
     <form
@@ -51,12 +55,12 @@ function NotesForm({
         onSubmit(notes.trim());
       }}
     >
-      <label className="block text-sm font-medium" htmlFor="stage-notes">
+      <label className="block text-sm font-medium" htmlFor={fieldId}>
         {label}
       </label>
       <textarea
-        id="stage-notes"
-        className="min-h-32 w-full rounded-md border border-border bg-bg px-3 py-2"
+        id={fieldId}
+        className="min-h-32 w-full rounded-md border border-border bg-bg px-3 py-2 text-textPrimary"
         value={notes}
         onChange={(event) => setNotes(event.target.value)}
       />
@@ -72,6 +76,7 @@ function EvidenceStage(props: StageRenderProps & { notesLabel: string }) {
   return (
     <StageFrame stage={stage}>
       <NotesForm
+        id={`${stage.id}-notes`}
         label={notesLabel}
         submitLabel="Submit stage"
         busy={busy === 'submit'}
@@ -105,6 +110,7 @@ export function OrientationStage(props: StageRenderProps) {
         </ul>
       ) : null}
       <NotesForm
+        id={`${props.stage.id}-notes`}
         label="Orientation notes"
         submitLabel="Submit stage"
         busy={props.busy === 'submit'}
@@ -144,6 +150,7 @@ export function TransferAssessmentStage(props: StageRenderProps) {
         Assistance is disabled for this stage. Submit unassisted evidence.
       </StatusBanner>
       <NotesForm
+        id={`${props.stage.id}-notes`}
         label="Transfer solution"
         submitLabel="Submit transfer"
         busy={props.busy === 'submit'}
@@ -187,7 +194,7 @@ export function ReflectionAdrStage(props: StageRenderProps) {
         </label>
         <input
           id="adr-title"
-          className="w-full rounded-md border border-border bg-bg px-3 py-2"
+          className="w-full rounded-md border border-border bg-bg px-3 py-2 text-textPrimary"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
         />
@@ -196,7 +203,7 @@ export function ReflectionAdrStage(props: StageRenderProps) {
         </label>
         <textarea
           id="adr-context"
-          className="min-h-24 w-full rounded-md border border-border bg-bg px-3 py-2"
+          className="min-h-24 w-full rounded-md border border-border bg-bg px-3 py-2 text-textPrimary"
           value={context}
           onChange={(event) => setContext(event.target.value)}
         />
@@ -205,7 +212,7 @@ export function ReflectionAdrStage(props: StageRenderProps) {
         </label>
         <textarea
           id="adr-decision"
-          className="min-h-24 w-full rounded-md border border-border bg-bg px-3 py-2"
+          className="min-h-24 w-full rounded-md border border-border bg-bg px-3 py-2 text-textPrimary"
           value={decision}
           onChange={(event) => setDecision(event.target.value)}
         />
@@ -214,7 +221,7 @@ export function ReflectionAdrStage(props: StageRenderProps) {
         </label>
         <textarea
           id="adr-consequences"
-          className="min-h-24 w-full rounded-md border border-border bg-bg px-3 py-2"
+          className="min-h-24 w-full rounded-md border border-border bg-bg px-3 py-2 text-textPrimary"
           value={consequences}
           onChange={(event) => setConsequences(event.target.value)}
         />
@@ -290,7 +297,7 @@ export function ExperimentStage(props: StageRenderProps) {
         </label>
         <textarea
           id="hypothesis"
-          className="min-h-24 w-full rounded-md border border-border bg-bg px-3 py-2"
+          className="min-h-24 w-full rounded-md border border-border bg-bg px-3 py-2 text-textPrimary"
           value={hypothesis}
           onChange={(event) => setHypothesis(event.target.value)}
           disabled={sealed}
@@ -300,7 +307,7 @@ export function ExperimentStage(props: StageRenderProps) {
         </label>
         <textarea
           id="expected-values"
-          className="min-h-20 w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm"
+          className="min-h-20 w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm text-textPrimary"
           value={expectedRaw}
           onChange={(event) => setExpectedRaw(event.target.value)}
           disabled={sealed}
@@ -319,7 +326,7 @@ export function ExperimentStage(props: StageRenderProps) {
         </label>
         <textarea
           id="experiment-code"
-          className="min-h-24 w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm"
+          className="min-h-24 w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm text-textPrimary"
           value={code}
           onChange={(event) => setCode(event.target.value)}
           disabled={!sealed}
@@ -329,7 +336,7 @@ export function ExperimentStage(props: StageRenderProps) {
         </label>
         <textarea
           id="experiment-parameters"
-          className="min-h-20 w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm"
+          className="min-h-20 w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm text-textPrimary"
           value={parametersRaw}
           onChange={(event) => setParametersRaw(event.target.value)}
           disabled={!sealed}
@@ -358,7 +365,7 @@ export function ExperimentStage(props: StageRenderProps) {
         </label>
         <textarea
           id="experiment-explain"
-          className="min-h-24 w-full rounded-md border border-border bg-bg px-3 py-2"
+          className="min-h-24 w-full rounded-md border border-border bg-bg px-3 py-2 text-textPrimary"
           value={explanation}
           onChange={(event) => setExplanation(event.target.value)}
         />

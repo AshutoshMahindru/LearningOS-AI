@@ -8,6 +8,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from app.core.secrets import IntegrityError, verify_package_checksums
+
 G3_FIXTURE_PACKAGE_ID = "g3.fixture.curriculum"
 G3_FIXTURE_VERSION = "3.0.0"
 
@@ -55,32 +57,6 @@ def compute_payload_digest(package_dir: Path, mission_relpaths: list[str]) -> st
         hasher.update(canonical_json_bytes(payload))
         hasher.update(b"\n")
     return hasher.hexdigest()
-
-
-def _sha256_file(path: Path) -> str:
-    hasher = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(65536), b""):
-            hasher.update(chunk)
-    return hasher.hexdigest()
-
-
-def _parse_sha256sums(path: Path) -> dict[str, str]:
-    entries: dict[str, str] = {}
-    for line_no, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
-        line = raw.strip()
-        if not line or line.startswith("#"):
-            continue
-        parts = line.split(None, 1)
-        if len(parts) != 2:
-            raise CurriculumPackageError(
-                f"Invalid SHA256SUMS line {line_no}",
-                code="BAD_DIGEST",
-                details={"path": str(path), "line": line_no},
-            )
-        digest, rel = parts
-        entries[rel.strip()] = digest.strip()
-    return entries
 
 
 def _mission_relpath(item: Any) -> tuple[str, str]:
@@ -186,24 +162,10 @@ class MissionLoader:
             mission_ids.append(mission_id)
             mission_relpaths.append(relpath)
 
-        checksums_path = package_dir / "SHA256SUMS"
-        if checksums_path.is_file():
-            listed = _parse_sha256sums(checksums_path)
-            for rel, expected in listed.items():
-                file_path = package_dir / rel
-                if not file_path.is_file():
-                    raise CurriculumPackageError(
-                        f"SHA256SUMS references missing file {rel}",
-                        code="BAD_DIGEST",
-                        details={"path": rel},
-                    )
-                actual = _sha256_file(file_path)
-                if actual != expected:
-                    raise CurriculumPackageError(
-                        f"Checksum mismatch for {rel}",
-                        code="BAD_DIGEST",
-                        details={"path": rel, "expected": expected, "actual": actual},
-                    )
+        try:
+            verify_package_checksums(package_dir, required=False)
+        except IntegrityError as exc:
+            raise CurriculumPackageError(str(exc), code=exc.code, details=exc.details) from exc
 
         for rel in mission_relpaths:
             if not (package_dir / rel).is_file():

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { clearDiagnostics, subscribeDiagnostics, type DiagnosticRecord } from '../api/diagnostics';
 import { Button } from './Button';
 
@@ -21,8 +21,13 @@ function pretty(value: unknown): string {
   }
 }
 
+const FOCUSABLE =
+  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export function DiagnosticsDrawer({ open, onClose }: DiagnosticsDrawerProps) {
   const [entries, setEntries] = useState<DiagnosticRecord[]>([]);
+  const panelRef = useRef<HTMLElement>(null);
+  const previouslyFocused = useRef<HTMLElement | null>(null);
 
   useEffect(() => subscribeDiagnostics(setEntries), []);
 
@@ -30,13 +35,50 @@ export function DiagnosticsDrawer({ open, onClose }: DiagnosticsDrawerProps) {
     if (!open) {
       return;
     }
+    previouslyFocused.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const focusable = (): HTMLElement[] => {
+      const root = panelRef.current;
+      if (!root) {
+        return [];
+      }
+      return Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+        (node) => node.getAttribute('aria-hidden') !== 'true',
+      );
+    };
+    const frame = window.requestAnimationFrame(() => {
+      const nodes = focusable();
+      (nodes[0] ?? panelRef.current)?.focus();
+    });
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        event.preventDefault();
         onClose();
+        return;
+      }
+      if (event.key !== 'Tab') {
+        return;
+      }
+      const nodes = focusable();
+      if (nodes.length === 0) {
+        event.preventDefault();
+        return;
+      }
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener('keydown', onKey);
+      previouslyFocused.current?.focus();
+    };
   }, [open, onClose]);
 
   if (!open) {
@@ -45,11 +87,21 @@ export function DiagnosticsDrawer({ open, onClose }: DiagnosticsDrawerProps) {
 
   return (
     <div className="diagnostics-root" data-testid="diagnostics-drawer">
-      <button type="button" className="diagnostics-backdrop" aria-label="Close diagnostics" onClick={onClose} />
-      <aside className="diagnostics-panel" aria-label="Request diagnostics">
+      <div className="diagnostics-backdrop" onClick={onClose} />
+      <aside
+        ref={panelRef}
+        id="diagnostics-panel"
+        className="diagnostics-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="diagnostics-title"
+        tabIndex={-1}
+      >
         <div className="mb-4 flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-xl font-bold">Diagnostics</h2>
+            <h2 id="diagnostics-title" className="text-xl font-bold">
+              Diagnostics
+            </h2>
             <p className="text-sm text-textSecondary">
               Local API request and response log. Tokens and credentials are redacted.
             </p>

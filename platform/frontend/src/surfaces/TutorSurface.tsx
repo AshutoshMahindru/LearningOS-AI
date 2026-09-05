@@ -128,7 +128,9 @@ export function TutorSurface() {
   return (
     <div className="mx-auto max-w-3xl space-y-6" data-testid="tutor-surface">
       <div>
-        <h1 className="text-3xl font-black tracking-tight">Tutor</h1>
+        <h1 id="tutor-heading" className="text-3xl font-black tracking-tight">
+          Tutor
+        </h1>
         <p className="mt-2 text-textSecondary">
           Role-based Socratic guidance for the active stage. Assistance policy is enforced by the
           local API. Credentials never enter this surface.
@@ -145,20 +147,22 @@ export function TutorSurface() {
           </label>
           <input
             id="tutor-session"
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm"
+            className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm text-textPrimary"
             value={sessionId}
             onChange={(event) => setSessionId(event.target.value)}
             autoComplete="off"
+            spellCheck={false}
           />
           <label className="block text-sm font-medium" htmlFor="tutor-stage">
             Stage id
           </label>
           <input
             id="tutor-stage"
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm"
+            className="w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm text-textPrimary"
             value={stageId}
             onChange={(event) => setStageId(event.target.value)}
             autoComplete="off"
+            spellCheck={false}
           />
           <Button type="submit" variant="secondary" disabled={loading || !sessionId.trim()}>
             {loading ? 'Loading…' : 'Load session'}
@@ -178,7 +182,7 @@ export function TutorSurface() {
       </Panel>
 
       {locked ? (
-        <StatusBanner tone="warning" title="No-AI lock">
+        <StatusBanner id="tutor-no-ai-lock" tone="warning" title="No-AI lock">
           Assistance is disabled for this stage. The tutor will not be called until the unassisted
           attempt is complete.
         </StatusBanner>
@@ -200,10 +204,11 @@ export function TutorSurface() {
           </label>
           <select
             id="tutor-role"
-            className="w-full rounded-md border border-border bg-bg px-3 py-2"
+            className="w-full rounded-md border border-border bg-bg px-3 py-2 text-textPrimary"
             value={role}
             onChange={(event) => setRole(event.target.value as TutorRoleId)}
             disabled={locked}
+            aria-describedby={locked ? 'tutor-no-ai-lock' : undefined}
           >
             {TUTOR_ROLES.map((item) => (
               <option key={item.id} value={item.id}>
@@ -216,10 +221,11 @@ export function TutorSurface() {
           </label>
           <textarea
             id="tutor-prompt"
-            className="min-h-32 w-full rounded-md border border-border bg-bg px-3 py-2"
+            className="min-h-32 w-full rounded-md border border-border bg-bg px-3 py-2 text-textPrimary"
             value={prompt}
             onChange={(event) => setPrompt(event.target.value)}
             disabled={locked}
+            aria-describedby={locked ? 'tutor-no-ai-lock' : undefined}
           />
           <Button type="submit" disabled={locked || busy || loading || !prompt.trim() || !sessionId.trim()}>
             {busy ? 'Asking…' : 'Ask tutor'}
@@ -229,7 +235,14 @@ export function TutorSurface() {
 
       {transcript.length > 0 ? (
         <Panel title="Transcript">
-          <ol className="space-y-3" data-testid="tutor-transcript">
+          <ol
+            className="space-y-3"
+            data-testid="tutor-transcript"
+            role="log"
+            aria-live="polite"
+            aria-relevant="additions"
+            aria-label="Tutor transcript"
+          >
             {transcript.map((item, index) => (
               <li key={`${item.role}-${index}`} className="rounded-md border border-border bg-bg p-3">
                 <p className="text-xs font-semibold uppercase tracking-widest text-textSecondary">
