@@ -1,0 +1,149 @@
+{
+  "id": "M14",
+  "title": "Discover Structure Without Labels",
+  "phase": {
+    "id": "P2",
+    "title": "Classical Machine Learning"
+  },
+  "order_index": 14,
+  "flagship_version": "V03",
+  "core_invariant": "Clustering is an engineering investigation, not a way to manufacture classes. Declare a feature and distance contract before fitting. Unscaled K-means can look persuasive while following a high-magnitude instrumentation feature. Internal diagnostics (inertia, silhouette, stability, sizes) are not a truth oracle. Cluster identifiers are nominal. These clusters are not true classes without external validation. Predict before running. Transfer without assistance. Prove competence with evidence.",
+  "competencies": [
+    "comp.cluster.feature_contract",
+    "comp.cluster.scale_and_k",
+    "comp.cluster.profile_interpretation",
+    "comp.cluster.failure_diagnosis",
+    "comp.cluster.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m14.feature_distance_contract",
+    "kn.m14.raw_scale_trap",
+    "kn.m14.candidate_k",
+    "kn.m14.not_true_classes",
+    "kn.m14.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M06"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame unlabelled structure as a useful whole",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M14 invariant and datasets/M14/learning_sessions.csv. Exclude identifiers such as session_id from the feature set. The high-magnitude activity_events column is a teaching trap for unscaled Euclidean K-means. The working loop is unlabelled observations \u2192 feature contract \u2192 scaling \u2192 candidate k \u2192 internal diagnostics \u2192 cluster profiles \u2192 cautious interpretation. Identify gate evidence: feature contract, candidate-k table, center profiles, controlled-failure diagnosis, ADR, and no-AI transfer on a different unlabelled dataset. No custom M14 frontend. Target labels are not available to this lab."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict the raw-scale trap, then compare candidate k",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle. (1) PREDICT which feature contributes most to squared Euclidean distance on raw values and which k in 2 through 6 will balance separation, stability, and useful sizes after standardization. (2) COMMIT the prediction. (3) EXECUTE raw k=3, then standardize the declared features and fit candidates with fixed seeds. (4) OBSERVE feature-level distance contributions, inertia, mean silhouette, minimum cluster size, and assignment stability. (5) SUBMIT an explanation why an internally separated raw partition can still be a unit-and-scale artifact, and defend k with converging evidence rather than maximum silhouette. Return a table of candidate-k diagnostics plus a metric of the dominant raw-distance feature.",
+      "runner": {
+        "module": "g5.reference.M14.experiment",
+        "entrypoint": "run_scale_trap",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Prediction is sealed before execute; raw-scale dominance is quantified; k is not declared from a single diagnostic."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Trace a candidate-k diagnostic",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read evaluate_candidate before running it. For k=3: which matrix defines the geometry, which state fit_predict learns, why n_init=20 and a fixed random_state, why inertia is not 'larger is better', what mean silhouette hides, why adjusted Rand is permutation-invariant, and which line fails if k=1. Sketch CSV \u2192 selected features \u2192 scaler state \u2192 standardized matrix \u2192 centers/assignments \u2192 internal diagnostics \u2192 interpretation and mark every consequential choice.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace marks scaler state, assignment storage, and why k=1 is excluded."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose the persuasive segmentation",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Reject the claim 'K-means found the three real learner types' because the plot has clean colors, silhouette is positive, and a stakeholder asked for three segments. Diagnose four traps: (1) scale \u2014 which feature supplies most of the squared-distance budget on raw values; (2) arbitrary k \u2014 compare requested k=3 with k=2..6 including small-cluster fragmentation; (3) outlier \u2014 inject one extreme instrumentation value and compare assignments for unchanged rows; (4) visualization \u2014 a two-component PCA view is not proof of natural classes. Quantify comparisons.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Diagnoses scale, arbitrary k, outlier, and projection traps with quantified comparisons."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Cluster a fresh unlabelled table without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Without AI-generated code or the M14 fixture, select three to seven defensible features on a fresh unlabelled numeric dataset, predict the dominant raw-distance feature, compare at least four candidate k values after justified preprocessing, record evidence against the chosen k, show original-unit center profiles, stress with an outlier or unit conversion, and write one paragraph beginning 'These clusters are not true classes because \u2026'.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Uses a different unlabelled dataset and does not claim true classes without external validation."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Record feature, scaling, algorithm, and k decisions",
+      "type": "reflection_adr",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Write an ADR covering included features, excluded identifiers, scaling, algorithm, and k. Include context, alternatives, consequences, and reversal triggers. Learner-authored ADRs stay outside this package.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR records feature contract, scaling, k, alternatives, and reversal triggers."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Integrate clustering diagnostics into V03",
+      "type": "flagship_integration",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "M14 extends V03 beyond supervised comparison. Expose cluster assignments and diagnostics as analytical outputs, not as stable identities, risk tiers, or true classes. Any downstream action requires a separately reviewed purpose and external validation.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "States that V03 must not treat cluster ids as true classes or risk tiers."
+      }
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate unsupervised-structure evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate feature contract, scale/k experiment, controlled-failure diagnosis, no-AI transfer, and ADR. Issue PASSED or targeted repair. A colorful cluster plot by itself does not pass."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.cluster.scale_and_k",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.cluster.feature_contract",
+        "stage_id": "stage_03_code_reading",
+        "artifact_type": "trace"
+      },
+      {
+        "competency_id": "comp.cluster.failure_diagnosis",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.cluster.unassisted_transfer",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      },
+      {
+        "competency_id": "comp.cluster.profile_interpretation",
+        "stage_id": "stage_06_adr",
+        "artifact_type": "markdown"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}
