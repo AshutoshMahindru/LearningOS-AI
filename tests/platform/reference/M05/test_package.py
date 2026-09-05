@@ -192,15 +192,33 @@ def test_wp136_schema_rejects_package_id_as_mission_id() -> None:
 def _changed_paths() -> list[str]:
     import subprocess
 
+    import pytest
+
     def _lines(args: list[str]) -> list[str]:
         completed = subprocess.run(
             args,
             cwd=str(REPO_ROOT),
-            check=True,
+            check=False,
             capture_output=True,
             text=True,
         )
+        if completed.returncode != 0:
+            pytest.skip(
+                "git history for path-ownership check is unavailable "
+                f"(exit {completed.returncode}: {(completed.stderr or completed.stdout).strip()[:200]})"
+            )
         return [line.strip() for line in completed.stdout.splitlines() if line.strip()]
+
+    # Shallow CI checkouts (fetch-depth: 1) do not contain FROZEN_BASE.
+    probe = subprocess.run(
+        ["git", "cat-file", "-e", f"{FROZEN_BASE}^{{commit}}"],
+        cwd=str(REPO_ROOT),
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if probe.returncode != 0:
+        pytest.skip(f"frozen base {FROZEN_BASE} is not in this clone (shallow checkout)")
 
     paths = set(_lines(["git", "diff", "--name-only", FROZEN_BASE]))
     paths.update(_lines(["git", "diff", "--cached", "--name-only"]))
