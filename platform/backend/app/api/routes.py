@@ -740,8 +740,27 @@ async def get_learner_next_action(learner_id: str) -> dict[str, Any]:
 
 
 @protected_router.post("/tutor/chat")
-async def tutor_chat(_payload: TutorChatRequest) -> None:
-    raise TutorUnavailableError("Tutor is not available in G3")
+async def tutor_chat(payload: TutorChatRequest) -> dict[str, Any]:
+    from app.core.tutor import handle_tutor_chat, provider_configured
+
+    if not provider_configured():
+        raise TutorUnavailableError("No tutor provider is configured")
+
+    with _db_conn() as conn:
+        try:
+            session = runtime.load_session(conn, payload.session_id)
+            spec = runtime.load_mission_spec(conn, str(session.get("mission_id")))
+            return await handle_tutor_chat(
+                session=session,
+                spec=spec,
+                stage_id=payload.stage_id,
+                role=payload.role,
+                prompt=payload.prompt,
+            )
+        except AppError:
+            raise
+        except Exception as exc:
+            raise _map_sqlite_write_error(exc, "Tutor chat") from exc
 
 
 router.include_router(public_router)
