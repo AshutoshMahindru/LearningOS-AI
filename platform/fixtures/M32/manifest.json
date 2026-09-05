@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M32",
+  "version": "5.0.0",
+  "title": "G5 M32 reference package",
+  "description": "Reference M32 inference and adaptation on the generic runtime. WP-136 mission id is M32. Package id is g5.reference.M32. Stages are catalogue compositions; WP-137 table, metric, and trace blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M32",
+      "path": "missions/M32.json"
+    }
+  ],
+  "digest": "fbee569a3b0878c7d1ea0b608cd8876cf3d350edb0f2c82c3e3b30890f75fad9"
+}

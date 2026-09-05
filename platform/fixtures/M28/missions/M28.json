@@ -1,0 +1,144 @@
+{
+  "id": "M28",
+  "title": "Search Meaning with Embeddings",
+  "phase": {
+    "id": "P5",
+    "title": "Foundation Models"
+  },
+  "order_index": 28,
+  "flagship_version": "V06",
+  "core_invariant": "An embedding is an operational vector used for similarity, not proof of meaning. Cosine ranking after L2 is a declared contract (v06-teaching-meanpool v06.1, width 12, mean pool). Lexical overlap and embedding rank can disagree. Negation, numbers, entities, and domain shift are honest hard cases. Model, version, width, metric, normalization, and pooling must match before scoring; mixed provenance is refused, not silently ranked. Predict before every retrieval action. Attention and a search service stay closed. Generic WP-137 metric, table, and artifact blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.emb.cosine_ranking",
+    "comp.emb.lexical_vs_semantic",
+    "comp.emb.provenance_gate",
+    "comp.emb.hard_cases"
+  ],
+  "knowledge_nodes": [
+    "kn.m28.cosine_neighbors",
+    "kn.m28.jaccard_disagreement",
+    "kn.m28.fingerprint",
+    "kn.m28.negation_numeric"
+  ],
+  "prerequisites": [
+    "M15",
+    "M27"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame bundled vectors as a retrieval contract",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M15 metric handoff and the M27 token boundary. M28 attaches offline vectors with a mix-or-refuse contract: v06-teaching-meanpool v06.1, 12-D, mean pool, L2, cosine. Identify gate evidence: a WP-137 metric of paraphrase neighbors and margins, a table of Jaccard versus cosine disagreement, and a provenance refusal. Do not introduce attention or a search service. The generic workbench renders catalogue blocks; do not expect a named-mission embedding page."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, rank, and metric one cosine retrieval",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the bundled vectors. (1) PREDICT whether a password/login paraphrase ranks login neighbors above printer traps, whether Jaccard and cosine disagree on a high-overlap/different-meaning pair, and whether inner product on sum-pooled raw vectors prefers a long document. (2) COMMIT the prediction. (3) EXECUTE / RUN cosine-on-L2 ranking; emit WP-137 blocks: a metric of top neighbor, margin, model, version, metric, normalization; a table of candidate scores; and an artifact of Jaccard versus cosine. (4) OBSERVE the structured metric. (5) SUBMIT an explanation of any delta. Do not download an encoder and do not open attention.",
+      "runner": {
+        "module": "g5.reference.M28.experiment",
+        "entrypoint": "run_embedding_ranking",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; the submitted explanation covers the observed metric and why later-mission mechanisms stayed closed."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read encode, provenance, score, rank, ties",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read encode → pool → L2 normalize → provenance fingerprint → cosine → rank with tie break (-score, id). Predict unit-norm shape and a refused mix when version or normalization disagrees. Do not inspect attention or a search index. Submit an annotated system-flow artifact.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "The trace names the teaching dataflow and does not open later-mission internals."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose mixed embedding provenance",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "One named fault: score a v06.1 query against v06.2 swapped-axis unnormalized corpus vectors with the provenance gate off. Predict that unchecked cosine still emits named ids while a password query can retrieve a printer document. Execute, emit a WP-137 table of mismatched fingerprint fields, and repair by restoring enforce_provenance so silent mixing is refused. Texts stay fixed. Submit prediction, named defect, fields, smallest repair, and regression.",
+      "runner": {
+        "module": "g5.reference.M28.failure",
+        "entrypoint": "run_controlled_failures",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Rank a fresh vector set without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, compute one hand cosine, name one successful neighbor, one failure, the mismatched fingerprint fields, and state that high cosine is not proof of intent. Tutor surfaces stay locked. Emit a WP-137 artifact of independent ranking. Leave learner answers unfilled in the repository.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Independent no-AI reasoning names the teaching contract and a valid repair."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Author the V06/V08 embedding provenance ADR",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Author the embedding model/version/normalization/metric/compatibility ADR: identity, width, pooling, mix-refusal triggers, logging, alternatives, owner, status, and date. Do not claim a globally optimal encoder.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a teaching-scale decision, alternatives, and a revisit trigger."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Hand V06/V08 a mix-or-refuse vector contract",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Connect accepted rankings to V06 and the later V08 search service: bundled vectors, cosine-on-L2, provenance fingerprint, and refused mixes. M29 may open attention only after static vectors are defensible. Do not implement a retrieval service here."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate embedding-retrieval evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, cosine-metric experiment, provenance-failure diagnosis, unassisted transfer, and ADR against the gate contract. Issue PASSED or targeted repair. Do not award completion from a downloaded encoder."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.emb.cosine_ranking",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.emb.lexical_vs_semantic",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.emb.provenance_gate",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.emb.hard_cases",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

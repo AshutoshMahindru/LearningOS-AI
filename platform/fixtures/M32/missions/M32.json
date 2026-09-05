@@ -1,0 +1,143 @@
+{
+  "id": "M32",
+  "title": "Control Inference and Adaptation",
+  "phase": {
+    "id": "P5",
+    "title": "Foundation Models"
+  },
+  "order_index": 32,
+  "flagship_version": "V07",
+  "core_invariant": "Inference converts frozen-checkpoint logits into selected tokens. Greedy decoding is argmax and is invariant to temperature for T > 0. Temperature and top-k/top-p rescale or truncate the distribution; they are not quality knobs. Seed replay is a sampling claim tested with other settings fixed. Stop and max-tokens change termination, not the checkpoint. Prompt/context changes the prefix. Inference configuration is reproducibility evidence. Adaptation hierarchy is prompt, retrieval, tools, then parameters; fine-tuning is the wrong first response to a freshness problem. Predict before every inference action. Search, RAG, and tool execution stay closed. Generic WP-137 table, metric, and trace blocks carry the evidence; there is no custom frontend.",
+  "competencies": [
+    "comp.inf.greedy_temperature",
+    "comp.inf.filters_and_seed",
+    "comp.inf.config_evidence",
+    "comp.inf.adaptation_hierarchy"
+  ],
+  "knowledge_nodes": [
+    "kn.m32.argmax",
+    "kn.m32.softmax_temp",
+    "kn.m32.inference_config",
+    "kn.m32.freshness_not_finetune"
+  ],
+  "prerequisites": [
+    "M31"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame token selection and the adaptation rubric",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Restate the M31 stage-aware checkpoint (inference_ready, training_time=False). M32 ends P5/V07: checkpoint → prompt → logits → temperature → top-k/top-p → greedy or seeded sample → stop/max-tokens → tokens plus InferenceConfig. Vocab alpha-beta-gamma-stop, seed 3201. Identify gate evidence: a WP-137 table of softmax at two temperatures, a metric of greedy index, and a config fingerprint. Do not implement search, RAG, or tools. The generic workbench renders catalogue blocks; do not expect a named decoder page."
+    },
+    {
+      "id": "stage_02_experiment",
+      "title": "Predict, decode, and table temperature versus greedy",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the local logits table. (1) PREDICT greedy argmax on [1, 3, 2, 0], that T>0 leaves greedy unchanged, that (log 3, 0) at T=1 softmaxes to (0.75, 0.25), and that the same seed replays. (2) COMMIT the prediction. (3) EXECUTE / RUN the teaching decoder; emit WP-137 blocks: a table of temperatures versus entropy, a metric of greedy_index and seed replay, and a trace of filter order temperature-then-top_k-then-top_p-then-softmax. (4) OBSERVE the structured table. (5) SUBMIT an explanation of any delta. Change stop or prompt with sampling fixed. Route freshness to retrieval, not fine-tuning first. Do not treat temperature as a quality knob.",
+      "runner": {
+        "module": "g5.reference.M32.experiment",
+        "entrypoint": "run_inference_controls",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Prediction is sealed before execute; the submitted explanation covers the observed table and why later-mission mechanisms stayed closed."
+      }
+    },
+    {
+      "id": "stage_03_code_reading",
+      "title": "Read prompt, scores, filters, sample/greedy, stop, metadata",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read prompt selecting local scores, filter order, fail-closed live adapter, config fingerprint (checkpoint, prompt, temperature, seed, stop, max-tokens). Predict greedy/temperature independence and required log fields. Do not inspect an M33 index. Submit an annotated system-flow artifact.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "The trace names the teaching dataflow and does not open later-mission internals."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose uncontrolled settings or the wrong adaptation lever",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "One named fault: two sampled runs share checkpoint and prompt but not temperature and seed, so a naive compare labels the disagreement model_changed; or a team proposes parameter change because holiday hours are stale. Predict which InferenceConfig fields must match before blaming the model, and that freshness is a retrieval route. Execute, emit a WP-137 table of first_divergence or wrong_route, and repair from the broken object. Decoder and checkpoint stay fixed. Submit prediction, discriminator, smallest repair, and regression.",
+      "runner": {
+        "module": "g5.reference.M32.failure",
+        "entrypoint": "run_controlled_failures",
+        "timeout_sec": 30
+      },
+      "validation_rubric": {
+        "required_evidence_type": "table",
+        "pass_criteria": "Each failure names one controlled cause; the repair restores the named contract."
+      }
+    },
+    {
+      "id": "stage_05_transfer",
+      "title": "Control inference without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "From a blank page, compute greedy and the (log 3, 0) softmax, call an uncontrolled record, choose an adaptation route for freshness, and list required metadata. Tutor surfaces stay locked. Emit a WP-137 metric of independent arithmetic. Leave learner answers unfilled in the repository.",
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Independent no-AI reasoning names the teaching contract and a valid repair."
+      }
+    },
+    {
+      "id": "stage_06_adr",
+      "title": "Author the V07 adaptation hierarchy and inference-config ADR",
+      "type": "reflection_adr",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Author the V07 ADR: prompt → retrieval → tools → parameters, required logs, revisit triggers, alternatives, owner, status, and date. Do not implement search, RAG, or tools here.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "ADR names a teaching-scale decision, alternatives, and a revisit trigger."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Close V07 with an inference provider contract",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Connect accepted decoding to V07 and hand M33/M34/M37 an InferenceConfig provider contract plus an adaptation decision hierarchy. Do not hand them a retriever, RAG pack, or tool executor. Phase P5 ends here."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate inference and adaptation evidence",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate orientation, temperature-table experiment, uncontrolled-settings failure, unassisted transfer, and ADR against the gate contract. Issue PASSED or targeted repair. Do not award completion from a quality-knob story."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.inf.greedy_temperature",
+        "stage_id": "stage_01_orientation",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.inf.filters_and_seed",
+        "stage_id": "stage_02_experiment",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.inf.config_evidence",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "table"
+      },
+      {
+        "competency_id": "comp.inf.adaptation_hierarchy",
+        "stage_id": "stage_05_transfer",
+        "artifact_type": "metric"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

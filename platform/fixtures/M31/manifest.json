@@ -1,0 +1,14 @@
+{
+  "id": "g5.reference.M31",
+  "version": "5.0.0",
+  "title": "G5 M31 reference package",
+  "description": "Reference M31 LLM-training lifecycle on the generic runtime. WP-136 mission id is M31. Package id is g5.reference.M31. Stages are catalogue compositions; WP-137 chart, table, and metric blocks render on the generic workbench. No custom frontend.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M31",
+      "path": "missions/M31.json"
+    }
+  ],
+  "digest": "f2475a5a1fcb3b12caeff4b44371905b56fd0d524742043e7a493bde5d4a710b"
+}
