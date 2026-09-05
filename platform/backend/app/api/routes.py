@@ -723,6 +723,30 @@ async def list_learner_evidence(learner_id: str) -> dict[str, Any]:
     return {"learner_id": learner_id, "evidence": items}
 
 
+@protected_router.get("/flagship")
+async def get_flagship(learner_id: str | None = None) -> dict[str, Any]:
+    """Generic flagship V00–V12 index. Optional learner_id adds progress and ADR/git artifacts."""
+    try:
+        from app.core.flagship import flagship_payload
+    except ImportError as exc:
+        raise InternalError("Flagship index is not available", status_code=503) from exc
+    if learner_id:
+        with _db_conn() as conn:
+            try:
+                _require_learner(conn, learner_id)
+                return flagship_payload(conn, learner_id)
+            except AppError:
+                raise
+            except ValueError as exc:
+                raise ValidationAppError(str(exc)) from exc
+            except Exception as exc:
+                raise _map_sqlite_write_error(exc, "Flagship") from exc
+    try:
+        return flagship_payload()
+    except ValueError as exc:
+        raise ValidationAppError(str(exc)) from exc
+
+
 @protected_router.get("/learners/{learner_id}/next-action")
 async def get_learner_next_action(learner_id: str) -> dict[str, Any]:
     with _db_conn() as conn:

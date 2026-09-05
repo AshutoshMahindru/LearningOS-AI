@@ -161,6 +161,31 @@ def _action_payload(
     }
 
 
+def _flagship_mod() -> Any | None:
+    try:
+        from app.core import flagship as flagship_mod
+    except ImportError:
+        return None
+    return flagship_mod
+
+
+def _finalize_action(
+    conn: sqlite3.Connection,
+    payload: dict[str, Any],
+    completed_missions: set[str],
+    catalog_ids: set[str],
+) -> dict[str, Any]:
+    flagship_mod = _flagship_mod()
+    if flagship_mod is None:
+        return payload
+    return flagship_mod.annotate_next_action(
+        payload,
+        conn=conn,
+        completed_missions=completed_missions,
+        catalog_ids=catalog_ids,
+    )
+
+
 def next_action(conn: sqlite3.Connection, learner_id: str) -> dict[str, Any]:
     """Next stage or next mission from catalog sequencing. No mission-id special case."""
     if not isinstance(learner_id, str) or not learner_id.strip():
@@ -174,6 +199,8 @@ def next_action(conn: sqlite3.Connection, learner_id: str) -> dict[str, Any]:
         for item in sessions
         if str(item.get("status") or "") == SESSION_COMPLETED and item.get("mission_id")
     }
+    catalog_ids = {str(item.get("id")) for item in missions if item.get("id")}
+    flagship_mod = _flagship_mod()
 
     active = [
         item
@@ -212,23 +239,33 @@ def next_action(conn: sqlite3.Connection, learner_id: str) -> dict[str, Any]:
                 index = -1
             if index >= 0 and index + 1 < len(ids):
                 nxt = ids[index + 1]
-                return _action_payload(
+                return _finalize_action(
+                    conn,
+                    _action_payload(
+                        learner_id=lid,
+                        action="ENTER_STAGE",
+                        reason="NEXT_STAGE",
+                        mission_id=mission_id,
+                        session_id=session_id,
+                        stage_id=nxt,
+                        competencies=competencies,
+                    ),
+                    completed_missions,
+                    catalog_ids,
+                )
+            return _finalize_action(
+                conn,
+                _action_payload(
                     learner_id=lid,
-                    action="ENTER_STAGE",
-                    reason="NEXT_STAGE",
+                    action="EVALUATE_GATE",
+                    reason="GATE_PENDING",
                     mission_id=mission_id,
                     session_id=session_id,
-                    stage_id=nxt,
+                    stage_id=current,
                     competencies=competencies,
-                )
-            return _action_payload(
-                learner_id=lid,
-                action="EVALUATE_GATE",
-                reason="GATE_PENDING",
-                mission_id=mission_id,
-                session_id=session_id,
-                stage_id=current,
-                competencies=competencies,
+                ),
+                completed_missions,
+                catalog_ids,
             )
         if current and attempt_status == ATTEMPT_ACTIVE:
             action = "CONTINUE_STAGE"
@@ -236,41 +273,79 @@ def next_action(conn: sqlite3.Connection, learner_id: str) -> dict[str, Any]:
         else:
             action = "ENTER_STAGE"
             reason = "CURRENT_SESSION_STAGE"
-        return _action_payload(
-            learner_id=lid,
-            action=action,
-            reason=reason,
-            mission_id=mission_id,
-            session_id=session_id,
-            stage_id=current or None,
-            competencies=competencies,
+        return _finalize_action(
+            conn,
+            _action_payload(
+                learner_id=lid,
+                action=action,
+                reason=reason,
+                mission_id=mission_id,
+                session_id=session_id,
+                stage_id=current or None,
+                competencies=competencies,
+            ),
+            completed_missions,
+            catalog_ids,
         )
 
+    blocked = False
     for mission in missions:
         mission_id = str(mission.get("id") or "")
         if not mission_id or mission_id in completed_missions:
             continue
+        if flagship_mod is not None and not flagship_mod.mission_unlocked(
+            mission_id, completed_missions, catalog_ids
+        ):
+            blocked = True
+            continue
         spec = mission.get("spec") or {}
         ids = _stage_ids(spec)
-        return _action_payload(
-            learner_id=lid,
-            action="START_MISSION",
-            reason="NEXT_MISSION",
-            mission_id=mission_id,
-            stage_id=ids[0] if ids else None,
-            competencies=competencies,
+        return _finalize_action(
+            conn,
+            _action_payload(
+                learner_id=lid,
+                action="START_MISSION",
+                reason="NEXT_MISSION",
+                mission_id=mission_id,
+                stage_id=ids[0] if ids else None,
+                competencies=competencies,
+            ),
+            completed_missions,
+            catalog_ids,
         )
 
+    if blocked:
+        return _finalize_action(
+            conn,
+            _action_payload(
+                learner_id=lid,
+                action="IDLE",
+                reason="PREREQUISITES_UNMET",
+                competencies=competencies,
+            ),
+            completed_missions,
+            catalog_ids,
+        )
     if missions:
-        return _action_payload(
+        return _finalize_action(
+            conn,
+            _action_payload(
+                learner_id=lid,
+                action="IDLE",
+                reason="ALL_MISSIONS_COMPLETE",
+                competencies=competencies,
+            ),
+            completed_missions,
+            catalog_ids,
+        )
+    return _finalize_action(
+        conn,
+        _action_payload(
             learner_id=lid,
             action="IDLE",
-            reason="ALL_MISSIONS_COMPLETE",
+            reason="NO_AVAILABLE_MISSIONS",
             competencies=competencies,
-        )
-    return _action_payload(
-        learner_id=lid,
-        action="IDLE",
-        reason="NO_AVAILABLE_MISSIONS",
-        competencies=competencies,
+        ),
+        completed_missions,
+        catalog_ids,
     )
