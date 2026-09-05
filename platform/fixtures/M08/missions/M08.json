@@ -1,0 +1,138 @@
+{
+  "id": "M08",
+  "title": "Predict a Continuous Outcome",
+  "phase": {
+    "id": "P2",
+    "title": "Classical Machine Learning"
+  },
+  "order_index": 8,
+  "flagship_version": "V02",
+  "core_invariant": "Run the whole regression path before descending into internals: baseline, train/test split, fit, predict, metrics, residuals, diagnose. Trust comes from evaluation and diagnosis, not one impressive score. Reject features unavailable at the prediction timestamp even when they improve validation scores.",
+  "competencies": [
+    "comp.reg.baseline_evaluation",
+    "comp.reg.residual_diagnosis",
+    "comp.reg.leakage_diagnosis",
+    "comp.reg.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m08.baseline_metrics",
+    "kn.m08.residuals_cv",
+    "kn.m08.target_leakage",
+    "kn.m08.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M07"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the housing regression system",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M08 invariant and the whole-first path: baseline \u2192 train/test split \u2192 fit \u2192 predict \u2192 metrics \u2192 residuals \u2192 diagnose. System boundary: facts available before a sale predict sale_price_k; post_sale_assessment_k is recorded after the outcome and is forbidden. Identify the evidence the gate will require: prediction log, baseline comparison with MAE/RMSE/R2, residual diagnosis, training-only cross-validation, underfit/overfit diagnosis, cautious feature influence, leakage failure diagnosis, invalid training-only evaluation, an ADR, and a fresh no-AI regression. Data is synthetic; do not claim real property-market performance."
+    },
+    {
+      "id": "stage_02_trace_map",
+      "title": "Map prediction-time features versus leakage",
+      "type": "trace_map",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Map the prediction timestamp, continuous target, permitted inputs, and excluded post-outcome fields. Mark where the test partition is forbidden during fit and cross-validation. Separate residual diagnosis from scalar metrics. Annotate why a random split cannot detect time-of-availability leakage.",
+      "validation_rubric": {
+        "required_evidence_type": "diagram",
+        "pass_criteria": "Map names the prediction moment, the forbidden post-outcome field, and the train/test evaluation boundary."
+      }
+    },
+    {
+      "id": "stage_03_experiment",
+      "title": "Predict, execute, and diagnose held-out regression",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the local housing-regression system. Change one dimension at a time (baseline versus model, residual slice, CV folds, tree capacity, or permutation importance). (1) PREDICT how MAE, RMSE, R2, residual pattern, or train/CV gap will move and why. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the controlled comparison with fit and CV only on training rows. (4) OBSERVE structured metric and chart blocks with units. (5) SUBMIT an explanation of any delta, including why R2 is not a sufficient selection rule and why feature importance is not causal. Never fit transformations or models on the test target.",
+      "runner": {
+        "module": "g6.reference.M08.experiment",
+        "entrypoint": "run_regression_diagnosis",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "metric",
+        "pass_criteria": "Prediction is sealed before execute; held-out MAE/RMSE/R2 and residual or CV evidence are explained with units and limits."
+      }
+    },
+    {
+      "id": "stage_04_controlled_failure",
+      "title": "Diagnose leaky scores and training-only optimism",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Two faults are injected. Fault A admits post_sale_assessment_k, a near-copy of sale price produced after close; a random split and ordinary CV both look extraordinary because the forbidden relationship exists in every partition \u2014 target leakage across time, not genuine skill. Fault B evaluates an unrestricted tree on its training rows. Diagnose: predict what each invalid evaluation will report; record safe, leaky, and training-only metrics; verify that row overlap is not the leakage mechanism; write the real-world prediction timestamp; audit feature availability; remove every post-outcome field; refit using training data only; add an allow-list and schema test as prevention. Explain why neither a random split nor CV automatically detects time-of-availability leakage. A weaker repaired score is acceptable.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "Diagnosis names post-outcome leakage and training-only optimism, repairs the feature contract, and adds a prevention control."
+      }
+    },
+    {
+      "id": "stage_05_adr",
+      "title": "Record the model and evaluation protocol",
+      "type": "reflection_adr",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Author a separate ADR covering model and evaluation protocol: alternatives, evidence, trade-offs, feature-availability guardrails, and revisit conditions. Formal engineering review comments must be accepted, rejected, or deferred with reasoning. Do not fabricate completion evidence.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "Learner-authored ADR connects baseline, held-out metrics, leakage controls, and residual uncertainty."
+      }
+    },
+    {
+      "id": "stage_06_transfer",
+      "title": "Fresh continuous-outcome system without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Complete a 30-60 minute transfer without AI-generated code or prose and without the bundled M08 housing data. Define the prediction moment, target, and permitted feature set; state a prediction before each material experiment; implement a baseline and one regression model; preserve a held-out test set; report MAE, RMSE and R2 with correct interpretation; create and diagnose at least one residual plot; use training-only cross-validation; demonstrate underfitting or overfitting; audit every feature for availability and leakage; explain one uncertainty and one prevention control. Do not invent a training step on the test partition.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Unassisted fresh regression with intact evaluation boundary, residual diagnosis, and leakage audit."
+      }
+    },
+    {
+      "id": "stage_07_flagship",
+      "title": "Open the V02 regression layer",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M08 begins the V02 Predictive Decision System: declare the decision and prediction timestamp, separate prediction-time features from the continuous target, compare against a baseline, evaluate held-out MAE/RMSE/R2, diagnose residuals and variability, reject unavailable features, and preserve choices in an ADR. M09 extends this contract to categorical outcomes; M10 adds consequence-aware metrics."
+    },
+    {
+      "id": "stage_08_gate",
+      "title": "Evaluate M08 evidence against the gate contract",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, experiment, controlled-failure, ADR, and transfer evidence against the mission gate_contract. Issue PASSED when every required evidence item meets the pass threshold. Otherwise issue a targeted repair plan naming the failed stage, competency, artifact type, and knowledge node \u2014 do not force a full mission repeat."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.reg.baseline_evaluation",
+        "stage_id": "stage_03_experiment",
+        "artifact_type": "metric"
+      },
+      {
+        "competency_id": "comp.reg.residual_diagnosis",
+        "stage_id": "stage_02_trace_map",
+        "artifact_type": "diagram"
+      },
+      {
+        "competency_id": "comp.reg.leakage_diagnosis",
+        "stage_id": "stage_04_controlled_failure",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.reg.unassisted_transfer",
+        "stage_id": "stage_06_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "id": "M06",
+  "title": "See the Data Before Modeling It",
+  "phase": {
+    "id": "P1",
+    "title": "Computational & Data Fluency"
+  },
+  "order_index": 6,
+  "flagship_version": "V01",
+  "core_invariant": "Start with a decision question, predict the evidence a chart might show, then interrogate visible marks. Separate visible observation, inference, and what cannot yet be concluded. A chart is evidence, not decoration and not causal proof.",
+  "competencies": [
+    "comp.viz.question_first",
+    "comp.viz.chart_evidence",
+    "comp.viz.failure_diagnosis",
+    "comp.viz.unassisted_transfer"
+  ],
+  "knowledge_nodes": [
+    "kn.m06.question_before_chart",
+    "kn.m06.observation_inference_limits",
+    "kn.m06.truncated_scale",
+    "kn.m06.no_ai_transfer"
+  ],
+  "prerequisites": [
+    "M04"
+  ],
+  "stages": [
+    {
+      "id": "stage_01_orientation",
+      "title": "Frame the support-ticket interrogation",
+      "type": "orientation",
+      "assistance_policy": "UNRESTRICTED",
+      "instructions": "Read the M06 invariant and the guided decision question: which observable signals are associated with escalation in the support-ticket sample, and what data-quality or leakage risks must be resolved before any escalation model is attempted? Identify the evidence the gate will require: a question-and-prediction log, distribution/missingness/outlier/relationship/group/imbalance/leakage interrogation, observation-inference-limitation statements, a truncated-scale diagnosis, and a fresh no-AI chart on community_programs_fresh.csv. This is a generic catalogue composition, not a custom M06 frontend. Do not fit a model."
+    },
+    {
+      "id": "stage_02_trace_map",
+      "title": "Map questions to evidence-bearing views",
+      "type": "trace_map",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Produce a structured map from decision questions to chart or table evidence. Required investigations: distribution of first-response time; missingness by field; IQR outlier candidates; scatter of response time versus satisfaction; group escalation rates with numerators and denominators; target class imbalance; possible leakage including post_case_priority timing. For each node, name the grain, the mark, the denominator, and whether the field exists at decision time. Annotate data-flow from rows to aggregates separately from rhetorical encoding choices such as axis limits.",
+      "validation_rubric": {
+        "required_evidence_type": "diagram",
+        "pass_criteria": "Map starts from questions, preserves denominators, and marks decision-time availability rather than listing chart types."
+      }
+    },
+    {
+      "id": "stage_03_interrogate",
+      "title": "Separate observation, inference, and limits",
+      "type": "interrogate",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Interrogate each planned view with Socratic probes. What would the chart actually display versus what a reader might infer? Which claims require a denominator? Which associations cannot support causation or future operational performance? If a field is recorded after case closure, can it be a feature for a new-ticket model? Record residual uncertainty instead of inventing missing collection processes."
+    },
+    {
+      "id": "stage_04_code_reading",
+      "title": "Trace data into marks before running plots",
+      "type": "code_reading",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Read plotting cells before running them. For one chart at a time, trace the source dataframe, excluded rows, selected columns, aggregations, axis/colour encodings, denominators, axis limits, bin boundaries, and imposed order. For iqr_outliers, manually trace median, quartiles, IQR, fences, and returned rows; an IQR flag is a review signal, not permission to delete a record. For group-rate charts, explain why size and sum sit beside mean. Identify the single plotting choice that can change impression while underlying means stay identical.",
+      "validation_rubric": {
+        "required_evidence_type": "trace",
+        "pass_criteria": "Trace reconstructs the exact values that reach the plotting call, including denominators and axis bounds."
+      }
+    },
+    {
+      "id": "stage_05_experiment",
+      "title": "Predict, chart, and interpret support-ticket evidence",
+      "type": "experiment",
+      "assistance_policy": "RESTRICTED_HINTS",
+      "instructions": "Complete the experiment cycle on the local support-ticket fixture without fitting a model. (1) PREDICT the shape of first-response time, missingness structure, outlier candidates, group escalation rates with counts, class imbalance, and whether any field would be unavailable when a new ticket is scored. (2) COMMIT the prediction so it cannot be edited. (3) EXECUTE / RUN the chosen charts and tables after stating a chart rationale from the question and variable types. (4) OBSERVE structured WP-137 chart, table, and metric blocks, including numerators and denominators. (5) SUBMIT an explanation that labels visible observation, inference, and what cannot yet be concluded, plus any delta between prediction and observation. Do not treat association as causation. Do not delete outliers without investigation.",
+      "runner": {
+        "module": "g6.reference.M06.experiment",
+        "entrypoint": "run_visual_interrogation",
+        "timeout_sec": 20
+      },
+      "validation_rubric": {
+        "required_evidence_type": "chart",
+        "pass_criteria": "Prediction is sealed before execute; submitted explanation separates observation, inference, and limits and preserves denominators."
+      }
+    },
+    {
+      "id": "stage_06_controlled_failure",
+      "title": "Diagnose the truncated tenure scale",
+      "type": "controlled_failure",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "The injected fault draws the same mean customer tenure by channel twice. One view truncates the vertical scale near the observed means; the other restores a zero baseline and the sample's full 0-50 month range. Underlying records, grouping, aggregation, ordering, and computed means are identical. Diagnose from observable behavior: which view makes modest differences look operationally dramatic, what a reader could wrongly infer, and which single plotting choice changed the impression. Repair with an honest scale or a more suitable encoding. Preserve exact values and denominators. State what neither view can establish about causation or future performance. Submit a written diagnosis and repaired view.",
+      "validation_rubric": {
+        "required_evidence_type": "markdown",
+        "pass_criteria": "Diagnosis isolates the truncated scale, verifies unchanged means, explains the rhetorical effect, and proposes a defensible repair."
+      }
+    },
+    {
+      "id": "stage_07_transfer",
+      "title": "Fresh community-program chart without assistance",
+      "type": "transfer_assessment",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Complete this gate without an AI assistant, search engine, copied diagram, tutor, or prior-answer surface. Use datasets/M06/community_programs_fresh.csv. Do not reuse a chart from the guided support-ticket analysis by changing only column names. Fresh question: do weekend community programs appear to have a different no-show rate from weekday programs, and what should the library investigate before changing its schedule? Define the row grain, calculate no-shows from registered minus attended, write a prediction before group results, choose and defend a chart, show rates with registration counts, check format/topic/promotion confounders, and write labelled Visible observation, Inference, and What cannot yet be concluded statements plus at least three limitations. Do not invent a model. Do not fit a model.",
+      "validation_rubric": {
+        "required_evidence_type": "artifact",
+        "pass_criteria": "Unassisted chart choice with correct denominators, labelled observation/inference/limits, and no invented model."
+      }
+    },
+    {
+      "id": "stage_08_flagship",
+      "title": "Hand visual interrogation to V01",
+      "type": "flagship_integration",
+      "assistance_policy": "SOCRATIC_ONLY",
+      "instructions": "Explain how M06 supplies V01 Structured Data Workbench with a question-first interrogation surface: shape, missingness, distributions, suspicious values, group structure, target balance, and field timing must be inspectable before M07 pipelines consume a table. Name why post_case_priority is unsuitable for a new-ticket model. State the hand-off: M07 may package preparation only after trustworthy, decision-time fields are identified."
+    },
+    {
+      "id": "stage_09_gate",
+      "title": "Evaluate M06 evidence against the gate contract",
+      "type": "competency_gate",
+      "assistance_policy": "NO_AI_REQUIRED",
+      "instructions": "Evaluate submitted orientation, map, experiment, controlled-failure, no-AI, and transfer evidence against the mission gate_contract. Issue PASSED when every required evidence item meets the pass threshold. Otherwise issue a targeted repair plan naming the failed stage, competency, artifact type, and knowledge node \u2014 do not force a full mission repeat."
+    }
+  ],
+  "gate_contract": {
+    "required_evidence": [
+      {
+        "competency_id": "comp.viz.question_first",
+        "stage_id": "stage_02_trace_map",
+        "artifact_type": "diagram"
+      },
+      {
+        "competency_id": "comp.viz.chart_evidence",
+        "stage_id": "stage_05_experiment",
+        "artifact_type": "chart"
+      },
+      {
+        "competency_id": "comp.viz.failure_diagnosis",
+        "stage_id": "stage_06_controlled_failure",
+        "artifact_type": "markdown"
+      },
+      {
+        "competency_id": "comp.viz.unassisted_transfer",
+        "stage_id": "stage_07_transfer",
+        "artifact_type": "artifact"
+      }
+    ],
+    "pass_threshold": 1.0,
+    "repair_policy": {
+      "allow_targeted_repair": true,
+      "max_repair_attempts": 3
+    }
+  }
+}

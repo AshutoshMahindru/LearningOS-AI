@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M10",
+  "version": "6.0.0",
+  "title": "G6 M10 reference package",
+  "description": "WP-136 curriculum package for M10 Make Metrics Reflect Consequences on the frozen generic runtime. Package id is metadata; mission id is M10.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M10",
+      "path": "missions/M10.json"
+    }
+  ],
+  "digest": "e75073c413a2193fdab6d1059cfcf94adebcf9a0534e26029c20b36b44323f91"
+}

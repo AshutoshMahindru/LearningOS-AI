@@ -1,0 +1,14 @@
+{
+  "id": "g6.reference.M06",
+  "version": "6.0.0",
+  "title": "G6 M06 reference package",
+  "description": "WP-136 curriculum package for M06 See the Data Before Modeling It on the frozen generic runtime. Package id is metadata; mission id is M06.",
+  "schema": "learningos.mission.v1",
+  "missions": [
+    {
+      "id": "M06",
+      "path": "missions/M06.json"
+    }
+  ],
+  "digest": "5e266191ce0e6d4a38f676cda3f856e5e6e5d6a8e1833b6a726a447ea1aa2613"
+}
