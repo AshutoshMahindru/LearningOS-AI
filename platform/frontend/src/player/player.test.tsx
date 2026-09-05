@@ -133,9 +133,31 @@ describe('generic mission player', () => {
 
     await user.click(screen.getByRole('button', { name: 'Diagnostics' }));
     const drawer = await screen.findByTestId('diagnostics-drawer');
+    expect(screen.getByRole('dialog', { name: 'Diagnostics' })).toBeInTheDocument();
     expect(drawer).toHaveTextContent('/api/v1/sessions/session-restore-1');
     expect(drawer.textContent).not.toContain('loopback-token');
     expect(drawer.textContent).not.toMatch(/Bearer /);
+    await user.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog', { name: 'Diagnostics' })).not.toBeInTheDocument();
+    });
+  });
+
+  it('moves between stages with arrow keys', async () => {
+    installPlayerMock('stage_orientation');
+    const user = userEvent.setup();
+    renderRoute('/sessions/session-restore-1');
+
+    const orientation = await screen.findByRole('button', {
+      name: 'Fixture orientation (orientation)',
+    });
+    orientation.focus();
+    await user.keyboard('{ArrowDown}');
+    expect(await screen.findByLabelText('Hypothesis')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Fixture experiment (experiment)' })).toHaveAttribute(
+      'aria-current',
+      'step',
+    );
   });
 });
 

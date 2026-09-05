@@ -1,57 +1,56 @@
-# LearningOS V3
+# LearningOS
 
-LearningOS V3 is a schema-driven, local-first pedagogy engine for software engineering. Built on the core principle of **"Transfer without AI"**, this system aims to force the learner into the driver's seat by stripping away instant answers and replacing them with deep, Socratic interrogation and rigorous code execution bounds.
+LearningOS is a local-first pedagogy engine for software and AI systems work. The core loop is **offline**: catalog, mission player, workbench, evidence, and gates run on your machine. The tutor is optional and talks only to the local API.
 
-## Core Philosophy
+> Start with the useful whole. Map it. Interrogate it. Descend only to the narrowest blocker. Decompose it. Rebuild it. Break it. Explain it. Transfer without AI. Prove competence. Return to the system.
 
-> "Start with the useful whole. Map it. Interrogate it. Descend only to the narrowest blocker. Decompose it. Rebuild it. Break it. Explain it. Transfer without AI. Prove competence. Return to the system."
+Learner state never lives in the Git worktree.
 
-**Key Principles:**
-- **Zero Mission-Specific Logic:** The platform has no hardcoded knowledge of the "missions" it runs. Everything is driven by a unified `MissionSchema`.
-- **Local-First Verification:** No internet is required to run the primary loop. Learner state lives under `LEARNINGOS_HOME` (default `~/.learningos`), never inside the Git worktree.
-- **Socratic Friction:** The tutor surface is a later-gate capability. In the G3 platform foundation, `POST /api/v1/tutor/chat` returns `501 TUTOR_NOT_AVAILABLE` and does not proxy provider APIs or read `OPENAI_API_KEY`.
+## Launch (learners)
+
+One-click install and launch from a checkout:
+
+```bash
+python3 tools/platform/install.py
+```
+
+Desktop helpers live under `tools/desktop/`. The installer starts the local UI, API, and isolated execution worker. **Jupyter is not required.**
+
+Then open the URL the installer prints (typically `http://127.0.0.1:5173`). Identify a local learner, pick a mission from the catalog, and work through stages in the player.
+
+See [docs/LEARNER.md](docs/LEARNER.md) for data location, backup/restore, and the offline loop.
+
+## Where data lives
+
+All mutable learner data is under `LEARNINGOS_HOME` (default `~/.learningos`): SQLite (`learningos.db`), artifacts, backups, and the worker socket. Override with an **external** directory — never a path inside this repository:
+
+```bash
+LEARNINGOS_HOME=/Volumes/private/learningos
+```
+
+Backup and restore are on the Settings surface. Restore unpacks into a **clean empty `dest_home`**. The live data home is not a valid restore target because it already contains the database.
+
+## Tutor
+
+`POST /api/v1/tutor/chat` returns **501** unless a provider is configured on the **local API process**. There is no in-browser model client. Do not put provider credentials in the frontend or in Vite environment variables.
 
 ## Architecture
 
-LearningOS V3 consists of a three-tier architecture:
+1. **Frontend** (`platform/frontend`) — generic shell: catalog, player, workbench, tutor, artifacts, settings.
+2. **Backend** (`platform/backend`) — FastAPI on `http://127.0.0.1:8765`, SQLite under `LEARNINGOS_HOME`.
+3. **Execution worker** (`platform/worker/daemon.py`) — JSON-RPC daemon on `$LEARNINGOS_WORKER_SOCKET` or `$LEARNINGOS_HOME/run/worker.sock`. Isolated from the API. Sandboxed execution is part of this worker (WP400).
 
-1. **Frontend (`platform/frontend`)**
-   - React + Vite SPA with a generic application shell (catalog, artifacts, settings).
-   - Talks to the local API at `/api/v1` (Vite proxies to `http://127.0.0.1:8765` in development).
-   - No mission-specific pages or provider secrets in the browser.
+The primary loop does not need the internet.
 
-2. **Backend Server (`platform/backend`)**
-   - FastAPI + uvicorn on `http://127.0.0.1:8765`.
-   - SQLite at `$LEARNINGOS_HOME/learningos.db` (WAL), checksummed artifacts, append-only ledger, backup/restore.
-   - Local loopback bearer token in `$LEARNINGOS_HOME/.auth_token`. Provider keys, if present in the process environment, are never returned on `/system/config`.
+## Developer inner loop
 
-3. **Execution Worker (`platform/worker/daemon.py`)**
-   - Canonical JSON-RPC 2.0 daemon started by `./start.sh`.
-   - Socket: `$LEARNINGOS_WORKER_SOCKET`, else `$LEARNINGOS_HOME/run/worker.sock`.
-   - Isolated from the API process. G3 does not `exec()` untrusted mission code (WP400 sandbox is later). There is no `platform/backend/worker_daemon.py`.
-
-## Setup & Running
-
-Python 3.11+ and Node.js 20+ are required.
+From a source checkout, after host prerequisites are installed:
 
 ```bash
-python3 -m pip install -r platform/backend/requirements.txt
-npm ci --prefix platform/frontend
 ./start.sh
 ```
 
-Learner data defaults to `~/.learningos`. Override with an **external** directory:
-
-```bash
-LEARNINGOS_HOME=/tmp/learningos-dev ./start.sh
-```
-
-**Services started:**
-- Frontend UI: `http://127.0.0.1:5173`
-- Backend API: `http://127.0.0.1:8765/api/v1`
-- Worker socket: `$LEARNINGOS_HOME/run/worker.sock`
-
-Diagnostics:
+`Ctrl+C` stops every service. Diagnostics:
 
 ```bash
 ./start.sh --check
@@ -59,6 +58,4 @@ Diagnostics:
 python3 tools/platform/state_guard.py
 ```
 
-`Ctrl+C` stops every service. See `tools/platform/README.md` for preflight and environment overrides.
-
-Backup restore unpacks into a **clean** `dest_home` (Settings and `POST /api/v1/system/restore`). The live data home is not a valid restore target because it already contains the database.
+See `tools/platform/README.md` for preflight and environment overrides.

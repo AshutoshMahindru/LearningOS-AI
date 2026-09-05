@@ -55,7 +55,9 @@ export function DashboardSurface() {
   return (
     <div className="mx-auto max-w-5xl space-y-8">
       <div>
-        <h1 className="text-3xl font-black tracking-tight">Dashboard</h1>
+        <h1 id="catalog-heading" className="text-3xl font-black tracking-tight">
+          Catalog
+        </h1>
         <p className="mt-2 text-textSecondary">
           Catalog of missions loaded by the local API. Starting a session opens the generic mission player.
         </p>
@@ -82,24 +84,35 @@ export function DashboardSurface() {
       ) : null}
 
       {missions && missions.length > 0 ? (
-        <ul className="grid gap-4 md:grid-cols-2">
-          {missions.map((mission) => (
-            <li key={mission.id} className="panel space-y-4">
-              <div>
-                <p className="font-mono text-xs text-textSecondary">{mission.id}</p>
-                <h2 className="text-xl font-bold">{mission.title || mission.id}</h2>
-                {mission.description ? (
-                  <p className="mt-2 text-sm text-textSecondary">{mission.description}</p>
-                ) : null}
-              </div>
-              <Button
-                onClick={() => void startSession(mission.id)}
-                disabled={!learner || startingId === mission.id}
-              >
-                {startingId === mission.id ? 'Starting…' : 'Start session'}
-              </Button>
-            </li>
-          ))}
+        <ul className="grid gap-4 md:grid-cols-2" aria-labelledby="catalog-heading">
+          {missions.map((mission) => {
+            const title = mission.title || mission.id;
+            const headingId = `mission-${mission.id}-title`;
+            const starting = startingId === mission.id;
+            return (
+              <li key={mission.id}>
+                <article className="panel space-y-4" aria-labelledby={headingId}>
+                  <div>
+                    <p className="font-mono text-xs text-textSecondary">{mission.id}</p>
+                    <h2 id={headingId} className="text-xl font-bold">
+                      {title}
+                    </h2>
+                    {mission.description ? (
+                      <p className="mt-2 text-sm text-textSecondary">{mission.description}</p>
+                    ) : null}
+                  </div>
+                  <Button
+                    onClick={() => void startSession(mission.id)}
+                    disabled={!learner || starting}
+                    aria-label={`Start session: ${title}`}
+                    aria-busy={starting || undefined}
+                  >
+                    {starting ? 'Starting…' : 'Start session'}
+                  </Button>
+                </article>
+              </li>
+            );
+          })}
         </ul>
       ) : null}
 

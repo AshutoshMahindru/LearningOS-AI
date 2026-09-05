@@ -61,6 +61,8 @@ export function LoginSurface() {
               onChange={(event) => setUsername(event.target.value)}
               disabled={status !== 'ready' || submitting}
               required
+              aria-invalid={formError ? true : undefined}
+              aria-describedby={formError ? 'login-form-error' : undefined}
             />
           </div>
           <div>
@@ -78,7 +80,7 @@ export function LoginSurface() {
             />
           </div>
           {formError ? (
-            <StatusBanner tone="error" title="Could not create learner">
+            <StatusBanner id="login-form-error" tone="error" title="Could not create learner">
               {formError}
             </StatusBanner>
           ) : null}

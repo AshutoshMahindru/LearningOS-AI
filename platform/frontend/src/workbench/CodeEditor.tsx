@@ -21,7 +21,7 @@ export function CodeEditor({
       <textarea
         id={id}
         data-testid="workbench-code-editor"
-        className="min-h-48 w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm"
+        className="min-h-48 w-full rounded-md border border-border bg-bg px-3 py-2 font-mono text-sm text-textPrimary"
         value={value}
         readOnly={readOnly || !onChange}
         spellCheck={false}

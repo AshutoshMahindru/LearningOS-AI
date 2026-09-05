@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useEffect, useState, type ReactNode } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { DiagnosticsDrawer } from '../components/DiagnosticsDrawer';
 import { useAuth } from '../context/AuthContext';
@@ -23,13 +23,34 @@ function navClassName({ isActive }: { isActive: boolean }): string {
   return cn('nav-link focus-visible:shadow-focus', isActive && 'bg-elevated text-primary');
 }
 
+function titleForPath(pathname: string): string {
+  if (pathname.startsWith('/sessions') || pathname.startsWith('/player')) {
+    return 'Mission player · LearningOS';
+  }
+  const titles: Record<string, string> = {
+    '/': 'Catalog · LearningOS',
+    '/artifacts': 'Artifacts · LearningOS',
+    '/settings': 'Settings · LearningOS',
+    '/workbench': 'Workbench · LearningOS',
+    '/tutor': 'Tutor · LearningOS',
+    '/reviews': 'Reviews · LearningOS',
+    '/competencies': 'Competency · LearningOS',
+  };
+  return titles[pathname] || 'LearningOS';
+}
+
 export function AppShell({ children }: { children: ReactNode }) {
   const { learner, logout } = useAuth();
+  const location = useLocation();
   const [diagnosticsOpen, setDiagnosticsOpen] = useState(false);
+
+  useEffect(() => {
+    document.title = titleForPath(location.pathname);
+  }, [location.pathname]);
 
   return (
     <div className="app-shell">
-      <header className="app-sidebar">
+      <header className="app-sidebar" aria-label="LearningOS">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-textSecondary">
             Local platform
@@ -73,12 +94,19 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Button variant="secondary" onClick={logout} className="w-full">
             Switch learner
           </Button>
-          <Button variant="ghost" className="w-full" onClick={() => setDiagnosticsOpen(true)}>
+          <Button
+            variant="ghost"
+            className="w-full"
+            onClick={() => setDiagnosticsOpen(true)}
+            aria-expanded={diagnosticsOpen}
+            aria-controls="diagnostics-panel"
+            aria-haspopup="dialog"
+          >
             Diagnostics
           </Button>
         </div>
       </header>
-      <main id="main-content" className="min-h-screen overflow-auto p-8" tabIndex={-1}>
+      <main id="main-content" className="min-h-screen overflow-auto p-8" tabIndex={-1} aria-label="Main content">
         {children}
       </main>
       <DiagnosticsDrawer open={diagnosticsOpen} onClose={() => setDiagnosticsOpen(false)} />
