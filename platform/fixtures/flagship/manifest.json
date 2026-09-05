@@ -1,0 +1,9 @@
+{
+  "id": "g6.flagship.index",
+  "version": "6.0.0",
+  "title": "G6 flagship V00–V12 index",
+  "description": "Flagship Operations Intelligence System index. Package metadata only; not a mission curriculum package. Maps V00–V12 to missions and prerequisites. ADR and git are generic learner artifact types.",
+  "schema": "learningos.flagship.v1",
+  "index": "index.json",
+  "digest": "8b34f29ae43e16d5225acc840aabb696d45d0cc8ce74de7998de6814fc76605c"
+}

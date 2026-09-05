@@ -1,0 +1,881 @@
+{
+  "schema": "learningos.flagship.v1",
+  "id": "g6.flagship.index",
+  "system": "Operations Intelligence System",
+  "title": "Flagship V00–V12 progression",
+  "description": "Generic index mapping flagship versions V00–V12 to missions and coherent prerequisites. Learner ADR and git commits are generic evidence artifacts (artifact_type adr|git); this index has no mission-id special cases.",
+  "learner_artifact_types": [
+    {
+      "id": "adr",
+      "evidence_artifact_type": "adr",
+      "store": "adrs",
+      "description": "Architectural Decision Record authored during reflection_adr / flagship_integration stages"
+    },
+    {
+      "id": "git",
+      "evidence_artifact_type": "git",
+      "store": "learning_events",
+      "description": "Learner git commit SHA bound to a mission and flagship version"
+    }
+  ],
+  "versions": [
+    {
+      "id": "V00",
+      "name": "Operations Intelligence Orientation",
+      "architecture_step": "Whole-system map and first ML system interrogation",
+      "release_tag": "v00-orientation",
+      "phase_ids": [
+        "P0"
+      ],
+      "missions": [
+        "M01",
+        "M02"
+      ],
+      "prerequisites": [],
+      "unlocks": "V01",
+      "order_index": 0
+    },
+    {
+      "id": "V01",
+      "name": "Structured Data Workbench",
+      "architecture_step": "Python + Pandas + NumPy + reproducible data-to-model pipeline",
+      "release_tag": "v01-data-workbench",
+      "phase_ids": [
+        "P1"
+      ],
+      "missions": [
+        "M03",
+        "M04",
+        "M05",
+        "M06",
+        "M07"
+      ],
+      "prerequisites": [
+        "V00"
+      ],
+      "unlocks": "V02",
+      "order_index": 1
+    },
+    {
+      "id": "V02",
+      "name": "Predictive Decision System",
+      "architecture_step": "Regression + classification + consequence-aware evaluation",
+      "release_tag": "v02-predictive-decision-system",
+      "phase_ids": [
+        "P2"
+      ],
+      "missions": [
+        "M08",
+        "M09",
+        "M10"
+      ],
+      "prerequisites": [
+        "V01"
+      ],
+      "unlocks": "V03",
+      "order_index": 2
+    },
+    {
+      "id": "V03",
+      "name": "Model Comparison & Diagnostics",
+      "architecture_step": "Trees + ensembles + neighbors + clustering",
+      "release_tag": "v03-model-diagnostics",
+      "phase_ids": [
+        "P2"
+      ],
+      "missions": [
+        "M11",
+        "M12",
+        "M13",
+        "M14"
+      ],
+      "prerequisites": [
+        "V02"
+      ],
+      "unlocks": "V04",
+      "order_index": 3
+    },
+    {
+      "id": "V04",
+      "name": "Mathematical Instrumentation Layer",
+      "architecture_step": "Vectors + matrices + probability + statistics + gradients + optimization",
+      "release_tag": "v04-math-instrumentation",
+      "phase_ids": [
+        "P3"
+      ],
+      "missions": [
+        "M15",
+        "M16",
+        "M17",
+        "M18",
+        "M19",
+        "M20"
+      ],
+      "prerequisites": [
+        "V03"
+      ],
+      "unlocks": "V05",
+      "order_index": 4
+    },
+    {
+      "id": "V05",
+      "name": "Neural Learning Component",
+      "architecture_step": "Neural network + NumPy + backprop + PyTorch + failure diagnosis",
+      "release_tag": "v05-neural-component",
+      "phase_ids": [
+        "P4"
+      ],
+      "missions": [
+        "M21",
+        "M22",
+        "M23",
+        "M24",
+        "M25",
+        "M26"
+      ],
+      "prerequisites": [
+        "V04"
+      ],
+      "unlocks": "V06",
+      "order_index": 5
+    },
+    {
+      "id": "V06",
+      "name": "Language Representation Layer",
+      "architecture_step": "Tokenization + embeddings + attention + transformer block",
+      "release_tag": "v06-language-representation",
+      "phase_ids": [
+        "P5"
+      ],
+      "missions": [
+        "M27",
+        "M28",
+        "M29",
+        "M30"
+      ],
+      "prerequisites": [
+        "V05"
+      ],
+      "unlocks": "V07",
+      "order_index": 6
+    },
+    {
+      "id": "V07",
+      "name": "LLM Inference & Adaptation Layer",
+      "architecture_step": "Training objective + decoding + adaptation choices",
+      "release_tag": "v07-llm-inference-adaptation",
+      "phase_ids": [
+        "P5"
+      ],
+      "missions": [
+        "M31",
+        "M32"
+      ],
+      "prerequisites": [
+        "V06"
+      ],
+      "unlocks": "V08",
+      "order_index": 7
+    },
+    {
+      "id": "V08",
+      "name": "Semantic Search Service",
+      "architecture_step": "Ingestion + embeddings + similarity + retrieval",
+      "release_tag": "v08-semantic-search",
+      "phase_ids": [
+        "P6"
+      ],
+      "missions": [
+        "M33"
+      ],
+      "prerequisites": [
+        "V07"
+      ],
+      "unlocks": "V09",
+      "order_index": 8
+    },
+    {
+      "id": "V09",
+      "name": "Grounded Knowledge System",
+      "architecture_step": "RAG + reranking + vector DB + hybrid retrieval",
+      "release_tag": "v09-rag-system",
+      "phase_ids": [
+        "P6"
+      ],
+      "missions": [
+        "M34",
+        "M35",
+        "M36"
+      ],
+      "prerequisites": [
+        "V08"
+      ],
+      "unlocks": "V10",
+      "order_index": 9
+    },
+    {
+      "id": "V10",
+      "name": "Tool-Using Agent System",
+      "architecture_step": "Tool calling + stateful workflow + memory + routing + fallbacks",
+      "release_tag": "v10-agent-system",
+      "phase_ids": [
+        "P7"
+      ],
+      "missions": [
+        "M37",
+        "M38",
+        "M39"
+      ],
+      "prerequisites": [
+        "V09"
+      ],
+      "unlocks": "V11",
+      "order_index": 10
+    },
+    {
+      "id": "V11",
+      "name": "Evaluated & Observable AI System",
+      "architecture_step": "Evaluation harness + architecture boundaries + reliability controls",
+      "release_tag": "v11-evaluated-system",
+      "phase_ids": [
+        "P7",
+        "P8"
+      ],
+      "missions": [
+        "M40",
+        "M41"
+      ],
+      "prerequisites": [
+        "V10"
+      ],
+      "unlocks": "V12",
+      "order_index": 11
+    },
+    {
+      "id": "V12",
+      "name": "Integrated AI Systems Capstone",
+      "architecture_step": "Structured/unstructured data + retrieval + tools + evals + observability",
+      "release_tag": "v12-capstone",
+      "phase_ids": [
+        "P8"
+      ],
+      "missions": [
+        "M42"
+      ],
+      "prerequisites": [
+        "V11"
+      ],
+      "unlocks": null,
+      "order_index": 12
+    }
+  ],
+  "missions": {
+    "M01": {
+      "id": "M01",
+      "title": "Map the AI/ML Landscape",
+      "phase_id": "P0",
+      "order_index": 1,
+      "flagship_version": "V00",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [],
+        "helpful": []
+      }
+    },
+    "M02": {
+      "id": "M02",
+      "title": "Run and Interrogate Your First ML System",
+      "phase_id": "P0",
+      "order_index": 2,
+      "flagship_version": "V00",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M01"
+        ],
+        "helpful": []
+      }
+    },
+    "M03": {
+      "id": "M03",
+      "title": "Modify Python Before Learning Python",
+      "phase_id": "P1",
+      "order_index": 3,
+      "flagship_version": "V01",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [
+          "M02"
+        ],
+        "helpful": []
+      }
+    },
+    "M04": {
+      "id": "M04",
+      "title": "Turn a Messy CSV into Usable Data",
+      "phase_id": "P1",
+      "order_index": 4,
+      "flagship_version": "V01",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M03"
+        ],
+        "helpful": []
+      }
+    },
+    "M05": {
+      "id": "M05",
+      "title": "Understand Arrays by Making Python Too Slow",
+      "phase_id": "P1",
+      "order_index": 5,
+      "flagship_version": "V01",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M03"
+        ],
+        "helpful": []
+      }
+    },
+    "M06": {
+      "id": "M06",
+      "title": "See the Data Before Modeling It",
+      "phase_id": "P1",
+      "order_index": 6,
+      "flagship_version": "V01",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M04"
+        ],
+        "helpful": []
+      }
+    },
+    "M07": {
+      "id": "M07",
+      "title": "Build a Reusable Data-to-Model Pipeline",
+      "phase_id": "P1",
+      "order_index": 7,
+      "flagship_version": "V01",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M04",
+          "M05",
+          "M06"
+        ],
+        "helpful": []
+      }
+    },
+    "M08": {
+      "id": "M08",
+      "title": "Predict a Continuous Outcome",
+      "phase_id": "P2",
+      "order_index": 8,
+      "flagship_version": "V02",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [
+          "M07"
+        ],
+        "helpful": []
+      }
+    },
+    "M09": {
+      "id": "M09",
+      "title": "Make Binary Decisions",
+      "phase_id": "P2",
+      "order_index": 9,
+      "flagship_version": "V02",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M07"
+        ],
+        "helpful": [
+          "M08"
+        ]
+      }
+    },
+    "M10": {
+      "id": "M10",
+      "title": "Make Metrics Reflect Consequences",
+      "phase_id": "P2",
+      "order_index": 10,
+      "flagship_version": "V02",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M09"
+        ],
+        "helpful": []
+      }
+    },
+    "M11": {
+      "id": "M11",
+      "title": "Interrogate a Decision Tree",
+      "phase_id": "P2",
+      "order_index": 11,
+      "flagship_version": "V03",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [
+          "M09"
+        ],
+        "helpful": []
+      }
+    },
+    "M12": {
+      "id": "M12",
+      "title": "Improve Weak Trees with Ensembles",
+      "phase_id": "P2",
+      "order_index": 12,
+      "flagship_version": "V03",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M11"
+        ],
+        "helpful": []
+      }
+    },
+    "M13": {
+      "id": "M13",
+      "title": "Learn from Neighbors",
+      "phase_id": "P2",
+      "order_index": 13,
+      "flagship_version": "V03",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M09"
+        ],
+        "helpful": [
+          "M15"
+        ]
+      }
+    },
+    "M14": {
+      "id": "M14",
+      "title": "Discover Structure Without Labels",
+      "phase_id": "P2",
+      "order_index": 14,
+      "flagship_version": "V03",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M06"
+        ],
+        "helpful": [
+          "M15"
+        ]
+      }
+    },
+    "M15": {
+      "id": "M15",
+      "title": "Represent Meaning and Data as Vectors",
+      "phase_id": "P3",
+      "order_index": 15,
+      "flagship_version": "V04",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [
+          "M05"
+        ],
+        "helpful": []
+      }
+    },
+    "M16": {
+      "id": "M16",
+      "title": "Use Matrices as Transformations",
+      "phase_id": "P3",
+      "order_index": 16,
+      "flagship_version": "V04",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M15"
+        ],
+        "helpful": []
+      }
+    },
+    "M17": {
+      "id": "M17",
+      "title": "Quantify Uncertainty",
+      "phase_id": "P3",
+      "order_index": 17,
+      "flagship_version": "V04",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M09"
+        ],
+        "helpful": [
+          "M10"
+        ]
+      }
+    },
+    "M18": {
+      "id": "M18",
+      "title": "Decide What Data Can Tell You",
+      "phase_id": "P3",
+      "order_index": 18,
+      "flagship_version": "V04",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M17"
+        ],
+        "helpful": []
+      }
+    },
+    "M19": {
+      "id": "M19",
+      "title": "Make Models Learn with Gradients",
+      "phase_id": "P3",
+      "order_index": 19,
+      "flagship_version": "V04",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M16",
+          "M17"
+        ],
+        "helpful": []
+      }
+    },
+    "M20": {
+      "id": "M20",
+      "title": "Understand Optimization Experimentally",
+      "phase_id": "P3",
+      "order_index": 20,
+      "flagship_version": "V04",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M19"
+        ],
+        "helpful": []
+      }
+    },
+    "M21": {
+      "id": "M21",
+      "title": "Train a Neural Network as a Black Box",
+      "phase_id": "P4",
+      "order_index": 21,
+      "flagship_version": "V05",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [
+          "M20"
+        ],
+        "helpful": []
+      }
+    },
+    "M22": {
+      "id": "M22",
+      "title": "Open the Neuron and Layer",
+      "phase_id": "P4",
+      "order_index": 22,
+      "flagship_version": "V05",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M21"
+        ],
+        "helpful": []
+      }
+    },
+    "M23": {
+      "id": "M23",
+      "title": "Implement a Forward Pass with NumPy",
+      "phase_id": "P4",
+      "order_index": 23,
+      "flagship_version": "V05",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M16",
+          "M22"
+        ],
+        "helpful": []
+      }
+    },
+    "M24": {
+      "id": "M24",
+      "title": "Assign Blame with Backpropagation",
+      "phase_id": "P4",
+      "order_index": 24,
+      "flagship_version": "V05",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M19",
+          "M23"
+        ],
+        "helpful": []
+      }
+    },
+    "M25": {
+      "id": "M25",
+      "title": "Train Networks in PyTorch",
+      "phase_id": "P4",
+      "order_index": 25,
+      "flagship_version": "V05",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M24"
+        ],
+        "helpful": []
+      }
+    },
+    "M26": {
+      "id": "M26",
+      "title": "Diagnose Deep Learning Failure",
+      "phase_id": "P4",
+      "order_index": 26,
+      "flagship_version": "V05",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M25"
+        ],
+        "helpful": []
+      }
+    },
+    "M27": {
+      "id": "M27",
+      "title": "Turn Text into Tokens",
+      "phase_id": "P5",
+      "order_index": 27,
+      "flagship_version": "V06",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [
+          "M03"
+        ],
+        "helpful": [
+          "M15"
+        ]
+      }
+    },
+    "M28": {
+      "id": "M28",
+      "title": "Search Meaning with Embeddings",
+      "phase_id": "P5",
+      "order_index": 28,
+      "flagship_version": "V06",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M15",
+          "M27"
+        ],
+        "helpful": []
+      }
+    },
+    "M29": {
+      "id": "M29",
+      "title": "Understand Attention Through Context",
+      "phase_id": "P5",
+      "order_index": 29,
+      "flagship_version": "V06",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M16",
+          "M28"
+        ],
+        "helpful": []
+      }
+    },
+    "M30": {
+      "id": "M30",
+      "title": "Dissect a Transformer Block",
+      "phase_id": "P5",
+      "order_index": 30,
+      "flagship_version": "V06",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M29"
+        ],
+        "helpful": []
+      }
+    },
+    "M31": {
+      "id": "M31",
+      "title": "Understand LLM Training",
+      "phase_id": "P5",
+      "order_index": 31,
+      "flagship_version": "V07",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [
+          "M30"
+        ],
+        "helpful": []
+      }
+    },
+    "M32": {
+      "id": "M32",
+      "title": "Control Inference and Adaptation",
+      "phase_id": "P5",
+      "order_index": 32,
+      "flagship_version": "V07",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M31"
+        ],
+        "helpful": []
+      }
+    },
+    "M33": {
+      "id": "M33",
+      "title": "Build Semantic Search",
+      "phase_id": "P6",
+      "order_index": 33,
+      "flagship_version": "V08",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [
+          "M28"
+        ],
+        "helpful": []
+      }
+    },
+    "M34": {
+      "id": "M34",
+      "title": "Build RAG",
+      "phase_id": "P6",
+      "order_index": 34,
+      "flagship_version": "V09",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [
+          "M31",
+          "M33"
+        ],
+        "helpful": []
+      }
+    },
+    "M35": {
+      "id": "M35",
+      "title": "Improve Retrieval",
+      "phase_id": "P6",
+      "order_index": 35,
+      "flagship_version": "V09",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M34"
+        ],
+        "helpful": []
+      }
+    },
+    "M36": {
+      "id": "M36",
+      "title": "Understand Vector Databases and Hybrid Retrieval",
+      "phase_id": "P6",
+      "order_index": 36,
+      "flagship_version": "V09",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M35"
+        ],
+        "helpful": [
+          "M33"
+        ]
+      }
+    },
+    "M37": {
+      "id": "M37",
+      "title": "Make an LLM Call Tools Reliably",
+      "phase_id": "P7",
+      "order_index": 37,
+      "flagship_version": "V10",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [
+          "M32"
+        ],
+        "helpful": []
+      }
+    },
+    "M38": {
+      "id": "M38",
+      "title": "Build a Stateful Agent Workflow",
+      "phase_id": "P7",
+      "order_index": 38,
+      "flagship_version": "V10",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M37"
+        ],
+        "helpful": []
+      }
+    },
+    "M39": {
+      "id": "M39",
+      "title": "Add Memory, Routing, and Fallbacks",
+      "phase_id": "P7",
+      "order_index": 39,
+      "flagship_version": "V10",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M38"
+        ],
+        "helpful": []
+      }
+    },
+    "M40": {
+      "id": "M40",
+      "title": "Evaluate AI Systems Systematically",
+      "phase_id": "P7",
+      "order_index": 40,
+      "flagship_version": "V11",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [
+          "M34",
+          "M39"
+        ],
+        "helpful": []
+      }
+    },
+    "M41": {
+      "id": "M41",
+      "title": "Design an Integrated AI System",
+      "phase_id": "P8",
+      "order_index": 41,
+      "flagship_version": "V11",
+      "starts_version": false,
+      "prerequisites": {
+        "blocking": [
+          "M40"
+        ],
+        "helpful": []
+      }
+    },
+    "M42": {
+      "id": "M42",
+      "title": "Build, Evaluate, and Explain the Capstone",
+      "phase_id": "P8",
+      "order_index": 42,
+      "flagship_version": "V12",
+      "starts_version": true,
+      "prerequisites": {
+        "blocking": [
+          "M41"
+        ],
+        "helpful": []
+      }
+    }
+  }
+}
